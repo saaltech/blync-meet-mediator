@@ -13,7 +13,7 @@ const STORE_NAME = 'features/dynamic-branding';
 const DEFAULT_STATE = {
     backgroundColor: '',
     backgroundImageUrl: '',
-    customizationReady: false,
+    customizationReady: true,
     logoClickUrl: '',
     logoImageUrl: ''
 };
