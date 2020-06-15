@@ -188,6 +188,9 @@ class WelcomePage extends AbstractWelcomePage {
                         <h1 className = 'header-text-title'>
                             { t('welcomepage.title') }
                         </h1>
+                        <h3 className = 'header-text-sub-title'>
+                            { t('welcomepage.subTitle') }
+                        </h3>
                         <p className = 'header-text-description'>
                             { t('welcomepage.appDescription',
                                 { app: APP_NAME }) }

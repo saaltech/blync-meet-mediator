@@ -32,7 +32,7 @@ body.welcome-page {
             margin-top: $watermarkHeight + $welcomePageHeaderTextMarginTop;
             margin-bottom: $welcomePageHeaderTextMarginBottom;
             max-width: calc(100% - 40px);
-            width: 650px;
+            width: 70%;
             z-index: $zindex2;
         }
 
@@ -41,6 +41,16 @@ body.welcome-page {
             font-size: $welcomePageHeaderTextTitleFontSize;
             font-weight: $welcomePageHeaderTextTitleFontWeight;
             line-height: $welcomePageHeaderTextTitleLineHeight;
+            margin-bottom: $welcomePageHeaderTextTitleMarginBottom;
+            opacity: $welcomePageHeaderTextTitleOpacity;
+        }
+
+        .header-text-sub-title {
+            color: $welcomePageTitleColor;
+            font-size: $welcomePageHeaderTextSubTitleFontSize;
+            font-weight: $welcomePageHeaderTextTitleFontWeight;
+            line-height: $welcomePageHeaderTextSubTitleLineHeight;
+            margin-top: $welcomePageHeaderTextSubTitleMarginTop;
             margin-bottom: $welcomePageHeaderTextTitleMarginBottom;
             opacity: $welcomePageHeaderTextTitleOpacity;
         }
