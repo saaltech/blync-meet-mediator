@@ -103,6 +103,7 @@ class WelcomePage extends AbstractWelcomePage {
         // Bind event handlers so they are only bound once per instance.
         this._onFormSubmit = this._onFormSubmit.bind(this);
         this._onRoomChange = this._onRoomChange.bind(this);
+        this._onRoomNameChanged = this._onRoomNameChanged.bind(this);
         this._setAdditionalContentRef
             = this._setAdditionalContentRef.bind(this);
         this._setRoomInputRef = this._setRoomInputRef.bind(this);
@@ -150,6 +151,20 @@ class WelcomePage extends AbstractWelcomePage {
         super.componentWillUnmount();
 
         document.body.classList.remove('welcome-page');
+    }
+
+    _onRoomNameChanged(e) {
+        this._onRoomChange(e); 
+        if(e.target.value.trim() != "") { 
+            this.setState({
+                formDisabled: false
+            }) 
+        } 
+        else {
+            this.setState({
+                formDisabled: true
+            }) 
+        }
     }
 
     /**
@@ -207,19 +222,7 @@ class WelcomePage extends AbstractWelcomePage {
                                     autoFocus = { true }
                                     className = 'enter-room-input'
                                     id = 'enter_room_field'
-                                    onChange = { (e) => { 
-                                        this._onRoomChange(e); 
-                                        if(e.target.value.trim() != "") { 
-                                            this.setState({
-                                                formDisabled: false
-                                            }) 
-                                        } 
-                                        else {
-                                            this.setState({
-                                                formDisabled: true
-                                            }) 
-                                        }
-                                    }}
+                                    onChange = { this._onRoomNameChanged }
                                     //pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
                                     placeholder = { t('welcomepage.placeholderEnterRoomName') } //this.state.roomPlaceholder
                                     ref = { this._setRoomInputRef }
