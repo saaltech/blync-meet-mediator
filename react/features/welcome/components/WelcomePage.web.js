@@ -55,7 +55,8 @@ class WelcomePage extends AbstractWelcomePage {
 
             generateRoomnames:
                 interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE,
-            selectedTab: 0
+            selectedTab: 0,
+            formDisabled: true
         };
 
         /**
@@ -206,9 +207,21 @@ class WelcomePage extends AbstractWelcomePage {
                                     autoFocus = { true }
                                     className = 'enter-room-input'
                                     id = 'enter_room_field'
-                                    onChange = { this._onRoomChange }
-                                    pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                    placeholder = { this.state.roomPlaceholder }
+                                    onChange = { (e) => { 
+                                        this._onRoomChange(e); 
+                                        if(e.target.value.trim() != "") { 
+                                            this.setState({
+                                                formDisabled: false
+                                            }) 
+                                        } 
+                                        else {
+                                            this.setState({
+                                                formDisabled: true
+                                            }) 
+                                        }
+                                    }}
+                                    //pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } //this.state.roomPlaceholder
                                     ref = { this._setRoomInputRef }
                                     title = { t('welcomepage.roomNameAllowedChars') }
                                     type = 'text'
@@ -217,7 +230,7 @@ class WelcomePage extends AbstractWelcomePage {
                             </form>
                         </div>
                         <div
-                            className = 'welcome-page-button'
+                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled': ''}` }
                             id = 'enter_room_button'
                             onClick = { this._onFormSubmit }>
                             {

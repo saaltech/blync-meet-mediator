@@ -248,7 +248,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @returns {void}
      */
     _updateRoomname() {
-        const generatedRoomname = generateRoomWithoutSeparator();
+        const generatedRoomname = ""; //generateRoomWithoutSeparator();
         const roomPlaceholder = '';
         const updateTimeoutId = setTimeout(this._updateRoomname, 10000);
 

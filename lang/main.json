@@ -857,7 +857,8 @@
         "sendFeedback": "Send feedback",
         "terms": "Terms",
         "title": "vMeet",
-        "subTitle": "Collaborate Anytime Anywhere"
+        "subTitle": "Collaborate Anytime Anywhere",
+        "placeholderEnterRoomName": "Enter the room name"
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",

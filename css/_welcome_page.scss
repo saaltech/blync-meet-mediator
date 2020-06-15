@@ -170,6 +170,12 @@ body.welcome-page {
     }
 
     .welcome-page-button {
+
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         width: $welcomePageButtonWidth;
         min-width: $welcomePageButtonMinWidth;
         height: $welcomePageButtonHeight;
