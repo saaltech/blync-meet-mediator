@@ -1240,64 +1240,73 @@ class Toolbox extends Component<Props, State> {
         return (
             <div className = 'toolbox-content'>
                 <div className = 'button-group-left'>
-                    { buttonsLeft.indexOf('desktop') !== -1
-                        && this._renderDesktopSharingButton() }
-                    { buttonsLeft.indexOf('raisehand') !== -1
-                        && <ToolbarButton
-                            accessibilityLabel = { t('toolbar.accessibilityLabel.raiseHand') }
-                            icon = { IconRaisedHand }
-                            onClick = { this._onToolbarToggleRaiseHand }
-                            toggled = { _raisedHand }
-                            tooltip = { t('toolbar.raiseHand') } /> }
-                    { buttonsLeft.indexOf('chat') !== -1
-                        && <div className = 'toolbar-button-with-badge'>
-                            <ToolbarButton
-                                accessibilityLabel = { t('toolbar.accessibilityLabel.chat') }
-                                icon = { IconChat }
-                                onClick = { this._onToolbarToggleChat }
-                                toggled = { _chatOpen }
-                                tooltip = { t('toolbar.chat') } />
-                            <ChatCounter />
-                        </div> }
                     {
                         buttonsLeft.indexOf('closedcaptions') !== -1
                             && <ClosedCaptionButton />
                     }
                 </div>
                 <div className = 'button-group-center'>
+                    { buttonsRight.indexOf('tileview') !== -1
+                        && <TileViewButton /> }
                     { this._renderAudioButton() }
-                    <HangupButton
-                        visible = { this._shouldShowButton('hangup') } />
                     { this._renderVideoButton() }
                 </div>
                 <div className = 'button-group-right'>
-                    { buttonsRight.indexOf('localrecording') !== -1
-                        && <LocalRecordingButton
-                            onClick = {
-                                this._onToolbarOpenLocalRecordingInfoDialog
-                            } />
-                    }
-                    { buttonsRight.indexOf('tileview') !== -1
-                        && <TileViewButton /> }
-                    { buttonsRight.indexOf('invite') !== -1
-                        && <ToolbarButton
-                            accessibilityLabel =
-                                { t('toolbar.accessibilityLabel.invite') }
-                            icon = { IconInviteMore }
-                            onClick = { this._onToolbarOpenInvite }
-                            tooltip = { t('toolbar.invite') } /> }
-                    { buttonsRight.indexOf('security') !== -1
-                        && <SecurityDialogButton customClass = 'security-toolbar-button' /> }
-                    { buttonsRight.indexOf('overflowmenu') !== -1
-                        && <OverflowMenuButton
-                            isOpen = { _overflowMenuVisible }
-                            onVisibilityChange = { this._onSetOverflowVisible }>
-                            <ul
-                                aria-label = { t(toolbarAccLabel) }
-                                className = 'overflow-menu'>
-                                { overflowMenuContent }
-                            </ul>
-                        </OverflowMenuButton> }
+                    <HangupButton
+                        visible = { this._shouldShowButton('hangup') }
+                        /*showIcon = { false }
+                        showLabel = { true } */
+                        />
+                    <div className = 'enclosed-group'>
+                        { buttonsRight.indexOf('localrecording') !== -1
+                            && <LocalRecordingButton
+                                onClick = {
+                                    this._onToolbarOpenLocalRecordingInfoDialog
+                                } />
+                        }
+                        { buttonsLeft.indexOf('raisehand') !== -1
+                            && <ToolbarButton
+                                accessibilityLabel = { t('toolbar.accessibilityLabel.raiseHand') }
+                                icon = { IconRaisedHand }
+                                onClick = { this._onToolbarToggleRaiseHand }
+                                toggled = { _raisedHand }
+                                tooltip = { t('toolbar.raiseHand') } /> }
+
+                        { buttonsLeft.indexOf('desktop') !== -1
+                            && this._renderDesktopSharingButton() }
+                            
+                        { buttonsLeft.indexOf('chat') !== -1
+                            && <div className = 'toolbar-button-with-badge'>
+                                <ToolbarButton
+                                    accessibilityLabel = { t('toolbar.accessibilityLabel.chat') }
+                                    icon = { IconChat }
+                                    onClick = { this._onToolbarToggleChat }
+                                    toggled = { _chatOpen }
+                                    tooltip = { t('toolbar.chat') } />
+                                <ChatCounter />
+                            </div> }
+
+                        { buttonsRight.indexOf('invite') !== -1
+                            && <ToolbarButton
+                                accessibilityLabel =
+                                    { t('toolbar.accessibilityLabel.invite') }
+                                icon = { IconInviteMore }
+                                onClick = { this._onToolbarOpenInvite }
+                                tooltip = { t('toolbar.invite') } /> }
+                        { buttonsRight.indexOf('security') !== -1
+                            && <SecurityDialogButton customClass = 'security-toolbar-button' /> }
+                        { buttonsRight.indexOf('overflowmenu') !== -1
+                            && <OverflowMenuButton
+                                isOpen = { _overflowMenuVisible }
+                                onVisibilityChange = { this._onSetOverflowVisible }>
+                                <ul
+                                    aria-label = { t(toolbarAccLabel) }
+                                    className = 'overflow-menu'>
+                                    { overflowMenuContent }
+                                </ul>
+                            </OverflowMenuButton> }
+                    </div>
+                    
                 </div>
             </div>);
     }

@@ -26,6 +26,11 @@ export type Props = {
     showLabel: boolean,
 
     /**
+     * Whether to show the icon or not.
+     */
+    showIcon: boolean,
+
+    /**
      * Collection of styles for the button.
      */
     styles: ?Styles,
