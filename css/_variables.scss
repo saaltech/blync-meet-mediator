@@ -37,7 +37,7 @@ $presence-idle: rgb(172, 172, 172);
 /**
  * Toolbar
  */
-$newToolbarBackgroundColor: rgba(22, 38, 55, 0.8);
+$newToolbarBackgroundColor: rgba(255, 255, 255, 0.8);
 $newToolbarButtonHoverColor: rgba(255, 255, 255, 0.15);
 $newToolbarButtonToggleColor: rgba(255, 255, 255, 0.2);
 $AOTToolbarButtonHoverColor: rgba(14, 20, 35, 0.6);
@@ -45,12 +45,12 @@ $AOTToolbarButtonToggleColor: rgba(14, 20, 35, 1);
 $newToolbarFontSize: 24px;
 $newToolbarHangupFontSize: 32px;
 $newToolbarSize: 40px;
-$newToolbarSizeWithPadding: calc(#{$newToolbarSize} + 24px);
+$newToolbarSizeWithPadding: calc(#{$newToolbarSize} + 30px);
 $toolbarTitleFontSize: 19px;
-$overflowMenuBG: initial;
-$overflowMenuItemHoverBG: #313D52;
-$overflowMenuItemHoverColor: #B8C7E0;
-$overflowMenuItemColor: #B8C7E0;
+$overflowMenuBG: #fff;
+$overflowMenuItemHoverBG: #E7E7E8;
+$overflowMenuItemHoverColor: #393939;
+$overflowMenuItemColor: #393939;
 
 /**
  * Video layout
@@ -90,11 +90,12 @@ $modalTextColor: #333;
  * Chat
  */
 $chatActionsSeparatorColor: rgb(173, 105, 112);
-$chatHeaderBackgroundColor: rgba(42, 58, 75, 0.9);
+$chatHeaderBackgroundColor: rgba(255, 255, 255, 0.9);
 $chatInputSeparatorColor: #A4B8D1;
-$chatLocalMessageBackgroundColor: rgb(4, 98, 178);
+$chatLocalMessageBackgroundColor: #005C85;
 $chatPrivateMessageBackgroundColor: rgb(153, 69, 77);
-$chatRemoteMessageBackgroundColor:  rgb(86, 101, 114);
+$chatRemoteMessageBackgroundColor:  #EDF0F5;
+$chatRemoteMessageColor:  #393939;
 $sidebarWidth: 375px;
 
  /**

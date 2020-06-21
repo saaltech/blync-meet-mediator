@@ -134,6 +134,86 @@
 
         .button-group-right {
             justify-content: flex-end;
+
+            .enclosed-group {
+                display: flex;
+                background: rgba(255, 255, 255, 0.63);
+                border-radius: 6px;
+                backdrop-filter: blur(3px);
+                -webkit-backdrop-filter: blur(3px);
+            }
+            
+            .toolbox-icon {
+                background-color: transparent;
+                width: 38px;
+                height: 40px;
+
+                &:hover, &.toggled {
+                    background-color: transparent;
+                    .jitsi-icon {
+                        svg {
+                            path {
+                                fill: #00C062;
+                            }
+                            fill: #00C062;
+                        }
+                    }
+                }
+
+                svg {
+                    fill: #005C84;
+                }
+
+                .jitsi-icon {
+                    svg {
+                        path {
+                            fill: #005C84;
+                            &:hover {
+                                fill: #00C062;
+                            }
+                        }
+                        fill: #005C84;
+                        &:hover {
+                            fill: #00C062;
+                        }
+                    }
+                }
+            }
+            > .toolbox-button {
+                margin-right: 30px;
+
+                &:nth-child(1) {
+                    .toolbox-icon {
+                        background-color: $hangupColor;
+                        border: 1px solid $hangupColor;
+                        width: 40px;
+                        height: 40px;
+                
+                        &:hover {
+                            background-color: $hangupColor;
+                        }
+
+                        svg {
+                            fill: #fff;
+                        }
+
+                        .jitsi-icon {
+                            svg {
+                                path {
+                                    fill: #fff;
+                                    &:hover {
+                                        fill:#fff;
+                                    }
+                                }
+                                fill:#fff;
+                                &:hover {
+                                    fill: #fff;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .overflow-menu {

@@ -31,6 +31,7 @@ var config = {
     bosh: '//jitsi-meet.example.com/http-bind',
 
     // Websocket URL
+    websocket: document.location.protocol.replace('http', 'ws') + '//' + document.location.host + '/xmpp-websocket'
     // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
 
     // The name of client node advertised in XEP-0115 'c' stanza
