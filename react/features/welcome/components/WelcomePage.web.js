@@ -55,7 +55,8 @@ class WelcomePage extends AbstractWelcomePage {
 
             generateRoomnames:
                 interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE,
-            selectedTab: 0
+            selectedTab: 0,
+            formDisabled: true
         };
 
         /**
@@ -102,6 +103,7 @@ class WelcomePage extends AbstractWelcomePage {
         // Bind event handlers so they are only bound once per instance.
         this._onFormSubmit = this._onFormSubmit.bind(this);
         this._onRoomChange = this._onRoomChange.bind(this);
+        this._onRoomNameChanged = this._onRoomNameChanged.bind(this);
         this._setAdditionalContentRef
             = this._setAdditionalContentRef.bind(this);
         this._setRoomInputRef = this._setRoomInputRef.bind(this);
@@ -151,6 +153,20 @@ class WelcomePage extends AbstractWelcomePage {
         document.body.classList.remove('welcome-page');
     }
 
+    _onRoomNameChanged(e) {
+        this._onRoomChange(e); 
+        if(e.target.value.trim() != "") { 
+            this.setState({
+                formDisabled: false
+            }) 
+        } 
+        else {
+            this.setState({
+                formDisabled: true
+            }) 
+        }
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -188,6 +204,9 @@ class WelcomePage extends AbstractWelcomePage {
                         <h1 className = 'header-text-title'>
                             { t('welcomepage.title') }
                         </h1>
+                        <h3 className = 'header-text-sub-title'>
+                            { t('welcomepage.subTitle') }
+                        </h3>
                         <p className = 'header-text-description'>
                             { t('welcomepage.appDescription',
                                 { app: APP_NAME }) }
@@ -203,9 +222,9 @@ class WelcomePage extends AbstractWelcomePage {
                                     autoFocus = { true }
                                     className = 'enter-room-input'
                                     id = 'enter_room_field'
-                                    onChange = { this._onRoomChange }
-                                    pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                    placeholder = { this.state.roomPlaceholder }
+                                    onChange = { this._onRoomNameChanged }
+                                    //pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } //this.state.roomPlaceholder
                                     ref = { this._setRoomInputRef }
                                     title = { t('welcomepage.roomNameAllowedChars') }
                                     type = 'text'
@@ -214,7 +233,7 @@ class WelcomePage extends AbstractWelcomePage {
                             </form>
                         </div>
                         <div
-                            className = 'welcome-page-button'
+                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled': ''}` }
                             id = 'enter_room_button'
                             onClick = { this._onFormSubmit }>
                             {
