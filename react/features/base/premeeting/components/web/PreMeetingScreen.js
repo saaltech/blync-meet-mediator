@@ -6,6 +6,7 @@ import { AudioSettingsButton, VideoSettingsButton } from '../../../../toolbox';
 
 import CopyMeetingUrl from './CopyMeetingUrl';
 import Preview from './Preview';
+import Background from '../../../../welcome/components/background';
 
 type Props = {
 
@@ -52,10 +53,13 @@ export default class PreMeetingScreen extends PureComponent<Props> {
             <div
                 className = 'premeeting-screen'
                 id = 'lobby-screen'>
-                <Preview
-                    videoMuted = { videoMuted }
-                    videoTrack = { videoTrack } />
+                <Background />
+                
                 <div className = 'content'>
+                    <a href="/" class="close-icon"></a>
+                    <Preview
+                        videoMuted = { videoMuted }
+                        videoTrack = { videoTrack } />
                     <div className = 'title'>
                         { title }
                     </div>

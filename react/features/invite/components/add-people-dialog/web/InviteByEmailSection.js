@@ -2,6 +2,7 @@
 
 import Tooltip from '@atlaskit/tooltip';
 import React, { useState } from 'react';
+import { WhatsappShareButton } from "react-share";
 
 import { translate } from '../../../../base/i18n';
 import {
@@ -11,7 +12,8 @@ import {
     IconEmail,
     IconGoogle,
     IconOutlook,
-    IconYahoo
+    IconYahoo,
+    IconWhatsapp
 } from '../../../../base/icons';
 import { openURLInBrowser } from '../../../../base/util';
 
@@ -52,6 +54,15 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
      */
     function _onCopyText() {
         copyText(inviteText);
+    }
+
+    /**
+     * Returns the conference invitation text.
+     *
+     * @returns {string}
+     */
+    function _getInviteText() {
+        return inviteText;
     }
 
     /**
@@ -126,6 +137,12 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
 
     }
 
+    function renderWhatsappShare(url) {
+        return  <WhatsappShareButton size={32} round={true} url={url}>
+            <Icon src = { IconWhatsapp } />
+        </WhatsappShareButton>
+    }
+
     return (
         <>
             <div>
@@ -146,6 +163,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
                         </div>
                     </Tooltip>
                     {renderEmailIcons()}
+                    {renderWhatsappShare(_getInviteText())}
                 </div>
             </div>
             <div className = 'invite-more-dialog separator' />

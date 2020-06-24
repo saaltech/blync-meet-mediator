@@ -769,7 +769,10 @@
         "roomnameHint": "",
         "sendFeedback": "",
         "terms": "الشروط",
-        "title": "تداول آمِن ومميّز عبر الفيديو و مجاني تمامًا"
+        "title": "Start a new meeting",
+        "subTitle": "Collaborate Anytime Anywhere",
+        "placeholderEnterRoomName": "Enter the room name",
+        "startSession": "Go ahead, enter the meeting name and start or join the session."
     },
     "lonelyMeetingExperience": {
         "button": "ادع أشخاصا آخرين",

@@ -3,7 +3,7 @@
  */
  .premeeting-screen {
     align-items: stretch;
-    background: #1C2025;
+    background: #fff;
     bottom: 0;
     display: flex;
     flex-direction: column;
@@ -16,12 +16,27 @@
 
     .content {
         align-items: center;
-        background-image: linear-gradient(transparent, black);
+        //background-image: linear-gradient(transparent, black);
         display: flex;
         flex: 1;
         flex-direction: column;
         justify-content: flex-end;
         z-index: $toolbarZ + 2;
+
+        flex-direction: column;
+        width: 500px;
+        background-color: rgba(0,0,0,0.5);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+
+        background: gray 0% 0% no-repeat padding-box;
+        box-shadow: 0px 12px 40px rgba(0,0,0,0.5);
+        border: 1px solid #E7EFF4;
+        border-radius: 6px;
+        opacity: 1;
 
         .title {
             color: #fff;
@@ -171,8 +186,8 @@
 }
 
 #preview {
-    height: 100%;
-    position: absolute;
+    height: 300px;
+    //position: absolute;
     width: 100%;
 
     &.no-video {
@@ -182,13 +197,14 @@
 
     .avatar {
         background: #A4B8D1;
-        margin: 200px auto 0 auto;
+        margin: 60px auto 0 auto;
     }
 
     video {
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
+        //height: 30%;
+        //object-fit: cover;
+        //position: absolute;
         width: 100%;
+        //top: 10%;
     }
 }

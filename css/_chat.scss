@@ -9,11 +9,11 @@
      * the toolbar and subtract from 100%.
      */
     height: calc(100% - #{$newToolbarSizeWithPadding});
-    left: -$sidebarWidth;
+    right: 0;
     overflow: hidden;
     position: absolute;
     top: 0;
-    transition: left 0.5s;
+    //transition: left 0.5s;
     width: $sidebarWidth;
     z-index: $sideToolbarContainerZ;
 
@@ -21,9 +21,9 @@
      * The sidebar (chat) is off-screen when hidden. Move it flush to the left
      * side of the window when it should be visible.
      */
-    &.slideInExt {
-        left: 0;
-    }
+    // &.slideInExt {
+    //     right: 0;
+    // }
 }
 
 #chatconversation {

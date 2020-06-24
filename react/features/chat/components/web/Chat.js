@@ -86,7 +86,7 @@ class Chat extends AbstractChat<Props> {
         return (
             <Transition
                 in = { this.props._isOpen }
-                timeout = { 500 }>
+                timeout = { 10 }>
                 { this._renderPanelContent }
             </Transition>
         );

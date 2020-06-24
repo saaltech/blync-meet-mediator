@@ -5,11 +5,11 @@ import React from 'react';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning } from '../../base/icons';
-import { Watermarks } from '../../base/react';
 import { connect } from '../../base/redux';
 import { CalendarList } from '../../calendar-sync';
 import { RecentList } from '../../recent-list';
 import { SettingsButton, SETTINGS_TABS } from '../../settings';
+import Background from './background';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
@@ -185,9 +185,9 @@ class WelcomePage extends AbstractWelcomePage {
                 className = { `welcome ${showAdditionalContent
                     ? 'with-content' : 'without-content'}` }
                 id = 'welcome_page'>
-                <div className = 'welcome-watermark'>
-                    <Watermarks />
-                </div>
+
+                <Background/>
+
                 <div className = 'header'>
                     <div className = 'welcome-page-settings'>
                         <SettingsButton
@@ -202,21 +202,18 @@ class WelcomePage extends AbstractWelcomePage {
                     <div className = 'header-image' />
                     <div className = 'header-text'>
                         <h1 className = 'header-text-title'>
-                            { t('welcomepage.title') }
+                            { t('welcomepage.enterRoomTitle') }
                         </h1>
-                        <h3 className = 'header-text-sub-title'>
+                        {/*<h3 className = 'header-text-sub-title'>
                             { t('welcomepage.subTitle') }
                         </h3>
                         <p className = 'header-text-description'>
                             { t('welcomepage.appDescription',
                                 { app: APP_NAME }) }
-                        </p>
+                    </p>*/}
                     </div>
                     <div id = 'enter_room'>
                         <div className = 'enter-room-input-container'>
-                            <div className = 'enter-room-title'>
-                                { t('welcomepage.enterRoomTitle') }
-                            </div>
                             <form onSubmit = { this._onFormSubmit }>
                                 <input
                                     autoFocus = { true }
@@ -243,7 +240,8 @@ class WelcomePage extends AbstractWelcomePage {
                             }
                         </div>
                     </div>
-                    { this._renderTabs() }
+                    <div className='note'> { t('welcomepage.startSession') } </div>
+                    {/* this._renderTabs() */}
                 </div>
                 { showAdditionalContent
                     ? <div

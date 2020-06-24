@@ -320,8 +320,8 @@ var config = {
     // and microsoftApiApplicationClientID
     // enableCalendarIntegration: false,
 
-    // When 'true', it shows an intermediate page before joining, where the user can  configure its devices.
-    // prejoinPageEnabled: false,
+    // When 'true', it shows an intermediate page before joining, where the user can configure its devices.
+    prejoinPageEnabled: true,
 
     // Stats
     //
