@@ -32,7 +32,7 @@ export type Props = {
  * @returns {ReactElement}
  */
 function Preview(props: Props) {
-    const { name, videoMuted, videoTrack } = props;
+    const { name, videoMuted, videoTrack, children } = props;
 
     if (!videoMuted && videoTrack) {
         return (
@@ -40,6 +40,7 @@ function Preview(props: Props) {
                 <Video
                     className = 'flipVideoX'
                     videoTrack = {{ jitsiTrack: videoTrack }} />
+                { children }
             </div>
         );
     }
@@ -52,6 +53,7 @@ function Preview(props: Props) {
                 className = 'preview-avatar'
                 displayName = { name }
                 size = { 200 } />
+            { children }
         </div>
     );
 }

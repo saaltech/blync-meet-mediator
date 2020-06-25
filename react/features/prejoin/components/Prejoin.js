@@ -269,9 +269,12 @@ class Prejoin extends Component<Props, State> {
                                     onClick = { joinConference }
                                     onOptionsClick = { _onOptionsClick }
                                     type = 'primary'>
-                                    { t('prejoin.joinMeeting') }
+                                    { t('prejoin.joinNow') }
                                 </ActionButton>
                             </InlineDialog>
+                            <div className="cancel-join">
+                                <a href="/">Cancel</a>
+                            </div>
                         </div>
                     </div>
 

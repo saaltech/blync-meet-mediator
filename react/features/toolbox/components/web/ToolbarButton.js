@@ -54,6 +54,11 @@ class ToolbarButton extends AbstractToolbarButton<Props> {
                 aria-label = { this.props.accessibilityLabel }
                 className = 'toolbox-button'
                 onClick = { this.props.onClick }>
+
+                <div className='arrow-down' style={{
+                    display: this.props.toggled ? 'block' : 'none'
+                    }}></div>
+
                 { this.props.tooltip
                     ? <Tooltip
                         content = { this.props.tooltip }

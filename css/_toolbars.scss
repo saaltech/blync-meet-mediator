@@ -75,7 +75,6 @@
             justify-content: center;
 
             .toolbox-button {
-
                 .toolbox-icon {
                     background-color: #fff;
                     border-radius: 50%;
@@ -90,12 +89,12 @@
                     }
         
                     &.toggled {
-                        background: #2a3a4b;
+                        //background: #2a3a4b;
                         border: 1px solid #5e6d7a;
     
-                        svg {
-                            fill: #fff;
-                        }
+                        // svg {
+                        //     fill: #fff;
+                        // }
         
                         &:hover {
                             background-color: #5e6d7a;
@@ -113,19 +112,30 @@
                     }
                 }
 
-                &:nth-child(2) {
-                    .toolbox-icon {
-                        background-color: $hangupColor;
-                        border: 1px solid $hangupColor;
-                        width: 40px;
-                        height: 40px;
                 
-                        &:hover {
-                            background-color: $hangupColor;
-                        }
+            }
 
+            > .toolbox-button {
+                .toolbox-icon {
+                    // background-color: $hangupColor;
+                    // border: 1px solid $hangupColor;
+                    // width: 40px;
+                    // height: 40px;
+            
+                    // &:hover {
+                    //     background-color: $hangupColor;
+                    // }
+
+                    &.toggled {
+                        //background: #2a3a4b;
+                        border: 1px solid #5e6d7a;
+    
                         svg {
-                            fill: #fff;
+                            fill: #00C062;
+                        }
+        
+                        &:hover {
+                            background-color: #5e6d7a;
                         }
                     }
                 }
@@ -179,6 +189,21 @@
                     }
                 }
             }
+
+            .toolbox-button {
+                .arrow-down {
+                    position: absolute;
+                    width: 0px;
+                    height: 0px;
+                    border-left: 8px solid transparent;
+                    border-right: 8px solid transparent;
+                    border-top: 13px solid #fff;
+                    margin-left: 10px;
+                    top: -28px;
+                    opacity: 0.8;
+                }
+            }
+
             > .toolbox-button {
                 margin-right: 30px;
 
@@ -323,6 +348,13 @@
 
         .toolbox-button-wth-dialog {
             display: inline-block;
+            div[class*=' sc-'],div[class^='sc-']{
+                //&:nth-child(1) {
+                    > div {
+                        top: -20px !important;
+                    }
+                //}
+            }
         }
 
         .toolbox-icon {
