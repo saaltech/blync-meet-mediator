@@ -6,7 +6,10 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'jitsi-meet.example.com',
+        domain: 'vmeet.saal.ai',
+
+        // When using authentication, domain for guest users.
+        anonymousdomain: 'guest.vmeet.saal.ai',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
@@ -24,14 +27,14 @@ var config = {
         // focus: 'focus.jitsi-meet.example.com',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'conference.jitsi-meet.example.com'
+        muc: 'conference.<!--# echo var="subdomain" default="" -->vmeet.saal.ai'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
-    bosh: '//jitsi-meet.example.com/http-bind',
+    bosh: '//vmeet.saal.ai/http-bind',
 
     // Websocket URL
-    websocket: document.location.protocol.replace('http', 'ws') + '//' + document.location.host + '/xmpp-websocket'
+    // websocket: document.location.protocol.replace('http', 'ws') + '//' + document.location.host + '/xmpp-websocket'
     // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
 
     // The name of client node advertised in XEP-0115 'c' stanza
@@ -47,7 +50,11 @@ var config = {
     testing: {
         // P2P test mode disables automatic switching to P2P when there are 2
         // participants in the conference.
-        p2pTestMode: false
+        p2pTestMode: false,
+
+        octo: {
+                probability: 1
+        }
 
         // Enables the test specific features consumed by jitsi-meet-torture
         // testMode: false
@@ -79,7 +86,7 @@ var config = {
     // Audio
 
     // Disable measuring of audio levels.
-    // disableAudioLevels: false,
+    disableAudioLevels: true,
     // audioLevelsInterval: 200,
 
     // Enabling this will run the lib-jitsi-meet no audio detection module which
@@ -98,7 +105,7 @@ var config = {
     // startAudioOnly: false,
 
     // Every participant after the Nth will start audio muted.
-    // startAudioMuted: 10,
+    //startAudioMuted: 10,
 
     // Start calls with audio muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
@@ -137,11 +144,11 @@ var config = {
     // enableLayerSuspension: false,
 
     // Every participant after the Nth will start video muted.
-    // startVideoMuted: 10,
+    startVideoMuted: 10,
 
     // Start calls with video muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
-    // startWithVideoMuted: false,
+    startWithVideoMuted: false,
 
     // If set to true, prefer to use the H.264 video codec (if supported).
     // Note that it's not recommended to do this because simulcast is not
@@ -262,7 +269,7 @@ var config = {
     // minParticipants: 2,
 
     // Use XEP-0215 to fetch STUN and TURN servers.
-    // useStunTurn: true,
+    useStunTurn: true,
 
     // Enable IPv6 support.
     // useIPv6: true,
@@ -281,7 +288,7 @@ var config = {
     // useNicks: false,
 
     // Require users to always specify a display name.
-    // requireDisplayName: true,
+    requireDisplayName: true,
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
@@ -368,14 +375,14 @@ var config = {
         enabled: true,
 
         // Use XEP-0215 to fetch STUN and TURN servers.
-        // useStunTurn: true,
+        useStunTurn: true,
 
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
             // { urls: 'stun:jitsi-meet.example.com:4446' },
             { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
-        ]
+        ],
 
         // Sets the ICE transport policy for the p2p connection. At the time
         // of this writing the list of possible values are 'all' and 'relay',
@@ -387,11 +394,11 @@ var config = {
 
         // If set to true, it will prefer to use H.264 for P2P calls (if H.264
         // is supported).
-        // preferH264: true
+        preferH264: true,
 
         // If set to true, disable H.264 video codec by stripping it out of the
         // SDP.
-        // disableH264: false,
+        disableH264: false
 
         // How long we're going to wait, before going back to P2P after the 3rd
         // participant has left the conference (to filter out page reload).
@@ -420,8 +427,8 @@ var config = {
     // the user region as seen by the server.
     deploymentInfo: {
         // shard: "shard1",
-        // region: "europe",
-        // userRegion: "asia"
+        region: "region1",
+        userRegion: "region1"
     },
 
     // Decides whether the start/stop recording audio notifications should play on record.
@@ -460,16 +467,16 @@ var config = {
     // },
 
     // Options related to end-to-end (participant to participant) ping.
-    // e2eping: {
+    e2eping: {
     //   // The interval in milliseconds at which pings will be sent.
     //   // Defaults to 10000, set to <= 0 to disable.
-    //   pingInterval: 10000,
+         pingInterval: -1
     //
     //   // The interval in milliseconds at which analytics events
     //   // with the measured RTT will be sent. Defaults to 60000, set
     //   // to <= 0 to disable.
     //   analyticsInterval: 60000,
-    //   },
+    },
 
     // If set, will attempt to use the provided video input device label when
     // triggering a screenshare, instead of proceeding through the normal flow
