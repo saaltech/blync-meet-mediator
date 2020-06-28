@@ -315,22 +315,22 @@ class Prejoin extends Component<Props, State> {
                                 <input type="radio" id="host" name="participantType" 
                                     onChange={ _setParticpantType } 
                                     value="host"/>
-                                <label for="host">I am the host</label><br/>
+                                <label for="host">{t('prejoin.hostuserLabel')}</label><br/>
                                 <input type="radio" id="guest" name="participantType" 
                                     onChange={ _setParticpantType }
                                     value="guest"/>
-                                <label for="guest">I am a guest user</label><br/>
+                                <label for="guest">{t('prejoin.guestUserLabel')}</label><br/>
 
                             </div>
 
                             {
                                 this.state.participantTypeOptionSpecified && !this.state.isHost &&
                                 <div className="prejoin-field">
-                                    <div className="prejoin-label">Meeting Password</div>
+                                    <div className="prejoin-label">{t('prejoin.meetingPasswordField')}</div>
                                     <InputField
                                         onChange = { _setLockPassword }
                                         //onSubmit = { joinConference }
-                                        placeHolder = { 'Password (if set by the host)' }/>
+                                        placeHolder = { t('prejoin.meetingPasswordPlaceholder') }/>
                                 </div>
                             }
 
@@ -338,20 +338,20 @@ class Prejoin extends Component<Props, State> {
                                 this.state.participantTypeOptionSpecified && this.state.isHost &&
                                 <>
                                     <div className="prejoin-field">
-                                        <div className="prejoin-label">User Name</div>
+                                        <div className="prejoin-label">{t('prejoin.usernameField')}</div>
                                         <InputField
                                             onChange = { _setHostUsername }
                                             //onSubmit = { joinConference }
-                                            placeHolder = { 'User Name' }/>
+                                            placeHolder = { t('prejoin.usernameField') }/>
                                     </div>
                                     
                                     <div className="prejoin-field">
-                                        <div className="prejoin-label">Password</div>
+                                        <div className="prejoin-label">{t('prejoin.passwordField')}</div>
                                         <InputField
                                             type="password"
                                             onChange = { _setHostPassword }
                                             //onSubmit = { joinConference }
-                                            placeHolder = { 'Password' } />
+                                            placeHolder = { t('prejoin.passwordField') } />
                                     </div>
                                     
                                 </>

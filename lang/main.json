@@ -531,7 +531,13 @@
         "screenSharingError": "Screen sharing error:",
         "videoOnlyError": "Video error:",
         "videoTrackError": "Could not create video track.",
-        "viewAllNumbers": "view all numbers"
+        "viewAllNumbers": "view all numbers",
+        "usernameField": "User Name",
+        "passwordField": "Password",
+        "meetingPasswordField": "Meeting Password",
+        "meetingPasswordPlaceholder": "Password (if set by the host)",
+        "guestUserLabel": "I am a guest user",
+        "hostuserLabel": "I am the host"
     },
     "presenceStatus": {
         "busy": "Busy",
