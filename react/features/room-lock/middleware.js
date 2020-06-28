@@ -5,7 +5,8 @@ import {
     CONFERENCE_FAILED,
     CONFERENCE_JOINED,
     LOCK_STATE_CHANGED,
-    SET_PASSWORD_FAILED
+    SET_PASSWORD_FAILED,
+    setPassword
 } from '../base/conference';
 import { hideDialog } from '../base/dialog';
 import { JitsiConferenceErrors } from '../base/lib-jitsi-meet';
@@ -112,7 +113,16 @@ function _conferenceFailed({ dispatch }, next, action) {
             error.recoverable = true;
         }
         if (error.recoverable) {
-            dispatch(_openPasswordRequiredPrompt(conference));
+            // The below 'if' block is the custom flow.
+            let password = window.sessionStorage.getItem('lockPassword')
+            if(window.sessionStorage.getItem('lockPassword')) {
+                window.sessionStorage.removeItem('lockPassword');
+                dispatch(setPassword(conference, conference.join, password));
+                return true;
+            }
+            else{
+                dispatch(_openPasswordRequiredPrompt(conference));
+            }
         }
     } else {
         dispatch(hideDialog(PasswordRequiredPrompt));
