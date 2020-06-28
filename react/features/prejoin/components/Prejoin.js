@@ -320,7 +320,6 @@ class Prejoin extends Component<Props, State> {
                                     onChange={ _setParticpantType }
                                     value="guest"/>
                                 <label for="guest">{t('prejoin.guestUserLabel')}</label><br/>
-
                             </div>
 
                             {
