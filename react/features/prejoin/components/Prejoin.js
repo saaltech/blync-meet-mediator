@@ -181,8 +181,8 @@ class Prejoin extends Component<Props, State> {
         this.setState({
             isHost: false,
             participantTypeOptionSpecified: false,
-            hostUsername: window.sessionStorage.getItem("hostUsername"),
-            hostPassword: window.sessionStorage.getItem("hostPassword")
+            hostUsername: window.sessionStorage.getItem("hostUsername") || "",
+            hostPassword: window.sessionStorage.getItem("hostPassword") || ""
         })
     }
 
