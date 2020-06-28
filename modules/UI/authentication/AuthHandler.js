@@ -3,6 +3,7 @@
 import Logger from 'jitsi-meet-logger';
 
 import { openConnection } from '../../../connection';
+import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
 import {
     JitsiConnectionErrors
@@ -163,49 +164,46 @@ function initJWTTokenListener(room) {
  * @param {JitsiConference} room
  * @param {string} [lockPassword] password to use if the conference is locked
  */
-function doXmppAuth(room, lockPassword) {
-    let participantType = window.sessionStorage.getItem("participantType")
-    let hostUsername = window.sessionStorage.getItem("hostUsername")
-    let hostPassword = window.sessionStorage.getItem("hostPassword")
+function doXmppAuth (room, lockPassword) {
+    let participantType = window.sessionStorage.getItem("participantType");
+    let hostUsername = window.sessionStorage.getItem("hostUsername") || "";
+    let hostPassword = window.sessionStorage.getItem("hostPassword") || "";
     lockPassword = window.sessionStorage.getItem("lockPassword") || lockPassword; // Need to set on prejoin page
     
-    setTimeout(() => {
-        if(participantType) {
-            room.authenticateAndUpgradeRole({
-                hostUsername,
-                hostPassword,
-                roomPassword: lockPassword,
-    
-                /** Called when the XMPP login succeeds. */
-                onLoginSuccessful() {
-                    console.log('connection.FETCH_SESSION_ID')
+    if(participantType) {
+        room.authenticateAndUpgradeRole({
+            id: toJid(hostUsername, config.hosts),
+            password: hostPassword,
+            roomPassword: lockPassword,
+
+            /** Called when the XMPP login succeeds. */
+            onLoginSuccessful() {
+                console.log('connection.FETCH_SESSION_ID')
+            }
+        })
+        .then(
+            /* onFulfilled */ () => {
+                console.log('connection.GOT_SESSION_ID')
+            },
+            /* onRejected */ error => {
+                logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
+
+                const { authenticationError, connectionError } = error;
+
+                if (authenticationError) {
+                    console.log('connection.GET_SESSION_ID_ERROR: ', authenticationError)
+                } else if (connectionError) {
+                    console.log(connectionError);
                 }
-            })
-            .then(
-                /* onFulfilled */ () => {
-                    console.log('connection.GOT_SESSION_ID')
-                },
-                /* onRejected */ error => {
-                    logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
-    
-                    const { authenticationError, connectionError } = error;
-    
-                    if (authenticationError) {
-                        console.log('connection.GET_SESSION_ID_ERROR: ', authenticationError)
-                    } else if (connectionError) {
-                        console.log(connectionError);
-                    }
-    
-                    //show the old flow if error occurs
-                    oldLoginFlow(room, lockPassword);
-                }
-            )
-        }
-        else {
-            oldLoginFlow(room, lockPassword)
-        }
-    }, 100)
-    
+                
+                //show the old flow if error occurs
+                oldLoginFlow(room, lockPassword);
+            }
+        )
+    }
+    else {
+        oldLoginFlow(room, lockPassword)
+    }
 }
 
 function oldLoginFlow(room, lockPassword) {
@@ -252,9 +250,6 @@ function oldLoginFlow(room, lockPassword) {
  * @param {string} [lockPassword] password to use if the conference is locked
  */
 function authenticate(room, lockPassword) {
-    if(loginDialog) {
-        return;
-    }
     if (isTokenAuthEnabled || room.isExternalAuthEnabled()) {
         doExternalAuth(room, lockPassword);
     } else {
@@ -288,15 +283,16 @@ function logout(room) {
  * @param {string} [lockPassword] password to use if the conference is locked
  */
 function requireAuth(room, lockPassword) {
-    if (authRequiredDialog) {
-        return;
-    }
-
     let participantType = window.sessionStorage.getItem("participantType");
     if(participantType) {
+        if(loginDialog)
+            return;
         authenticate(room, lockPassword)
     }
     else {
+        if (authRequiredDialog) {
+            return;
+        }
         authRequiredDialog = LoginDialog.showAuthRequiredDialog(
             room.getName(), authenticate.bind(null, room, lockPassword)
         );

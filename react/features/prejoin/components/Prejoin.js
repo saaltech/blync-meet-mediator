@@ -117,7 +117,9 @@ class Prejoin extends Component<Props, State> {
         this.state = {
             showJoinByPhoneButtons: false,
             isHost: false,
-            participantTypeOptionSpecified: false
+            participantTypeOptionSpecified: false,
+            hostUsername: "",
+            hostPassword: ""
         };
 
         this._closeDialog = this._closeDialog.bind(this);
@@ -175,13 +177,12 @@ class Prejoin extends Component<Props, State> {
 
     componentDidMount() {
         window.sessionStorage.setItem("participantType", "guest");
-        // We can use this a logged-in user
-        //window.sessionStorage.removeItem("hostUsername");
-        //window.sessionStorage.removeItem("hostPassword");
         window.sessionStorage.removeItem("lockPassword");
         this.setState({
             isHost: false,
-            participantTypeOptionSpecified: false
+            participantTypeOptionSpecified: false,
+            hostUsername: window.sessionStorage.getItem("hostUsername"),
+            hostPassword: window.sessionStorage.getItem("hostPassword")
         })
     }
 
@@ -222,6 +223,7 @@ class Prejoin extends Component<Props, State> {
      */
     _setHostUsername(username) {
         window.sessionStorage.setItem("hostUsername", username);
+        this.setFieldInState('hostUsername', username)
     }
 
     _setHostPassword: () => void;
@@ -231,6 +233,7 @@ class Prejoin extends Component<Props, State> {
      */
     _setHostPassword(password) {
         window.sessionStorage.setItem("hostPassword", password);
+        this.setFieldInState('hostPassword', password)
     }
 
     _setLockPassword: () => void;
@@ -240,6 +243,12 @@ class Prejoin extends Component<Props, State> {
      */
     _setLockPassword(lockPassword) {
         window.sessionStorage.setItem("lockPassword", lockPassword);
+    }
+
+    setFieldInState(field, value) {
+        let obj = {}
+        obj[field] = value
+        this.setState(obj);
     }
 
     _closeDialog: () => void;
@@ -341,6 +350,7 @@ class Prejoin extends Component<Props, State> {
                                         <InputField
                                             onChange = { _setHostUsername }
                                             //onSubmit = { joinConference }
+                                            value = { this.state.hostUsername }
                                             placeHolder = { t('prejoin.usernameField') }/>
                                     </div>
                                     
@@ -350,6 +360,7 @@ class Prejoin extends Component<Props, State> {
                                             type="password"
                                             onChange = { _setHostPassword }
                                             //onSubmit = { joinConference }
+                                            value = { this.state.hostPassword }
                                             placeHolder = { t('prejoin.passwordField') } />
                                     </div>
                                     
