@@ -16,6 +16,8 @@ const logger = Logger.getLogger(__filename);
 let externalAuthWindow;
 let authRequiredDialog;
 
+let loginDialog;
+
 const isTokenAuthEnabled
     = typeof config.tokenAuthUrl === 'string' && config.tokenAuthUrl.length;
 const getTokenAuthUrl
@@ -205,10 +207,11 @@ function doXmppAuth(room, lockPassword) {
 }
 
 function oldLoginFlow(room, lockPassword) {
-    const loginDialog = LoginDialog.showAuthDialog(
+    if(loginDialog) {
+        return;
+    }
+    loginDialog = LoginDialog.showAuthDialog(
         /* successCallback */ (id, password) => {
-            hostUsername = id;
-            hostPassword = password;
             room.authenticateAndUpgradeRole({
                 id,
                 password,
