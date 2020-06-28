@@ -342,7 +342,6 @@ class Prejoin extends Component<Props, State> {
                                         <InputField
                                             onChange = { _setHostUsername }
                                             //onSubmit = { joinConference }
-                                            value = { window.sessionStorage.getItem('hostUsername') }
                                             placeHolder = { 'User Name' }/>
                                     </div>
                                     
@@ -352,7 +351,6 @@ class Prejoin extends Component<Props, State> {
                                             type="password"
                                             onChange = { _setHostPassword }
                                             //onSubmit = { joinConference }
-                                            value = { window.sessionStorage.getItem('hostPassword') }
                                             placeHolder = { 'Password' } />
                                     </div>
                                     
