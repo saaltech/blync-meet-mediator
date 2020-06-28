@@ -162,8 +162,53 @@ function initJWTTokenListener(room) {
  * @param {string} [lockPassword] password to use if the conference is locked
  */
 function doXmppAuth(room, lockPassword) {
+    let participantType = window.sessionStorage.getItem("participantType")
+    let hostUsername = window.sessionStorage.getItem("hostUsername")
+    let hostPassword = window.sessionStorage.getItem("hostPassword")
+    lockPassword = window.sessionStorage.getItem("lockPassword") || lockPassword; // Need to set on prejoin page
+    
+
+    if(participantType) {
+        room.authenticateAndUpgradeRole({
+            hostUsername,
+            hostPassword,
+            roomPassword: lockPassword,
+
+            /** Called when the XMPP login succeeds. */
+            onLoginSuccessful() {
+                console.log('connection.FETCH_SESSION_ID')
+            }
+        })
+        .then(
+            /* onFulfilled */ () => {
+                console.log('connection.GOT_SESSION_ID')
+            },
+            /* onRejected */ error => {
+                logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
+
+                const { authenticationError, connectionError } = error;
+
+                if (authenticationError) {
+                    console.log('connection.GET_SESSION_ID_ERROR: ', authenticationError)
+                } else if (connectionError) {
+                    console.log(connectionError);
+                }
+
+                //show the old flow if error occurs
+                oldLoginFlow(room, lockPassword);
+            }
+        )
+    }
+    else {
+        oldLoginFlow(room, lockPassword)
+    }
+}
+
+function oldLoginFlow(room, lockPassword) {
     const loginDialog = LoginDialog.showAuthDialog(
         /* successCallback */ (id, password) => {
+            hostUsername = id;
+            hostPassword = password;
             room.authenticateAndUpgradeRole({
                 id,
                 password,
@@ -242,9 +287,15 @@ function requireAuth(room, lockPassword) {
         return;
     }
 
-    authRequiredDialog = LoginDialog.showAuthRequiredDialog(
-        room.getName(), authenticate.bind(null, room, lockPassword)
-    );
+    let participantType = window.sessionStorage.getItem("participantType");
+    if(participantType) {
+        authenticate(room, lockPassword)
+    }
+    else {
+        authRequiredDialog = LoginDialog.showAuthRequiredDialog(
+            room.getName(), authenticate.bind(null, room, lockPassword)
+        );
+    }
 }
 
 /**
