@@ -319,7 +319,7 @@ class Prejoin extends Component<Props, State> {
                                 <input type="radio" id="guest" name="participantType" 
                                     onChange={ _setParticpantType }
                                     value="guest"/>
-                                <label for="guest">{t('prejoin.guestUserLabel')}</label><br/>
+                                <label for="guest">{ t('prejoin.guestUserLabel') }</label>
                             </div>
 
                             {
