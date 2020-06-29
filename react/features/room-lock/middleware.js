@@ -114,9 +114,9 @@ function _conferenceFailed({ dispatch }, next, action) {
         }
         if (error.recoverable) {
             // The below 'if' block is the custom flow.
-            let password = window.sessionStorage.getItem('lockPassword')
-            if(window.sessionStorage.getItem('lockPassword')) {
-                window.sessionStorage.removeItem('lockPassword');
+            let password = window.sessionStorage.getItem('roomPassword')
+            if(password) {
+                window.sessionStorage.removeItem('roomPassword');
                 dispatch(setPassword(conference, conference.join, password));
                 return true;
             }

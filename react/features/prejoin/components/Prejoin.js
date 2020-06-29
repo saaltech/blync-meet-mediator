@@ -131,7 +131,7 @@ class Prejoin extends Component<Props, State> {
         this._setParticpantType = this._setParticpantType.bind(this);
         this._setHostUsername = this._setHostUsername.bind(this);
         this._setHostPassword = this._setHostPassword.bind(this);
-        this._setLockPassword = this._setLockPassword.bind(this);
+        this._setRoomPassword = this._setRoomPassword.bind(this);
     }
 
     _onCheckboxChange: () => void;
@@ -177,7 +177,7 @@ class Prejoin extends Component<Props, State> {
 
     componentDidMount() {
         window.sessionStorage.setItem("participantType", "guest");
-        window.sessionStorage.removeItem("lockPassword");
+        window.sessionStorage.removeItem("roomPassword");
         this.setState({
             isHost: false,
             participantTypeOptionSpecified: false,
@@ -236,13 +236,13 @@ class Prejoin extends Component<Props, State> {
         this.setFieldInState('hostPassword', password)
     }
 
-    _setLockPassword: () => void;
+    _setRoomPassword: () => void;
     /**
      * Sets the roomPassword property in localstorage
-     * @param {*} lockPassword 
+     * @param {*} roomPassword 
      */
-    _setLockPassword(lockPassword) {
-        window.sessionStorage.setItem("lockPassword", lockPassword);
+    _setRoomPassword(roomPassword) {
+        window.sessionStorage.setItem("roomPassword", roomPassword);
     }
 
     setFieldInState(field, value) {
@@ -293,7 +293,7 @@ class Prejoin extends Component<Props, State> {
         } = this.props;
 
         const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName, 
-            _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setLockPassword } = this;
+            _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
         const { showJoinByPhoneButtons } = this.state;
 
         return (
@@ -336,7 +336,7 @@ class Prejoin extends Component<Props, State> {
                                 <div className="prejoin-field">
                                     <div className="prejoin-label">{t('prejoin.meetingPasswordField')}</div>
                                     <InputField
-                                        onChange = { _setLockPassword }
+                                        onChange = { _setRoomPassword }
                                         //onSubmit = { joinConference }
                                         placeHolder = { t('prejoin.meetingPasswordPlaceholder') }/>
                                 </div>
