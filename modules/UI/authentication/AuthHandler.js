@@ -168,7 +168,6 @@ function doXmppAuth (room, lockPassword) {
     let participantType = window.sessionStorage.getItem("participantType");
     let hostUsername = window.sessionStorage.getItem("hostUsername") || "";
     let hostPassword = window.sessionStorage.getItem("hostPassword") || "";
-    lockPassword = window.sessionStorage.getItem("lockPassword") || lockPassword; // Need to set on prejoin page
     
     if(participantType) {
         room.authenticateAndUpgradeRole({

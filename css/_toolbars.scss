@@ -146,6 +146,12 @@
             justify-content: flex-end;
 
             .enclosed-group {
+                > .toolbox-button:nth-child(1) {
+                    // to hide the arrow indicator for the raise hand icon when toggled
+                    .arrow-down {
+                        display: none !important;
+                    }
+                }
                 display: flex;
                 background: rgba(255, 255, 255, 0.63);
                 border-radius: 6px;
