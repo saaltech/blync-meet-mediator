@@ -137,6 +137,10 @@ function LoginDialog(successCallback, cancelCallback) {
             // this is a password required error, as login window was already
             // open once, this means username or password is wrong
             messageKey = 'dialog.incorrectPassword';
+        } else if (error === JitsiConnectionErrors.CONFERENCE_HOST_NOT_AUTHORIZED) {
+            // this is a CONFERENCE_HOST_NOT_AUTHORIZED error, as login window was already
+            // open once, this means username or password does not match that of the host.
+            messageKey = 'dialog.invalidHost';
         } else {
             messageKey = 'dialog.connectErrorWithMsg';
 

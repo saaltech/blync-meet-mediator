@@ -319,6 +319,22 @@ class ConferenceConnector {
             break;
         }
 
+        // not enough rights to host the conference
+        case JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED: {
+            // Schedule reconnect to check if someone else created the room.
+            this.reconnectTimeout = setTimeout(() => {
+                APP.store.dispatch(conferenceWillJoin(room));
+                room.join();
+            }, 5000);
+
+            const { password }
+                = APP.store.getState()['features/base/conference'];
+
+            AuthHandler.requireAuth(room, password);
+
+            break;
+        }
+
         case JitsiConferenceErrors.RESERVATION_ERROR: {
             const [ code, msg ] = params;
 

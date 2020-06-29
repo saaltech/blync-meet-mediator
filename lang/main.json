@@ -206,6 +206,7 @@
         "IamHost": "I am the host",
         "incorrectRoomLockPassword": "Incorrect password",
         "incorrectPassword": "Incorrect username or password",
+        "invalidHost": "Sorry, You cannot host this meeting. Please wait for the host to join.",
         "inlineInstallationMsg": "You need to install our desktop sharing extension.",
         "inlineInstallExtension": "Install now",
         "internalError": "Oops! Something went wrong. The following error occurred: {{error}}",
