@@ -188,15 +188,19 @@ function doXmppAuth (room, lockPassword) {
                 logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
 
                 const { authenticationError, connectionError } = error;
-
-                if (authenticationError) {
-                    console.log('connection.GET_SESSION_ID_ERROR: ', authenticationError)
-                } else if (connectionError) {
-                    console.log(connectionError);
-                }
                 
                 //show the old flow if error occurs
                 oldLoginFlow(room, lockPassword);
+                setTimeout(() => {
+                    if (authenticationError) {
+                        loginDialog.displayError(
+                            'connection.GET_SESSION_ID_ERROR',
+                            { msg: authenticationError });
+                    } else if (connectionError) {
+                        loginDialog.displayError(connectionError);
+                    }
+                }, 1)
+                
             }
         )
     }
