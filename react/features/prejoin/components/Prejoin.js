@@ -9,18 +9,22 @@ import { Icon, IconPhone, IconVolumeOff } from '../../base/icons';
 import { ActionButton, InputField, PreMeetingScreen } from '../../base/premeeting';
 import { connect } from '../../base/redux';
 import { getDisplayName, updateSettings } from '../../base/settings';
+import { setPrejoinPageErrorMessageKey } from '../../prejoin'
+
 import {
     joinConference as joinConferenceAction,
     joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
     setSkipPrejoin as setSkipPrejoinAction,
-    setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
+    setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction,
+    setPrejoinRepainted
 } from '../actions';
 import {
     getActiveVideoTrack,
     isJoinByPhoneButtonVisible,
     isDeviceStatusVisible,
     isJoinByPhoneDialogVisible,
-    isPrejoinVideoMuted
+    isPrejoinVideoMuted,
+    getPageErrorMessageKey
 } from '../functions';
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
@@ -132,6 +136,7 @@ class Prejoin extends Component<Props, State> {
         this._setHostUsername = this._setHostUsername.bind(this);
         this._setHostPassword = this._setHostPassword.bind(this);
         this._setRoomPassword = this._setRoomPassword.bind(this);
+        this._setDetailsToStore = this._setDetailsToStore.bind(this);
     }
 
     _onCheckboxChange: () => void;
@@ -207,13 +212,11 @@ class Prejoin extends Component<Props, State> {
      */
     _setParticpantType(event) {
         let value = event.target.value
-        window.sessionStorage.setItem("participantType", value);
+        //window.sessionStorage.setItem("participantType", value);
         this.setState({
             isHost: value === 'host',
             participantTypeOptionSpecified: true
         })
-
-
     }
 
     _setHostUsername: () => void;
@@ -222,7 +225,7 @@ class Prejoin extends Component<Props, State> {
      * @param {*} username 
      */
     _setHostUsername(username) {
-        window.sessionStorage.setItem("hostUsername", username);
+        //window.sessionStorage.setItem("hostUsername", username);
         this.setFieldInState('hostUsername', username)
     }
 
@@ -232,7 +235,7 @@ class Prejoin extends Component<Props, State> {
      * @param {*} password 
      */
     _setHostPassword(password) {
-        window.sessionStorage.setItem("hostPassword", password);
+        //window.sessionStorage.setItem("hostPassword", password);
         this.setFieldInState('hostPassword', password)
     }
 
@@ -249,6 +252,12 @@ class Prejoin extends Component<Props, State> {
         let obj = {}
         obj[field] = value
         this.setState(obj);
+    }
+
+    _setDetailsToStore() {
+        window.sessionStorage.setItem("hostUsername", this.state.hostUsername);
+        window.sessionStorage.setItem("hostPassword", this.state.hostPassword);
+        window.sessionStorage.setItem("participantType", this.state.participantType);
     }
 
     _closeDialog: () => void;
@@ -290,6 +299,7 @@ class Prejoin extends Component<Props, State> {
             showDialog,
             t,
             videoTrack,
+            pageErrorMessageKey
         } = this.props;
 
         const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName, 
@@ -393,16 +403,32 @@ class Prejoin extends Component<Props, State> {
                                 isOpen = { showJoinByPhoneButtons }
                                 onClose = { _onDropdownClose }>
                                 <ActionButton
-                                    disabled = { !name || !this.state.participantTypeOptionSpecified }
+                                    disabled = { !name || 
+                                        !this.state.participantTypeOptionSpecified ||
+                                        "submitting" === pageErrorMessageKey}
                                     hasOptions = { true }
-                                    onClick = { joinConference }
+                                    onClick = { () => {
+                                        this._setDetailsToStore()
+                                        APP.store.dispatch(setPrejoinPageErrorMessageKey("submitting"))
+                                        joinConference()
+                                    }}
                                     onOptionsClick = { _onOptionsClick }
                                     type = 'primary'>
                                     { t('prejoin.joinNow') }
                                 </ActionButton>
                             </InlineDialog>
                             <div className="cancel-join">
-                                <a href="/">Cancel</a>
+                                <a href={"submitting" === pageErrorMessageKey ? "javascript:void(0)" : "/"}>
+                                    Cancel
+                                </a>
+                            </div>
+
+                            <div className="error-msg">
+                                {
+                                    pageErrorMessageKey && 
+                                    "submitting" !== pageErrorMessageKey &&
+                                     t(pageErrorMessageKey)
+                                }
                             </div>
                         </div>
                     </div>
@@ -448,7 +474,8 @@ function mapStateToProps(state): Object {
         showDialog: isJoinByPhoneDialogVisible(state),
         hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
         showCameraPreview: !isPrejoinVideoMuted(state),
-        videoTrack: getActiveVideoTrack(state)
+        videoTrack: getActiveVideoTrack(state),
+        pageErrorMessageKey: getPageErrorMessageKey(state)
     };
 }
 

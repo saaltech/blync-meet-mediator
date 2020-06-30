@@ -68,7 +68,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                 </Preview>
 
                 <div className = 'content'>
-                    <a href="/" class="close-icon"></a>
+                    <a href="/" className="close-icon"></a>
                     <div className = 'title'>
                         { urlToShow }
                     </div>

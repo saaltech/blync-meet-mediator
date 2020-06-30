@@ -15,7 +15,9 @@ import {
     SET_PREJOIN_DEVICE_ERRORS,
     SET_PREJOIN_PAGE_VISIBILITY,
     SET_PREJOIN_VIDEO_DISABLED,
-    SET_PREJOIN_VIDEO_MUTED
+    SET_PREJOIN_VIDEO_MUTED,
+    SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY,
+    SET_PREJOIN_REPAINTED
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -153,6 +155,22 @@ ReducerRegistry.register(
                 showJoinByPhoneDialog: action.value
             };
         }
+
+        case SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY: {
+            return {
+                ...state,
+                pageErrorMessageKey: action.value
+            };
+        }
+
+        case SET_PREJOIN_REPAINTED: {
+            return {
+                ...state,
+                prejoinRepainted: action.value
+            };
+        }
+
+        prejoinRepainted
 
         default:
             return state;

@@ -5,6 +5,7 @@ import Logger from 'jitsi-meet-logger';
 import { openConnection } from '../../../connection';
 import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
+import { setPrejoinPageVisibility, setPrejoinPageErrorMessageKey } from '../../../react/features/prejoin'
 import {
     JitsiConnectionErrors,
     JitsiConferenceErrors
@@ -184,15 +185,30 @@ function doXmppAuth (room, lockPassword) {
         .then(
             /* onFulfilled */ () => {
                 console.log('connection.GOT_SESSION_ID')
+
+                // hide PrejoinPage 
+                _setPrejoinPageVisibility(false)
+
+                // Clear PrejoinPage error
+                _setPrejoinPageErrorMessage(null)
+                
+
             },
             /* onRejected */ error => {
                 logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
                 
                 //show the old flow if error occurs
-                oldLoginFlow(room, lockPassword);
-                setTimeout(() => {
-                    handleLoginError(error)
-                }, 1)
+                //oldLoginFlow(room, lockPassword);
+
+                //setTimeout(() => {
+                    // Show PrejoinPage
+                    _setPrejoinPageVisibility(true)
+
+                    // Show error on the page
+                    _setPrejoinPageErrorMessage(error)
+                    
+                    //handleLoginError(error)
+                //}, 1)
             }
         )
     }
@@ -228,6 +244,38 @@ function oldLoginFlow(room, lockPassword) {
                 });
         },
         /* cancelCallback */ () => loginDialog.close());
+}
+
+function _setPrejoinPageVisibility(visible) {
+    APP.store.dispatch(setPrejoinPageVisibility(visible))
+}
+
+function _setPrejoinPageErrorMessage(error) {
+    let messageKey = error ? 'dialog.connectErrorWithMsg' : null;
+    if(!messageKey) {
+        return null;
+    }
+    
+    let errorKey = '';
+    const { authenticationError, connectionError, message } = error;
+    if (authenticationError) {
+        errorKey = (message === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) ? 
+                                message : 'connection.GET_SESSION_ID_ERROR';
+    } else if (connectionError) {
+        errorKey = connectionError;
+    }
+    if (errorKey === JitsiConnectionErrors.PASSWORD_REQUIRED) {
+        // this is a password required error, as login window was already
+        // open once, this means username or password is wrong
+        messageKey = 'dialog.incorrectPassword';
+    } else if (errorKey === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) {
+        // this is a CONFERENCE_HOST_NOT_AUTHORIZED error, as login window was already
+        // open once, this means username or password does not match that of the host.
+        messageKey = 'dialog.invalidHost';
+    }
+
+    APP.store.dispatch(setPrejoinPageErrorMessageKey(messageKey))
+    
 }
 
 function handleLoginError(error) {
@@ -284,8 +332,8 @@ function logout(room) {
 function requireAuth(room, lockPassword) {
     let participantType = window.sessionStorage.getItem("participantType");
     if(participantType) {
-        if(loginDialog)
-            return;
+        //if(loginDialog)
+        //    return;
         authenticate(room, lockPassword)
     }
     else {

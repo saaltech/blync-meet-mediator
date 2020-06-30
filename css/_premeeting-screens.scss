@@ -163,6 +163,16 @@
             }
         }
 
+        .error-msg {
+            color: red;
+            position: absolute;
+            width: 100%;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+        }
+
         .action-btn {
             border-radius: 3px;
             color: #fff;
