@@ -127,7 +127,7 @@ class Chat extends AbstractChat<Props, State> {
      */
     _renderChat() {
         let messages = this.props._messages;
-        const { _privateMessageRecipient, _localParticipant, _messagesSinceLastRead } = this.props;
+        const { _participants, _privateMessageRecipient, _localParticipant, _messagesSinceLastRead } = this.props;
         const showUsersList = this.state.activeSwitcher === SwitcherViews.PRIVATE && !this.props._privateMessageRecipient;
         const showMessageContainer = this.state.activeSwitcher === SwitcherViews.EVERYONE || this.props._privateMessageRecipient;
 
@@ -153,10 +153,11 @@ class Chat extends AbstractChat<Props, State> {
                     messages = { messages }
                     ref = { this._messageContainerRef } /> }
                 {showUsersList && <ChatUsers
-                    messages = { messages }
+                    localParticipant = { _localParticipant }
+                    messages = { this.props._messages.filter(msg => msg.privateMessage) }
                     messagesSinceLastRead = { _messagesSinceLastRead }
                     onSelect = { participant => this.props._setPrivateMessageRecipient(participant) }
-                    participants = { this.props._participants.filter(user => user.id !== _localParticipant.id) }
+                    participants = { _participants }
                     ref = { this._messageContainerRef } /> }
                 {showMessageContainer && <ChatInput
                     onResize = { this._onChatInputResize }
