@@ -15,8 +15,7 @@ import {
     joinConference as joinConferenceAction,
     joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
     setSkipPrejoin as setSkipPrejoinAction,
-    setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction,
-    setPrejoinRepainted
+    setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
 } from '../actions';
 import {
     getActiveVideoTrack,
@@ -418,9 +417,15 @@ class Prejoin extends Component<Props, State> {
                                 </ActionButton>
                             </InlineDialog>
                             <div className="cancel-join">
-                                <a href={"submitting" === pageErrorMessageKey ? "javascript:void(0)" : "/"}>
+                            {
+                                "submitting" !== pageErrorMessageKey ?
+                                <a href={ "/"}>
                                     Cancel
-                                </a>
+                                </a> 
+                                :
+                                "Cancel"
+                            }
+                                
                             </div>
 
                             <div className="error-msg">

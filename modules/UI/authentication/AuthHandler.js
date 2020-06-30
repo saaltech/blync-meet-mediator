@@ -5,7 +5,8 @@ import Logger from 'jitsi-meet-logger';
 import { openConnection } from '../../../connection';
 import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
-import { setPrejoinPageVisibility, setPrejoinPageErrorMessageKey } from '../../../react/features/prejoin'
+import { setInterimPrejoinPage, 
+    setPrejoinPageErrorMessageKey } from '../../../react/features/prejoin'
 import {
     JitsiConnectionErrors,
     JitsiConferenceErrors
@@ -187,7 +188,7 @@ function doXmppAuth (room, lockPassword) {
                 console.log('connection.GOT_SESSION_ID')
 
                 // hide PrejoinPage 
-                _setPrejoinPageVisibility(false)
+                _setInterimPrejoinPage(false)
 
                 // Clear PrejoinPage error
                 _setPrejoinPageErrorMessage(null)
@@ -201,12 +202,29 @@ function doXmppAuth (room, lockPassword) {
                 //oldLoginFlow(room, lockPassword);
 
                 //setTimeout(() => {
+                   
+                /*    
                     // Show PrejoinPage
-                    _setPrejoinPageVisibility(true)
+                    _setInterimPrejoinPage(true)
 
                     // Show error on the page
                     _setPrejoinPageErrorMessage(error)
+                */
                     
+                    APP.conference.init({
+                        roomName: APP.conference.roomName,
+                        refreshTracksOnly: true
+                    }).then(()=>{
+                         // Show PrejoinPage
+                         _setInterimPrejoinPage(true)
+
+                        // Show error on the page
+                        _setPrejoinPageErrorMessage(error)
+
+                    }).catch(error => {
+                        //APP.API.notifyConferenceLeft(APP.conference.roomName);
+                        logger.error(error);
+                    });
                     //handleLoginError(error)
                 //}, 1)
             }
@@ -246,8 +264,8 @@ function oldLoginFlow(room, lockPassword) {
         /* cancelCallback */ () => loginDialog.close());
 }
 
-function _setPrejoinPageVisibility(visible) {
-    APP.store.dispatch(setPrejoinPageVisibility(visible))
+function _setInterimPrejoinPage(visible) {
+    APP.store.dispatch(setInterimPrejoinPage(visible))
 }
 
 function _setPrejoinPageErrorMessage(error) {

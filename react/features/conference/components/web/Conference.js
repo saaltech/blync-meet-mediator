@@ -13,7 +13,7 @@ import { Filmstrip } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
-import { Prejoin, isPrejoinPageVisible } from '../../../prejoin';
+import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
     Toolbox,
     fullScreenChanged,
@@ -184,7 +184,8 @@ class Conference extends AbstractConference<Props, *> {
         const {
             _iAmRecorder,
             _layoutClassName,
-            _showPrejoin
+            _showPrejoin,
+            _interimPrejoin
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -211,7 +212,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                { !filmstripOnly && _showPrejoin && <Prejoin />}
+                { !filmstripOnly && (_showPrejoin || _interimPrejoin )&&  <Prejoin />}
             </div>
         );
     }
@@ -278,7 +279,8 @@ function _mapStateToProps(state) {
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
-        _showPrejoin: isPrejoinPageVisible(state)
+        _showPrejoin: isPrejoinPageVisible(state),
+        _interimPrejoin: isInterimPrejoinPageVisible(state)
     };
 }
 
