@@ -64,3 +64,13 @@ export const TOGGLE_CHAT = 'TOGGLE_CHAT';
  * }
  */
 export const MARK_AS_READ = 'MARK_AS_READ';
+
+
+/**
+ * The type of the action which signals to toggle the display of the chat panel.
+ *
+ * {
+ *     type: MARK_PUBLIC_AS_READ
+ * }
+ */
+export const MARK_PUBLIC_AS_READ = 'MARK_PUBLIC_AS_READ';

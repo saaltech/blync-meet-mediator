@@ -4,7 +4,7 @@ import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { getLocalParticipant } from '../../base/participants';
-import { sendMessage, toggleChat, setPrivateMessageRecipient, markAsRead } from '../actions';
+import { sendMessage, toggleChat, setPrivateMessageRecipient, markAsRead, markPublicAsRead } from '../actions';
 import { getUnreadSinceLastRead } from '../functions';
 
 /**
@@ -77,7 +77,12 @@ export type Props = {
     /**
      * Mark message as read
      */
-    _markAsRead: Function
+    _markAsRead: Function,
+
+    /**
+     * Mark non-private message as read
+     */
+    _markPublicAsRead: Function,
 };
 
 /**
@@ -124,6 +129,10 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
 
         _markAsRead(localParticipant: Object, participant: Object) {
             dispatch(markAsRead(localParticipant, participant));
+        },
+
+        _markPublicAsRead() {
+            dispatch(markPublicAsRead());
         }
     };
 }
@@ -141,7 +150,6 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    console.log(state, 'statestatestatestatestate');
     const { isOpen, messages, privateMessageRecipient } = state['features/chat'];
     const participants = state['features/base/participants'];
     const _localParticipant = getLocalParticipant(state);

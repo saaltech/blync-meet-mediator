@@ -482,8 +482,9 @@
     @extend #chatconversation;
     padding-left: 0;
     padding-right: 0;
+    box-sizing: border-box;
     &__list {
-        padding: 0 43px;
+        padding: 0 20px;
         margin: 0;
     }
 
@@ -547,8 +548,9 @@
         display: flex;
         align-items: center;
         background: #E7EFF4;
-        padding: 0 43px;
+        padding: 0 20px;
         margin-bottom: 20px;
+        box-sizing: border-box;
     }
 
     &__search svg {

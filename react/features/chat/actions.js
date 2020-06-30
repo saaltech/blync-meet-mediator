@@ -6,7 +6,8 @@ import {
     SEND_MESSAGE,
     SET_PRIVATE_MESSAGE_RECIPIENT,
     TOGGLE_CHAT,
-    MARK_AS_READ
+    MARK_AS_READ,
+    MARK_PUBLIC_AS_READ
 } from './actionTypes';
 
 /**
@@ -101,7 +102,7 @@ export function toggleChat() {
 
 
 /**
- * Toggles display of the chat side panel.
+ * Marks message as read.
  *
  * @param {Object} localParticipant - The participant.
  * @param {Object} remoteParticipant - The localeParticipant.
@@ -118,5 +119,19 @@ export function markAsRead(
         localParticipant,
         remoteParticipant,
         type: MARK_AS_READ
+    };
+}
+
+
+/**
+ * Marks public messages as read.
+ *
+ * @returns {{
+    *     type: MARK_PUBLIC_AS_READ
+    * }}
+    */
+export function markPublicAsRead(): Object {
+    return {
+        type: MARK_PUBLIC_AS_READ
     };
 }

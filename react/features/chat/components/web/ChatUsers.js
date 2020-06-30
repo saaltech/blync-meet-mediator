@@ -74,12 +74,15 @@ export default class ChatUsers extends Component<Props, State> {
     _getLastMessage(participant): Object {
         const { localParticipant, messages } = this.props;
 
-        const message = messages.find(msg => {
-            const localSent = msg.displayName === localParticipant.name && msg.recipient === participant.name;
-            const localReceived = msg.recipient === localParticipant.name && msg.displayName === participant.name;
+        const message = messages
+            .slice()
+            .reverse()
+            .find(msg => {
+                const localSent = msg.displayName === localParticipant.name && msg.recipient === participant.name;
+                const localReceived = msg.recipient === localParticipant.name && msg.displayName === participant.name;
 
-            return localSent || localReceived;
-        });
+                return localSent || localReceived;
+            });
 
         return message;
     }
@@ -127,7 +130,6 @@ export default class ChatUsers extends Component<Props, State> {
                 .toLowerCase()
                 .includes(search);
         });
-
 
         return (
             <div className = 'chat-users'>

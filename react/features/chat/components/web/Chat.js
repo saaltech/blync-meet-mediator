@@ -74,6 +74,10 @@ class Chat extends AbstractChat<Props, State> {
      */
     componentDidMount() {
         this._scrollMessageContainerToBottom(true);
+
+        if (this.state.activeSwitcher === SwitcherViews.EVERYONE) {
+            this.props._markPublicAsRead();
+        }
     }
 
     /**
@@ -225,15 +229,43 @@ class Chat extends AbstractChat<Props, State> {
      * @returns {ReactElement}
      */
     _renderSwitcher() {
+        const { _messages } = this.props;
+        const unReadPrivateMessages = _messages.filter(msg => msg.privateMessage).reduce((acc, message) => {
+            if (message.hasRead) {
+                return acc;
+            }
+
+            return acc + 1;
+
+        }, 0);
+
+        const unReadPublicMessages = _messages.filter(msg => !msg.privateMessage).reduce((acc, message) => {
+            if (message.hasRead) {
+                return acc;
+            }
+
+            return acc + 1;
+
+        }, 0);
+
         return (<div className = 'chat__switcher'>
             <button
                 className = { `${this.state.activeSwitcher === SwitcherViews.EVERYONE ? 'chat__switcher-btn--active' : ''}` }
-                onClick = { () => this.setState({ activeSwitcher: SwitcherViews.EVERYONE }) }
-                type = 'button'>{this.props.t('chat.everyone')}</button>
+                onClick = { () => {
+                    this.setState({ activeSwitcher: SwitcherViews.EVERYONE });
+                    this.props._markPublicAsRead();
+                } }
+                type = 'button'>
+                {this.props.t('chat.everyone')}
+                {unReadPublicMessages > 0 && <span className = 'chat__unread-count'>({unReadPublicMessages})</span>}
+            </button>
             <button
                 className = { `${this.state.activeSwitcher === SwitcherViews.PRIVATE ? 'chat__switcher-btn--active' : ''}` }
                 onClick = { () => this.setState({ activeSwitcher: SwitcherViews.PRIVATE }) }
-                type = 'button'>{this.props.t('chat.private')}</button>
+                type = 'button'>
+                {this.props.t('chat.private')}
+                {unReadPrivateMessages > 0 && <span className = 'chat__unread-count'>({unReadPrivateMessages})</span>}
+            </button>
         </div>);
     }
 
