@@ -744,7 +744,7 @@ export default {
      * @param {{ roomName: string }} options
      * @returns {Promise}
      */
-    async init({ roomName }) {
+    async init({ roomName, refreshTracksOnly = false }) {
         const initialOptions = {
             startAudioOnly: config.startAudioOnly,
             startScreenSharing: config.startScreenSharing,
@@ -754,6 +754,17 @@ export default {
             startWithVideoMuted: config.startWithVideoMuted
                 || isUserInteractionRequiredForUnmute(APP.store.getState())
         };
+        if(refreshTracksOnly) {
+            const { tryCreateLocalTracks, errors } = this.createInitialLocalTracks(initialOptions);
+            const tracks = await tryCreateLocalTracks;
+
+            // Initialize device list a second time to ensure device labels
+            // get populated in case of an initial gUM acceptance; otherwise
+            // they may remain as empty strings.
+            this._initDeviceList(true);
+
+            return APP.store.dispatch(initPrejoin(tracks, errors));
+        }
 
         this.roomName = roomName;
 

@@ -271,8 +271,11 @@ export function isPrejoinPageEnabled(state: Object): boolean {
  * @returns {boolean}
  */
 export function isPrejoinPageVisible(state: Object): boolean {
-    return isPrejoinPageEnabled(state) && state['features/prejoin']?.showPrejoin
-     && !state['features/prejoin']?.prejoinRepainted;
+    return isPrejoinPageEnabled(state) && state['features/prejoin']?.showPrejoin;
+}
+
+export function isInterimPrejoinPageVisible(state: Object): boolean {
+    return isPrejoinPageEnabled(state) && state['features/prejoin']?.interimPrejoin;
 }
 
 
