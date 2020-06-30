@@ -480,12 +480,11 @@
 
 .chat-users {
     @extend #chatconversation;
-
+    padding-left: 0;
+    padding-right: 0;
     &__list {
-        padding: 0;
+        padding: 0 43px;
         margin: 0;
-        
-
     }
 
     &__list  li {
@@ -540,5 +539,28 @@
     &__chat-time {
         font-size: 14px; 
         color: #C7C7C7;
+    }
+
+    &__search {
+        height: 53px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background: #E7EFF4;
+        padding: 0 43px;
+        margin-bottom: 20px;
+    }
+
+    &__search svg {
+        fill: #393939;
+    }
+    &__search input {
+        border: none;
+        height: 100%;
+        flex: 1;
+        background: transparent;
+        color: #393939;
+        font-size: 14px;
+        padding: 0 .5rem;
     }
 }

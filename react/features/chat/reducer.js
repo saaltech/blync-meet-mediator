@@ -56,16 +56,22 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
     }
 
     case MARK_AS_READ: {
-        const { sender, recipient } = action;
-        const messages = state.messages.map(message => {
-            if (message.sender === sender && message.recipient === recipient) {
+        const { remoteParticipant, localParticipant } = action;
+
+        console.log(action, 'actionactionactionactionaction');
+
+        const messages = state.messages.map(msg => {
+            const localSent = msg.displayName === localParticipant.name && msg.recipient === remoteParticipant.name;
+            const localReceived = msg.recipient === localParticipant.name && msg.displayName === remoteParticipant.name;
+
+            if (localSent || localReceived) {
                 return {
-                    ...message,
+                    ...msg,
                     hasRead: true
                 };
             }
 
-            return message;
+            return msg;
         });
 
         return {

@@ -105,6 +105,21 @@ class Chat extends AbstractChat<Props, State> {
         );
     }
 
+    /**
+     * Handler for selecting private user.
+     *
+     * @private
+     * @param {string} participant - The participant.
+     * @returns {void}
+     */
+    _onSelectPrivateUser(participant) {
+        console.log(participant, 'participantparticipantparticipantparticipant');
+        const { _localParticipant } = this.props;
+
+        this.props._setPrivateMessageRecipient(participant);
+        this.props._markAsRead(_localParticipant, participant);
+    }
+
     _onChatInputResize: () => void;
 
     /**
@@ -156,7 +171,7 @@ class Chat extends AbstractChat<Props, State> {
                     localParticipant = { _localParticipant }
                     messages = { this.props._messages.filter(msg => msg.privateMessage) }
                     messagesSinceLastRead = { _messagesSinceLastRead }
-                    onSelect = { participant => this.props._setPrivateMessageRecipient(participant) }
+                    onSelect = { this._onSelectPrivateUser.bind(this) }
                     participants = { _participants }
                     ref = { this._messageContainerRef } /> }
                 {showMessageContainer && <ChatInput

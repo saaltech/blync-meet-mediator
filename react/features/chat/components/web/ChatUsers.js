@@ -4,6 +4,7 @@ import moment from 'moment';
 import React, { Component } from 'react';
 
 import { Avatar as AvatarDisplay } from '../../../../../react/features/base/avatar';
+import { Icon, IconSearch } from '../../../base/icons';
 type Props = {
     participants: Array<Object>,
     onSelect: Function,
@@ -12,10 +13,19 @@ type Props = {
     localParticipant: Object,
 }
 
+type State = {
+    search: string
+}
+
 /**
  * React Component for displaying users list
  */
-export default class ChatUsers extends Component<Props> {
+export default class ChatUsers extends Component<Props, State> {
+
+    state = {
+        search: ''
+    }
+
     /**
      * Gets the uniqe users who have messaged user.
      *
@@ -44,7 +54,15 @@ export default class ChatUsers extends Component<Props> {
             }
 
             return participant.name !== localParticipant.name;
-        });
+        }).reduce((acc, participant: Object) => {
+            const isInList = acc.find((p: Object) => p.id === participant.id);
+
+            if (isInList) {
+                return acc;
+            }
+
+            return [ ...acc, participant ];
+        }, []);
     }
 
     /**
@@ -99,11 +117,27 @@ export default class ChatUsers extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const participants = this._getEngagedUsers();
+        const participants = this._getEngagedUsers().filter(user => {
+            if (!this.state.search) {
+                return user;
+            }
+            const search = String(this.state.search).toLowerCase();
+
+            return String(user.name)
+                .toLowerCase()
+                .includes(search);
+        });
 
 
         return (
             <div className = 'chat-users'>
+                <label className = 'chat-users__search'>
+                    <Icon src = { IconSearch } />
+                    <input
+                        onChange = { e => this.setState({ search: e.target.value }) }
+                        placeholder = 'Search Participant'
+                        type = 'text' />
+                </label>
                 <ul className = 'chat-users__list'>
                     {
                         (participants || []).map(participant => {
@@ -120,7 +154,7 @@ export default class ChatUsers extends Component<Props> {
                                 <div className = 'chat-users__user-details'>
                                     <div className = 'chat-users__user-header'>
                                         <span className = 'chat-users__username'>{participant.name}</span>
-                                        <span className = 'chat-users__status--new-message' />
+                                        {!lastMessage.hasRead && <span className = 'chat-users__status--new-message' />}
                                     </div>
                                     <div className = 'chat-users__user-details-body'>
                                         {truncate(lastMessage.message, { length: 70 })}

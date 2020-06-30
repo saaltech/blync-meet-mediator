@@ -103,19 +103,20 @@ export function toggleChat() {
 /**
  * Toggles display of the chat side panel.
  *
- * @param {string} sender - The chat message to sender.
- * @param {string} recipient - The chat message to recipient.
+ * @param {Object} localParticipant - The participant.
+ * @param {Object} remoteParticipant - The localeParticipant.
  *
  * @returns {{
- *     sender: string,
- *     recipient: string,
+ *     localParticipant: Object,
+ *     remoteParticipant: Object,
  *     type: MARK_AS_READ
  * }}
  */
-export function markAsRead(sender: String, recipient: String) {
+export function markAsRead(
+        localParticipant: Object, remoteParticipant: Object): Object {
     return {
-        sender,
-        recipient,
+        localParticipant,
+        remoteParticipant,
         type: MARK_AS_READ
     };
 }
