@@ -6,7 +6,8 @@ import { openConnection } from '../../../connection';
 import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
 import {
-    JitsiConnectionErrors
+    JitsiConnectionErrors,
+    JitsiConferenceErrors
 } from '../../../react/features/base/lib-jitsi-meet';
 import UIUtil from '../util/UIUtil';
 
@@ -186,21 +187,12 @@ function doXmppAuth (room, lockPassword) {
             },
             /* onRejected */ error => {
                 logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
-
-                const { authenticationError, connectionError } = error;
                 
                 //show the old flow if error occurs
                 oldLoginFlow(room, lockPassword);
                 setTimeout(() => {
-                    if (authenticationError) {
-                        loginDialog.displayError(
-                            'connection.GET_SESSION_ID_ERROR',
-                            { msg: authenticationError });
-                    } else if (connectionError) {
-                        loginDialog.displayError(connectionError);
-                    }
+                    handleLoginError(error)
                 }, 1)
-                
             }
         )
     }
@@ -232,18 +224,22 @@ function oldLoginFlow(room, lockPassword) {
                 /* onRejected */ error => {
                     logger.error('authenticateAndUpgradeRole failed', error);
 
-                    const { authenticationError, connectionError } = error;
-
-                    if (authenticationError) {
-                        loginDialog.displayError(
-                            'connection.GET_SESSION_ID_ERROR',
-                            { msg: authenticationError });
-                    } else if (connectionError) {
-                        loginDialog.displayError(connectionError);
-                    }
+                    handleLoginError(error)
                 });
         },
         /* cancelCallback */ () => loginDialog.close());
+}
+
+function handleLoginError(error) {
+    const { authenticationError, connectionError, message } = error;
+    if (authenticationError) {
+        let error = (message === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) ? message : 'connection.GET_SESSION_ID_ERROR';
+        loginDialog.displayError(
+            error,
+            { msg: authenticationError });
+    } else if (connectionError) {
+        loginDialog.displayError(connectionError);
+    }
 }
 
 /**
