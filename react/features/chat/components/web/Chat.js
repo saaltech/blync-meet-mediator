@@ -74,10 +74,6 @@ class Chat extends AbstractChat<Props, State> {
      */
     componentDidMount() {
         this._scrollMessageContainerToBottom(true);
-
-        if (this.state.activeSwitcher === SwitcherViews.EVERYONE) {
-            this.props._markPublicAsRead();
-        }
     }
 
     /**
@@ -90,6 +86,10 @@ class Chat extends AbstractChat<Props, State> {
             this._scrollMessageContainerToBottom(true);
         } else if (this.props._isOpen && !prevProps._isOpen) {
             this._scrollMessageContainerToBottom(false);
+
+            if (this.state.activeSwitcher === SwitcherViews.EVERYONE) {
+                this.props._markPublicAsRead();
+            }
         }
     }
 
