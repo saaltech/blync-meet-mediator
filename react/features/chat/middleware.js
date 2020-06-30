@@ -230,7 +230,7 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, nick, pri
     const participant = getParticipantById(state, id) || {};
     const localParticipant = getLocalParticipant(getState);
     const displayName = participant.name || nick || getParticipantDisplayName(state, id);
-    const hasRead = participant.local || isChatOpen;
+    const hasRead = participant.local;
     const timestampToDate = timestamp
         ? new Date(timestamp) : new Date();
     const millisecondsTimestamp = timestampToDate.getTime();

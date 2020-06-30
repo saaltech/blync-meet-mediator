@@ -1,4 +1,5 @@
 // @flow
+import uuidv4 from 'uuid/v4';
 
 import { SET_ACTIVE_MODAL_ID } from '../base/modal';
 import { ReducerRegistry } from '../base/redux';
@@ -7,7 +8,8 @@ import {
     ADD_MESSAGE,
     CLEAR_MESSAGES,
     SET_PRIVATE_MESSAGE_RECIPIENT,
-    TOGGLE_CHAT
+    TOGGLE_CHAT,
+    MARK_AS_READ
 } from './actionTypes';
 import { CHAT_VIEW_MODAL_ID } from './constants';
 
@@ -29,7 +31,9 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
             message: action.message,
             privateMessage: action.privateMessage,
             recipient: action.recipient,
-            timestamp: action.timestamp
+            timestamp: action.timestamp,
+            hasRead: action.hasRead,
+            chatId: uuidv4()
         };
 
         // React native, unlike web, needs a reverse sorted message list.
@@ -47,6 +51,25 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
             ...state,
             lastReadMessage:
                 action.hasRead ? newMessage : state.lastReadMessage,
+            messages
+        };
+    }
+
+    case MARK_AS_READ: {
+        const { sender, recipient } = action;
+        const messages = state.messages.map(message => {
+            if (message.sender === sender && message.recipient === recipient) {
+                return {
+                    ...message,
+                    hasRead: true
+                };
+            }
+
+            return message;
+        });
+
+        return {
+            ...state,
             messages
         };
     }

@@ -5,7 +5,8 @@ import {
     CLEAR_MESSAGES,
     SEND_MESSAGE,
     SET_PRIVATE_MESSAGE_RECIPIENT,
-    TOGGLE_CHAT
+    TOGGLE_CHAT,
+    MARK_AS_READ
 } from './actionTypes';
 
 /**
@@ -95,5 +96,26 @@ export function setPrivateMessageRecipient(participant: Object) {
 export function toggleChat() {
     return {
         type: TOGGLE_CHAT
+    };
+}
+
+
+/**
+ * Toggles display of the chat side panel.
+ *
+ * @param {string} sender - The chat message to sender.
+ * @param {string} recipient - The chat message to recipient.
+ *
+ * @returns {{
+ *     sender: string,
+ *     recipient: string,
+ *     type: MARK_AS_READ
+ * }}
+ */
+export function markAsRead(sender: String, recipient: String) {
+    return {
+        sender,
+        recipient,
+        type: MARK_AS_READ
     };
 }
