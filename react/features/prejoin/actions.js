@@ -25,7 +25,9 @@ import {
     SET_PREJOIN_DEVICE_ERRORS,
     SET_PREJOIN_PAGE_VISIBILITY,
     SET_PREJOIN_VIDEO_DISABLED,
-    SET_PREJOIN_VIDEO_MUTED
+    SET_PREJOIN_VIDEO_MUTED,
+    SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY,
+    SET_PREJOIN_REPAINTED
 } from './actionTypes';
 import {
     getFullDialOutNumber,
@@ -263,8 +265,10 @@ export function initPrejoin(tracks: Object[], errors: Object) {
  */
 export function joinConference() {
     return function(dispatch: Function) {
-        dispatch(setPrejoinPageVisibility(false));
+        //dispatch(setPrejoinPageVisibility(false));
+        dispatch(setPrejoinRepainted(true))
         dispatch(startConference());
+        dispatch(setPrejoinRepainted(false))
     };
 }
 
@@ -530,6 +534,34 @@ export function setPrejoinDeviceErrors(value: Object) {
         value
     };
 }
+
+/**
+ * Action used to set the initial errors after creating the tracks.
+ *
+ * @param {Object} value - The track errors.
+ * @returns {Object}
+ */
+export function setPrejoinPageErrorMessageKey(value: Object) {
+    return {
+        type: SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY,
+        value
+    };
+}
+
+/**
+ * Action used to set to indicated prejoin is repainted.
+ *
+ * @param {Object} value - The track errors.
+ * @returns {Object}
+ */
+export function setPrejoinRepainted(value: Object) {
+    return {
+        type: SET_PREJOIN_REPAINTED,
+        value
+    };
+}
+
+
 
 /**
  * Action used to set the visiblity of the prejoin page.
