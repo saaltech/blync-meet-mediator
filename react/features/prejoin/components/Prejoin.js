@@ -9,8 +9,7 @@ import { Icon, IconPhone, IconVolumeOff } from '../../base/icons';
 import { ActionButton, InputField, PreMeetingScreen } from '../../base/premeeting';
 import { connect } from '../../base/redux';
 import { getDisplayName, updateSettings } from '../../base/settings';
-import { setPrejoinPageErrorMessageKey } from '../../prejoin'
-
+import { setPrejoinPageErrorMessageKey } from '../../prejoin';
 import {
     joinConference as joinConferenceAction,
     joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
@@ -121,8 +120,8 @@ class Prejoin extends Component<Props, State> {
             showJoinByPhoneButtons: false,
             isHost: false,
             participantTypeOptionSpecified: false,
-            hostUsername: "",
-            hostPassword: ""
+            hostUsername: '',
+            hostPassword: ''
         };
 
         this._closeDialog = this._closeDialog.bind(this);
@@ -180,14 +179,14 @@ class Prejoin extends Component<Props, State> {
     }
 
     componentDidMount() {
-        window.sessionStorage.setItem("participantType", "guest");
-        window.sessionStorage.removeItem("roomPassword");
+        window.sessionStorage.setItem('participantType', 'guest');
+        window.sessionStorage.removeItem('roomPassword');
         this.setState({
             isHost: false,
             participantTypeOptionSpecified: false,
-            hostUsername: window.sessionStorage.getItem("hostUsername") || "",
-            hostPassword: window.sessionStorage.getItem("hostPassword") || ""
-        })
+            hostUsername: window.sessionStorage.getItem('hostUsername') || '',
+            hostPassword: window.sessionStorage.getItem('hostPassword') || ''
+        });
     }
 
     _setName: () => void;
@@ -205,58 +204,68 @@ class Prejoin extends Component<Props, State> {
     }
 
     _setParticpantType: () => void;
+
     /**
-     * Sets the participantType property in localstorage
-     * @param {*} event 
+     * Sets the participantType property in localstorage.
+     *
+     * @param {*} event
      */
     _setParticpantType(event) {
-        let value = event.target.value
-        //window.sessionStorage.setItem("participantType", value);
+        const value = event.target.value;
+
+        // window.sessionStorage.setItem("participantType", value);
         this.setState({
             isHost: value === 'host',
             participantTypeOptionSpecified: true
-        })
+        });
     }
 
     _setHostUsername: () => void;
+
     /**
-     * Sets the hostUsername property in localstorage
-     * @param {*} username 
+     * Sets the hostUsername property in localstorage.
+     *
+     * @param {*} username
      */
     _setHostUsername(username) {
-        //window.sessionStorage.setItem("hostUsername", username);
-        this.setFieldInState('hostUsername', username)
+        // window.sessionStorage.setItem("hostUsername", username);
+        this.setFieldInState('hostUsername', username);
     }
 
     _setHostPassword: () => void;
+
     /**
-     * Sets the hostPassword property in localstorage
-     * @param {*} password 
+     * Sets the hostPassword property in localstorage.
+     *
+     * @param {*} password
      */
     _setHostPassword(password) {
-        //window.sessionStorage.setItem("hostPassword", password);
-        this.setFieldInState('hostPassword', password)
+        // window.sessionStorage.setItem("hostPassword", password);
+        this.setFieldInState('hostPassword', password);
     }
 
     _setRoomPassword: () => void;
+
     /**
-     * Sets the roomPassword property in localstorage
-     * @param {*} roomPassword 
+     * Sets the roomPassword property in localstorage.
+     *
+     * @param {*} roomPassword
      */
     _setRoomPassword(roomPassword) {
-        window.sessionStorage.setItem("roomPassword", roomPassword);
+        window.sessionStorage.setItem('roomPassword', roomPassword);
     }
 
     setFieldInState(field, value) {
-        let obj = {}
-        obj[field] = value
+        const obj = {};
+
+        obj[field] = value;
         this.setState(obj);
     }
 
     _setDetailsToStore() {
-        window.sessionStorage.setItem("hostUsername", this.state.hostUsername);
-        window.sessionStorage.setItem("hostPassword", this.state.hostPassword);
-        window.sessionStorage.setItem("participantType", this.state.participantType);
+        window.sessionStorage.setItem('hostUsername', this.state.hostUsername);
+        window.sessionStorage.setItem('hostPassword', this.state.hostPassword);
+        window.sessionStorage.setItem('participantType', this.state.participantType);
     }
 
     _closeDialog: () => void;
@@ -301,7 +310,7 @@ class Prejoin extends Component<Props, State> {
             pageErrorMessageKey
         } = this.props;
 
-        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName, 
+        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName,
             _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
         const { showJoinByPhoneButtons } = this.state;
 
@@ -313,66 +322,76 @@ class Prejoin extends Component<Props, State> {
                 videoTrack = { videoTrack }>
                 <div className = 'prejoin-input-area-container'>
                     <div className = 'prejoin-input-area'>
-                        <div className="prejoin-input-form-fields">
-                            <div className="prejoin-field">
-                                <div className="prejoin-label">Your Name</div>
+                        <div className = 'prejoin-input-form-fields'>
+                            <div className = 'prejoin-field'>
+                                <div className = 'prejoin-label'>Your Name</div>
                                 <InputField
                                     onChange = { _setName }
                                     placeHolder = { t('dialog.enterDisplayName') }
                                     value = { name } />
                             </div>
-                            
+
 
                             {
+
                                 /**
-                                 * Authenticated rooms should be enabled. 
+                                 * Authenticated rooms should be enabled.
                                  * or else, this host/username/password has no effect
                                  */
                             }
-                            <div className="prejoin-field">
-                                <input type="radio" id="host" name="participantType" 
-                                    onChange={ _setParticpantType } 
-                                    value="host"/>
-                                <label for="host">{t('prejoin.hostuserLabel')}</label><br/>
-                                <input type="radio" id="guest" name="participantType" 
-                                    onChange={ _setParticpantType }
-                                    value="guest"/>
-                                <label for="guest">{ t('prejoin.guestUserLabel') }</label>
+                            <div className = 'prejoin-field'>
+                                <input
+                                    type = 'radio'
+                                    id = 'host'
+                                    name = 'participantType'
+                                    onChange = { _setParticpantType }
+                                    value = 'host' />
+                                <label htmlFor = 'host'>{t('prejoin.hostuserLabel')}</label><br />
+                                <input
+                                    type = 'radio'
+                                    id = 'guest'
+                                    name = 'participantType'
+                                    onChange = { _setParticpantType }
+                                    value = 'guest' />
+                                <label htmlFor = 'guest'>{ t('prejoin.guestUserLabel') }</label>
                             </div>
 
                             {
-                                this.state.participantTypeOptionSpecified && !this.state.isHost &&
-                                <div className="prejoin-field">
-                                    <div className="prejoin-label">{t('prejoin.meetingPasswordField')}</div>
+                                this.state.participantTypeOptionSpecified && !this.state.isHost
+                                && <div className = 'prejoin-field'>
+                                    <div className = 'prejoin-label'>{t('prejoin.meetingPasswordField')}</div>
                                     <InputField
                                         onChange = { _setRoomPassword }
-                                        //onSubmit = { joinConference }
-                                        placeHolder = { t('prejoin.meetingPasswordPlaceholder') }/>
+
+                                        // onSubmit = { joinConference }
+                                        placeHolder = { t('prejoin.meetingPasswordPlaceholder') } />
                                 </div>
                             }
 
                             {
-                                this.state.participantTypeOptionSpecified && this.state.isHost &&
-                                <>
-                                    <div className="prejoin-field">
-                                        <div className="prejoin-label">{t('prejoin.usernameField')}</div>
+                                this.state.participantTypeOptionSpecified && this.state.isHost
+                                && <>
+                                    <div className = 'prejoin-field'>
+                                        <div className = 'prejoin-label'>{t('prejoin.usernameField')}</div>
                                         <InputField
                                             onChange = { _setHostUsername }
-                                            //onSubmit = { joinConference }
+
+                                            // onSubmit = { joinConference }
                                             value = { this.state.hostUsername }
-                                            placeHolder = { t('prejoin.usernameField') }/>
+                                            placeHolder = { t('prejoin.usernameField') } />
                                     </div>
-                                    
-                                    <div className="prejoin-field">
-                                        <div className="prejoin-label">{t('prejoin.passwordField')}</div>
+
+                                    <div className = 'prejoin-field'>
+                                        <div className = 'prejoin-label'>{t('prejoin.passwordField')}</div>
                                         <InputField
-                                            type="password"
+                                            type = 'password'
                                             onChange = { _setHostPassword }
-                                            //onSubmit = { joinConference }
+
+                                            // onSubmit = { joinConference }
                                             value = { this.state.hostPassword }
                                             placeHolder = { t('prejoin.passwordField') } />
                                     </div>
-                                    
+
                                 </>
                             }
                         </div>
@@ -402,37 +421,36 @@ class Prejoin extends Component<Props, State> {
                                 isOpen = { showJoinByPhoneButtons }
                                 onClose = { _onDropdownClose }>
                                 <ActionButton
-                                    disabled = { !name || 
-                                        !this.state.participantTypeOptionSpecified ||
-                                        "submitting" === pageErrorMessageKey}
+                                    disabled = { !name
+                                        || !this.state.participantTypeOptionSpecified
+                                        || pageErrorMessageKey === 'submitting' }
                                     hasOptions = { true }
                                     onClick = { () => {
-                                        this._setDetailsToStore()
-                                        APP.store.dispatch(setPrejoinPageErrorMessageKey("submitting"))
-                                        joinConference()
-                                    }}
+                                        this._setDetailsToStore();
+                                        APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+                                        joinConference();
+                                    } }
                                     onOptionsClick = { _onOptionsClick }
                                     type = 'primary'>
                                     { t('prejoin.joinNow') }
                                 </ActionButton>
                             </InlineDialog>
-                            <div className="cancel-join">
-                            {
-                                "submitting" !== pageErrorMessageKey ?
-                                <a href={ "/"}>
+                            <div className = 'cancel-join'>
+                                {
+                                    pageErrorMessageKey !== 'submitting'
+                                        ? <a href = { '/' }>
                                     Cancel
-                                </a> 
-                                :
-                                "Cancel"
-                            }
-                                
+                                        </a>
+                                        : 'Cancel'
+                                }
+
                             </div>
 
-                            <div className="error-msg">
+                            <div className = 'error-msg'>
                                 {
-                                    pageErrorMessageKey && 
-                                    "submitting" !== pageErrorMessageKey &&
-                                     t(pageErrorMessageKey)
+                                    pageErrorMessageKey
+                                    && pageErrorMessageKey !== 'submitting'
+                                     && t(pageErrorMessageKey)
                                 }
                             </div>
                         </div>

@@ -100,6 +100,7 @@ class Chat extends AbstractChat<Props, State> {
      * @returns {ReactElement}
      */
     render() {
+
         return (
             <Transition
                 in = { this.props._isOpen }
@@ -117,7 +118,6 @@ class Chat extends AbstractChat<Props, State> {
      * @returns {void}
      */
     _onSelectPrivateUser(participant) {
-        console.log(participant, 'participantparticipantparticipantparticipant');
         const { _localParticipant } = this.props;
 
         this.props._setPrivateMessageRecipient(participant);
@@ -146,6 +146,7 @@ class Chat extends AbstractChat<Props, State> {
      */
     _renderChat() {
         let messages = this.props._messages;
+
         const { _participants, _privateMessageRecipient, _localParticipant, _messagesSinceLastRead } = this.props;
         const showUsersList = this.state.activeSwitcher === SwitcherViews.PRIVATE && !this.props._privateMessageRecipient;
         const showMessageContainer = this.state.activeSwitcher === SwitcherViews.EVERYONE || this.props._privateMessageRecipient;

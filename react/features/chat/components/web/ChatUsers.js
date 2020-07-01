@@ -35,12 +35,12 @@ export default class ChatUsers extends Component<Props, State> {
     _getEngagedUsers(): Array<Object> {
         const { localParticipant, messages, participants } = this.props;
         const senders = messages.map(msg => {
-            const usr = participants.find(p => p.name === msg.displayName);
+            const usr = participants.find(p => p.id === msg.senderId);
 
             return usr;
         });
         const recipients = messages.map(msg => {
-            const usr = participants.find(p => p.name === msg.recipient);
+            const usr = participants.find(p => p.id === msg.recipientId);
 
             return usr;
         });
@@ -53,7 +53,7 @@ export default class ChatUsers extends Component<Props, State> {
                 return false;
             }
 
-            return participant.name !== localParticipant.name;
+            return participant.id !== localParticipant.id;
         }).reduce((acc, participant: Object) => {
             const isInList = acc.find((p: Object) => p.id === participant.id);
 
@@ -78,8 +78,8 @@ export default class ChatUsers extends Component<Props, State> {
             .slice()
             .reverse()
             .find(msg => {
-                const localSent = msg.displayName === localParticipant.name && msg.recipient === participant.name;
-                const localReceived = msg.recipient === localParticipant.name && msg.displayName === participant.name;
+                const localSent = msg.senderId === localParticipant.id && msg.recipientId === participant.id;
+                const localReceived = msg.recipientId === localParticipant.id && msg.senderId === participant.id;
 
                 return localSent || localReceived;
             });
@@ -130,6 +130,7 @@ export default class ChatUsers extends Component<Props, State> {
                 .toLowerCase()
                 .includes(search);
         });
+
 
         return (
             <div className = 'chat-users'>

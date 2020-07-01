@@ -239,10 +239,12 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, nick, pri
         displayName,
         hasRead,
         id,
+        senderId: id,
         messageType: participant.local ? MESSAGE_TYPE_LOCAL : MESSAGE_TYPE_REMOTE,
         message,
         privateMessage,
         recipient: getParticipantDisplayName(state, localParticipant.id),
+        recipientId: localParticipant.id,
         timestamp: millisecondsTimestamp
     }));
 
@@ -293,10 +295,12 @@ function _persistSentPrivateMessage({ dispatch, getState }, recipientID, message
         displayName,
         hasRead: true,
         id: localParticipant.id,
+        senderId: localParticipant.id,
         messageType: MESSAGE_TYPE_LOCAL,
         message,
         privateMessage: true,
         recipient: getParticipantDisplayName(getState, recipientID),
+        recipientId: recipientID,
         timestamp: Date.now()
     }));
 }
