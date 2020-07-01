@@ -208,22 +208,27 @@ function doXmppAuth (room, lockPassword) {
 
                 //setTimeout(() => {
                    
-                /*
-                    // Show PrejoinPage
-                    _setPrejoinPageVisibility(true)
-                    //_setInterimPrejoinPage(true)
-
-                    // Show error on the page
-                    _setPrejoinPageErrorMessage(error)
-                */
+                
                /*const { interimPrejoin } = APP.store.getState()['features/prejoin'];
                if(interimPrejoin) {
                     _setPrejoinPageErrorMessage(error)
                    return;
                }*/
+                    
+
+                    /*
+                        // Show PrejoinPage
+                        _setPrejoinPageVisibility(true)
+                        _setInterimPrejoinPage(true)
+
+                        // Show error on the page
+                        _setPrejoinPageErrorMessage(error)
+                        */
+                    
+                   
                     APP.conference.init({
-                        roomName: APP.conference.roomName,
-                        refreshTracksOnly: true
+                        roomName: APP.conference.roomName//,
+                        //refreshTracksOnly: true
                     }).then(()=>{
                          // Show PrejoinPage
                          _setPrejoinPageVisibility(true)
@@ -236,6 +241,7 @@ function doXmppAuth (room, lockPassword) {
                         //APP.API.notifyConferenceLeft(APP.conference.roomName);
                         logger.error(error);
                     });
+                    
                     //handleLoginError(error)
                 //}, 1)
             }
