@@ -755,6 +755,16 @@ export default {
                 || isUserInteractionRequiredForUnmute(APP.store.getState())
         };
         if(refreshTracksOnly) {
+            try {
+                // Initialize the device list first. This way, when creating tracks
+                // based on preferred devices, loose label matching can be done in
+                // cases where the exact ID match is no longer available, such as
+                // when the camera device has switched USB ports.
+                // when in startSilent mode we want to start with audio muted
+                await this._initDeviceList();
+            } catch (error) {
+                logger.warn('initial device list initialization failed', error);
+            }
             const { tryCreateLocalTracks, errors } = this.createInitialLocalTracks(initialOptions);
             const tracks = await tryCreateLocalTracks;
 
