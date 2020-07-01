@@ -212,7 +212,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                { !filmstripOnly && (_showPrejoin || _interimPrejoin )&&  <Prejoin />}
+                { !filmstripOnly && (_showPrejoin /*|| _interimPrejoin*/ ) &&  <Prejoin />}
             </div>
         );
     }
