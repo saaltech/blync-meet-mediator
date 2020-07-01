@@ -102,15 +102,15 @@ export default class ChatUsers extends Component<Props, State> {
                         .toFixed();
 
         if (hours > 0) {
-            return `${hours}H`;
+            return `${hours}h`;
         }
 
         if (minutes > 0) {
-            return `${minutes}M`;
+            return `${minutes}m`;
         }
 
 
-        return `${seconds}S`;
+        return `${seconds}s`;
     }
 
     /**
