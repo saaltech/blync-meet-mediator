@@ -72,7 +72,9 @@
         },
         "privateNotice": "Private message to {{recipient}}",
         "title": "Chat",
-        "you": "you"
+        "you": "you",
+        "everyone": "Everyone",
+        "private": "Private"
     },
     "chromeExtensionBanner": {
         "installExtensionText": "Install the extension for Google Calendar and Office 365 integration",

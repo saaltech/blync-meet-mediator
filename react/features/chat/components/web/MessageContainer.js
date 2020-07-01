@@ -57,6 +57,7 @@ export default class MessageContainer extends AbstractMessageContainer<Props> {
      */
     render() {
         const groupedMessages = this._getMessagesGroupedBySender();
+
         const messages = groupedMessages.map((group, index) => {
             const messageType = group[0] && group[0].messageType;
 

@@ -4,5 +4,13 @@ module.exports = {
         'eslint-config-jitsi/jsdoc',
         'eslint-config-jitsi/react',
         '.eslintrc-react-native.js'
-    ]
+    ],
+    'rules': {
+        'react/jsx-no-bind': 0,
+        'max-len': [
+            2,
+            150,
+            4
+        ]
+    }
 };

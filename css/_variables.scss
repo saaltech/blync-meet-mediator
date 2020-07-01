@@ -37,7 +37,7 @@ $presence-idle: rgb(172, 172, 172);
 /**
  * Toolbar
  */
-$newToolbarBackgroundColor: rgba(255, 255, 255, 0.8);
+$newToolbarBackgroundColor: rgba(255, 255, 255,1);
 $newToolbarButtonHoverColor: rgba(255, 255, 255, 0.15);
 $newToolbarButtonToggleColor: rgba(255, 255, 255, 0.2);
 $AOTToolbarButtonHoverColor: rgba(14, 20, 35, 0.6);
@@ -97,6 +97,7 @@ $chatPrivateMessageBackgroundColor: rgb(153, 69, 77);
 $chatRemoteMessageBackgroundColor:  #EDF0F5;
 $chatRemoteMessageColor:  #393939;
 $sidebarWidth: 375px;
+$chatPrimaryColor: #005C85;
 
  /**
  * Misc.

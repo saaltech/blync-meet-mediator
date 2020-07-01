@@ -4,7 +4,7 @@ import React from 'react';
 import Transition from 'react-transition-group/Transition';
 
 import { translate } from '../../../base/i18n';
-import { Icon, IconClose } from '../../../base/icons';
+import { Icon, IconClose, IconArrowLeft } from '../../../base/icons';
 import { connect } from '../../../base/redux';
 import AbstractChat, {
     _mapDispatchToProps,
@@ -13,15 +13,28 @@ import AbstractChat, {
 } from '../AbstractChat';
 
 import ChatInput from './ChatInput';
+import ChatUsers from './ChatUsers';
 import DisplayNameForm from './DisplayNameForm';
 import MessageContainer from './MessageContainer';
-import MessageRecipient from './MessageRecipient';
+
+const SwitcherViews = {
+    EVERYONE: 'EVERYONE',
+    PRIVATE: 'PRIVATE'
+};
+
+type State = {
+    activeSwitcher: string,
+}
 
 /**
  * React Component for holding the chat feature in a side panel that slides in
  * and out of view.
  */
-class Chat extends AbstractChat<Props> {
+class Chat extends AbstractChat<Props, State> {
+
+    state = {
+        activeSwitcher: SwitcherViews.EVERYONE
+    };
 
     /**
      * Whether or not the {@code Chat} component is off-screen, having finished
@@ -73,6 +86,10 @@ class Chat extends AbstractChat<Props> {
             this._scrollMessageContainerToBottom(true);
         } else if (this.props._isOpen && !prevProps._isOpen) {
             this._scrollMessageContainerToBottom(false);
+
+            if (this.state.activeSwitcher === SwitcherViews.EVERYONE) {
+                this.props._markPublicAsRead();
+            }
         }
     }
 
@@ -83,6 +100,7 @@ class Chat extends AbstractChat<Props> {
      * @returns {ReactElement}
      */
     render() {
+
         return (
             <Transition
                 in = { this.props._isOpen }
@@ -90,6 +108,20 @@ class Chat extends AbstractChat<Props> {
                 { this._renderPanelContent }
             </Transition>
         );
+    }
+
+    /**
+     * Handler for selecting private user.
+     *
+     * @private
+     * @param {string} participant - The participant.
+     * @returns {void}
+     */
+    _onSelectPrivateUser(participant) {
+        const { _localParticipant } = this.props;
+
+        this.props._setPrivateMessageRecipient(participant);
+        this.props._markAsRead(_localParticipant, participant);
     }
 
     _onChatInputResize: () => void;
@@ -113,15 +145,43 @@ class Chat extends AbstractChat<Props> {
      * @returns {ReactElement}
      */
     _renderChat() {
+        let messages = this.props._messages;
+
+        const { _participants, _privateMessageRecipient, _localParticipant, _messagesSinceLastRead } = this.props;
+        const showUsersList = this.state.activeSwitcher === SwitcherViews.PRIVATE && !this.props._privateMessageRecipient;
+        const showMessageContainer = this.state.activeSwitcher === SwitcherViews.EVERYONE || this.props._privateMessageRecipient;
+
+        if (this.props._privateMessageRecipient) {
+            messages = (this.props._messages || []).filter(
+                message => {
+                    const containsLocalAndRemoteUsersOnly = (
+                        message.recipient === _privateMessageRecipient.name && message.id === _localParticipant.id
+                    )
+                    || (
+                        message.recipient === _localParticipant.name && message.id === _privateMessageRecipient.id
+                    );
+
+                    return containsLocalAndRemoteUsersOnly && message.privateMessage;
+                });
+        } else {
+            messages = (this.props._messages || []).filter(message => !message.privateMessage);
+        }
+
         return (
             <>
-                <MessageContainer
-                    messages = { this.props._messages }
-                    ref = { this._messageContainerRef } />
-                <MessageRecipient />
-                <ChatInput
+                {showMessageContainer && <MessageContainer
+                    messages = { messages }
+                    ref = { this._messageContainerRef } /> }
+                {showUsersList && <ChatUsers
+                    localParticipant = { _localParticipant }
+                    messages = { this.props._messages.filter(msg => msg.privateMessage) }
+                    messagesSinceLastRead = { _messagesSinceLastRead }
+                    onSelect = { this._onSelectPrivateUser.bind(this) }
+                    participants = { _participants }
+                    ref = { this._messageContainerRef } /> }
+                {showMessageContainer && <ChatInput
                     onResize = { this._onChatInputResize }
-                    onSend = { this.props._onSendMessage } />
+                    onSend = { this.props._onSendMessage } />}
             </>
         );
     }
@@ -136,7 +196,21 @@ class Chat extends AbstractChat<Props> {
     _renderChatHeader() {
         return (
             <div className = 'chat-header'>
-                <div className='chat-label'>
+                <div
+                    className = 'chat-label'
+                    onClick = { e => {
+                        e.preventDefault();
+                        if (this.props._privateMessageRecipient) {
+                            this.setState({
+                                activeSwitcher: SwitcherViews.PRIVATE
+                            });
+
+                            this.props._setPrivateMessageRecipient(null);
+                        }
+                    } }>
+                    {this.props._privateMessageRecipient && <Icon
+                        className = 'chat__back-icon'
+                        src = { IconArrowLeft } />}
                     {this.props.t('chat.title')}
                 </div>
                 <div
@@ -146,6 +220,54 @@ class Chat extends AbstractChat<Props> {
                 </div>
             </div>
         );
+    }
+
+    /**
+     * Instantiates a React Element to display at the top of {@code Chat} to
+     * close {@code Chat}.
+     *
+     * @private
+     * @returns {ReactElement}
+     */
+    _renderSwitcher() {
+        const { _messages } = this.props;
+        const unReadPrivateMessages = _messages.filter(msg => msg.privateMessage).reduce((acc, message) => {
+            if (message.hasRead) {
+                return acc;
+            }
+
+            return acc + 1;
+
+        }, 0);
+
+        const unReadPublicMessages = _messages.filter(msg => !msg.privateMessage).reduce((acc, message) => {
+            if (message.hasRead) {
+                return acc;
+            }
+
+            return acc + 1;
+
+        }, 0);
+
+        return (<div className = 'chat__switcher'>
+            <button
+                className = { `${this.state.activeSwitcher === SwitcherViews.EVERYONE ? 'chat__switcher-btn--active' : ''}` }
+                onClick = { () => {
+                    this.setState({ activeSwitcher: SwitcherViews.EVERYONE });
+                    this.props._markPublicAsRead();
+                } }
+                type = 'button'>
+                {this.props.t('chat.everyone')}
+                {unReadPublicMessages > 0 && <span className = 'chat__unread-count'>({unReadPublicMessages})</span>}
+            </button>
+            <button
+                className = { `${this.state.activeSwitcher === SwitcherViews.PRIVATE ? 'chat__switcher-btn--active' : ''}` }
+                onClick = { () => this.setState({ activeSwitcher: SwitcherViews.PRIVATE }) }
+                type = 'button'>
+                {this.props.t('chat.private')}
+                {unReadPrivateMessages > 0 && <span className = 'chat__unread-count'>({unReadPrivateMessages})</span>}
+            </button>
+        </div>);
     }
 
     _renderPanelContent: (string) => React$Node | null;
@@ -162,12 +284,14 @@ class Chat extends AbstractChat<Props> {
     _renderPanelContent(state) {
         this._isExited = state === 'exited';
 
-        const { _isOpen, _showNamePrompt } = this.props;
+        const { _isOpen, _showNamePrompt, _privateMessageRecipient } = this.props;
         const ComponentToRender = !_isOpen && state === 'exited'
             ? null
             : (
                 <>
                     { this._renderChatHeader() }
+                    { !_privateMessageRecipient && this._renderSwitcher() }
+                    {_privateMessageRecipient && <div className = 'chat__private-user-name'>{_privateMessageRecipient.name}</div>}
                     { _showNamePrompt
                         ? <DisplayNameForm /> : this._renderChat() }
                 </>
@@ -198,7 +322,7 @@ class Chat extends AbstractChat<Props> {
      * @returns {void}
      */
     _scrollMessageContainerToBottom(withAnimation) {
-        if (this._messageContainerRef.current) {
+        if (this._messageContainerRef.current && this._messageContainerRef.current.scrollToBottom) {
             this._messageContainerRef.current.scrollToBottom(withAnimation);
         }
     }

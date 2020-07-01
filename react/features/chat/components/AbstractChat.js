@@ -4,7 +4,8 @@ import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { getLocalParticipant } from '../../base/participants';
-import { sendMessage, toggleChat } from '../actions';
+import { sendMessage, toggleChat, setPrivateMessageRecipient, markAsRead, markPublicAsRead } from '../actions';
+import { getUnreadSinceLastRead } from '../functions';
 
 /**
  * The type of the React {@code Component} props of {@code AbstractChat}.
@@ -20,6 +21,11 @@ export type Props = {
      * All the chat messages in the conference.
      */
     _messages: Array<Object>,
+
+    /**
+     * All the participants in the conference.
+     */
+    _participants: Array<Object>,
 
     /**
      * Function to send a text message.
@@ -46,13 +52,43 @@ export type Props = {
     /**
      * Function to be used to translate i18n labels.
      */
-    t: Function
+    t: Function,
+
+    /**
+     * Function to be used to set private message recipient.
+     */
+    _setPrivateMessageRecipient: Function,
+
+    /**
+     * Private message recipient.
+     */
+    _privateMessageRecipient: Object,
+
+    /**
+     * The local participant.
+     */
+    _localParticipant: Object,
+
+    /**
+     * Messages since last read .
+     */
+    _messagesSinceLastRead: Array<Object>,
+
+    /**
+     * Mark message as read
+     */
+    _markAsRead: Function,
+
+    /**
+     * Mark non-private message as read
+     */
+    _markPublicAsRead: Function,
 };
 
 /**
  * Implements an abstract chat panel.
  */
-export default class AbstractChat<P: Props> extends Component<P> {}
+export default class AbstractChat<P: Props, S> extends Component<P, S> {}
 
 /**
  * Maps redux actions to the props of the component.
@@ -85,6 +121,18 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
          */
         _onSendMessage(text: string) {
             dispatch(sendMessage(text));
+        },
+
+        _setPrivateMessageRecipient(participant: Object) {
+            dispatch(setPrivateMessageRecipient(participant));
+        },
+
+        _markAsRead(localParticipant: Object, participant: Object) {
+            dispatch(markAsRead(localParticipant, participant));
+        },
+
+        _markPublicAsRead() {
+            dispatch(markPublicAsRead());
         }
     };
 }
@@ -102,12 +150,19 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { isOpen, messages } = state['features/chat'];
+    const { isOpen, messages, privateMessageRecipient } = state['features/chat'];
+    const participants = state['features/base/participants'];
     const _localParticipant = getLocalParticipant(state);
+
+    const _messagesSinceLastRead = getUnreadSinceLastRead(state);
 
     return {
         _isOpen: isOpen,
         _messages: messages,
-        _showNamePrompt: !_localParticipant.name
+        _participants: participants,
+        _showNamePrompt: !_localParticipant.name,
+        _localParticipant,
+        _messagesSinceLastRead,
+        _privateMessageRecipient: privateMessageRecipient
     };
 }
