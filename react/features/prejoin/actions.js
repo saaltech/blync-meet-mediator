@@ -24,8 +24,10 @@ import {
     SET_PREJOIN_AUDIO_MUTED,
     SET_PREJOIN_DEVICE_ERRORS,
     SET_PREJOIN_PAGE_VISIBILITY,
+    SET_INTERIM_PREJOIN_PAGE,
     SET_PREJOIN_VIDEO_DISABLED,
-    SET_PREJOIN_VIDEO_MUTED
+    SET_PREJOIN_VIDEO_MUTED,
+    SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY
 } from './actionTypes';
 import {
     getFullDialOutNumber,
@@ -263,6 +265,9 @@ export function initPrejoin(tracks: Object[], errors: Object) {
  */
 export function joinConference() {
     return function(dispatch: Function) {
+        // Set prejoin to show up until login is successful
+        dispatch(setInterimPrejoinPage(true));
+
         dispatch(setPrejoinPageVisibility(false));
         dispatch(startConference());
     };
@@ -532,6 +537,19 @@ export function setPrejoinDeviceErrors(value: Object) {
 }
 
 /**
+ * Action used to set the initial errors after creating the tracks.
+ *
+ * @param {Object} value - The track errors.
+ * @returns {Object}
+ */
+export function setPrejoinPageErrorMessageKey(value: Object) {
+    return {
+        type: SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY,
+        value
+    };
+}
+
+/**
  * Action used to set the visiblity of the prejoin page.
  *
  * @param {boolean} value - The value.
@@ -540,6 +558,13 @@ export function setPrejoinDeviceErrors(value: Object) {
 export function setPrejoinPageVisibility(value: boolean) {
     return {
         type: SET_PREJOIN_PAGE_VISIBILITY,
+        value
+    };
+}
+
+export function setInterimPrejoinPage(value: boolean) {
+    return {
+        type: SET_INTERIM_PREJOIN_PAGE,
         value
     };
 }

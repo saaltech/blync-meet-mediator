@@ -69,6 +69,8 @@ export const SET_PREJOIN_DEVICE_ERRORS = 'SET_PREJOIN_DEVICE_ERRORS';
  */
 export const SET_PREJOIN_PAGE_VISIBILITY = 'SET_PREJOIN_PAGE_VISIBILITY';
 
+export const SET_INTERIM_PREJOIN_PAGE = "SET_INTERIM_PREJOIN_PAGE"
+
 /**
  * Action type to mute/unmute the video while on prejoin page.
  */
@@ -78,3 +80,10 @@ export const SET_PREJOIN_VIDEO_DISABLED = 'SET_PREJOIN_VIDEO_DISABLED';
  * Action type to mute/unmute the video while on prejoin page.
  */
 export const SET_PREJOIN_VIDEO_MUTED = 'SET_PREJOIN_VIDEO_MUTED';
+
+/**
+ * Action type to set/unset error message to show on the prejoin page
+ */
+export const SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY = 'SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY';
+
+
