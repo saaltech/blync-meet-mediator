@@ -5,7 +5,7 @@ import Logger from 'jitsi-meet-logger';
 import { openConnection } from '../../../connection';
 import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
-import { setInterimPrejoinPage, 
+import { setInterimPrejoinPage, setPrejoinPageVisibility,
     setPrejoinPageErrorMessageKey } from '../../../react/features/prejoin'
 import {
     JitsiConnectionErrors,
@@ -172,6 +172,10 @@ function doXmppAuth (room, lockPassword) {
     let hostUsername = window.sessionStorage.getItem("hostUsername") || "";
     let hostPassword = window.sessionStorage.getItem("hostPassword") || "";
     
+    const { showPrejoin } = APP.store.getState()['features/prejoin'];
+    if(showPrejoin) {
+        return;
+    }
     if(participantType) {
         room.authenticateAndUpgradeRole({
             id: toJid(hostUsername, config.hosts),
@@ -188,6 +192,7 @@ function doXmppAuth (room, lockPassword) {
                 console.log('connection.GOT_SESSION_ID')
 
                 // hide PrejoinPage 
+                _setPrejoinPageVisibility(false)
                 _setInterimPrejoinPage(false)
 
                 // Clear PrejoinPage error
@@ -203,19 +208,25 @@ function doXmppAuth (room, lockPassword) {
 
                 //setTimeout(() => {
                    
-                /*    
+                /*
                     // Show PrejoinPage
-                    _setInterimPrejoinPage(true)
+                    _setPrejoinPageVisibility(true)
+                    //_setInterimPrejoinPage(true)
 
                     // Show error on the page
                     _setPrejoinPageErrorMessage(error)
                 */
-                    
+               /*const { interimPrejoin } = APP.store.getState()['features/prejoin'];
+               if(interimPrejoin) {
+                    _setPrejoinPageErrorMessage(error)
+                   return;
+               }*/
                     APP.conference.init({
                         roomName: APP.conference.roomName,
                         refreshTracksOnly: true
                     }).then(()=>{
                          // Show PrejoinPage
+                         _setPrejoinPageVisibility(true)
                          _setInterimPrejoinPage(true)
 
                         // Show error on the page
@@ -267,6 +278,12 @@ function oldLoginFlow(room, lockPassword) {
 function _setInterimPrejoinPage(visible) {
     APP.store.dispatch(setInterimPrejoinPage(visible))
 }
+
+function _setPrejoinPageVisibility(visible) {
+    APP.store.dispatch(setPrejoinPageVisibility(visible))
+}
+
+
 
 function _setPrejoinPageErrorMessage(error) {
     let messageKey = error ? 'dialog.connectErrorWithMsg' : null;
