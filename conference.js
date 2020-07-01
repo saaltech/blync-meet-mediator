@@ -306,7 +306,27 @@ class ConferenceConnector {
         // not enough rights to create conference
         case JitsiConferenceErrors.AUTHENTICATION_REQUIRED: {
             // Schedule reconnect to check if someone else created the room.
+
+
+            function isHostPrejoinError() {
+                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin']
+                pageErrorMessageKey = "submitting" === pageErrorMessageKey ? null : pageErrorMessageKey;
+                if(pageErrorMessageKey ) {
+                    return true;
+                }
+                else {
+                    return false
+                }
+            }
+
+            if(isHostPrejoinError()) {
+                return;
+            }
+
             this.reconnectTimeout = setTimeout(() => {
+                if(isHostPrejoinError()) {
+                    return;
+                }
                 APP.store.dispatch(conferenceWillJoin(room));
                 room.join();
             }, 5000);

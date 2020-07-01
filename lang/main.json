@@ -247,6 +247,7 @@
         "muteParticipantTitle": "Mute this participant?",
         "Ok": "OK",
         "passwordLabel": "The meeting has been locked by a participant. Please enter the $t(lockRoomPassword) to join.",
+        "guestPasswordError": "The meeting has been locked by a participant. Please enter the correct room $t(lockRoomPassword) to join.",
         "passwordNotSupported": "Setting a meeting $t(lockRoomPassword) is not supported.",
         "passwordNotSupportedTitle": "$t(lockRoomPasswordUppercase) not supported",
         "passwordRequired": "$t(lockRoomPasswordUppercase) required",

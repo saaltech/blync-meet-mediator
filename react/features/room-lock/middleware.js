@@ -21,6 +21,9 @@ import { PasswordRequiredPrompt, RoomLockPrompt } from './components';
 import { LOCKED_REMOTELY } from './constants';
 import logger from './logger';
 
+import { setPrejoinPageVisibility,
+    setPrejoinPageErrorMessageKey } from '../prejoin'
+
 declare var APP: Object;
 
 /**
@@ -120,8 +123,24 @@ function _conferenceFailed({ dispatch }, next, action) {
                 dispatch(setPassword(conference, conference.join, password));
                 return true;
             }
-            else{
-                dispatch(_openPasswordRequiredPrompt(conference));
+            else {
+                    APP.conference.init({
+                        roomName: APP.conference.roomName
+                    }).then(()=>{
+                         // Show PrejoinPage
+                         APP.store.dispatch(setPrejoinPageVisibility(true))
+                         //_setInterimPrejoinPage(true)
+
+                         APP.store.dispatch(setPrejoinPageErrorMessageKey('dialog.guestPasswordError'))
+                        // Show error on the page
+                        //_setPrejoinPageErrorMessage('dialog.passwordLabel')
+
+                    }).catch(error => {
+                        //APP.API.notifyConferenceLeft(APP.conference.roomName);
+                        logger.error(error);
+                    });
+
+                // dispatch(_openPasswordRequiredPrompt(conference));
             }
         }
     } else {
