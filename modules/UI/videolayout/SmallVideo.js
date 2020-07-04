@@ -358,6 +358,10 @@ export default class SmallVideo {
      * element which displays the hosts label.
      */
     $host() {
+        if (!this.container) {
+            return null;
+        }
+
         return this.$container.find('.videocontainer__host');
     }
 
@@ -578,13 +582,23 @@ export default class SmallVideo {
      * @returns {void}
      */
     initializeHost() {
-        const hostLabel = this.$host().get(0);
+        const hostLabel = this.$host();
 
         if (!hostLabel) {
             return;
         }
+        const user = APP.store.getState()['features/base/participants']
+        .find(p => p.id === this.id);
 
-        if (this.user._role === 'moderator') {
+        console.log(user, this.id, 'useruseruseruseruseruseruser');
+
+        if (!user) {
+            hostLabel.hide();
+
+            return;
+        }
+
+        if (user._role === 'moderator' || user.role === 'moderator') {
             hostLabel.show();
         } else {
             hostLabel.hide();
