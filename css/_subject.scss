@@ -1,11 +1,14 @@
 .subject {
-    top: -120px;
-    transition: top .3s ease-in;
-    height: 95px;
-    width: 100%;
+    top: 190px;
+    left: 50%;
+    transition: opacity .3s ease-in;
+    transform: translateX(-50%);
+    min-height: 48px;
+    height: auto;
+    width: auto;
     pointer-events: none;
     position: absolute;
-    padding: 25px 140px 0 140px;
+    padding: 8px 25px;
     text-align: center;
     font-size: 17px;
     color: #fff;
@@ -14,10 +17,17 @@
     text-overflow: ellipsis;
     box-sizing: border-box;
     white-space: nowrap;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    background: rgba(#000000, 0.5);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 101px;
+    opacity: 0;
 
     &.visible {
-        top: 0px;
+        opacity: 1;
     }
 
     &-text {

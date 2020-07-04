@@ -7,7 +7,8 @@
 
 .horizontal-filmstrip .filmstrip {
     position: absolute;
-    bottom: 0;
+    top: 0;
+    bottom: auto;
     right: 0;
     padding: 10px 5px;
     @extend %align-right;
@@ -30,7 +31,7 @@
     }
 
     &.reduce-height {
-        bottom: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
+        // top: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
     }
 
     &__videos {
@@ -87,7 +88,7 @@
 
     &.hide-videos {
         .remote-videos-container {
-            opacity: 0;
+            // opacity: 0;
             pointer-events: none;
         }
     }

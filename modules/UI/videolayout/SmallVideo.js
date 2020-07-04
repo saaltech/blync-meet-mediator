@@ -846,8 +846,8 @@ export default class SmallVideo {
         }
         case LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW: {
             const state = APP.store.getState();
-            const { local, remote } = state['features/filmstrip'].horizontalViewDimensions;
-            const size = this.isLocal ? local : remote;
+            const { local } = state['features/filmstrip'].horizontalViewDimensions;
+            const size = local;
 
             if (typeof size !== 'undefined') {
                 const { height, width } = size;
