@@ -352,6 +352,16 @@ export default class SmallVideo {
     }
 
     /**
+     * Selects the HTML image element which displays hosts label.
+     *
+     * @return {jQuery|HTMLElement} a jQuery selector pointing to the HTML image
+     * element which displays the hosts label.
+     */
+    $host() {
+        return this.$container.find('.videocontainer__host');
+    }
+
+    /**
      * Returns the display name element, which appears on the video thumbnail.
      *
      * @return {jQuery} a jQuery selector pointing to the display name element of
@@ -558,6 +568,26 @@ export default class SmallVideo {
                 </Provider>,
                 thumbnail
             );
+        }
+    }
+
+    /**
+     * Updates the react component displaying the host label
+     * url.
+     *
+     * @returns {void}
+     */
+    initializeHost() {
+        const hostLabel = this.$host().get(0);
+
+        if (!hostLabel) {
+            return;
+        }
+
+        if (this.user._role === 'moderator') {
+            hostLabel.show();
+        } else {
+            hostLabel.hide();
         }
     }
 

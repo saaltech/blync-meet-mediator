@@ -12,11 +12,12 @@
     right: 0;
     padding: 10px 5px;
     @extend %align-right;
-    transition: bottom .3s;
+    transition: transform .3s;
     z-index: $filmstripVideosZ;
     box-sizing: border-box;
     width: 100%;
     position: fixed;
+    flex-direction: column;
 
     /*
      * Firefox sets flex items to min-height: auto and min-width: auto,
@@ -32,6 +33,10 @@
 
     &.reduce-height {
         // top: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
+    }
+
+    &__toolbar {
+        display: none;
     }
 
     &__videos {
@@ -87,6 +92,7 @@
     }
 
     &.hide-videos {
+        // transform: translateY(-110%);
         .remote-videos-container {
             // opacity: 0;
             pointer-events: none;
@@ -116,6 +122,9 @@
 
     .videocontainer {
         margin-bottom: 10px;
+        &.active-speaker {
+            border: 4px solid #00C062;
+        }
     }
 }
 
