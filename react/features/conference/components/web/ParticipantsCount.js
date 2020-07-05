@@ -69,14 +69,21 @@ class ParticipantsCount extends PureComponent<Props> {
      * @returns {ReactElement}
      */
     render() {
+        if (this.props.count === 1) {
+            return null;
+        }
+
         return (
-            <div
-                className = 'participants-count'
-                onClick = { this._onClick }>
-                <span className = 'participants-count-number'>
-                    {this.props.count}
-                </span>
-                <span className = 'participants-count-icon' />
+            <div className = 'participants-count'>
+                <div
+                    className = 'participants-count__container'
+                    onClick = { this._onClick }>
+                        Online users
+                    <span className = 'participants-count-number'>
+                        ({this.props.count})
+                    </span>
+                    <span className = 'participants-count-icon' />
+                </div>
             </div>
         );
     }

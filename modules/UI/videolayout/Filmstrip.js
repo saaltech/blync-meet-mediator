@@ -72,7 +72,7 @@ const Filmstrip = {
      * @param {boolean} forceUpdate
      * @returns {void}
      */
-    resizeThumbnailsForHorizontalView({ local = {}, remote = {} }, forceUpdate = false) {
+    resizeThumbnailsForHorizontalView({ local = {} }, forceUpdate = false) {
         const thumbs = this._getThumbs(!forceUpdate);
 
         if (thumbs.localThumb) {
@@ -92,7 +92,7 @@ const Filmstrip = {
         }
 
         if (thumbs.remoteThumbs) {
-            const { height, width } = remote;
+            const { height, width } = local;
             const avatarSize = height / 2;
 
             thumbs.remoteThumbs.css({

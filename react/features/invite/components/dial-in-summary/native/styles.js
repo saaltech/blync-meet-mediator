@@ -4,7 +4,7 @@ import { ColorPalette } from '../../../../base/styles';
 
 export const INDICATOR_COLOR = ColorPalette.lightGrey;
 
-const WV_BACKGROUND = 'rgb(71, 71, 71)';
+const WV_BACKGROUND = '#242424';
 
 export default {
 

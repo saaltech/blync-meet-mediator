@@ -16,8 +16,6 @@ declare var interfaceConfig: Object;
 export function getCurrentLayout(state: Object) {
     if (shouldDisplayTileView(state)) {
         return LAYOUTS.TILE_VIEW;
-    } else if (interfaceConfig.VERTICAL_FILMSTRIP) {
-        return LAYOUTS.VERTICAL_FILMSTRIP_VIEW;
     }
 
     return LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW;

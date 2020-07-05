@@ -27,6 +27,7 @@ import {
     abstractMapStateToProps
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
+import ParticipantsCount from '../web/ParticipantsCount';
 
 import InviteMore from './InviteMore';
 import Labels from './Labels';
@@ -184,8 +185,7 @@ class Conference extends AbstractConference<Props, *> {
         const {
             _iAmRecorder,
             _layoutClassName,
-            _showPrejoin,
-            _interimPrejoin
+            _showPrejoin
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -196,9 +196,8 @@ class Conference extends AbstractConference<Props, *> {
                 onMouseMove = { this._onShowToolbar }>
 
                 <Notice />
-                <Subject />
-                <InviteMore />
                 <div id = 'videospace'>
+                    <Subject />
                     <LargeVideo />
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
@@ -212,7 +211,8 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                { !filmstripOnly && (_showPrejoin /*|| _interimPrejoin*/ ) &&  <Prejoin />}
+                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
+                <InviteMore />
             </div>
         );
     }

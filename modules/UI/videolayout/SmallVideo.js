@@ -352,6 +352,20 @@ export default class SmallVideo {
     }
 
     /**
+     * Selects the HTML image element which displays hosts label.
+     *
+     * @return {jQuery|HTMLElement} a jQuery selector pointing to the HTML image
+     * element which displays the hosts label.
+     */
+    $host() {
+        if (!this.container) {
+            return null;
+        }
+
+        return this.$container.find('.videocontainer__host');
+    }
+
+    /**
      * Returns the display name element, which appears on the video thumbnail.
      *
      * @return {jQuery} a jQuery selector pointing to the display name element of
@@ -558,6 +572,36 @@ export default class SmallVideo {
                 </Provider>,
                 thumbnail
             );
+        }
+    }
+
+    /**
+     * Updates the react component displaying the host label
+     * url.
+     *
+     * @returns {void}
+     */
+    initializeHost() {
+        const hostLabel = this.$host();
+
+        if (!hostLabel) {
+            return;
+        }
+        const user = APP.store.getState()['features/base/participants']
+        .find(p => p.id === this.id);
+
+        console.log(user, this.id, 'useruseruseruseruseruseruser');
+
+        if (!user) {
+            hostLabel.hide();
+
+            return;
+        }
+
+        if (user._role === 'moderator' || user.role === 'moderator') {
+            hostLabel.show();
+        } else {
+            hostLabel.hide();
         }
     }
 
@@ -846,8 +890,8 @@ export default class SmallVideo {
         }
         case LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW: {
             const state = APP.store.getState();
-            const { local, remote } = state['features/filmstrip'].horizontalViewDimensions;
-            const size = this.isLocal ? local : remote;
+            const { local } = state['features/filmstrip'].horizontalViewDimensions;
+            const size = local;
 
             if (typeof size !== 'undefined') {
                 const { height, width } = size;
