@@ -121,7 +121,8 @@ class Prejoin extends Component<Props, State> {
             isHost: false,
             participantTypeOptionSpecified: false,
             hostUsername: '',
-            hostPassword: ''
+            hostPassword: '',
+            participantType: 'guest'
         };
 
         this._closeDialog = this._closeDialog.bind(this);
@@ -216,7 +217,8 @@ class Prejoin extends Component<Props, State> {
         // window.sessionStorage.setItem("participantType", value);
         this.setState({
             isHost: value === 'host',
-            participantTypeOptionSpecified: true
+            participantTypeOptionSpecified: true,
+            participantType: value
         });
     }
 
