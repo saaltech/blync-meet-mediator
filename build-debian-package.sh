@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-cd saal-meeting
+cd /saal-meeting/saal-meeting
 find . -type f -name "*.*" -exec chmod 644 {} +
 npm install
 make
