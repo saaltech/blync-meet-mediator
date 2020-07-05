@@ -1,4 +1,5 @@
 // @flow
+import toast from 'toastr';
 
 import { APP_WILL_MOUNT, APP_WILL_UNMOUNT } from '../base/app';
 import {
@@ -20,7 +21,7 @@ import { MiddlewareRegistry, StateListenerRegistry } from '../base/redux';
 import { playSound, registerSound, unregisterSound } from '../base/sounds';
 import { isButtonEnabled, showToolbox } from '../toolbox';
 
-import { SEND_MESSAGE, SET_PRIVATE_MESSAGE_RECIPIENT } from './actionTypes';
+import { ADD_MESSAGE, SEND_MESSAGE, SET_PRIVATE_MESSAGE_RECIPIENT } from './actionTypes';
 import { addMessage, clearMessages, toggleChat } from './actions';
 import { ChatPrivacyDialog } from './components';
 import {
@@ -65,7 +66,6 @@ MiddlewareRegistry.register(store => next => action => {
     case CONFERENCE_JOINED:
         _addChatMsgListener(action.conference, store);
         break;
-
     case SEND_MESSAGE: {
         const state = store.getState();
         const { conference } = state['features/base/conference'];

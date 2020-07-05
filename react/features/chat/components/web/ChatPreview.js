@@ -1,12 +1,16 @@
 // @flow
 import React from 'react';
 
-import AbstractChat from '../AbstractChat';
+import { translate } from '../../../base/i18n';
+import { connect } from '../../../base/redux';
+import AbstractChatPreview, {
+    type Props,
+    _mapDispatchToProps,
+    _mapStateToProps
+} from '../AbstractChatPreview';
 
+import ChatPreviewContainer from './ChatPreviewContainer';
 
-type Props = {
-    _isOpen: Boolean
-}
 
 type State = {
 
@@ -15,7 +19,7 @@ type State = {
 /**
  * Implements a React native component that renders the chat preview
  */
-export default class ChatPreview extends AbstractChatPreview<Props, State> {
+class ChatPreview extends AbstractChatPreview<Props, State> {
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -23,8 +27,19 @@ export default class ChatPreview extends AbstractChatPreview<Props, State> {
      */
     render() {
 
+        if (this.props._isOpen) {
+            return null;
+        }
+
         return (
-            <div className = 'chat-preview' />
+            <div className = 'chat-preview'>
+                <ChatPreviewContainer
+                    localParticipant = { this.props._localParticipant }
+                    messages = { this.props._messages } />
+            </div>
         );
     }
 }
+
+
+export default translate(connect(_mapStateToProps, _mapDispatchToProps)(ChatPreview));
