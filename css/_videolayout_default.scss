@@ -685,12 +685,21 @@
         visibility: visible;
     }
 
+    .avatar-container .avatar {
+        background-color: darken(#B2A474, 5) !important;
+    }
+
     .displayNameContainer {
         visibility: hidden;
     }
 
+    .videocontainer__background {
+        background: #B2A474 !important;
+    }
+
     .videocontainer__hoverOverlay {
         visibility: hidden;
+        background: #B2A474 !important;
     }
 
     video {
