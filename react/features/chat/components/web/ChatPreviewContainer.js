@@ -55,8 +55,6 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
      * @inheritdoc
      */
     render() {
-        // const groupedMessages = this._getMessagesGroupedBySender();
-
         const messages = [ ...this.props.messages ]
         .filter(msg => msg.senderId !== this.props.localParticipant?.id)
         .reverse()
@@ -103,8 +101,6 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
             block: 'nearest'
         });
     }
-
-    _getMessagesGroupedBySender: () => Array<Array<Object>>;
 
     _onChatScroll: () => void;
 

@@ -1,5 +1,6 @@
 // @flow
 
+import truncate from 'lodash/truncate';
 import React, { Component } from 'react';
 
 import { Avatar } from '../../../base/avatar';
@@ -46,6 +47,7 @@ class ChatPreviewGroup extends Component<Props> {
 
         const { senderId } = message;
 
+
         return (
 
             <Expire
@@ -55,7 +57,10 @@ class ChatPreviewGroup extends Component<Props> {
                     <div className = 'chat-preview-group__container'>
                         <ChatMessage
                             key = { message.chatId }
-                            message = { message }
+                            message = {{ ...message,
+                                message: truncate(message.message, {
+                                    length: 60
+                                }) }}
                             showDisplayName = { true }
                             showTimestamp = { false } />
                     </div>
