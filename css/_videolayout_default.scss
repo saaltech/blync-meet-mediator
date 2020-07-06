@@ -44,6 +44,16 @@
         height: 100%;
     }
 
+    &__host {
+        padding: 5px;
+        color: #FFF;
+        border-radius: 6px;
+        background: #D76751;
+        position: absolute;
+        left: 6px;
+        top: 8px;
+    }
+
     /**
      * The toolbar of the video thumbnail.
      */
@@ -675,12 +685,21 @@
         visibility: visible;
     }
 
+    .avatar-container .avatar {
+        background-color: darken(#B2A474, 5) !important;
+    }
+
     .displayNameContainer {
         visibility: hidden;
     }
 
+    .videocontainer__background {
+        background: #B2A474 !important;
+    }
+
     .videocontainer__hoverOverlay {
         visibility: hidden;
+        background: #B2A474 !important;
     }
 
     video {

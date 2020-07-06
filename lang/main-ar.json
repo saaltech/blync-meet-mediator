@@ -180,6 +180,7 @@
         "incorrectRoomLockPassword": "",
         "incorrectPassword": "",
         "invalidHost": "Sorry, You cannot host this meeting. Please wait for the host to join.",
+        "guestErrorMessage": "Please wait for the host to join.",
         "inlineInstallationMsg": "",
         "inlineInstallExtension": "",
         "internalError": "",

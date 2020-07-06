@@ -169,8 +169,10 @@ function initJWTTokenListener(room) {
  */
 function doXmppAuth (room, lockPassword) {
     let participantType = window.sessionStorage.getItem("participantType");
-    let hostUsername = window.sessionStorage.getItem("hostUsername") || "";
-    let hostPassword = window.sessionStorage.getItem("hostPassword") || "";
+    let hostUsername = participantType == "host" ? 
+        (window.sessionStorage.getItem("hostUsername") || "") : "";
+    let hostPassword = participantType == "host" ?
+        (window.sessionStorage.getItem("hostPassword") || "") : "";
     
     const { showPrejoin } = APP.store.getState()['features/prejoin'];
     if(showPrejoin) {
@@ -235,6 +237,10 @@ function doXmppAuth (room, lockPassword) {
                          _setInterimPrejoinPage(true)
 
                         // Show error on the page
+                        if(participantType == 'guest') {
+                            error.connectionError = "dialog.guestErrorMessage"
+                        }
+
                         _setPrejoinPageErrorMessage(error)
 
                     }).catch(error => {
@@ -247,9 +253,9 @@ function doXmppAuth (room, lockPassword) {
             }
         )
     }
-    else {
-        oldLoginFlow(room, lockPassword)
-    }
+    // else {
+    //     oldLoginFlow(room, lockPassword)
+    // }
 }
 
 function oldLoginFlow(room, lockPassword) {
@@ -313,6 +319,8 @@ function _setPrejoinPageErrorMessage(error) {
         // this is a CONFERENCE_HOST_NOT_AUTHORIZED error, as login window was already
         // open once, this means username or password does not match that of the host.
         messageKey = 'dialog.invalidHost';
+    } else if (errorKey) {
+        messageKey = errorKey
     }
 
     APP.store.dispatch(setPrejoinPageErrorMessageKey(messageKey))

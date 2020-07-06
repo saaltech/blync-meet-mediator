@@ -8,7 +8,6 @@ import { connect } from '../../../base/redux';
 import { isToolboxVisible } from '../../../toolbox';
 import ConferenceTimer from '../ConferenceTimer';
 
-import ParticipantsCount from './ParticipantsCount';
 
 /**
  * The type of the React {@code Component} props of {@link Subject}.
@@ -46,12 +45,11 @@ class Subject extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _showParticipantCount, _subject, _visible } = this.props;
+        const { _subject, _visible } = this.props;
 
         return (
             <div className = { `subject ${_visible ? 'visible' : ''}` }>
                 <span className = 'subject-text'>{ _subject }</span>
-                { _showParticipantCount && <ParticipantsCount /> }
                 <ConferenceTimer />
             </div>
         );
