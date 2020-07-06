@@ -92,7 +92,7 @@
     }
 
     &.hide-videos {
-        transform: translateY(-110%);
+        // transform: translateY(-110%);
         .remote-videos-container {
             // opacity: 0;
             pointer-events: none;

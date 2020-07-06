@@ -62,6 +62,8 @@ export type Props = {
      * URL of the avatar, if any.
      */
     url: ?string,
+
+    opacity: ?number,
 }
 
 type State = {
@@ -117,6 +119,7 @@ class Avatar<P: Props> extends PureComponent<P, State> {
         const {
             _initialsBase,
             _loadableAvatarUrl,
+            opacity,
             className,
             colorBase,
             id,
@@ -149,8 +152,10 @@ class Avatar<P: Props> extends PureComponent<P, State> {
 
         const initials = getInitials(_initialsBase);
 
+        console.log(opacity, 'opacityopacityopacity');
+
         if (initials) {
-            avatarProps.color = getAvatarColor(colorBase || _initialsBase);
+            avatarProps.color = getAvatarColor(colorBase || _initialsBase, opacity);
             avatarProps.initials = initials;
         }
 
