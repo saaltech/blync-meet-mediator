@@ -52,7 +52,10 @@
             border: $thumbnailsBorder solid transparent;
             transition: bottom 2s;
             flex-grow: 1;
-            @include minHWAutoFix()
+            @include minHWAutoFix();
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /**
@@ -101,9 +104,7 @@
 
     #filmstripRemoteVideos {
         @include minHWAutoFix();
-
         display: flex;
-        flex: 1;
         width: auto;
         justify-content: flex-end;
         flex-direction: row;

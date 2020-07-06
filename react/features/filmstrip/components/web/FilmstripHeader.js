@@ -110,7 +110,8 @@ class FilmstripHeader extends Component<Props> {
                                 left: '-287.828px',
                                 boxShadow: '0px 8px 15px #0000001D',
                                 borderRadius: '6px',
-                                border: 'none'
+                                border: 'none',
+                                zIndex: '999'
                             }}
                             position = 'left top'
                             trigger = { this._renderParticipantsTrigger() }>
