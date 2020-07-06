@@ -108,7 +108,7 @@ class FilmstripHeader extends Component<Props> {
                                 minHeight: '482px',
                                 top: '40px !important',
                                 left: '-287.828px',
-                                boxShadow: '0px 8px 15px #0000001D',
+                                boxShadow: '0px 8px 15px rgba(0, 0, 0,  0.3)',
                                 borderRadius: '6px',
                                 border: 'none',
                                 zIndex: '999',
