@@ -200,7 +200,7 @@ export default class RemoteVideo extends SmallVideo {
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
             remoteMenuPosition = 'left bottom';
         } else {
-            remoteMenuPosition = 'top center';
+            remoteMenuPosition = 'bottom center';
         }
 
         ReactDOM.render(

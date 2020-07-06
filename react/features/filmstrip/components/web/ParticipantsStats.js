@@ -100,8 +100,14 @@ class ParticipantsStats extends Component<Props, State> {
             return null;
         }
 
-        const dominantSpeakerTime = statsModel.getTotalDominantSpeakerTime();
+        const hasLeft = statsModel.hasLeft();
 
+        if (hasLeft) {
+            return null;
+        }
+
+
+        const dominantSpeakerTime = statsModel.getTotalDominantSpeakerTime();
         let displayName;
 
         if (statsModel.isLocalStats()) {
