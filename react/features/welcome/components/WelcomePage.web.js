@@ -14,6 +14,8 @@ import Background from './background';
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 
+import { LoginComponent, decideAppLogin } from '../../../features/app-auth'
+
 /**
  * The pattern used to validate room name.
  * @type {string}
@@ -56,7 +58,8 @@ class WelcomePage extends AbstractWelcomePage {
             generateRoomnames:
                 interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE,
             selectedTab: 0,
-            formDisabled: true
+            formDisabled: true,
+            hideLogin: true
         };
 
         /**
@@ -110,6 +113,7 @@ class WelcomePage extends AbstractWelcomePage {
         this._setAdditionalToolbarContentRef
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
+        this._closeLogin = this._closeLogin.bind(this);
     }
 
     /**
@@ -120,6 +124,7 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
+        this.props.dispatch(decideAppLogin())
         super.componentDidMount();
 
         document.body.classList.add('welcome-page');
@@ -167,6 +172,12 @@ class WelcomePage extends AbstractWelcomePage {
         }
     }
 
+    _closeLogin() {
+        this.setState({
+            hideLogin: true
+        })
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -174,12 +185,14 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     render() {
-        const { t } = this.props;
+        const { t, _showAppLogin } = this.props;
+        const { hideLogin } = this.state;
         const { APP_NAME } = interfaceConfig;
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
 
+        console.log("_showAppLogin: ", _showAppLogin)
         return (
             <div
                 className = { `welcome ${showAdditionalContent
@@ -188,8 +201,30 @@ class WelcomePage extends AbstractWelcomePage {
 
                 <Background/>
 
+                {
+                    _showAppLogin && !hideLogin && 
+                    <LoginComponent 
+                        closeAction={ this._closeLogin }
+                        isOverlay={true}
+                        t = {t}
+                    />
+                }
+
                 <div className = 'header'>
-                    <div className = 'welcome-page-settings'>
+                    {
+                        _showAppLogin &&
+                        <div
+                            className = { `welcome-page-button signin` }
+                            id = 'enter_room_button'
+                            onClick = { () => this.setState({
+                                hideLogin: false
+                            }) }>
+                            {
+                                t('welcomepage.signinLabel')
+                            }
+                        </div>
+                    }
+                    {/*<div className = 'welcome-page-settings'>
                         <SettingsButton
                             defaultTab = { SETTINGS_TABS.CALENDAR } />
                         { showAdditionalToolbarContent
@@ -198,7 +233,7 @@ class WelcomePage extends AbstractWelcomePage {
                                 ref = { this._setAdditionalToolbarContentRef } />
                             : null
                         }
-                    </div>
+                    </div>*/}
                     <div className = 'header-image' />
                     <div className = 'header-text'>
                         <h1 className = 'header-text-title'>
@@ -230,7 +265,7 @@ class WelcomePage extends AbstractWelcomePage {
                             </form>
                         </div>
                         <div
-                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled': ''}` }
+                            className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled': ''}` }
                             id = 'enter_room_button'
                             onClick = { this._onFormSubmit }>
                             {
@@ -277,6 +312,13 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _onFormSubmit(event) {
         event.preventDefault();
+
+        if (this.props._showAppLogin) {
+            this.setState({
+                hideLogin: false
+            })
+            return;
+        }
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this._onJoin();

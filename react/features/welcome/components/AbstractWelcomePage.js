@@ -281,6 +281,8 @@ export function _mapStateToProps(state: Object) {
         _enableInsecureRoomNameWarning: state['features/base/config'].enableInsecureRoomNameWarning || false,
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
-        _settings: state['features/base/settings']
+        _settings: state['features/base/settings'],
+        _showAppLogin : state['features/app-auth'].showAppLogin
+
     };
 }

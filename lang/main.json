@@ -871,7 +871,15 @@
         "title": "vMeet",
         "subTitle": "Collaborate Anytime Anywhere",
         "placeholderEnterRoomName": "Enter the room name",
-        "startSession": "Go ahead, enter the meeting name and start or join the session."
+        "startSession": "Go ahead, enter the meeting name and start or join the session.",
+        "signinLabel": "Sign in"
+    },
+    "loginPage": {
+        "loginLabel": "Login",
+        "placeholderUsername": "Enter your username",
+        "placeholderPassword": "Enter your password",
+        "fieldPassword": "Password",
+        "fieldUsername": "Username"
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",
