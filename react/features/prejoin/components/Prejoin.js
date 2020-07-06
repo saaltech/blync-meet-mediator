@@ -186,7 +186,8 @@ class Prejoin extends Component<Props, State> {
             isHost: false,
             participantTypeOptionSpecified: false,
             hostUsername: window.sessionStorage.getItem('hostUsername') || '',
-            hostPassword: window.sessionStorage.getItem('hostPassword') || ''
+            hostPassword: window.sessionStorage.getItem('hostPassword') || '',
+            roomPassword: ''
         });
     }
 
@@ -254,7 +255,8 @@ class Prejoin extends Component<Props, State> {
      * @param {*} roomPassword
      */
     _setRoomPassword(roomPassword) {
-        window.sessionStorage.setItem('roomPassword', roomPassword);
+        //window.sessionStorage.setItem('roomPassword', roomPassword);
+        this.setFieldInState('roomPassword', roomPassword);
     }
 
     setFieldInState(field, value) {
@@ -267,7 +269,9 @@ class Prejoin extends Component<Props, State> {
     _setDetailsToStore() {
         window.sessionStorage.setItem('hostUsername', this.state.hostUsername);
         window.sessionStorage.setItem('hostPassword', this.state.hostPassword);
+        window.sessionStorage.setItem('roomPassword', this.state.roomPassword);
         window.sessionStorage.setItem('participantType', this.state.participantType);
+
     }
 
     _closeDialog: () => void;
