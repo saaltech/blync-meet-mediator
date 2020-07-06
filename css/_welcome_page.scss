@@ -1,6 +1,9 @@
 body.welcome-page {
     background: inherit;
     overflow: auto;
+    .leftwatermark {
+        display: block;
+    }
 }
 
 @media only screen and (max-width: 800px) {

@@ -9,10 +9,11 @@ import { connect } from '../../base/redux';
 import { CalendarList } from '../../calendar-sync';
 import { RecentList } from '../../recent-list';
 import { SettingsButton, SETTINGS_TABS } from '../../settings';
-import Background from './background';
+
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
+import Background from './background';
 
 /**
  * The pattern used to validate room name.
@@ -154,16 +155,15 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     _onRoomNameChanged(e) {
-        this._onRoomChange(e); 
-        if(e.target.value.trim() != "") { 
+        this._onRoomChange(e);
+        if (e.target.value.trim() != '') {
             this.setState({
                 formDisabled: false
-            }) 
-        } 
-        else {
+            });
+        } else {
             this.setState({
                 formDisabled: true
-            }) 
+            });
         }
     }
 
@@ -186,7 +186,7 @@ class WelcomePage extends AbstractWelcomePage {
                     ? 'with-content' : 'without-content'}` }
                 id = 'welcome_page'>
 
-                <Background/>
+                <Background />
 
                 <div className = 'header'>
                     <div className = 'welcome-page-settings'>
@@ -204,7 +204,7 @@ class WelcomePage extends AbstractWelcomePage {
                         <h1 className = 'header-text-title'>
                             { t('welcomepage.enterRoomTitle') }
                         </h1>
-                        {/*<h3 className = 'header-text-sub-title'>
+                        {/* <h3 className = 'header-text-sub-title'>
                             { t('welcomepage.subTitle') }
                         </h3>
                         <p className = 'header-text-description'>
@@ -220,8 +220,9 @@ class WelcomePage extends AbstractWelcomePage {
                                     className = 'enter-room-input'
                                     id = 'enter_room_field'
                                     onChange = { this._onRoomNameChanged }
-                                    //pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } //this.state.roomPlaceholder
+
+                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
                                     ref = { this._setRoomInputRef }
                                     title = { t('welcomepage.roomNameAllowedChars') }
                                     type = 'text'
@@ -230,7 +231,7 @@ class WelcomePage extends AbstractWelcomePage {
                             </form>
                         </div>
                         <div
-                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled': ''}` }
+                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled' : ''}` }
                             id = 'enter_room_button'
                             onClick = { this._onFormSubmit }>
                             {
@@ -240,7 +241,7 @@ class WelcomePage extends AbstractWelcomePage {
                             }
                         </div>
                     </div>
-                    <div className='note'> { t('welcomepage.startSession') } </div>
+                    <div className = 'note'> { t('welcomepage.startSession') } </div>
                     {/* this._renderTabs() */}
                 </div>
                 { showAdditionalContent
