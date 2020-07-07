@@ -35,7 +35,7 @@
 .videocontainer {
     position: relative;
     text-align: center;
-
+    z-index: 1 !important; 
     &__background {
         @include topLeft();
         background-color: black;
