@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 
-import { Watermarks } from '../../base/react';
 import { connect } from '../../base/redux';
 import { fetchCustomBrandingData } from '../../dynamic-branding';
 import { Captions } from '../../subtitles/';

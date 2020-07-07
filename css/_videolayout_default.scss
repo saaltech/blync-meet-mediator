@@ -50,8 +50,10 @@
         border-radius: 6px;
         background: #D76751;
         position: absolute;
-        left: 6px;
-        top: 8px;
+        left: auto;
+        right: 6px;
+        bottom: 8px;
+        z-index: 9;
     }
 
     /**
@@ -84,7 +86,6 @@
             display: inline-block;
             float: left;
             pointer-events: all;
-            display: none !important;
         }
     }
 
@@ -182,7 +183,7 @@
     }
 
     &__hoverOverlay {
-        background: rgba(0,0,0,.6);
+        background: rgba(0,0,0,.2);
         border-radius: $borderRadius;
         position: absolute;
         top: 0px;
@@ -362,7 +363,7 @@
  * Toolbar icons positioned on the right.
  */
 .moderator-icon {
-    display: inline-block;
+    display: none;
 
     &.right {
         float: right;
@@ -609,8 +610,16 @@
 }
 
 .display-avatar-with-name {
+    .videocontainer__background {
+        background: darken(#B2A474, 5) !important;
+    }
+
     .avatar-container {
         visibility: visible;
+    }
+
+    .avatar-container .avatar {
+        background-color: rgba(0, 0, 0, 0.3) !important;
     }
 
     .displayNameContainer {
