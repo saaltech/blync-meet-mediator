@@ -745,14 +745,14 @@ export default class SmallVideo {
         let statsPopoverPosition, tooltipPosition;
 
         if (currentLayout === LAYOUTS.TILE_VIEW) {
-            statsPopoverPosition = 'right top';
-            tooltipPosition = 'right';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'left';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'top';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         }
 
         ReactDOM.render(

@@ -35,7 +35,7 @@
 .videocontainer {
     position: relative;
     text-align: center;
-
+    z-index: 1 !important; 
     &__background {
         @include topLeft();
         background-color: black;
@@ -53,7 +53,7 @@
         left: auto;
         right: 6px;
         bottom: 8px;
-        z-index: 9;
+        z-index: 4;
     }
 
     /**
@@ -93,12 +93,14 @@
         bottom: 0;
         height: $thumbnailToolbarHeight;
         padding: 0 5px 0 5px;
+        z-index: 3;
     }
 
     &__toptoolbar {
         $toolbarIconMargin: 5px;
         top: 0;
         padding-bottom: 0;
+        z-index: 10;
         /**
          * Override text-align center as icons need to be left justified.
          */
@@ -192,6 +194,7 @@
         height: 100%;
         visibility: hidden;
         z-index: $zindex2;
+        pointer-events: none;
     }
 }
 

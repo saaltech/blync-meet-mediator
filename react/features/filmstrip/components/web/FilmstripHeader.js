@@ -46,22 +46,6 @@ type Props = {
 class FilmstripHeader extends Component<Props> {
 
     /**
-     * Render participant trigger.
-     *
-     * @inheritdoc
-     * @returns {ReactElement}
-     */
-    _renderParticipantsTrigger() {
-        return (<button
-            className = 'film-strip-header__action-button'
-            type = 'button'>
-            <Icon
-                size = { 16 }
-                src = { IconArrowDownSmall } />
-        </button>);
-    }
-
-    /**
      * Render participants list.
      *
      * @inheritdoc
@@ -116,8 +100,15 @@ class FilmstripHeader extends Component<Props> {
                                 overflowX: 'hidden',
                                 height: '482px'
                             }}
+                            on = 'hover'
                             position = 'left top'
-                            trigger = { this._renderParticipantsTrigger() }>
+                            trigger = { <button
+                                className = 'film-strip-header__action-button'
+                                type = 'button'>
+                                <Icon
+                                    size = { 16 }
+                                    src = { IconArrowDownSmall } />
+                            </button> }>
                             {this._renderParticipantsList()}
                         </Popup>
                     </div>
