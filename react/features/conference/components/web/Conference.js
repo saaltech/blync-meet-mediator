@@ -8,7 +8,7 @@ import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
 import { connect as reactReduxConnect } from '../../../base/redux';
-import { Chat } from '../../../chat';
+import { ChatPreview, Chat } from '../../../chat';
 import { Filmstrip } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
@@ -207,6 +207,10 @@ class Conference extends AbstractConference<Props, *> {
                 { this.renderNotificationsContainer() }
 
                 <CalleeInfoContainer />
+
+                <ChatPreview />
+                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
+
 
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
                 <InviteMore />
