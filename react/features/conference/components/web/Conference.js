@@ -28,7 +28,6 @@ import {
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
-import InviteMore from './InviteMore';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 
@@ -213,7 +212,6 @@ class Conference extends AbstractConference<Props, *> {
 
 
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
-                <InviteMore />
             </div>
         );
     }
