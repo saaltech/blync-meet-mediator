@@ -26,11 +26,6 @@ class ChatPreview extends AbstractChatPreview<Props, State> {
      * @inheritdoc
      */
     render() {
-
-        if (this.props._isOpen) {
-            return null;
-        }
-
         return (
             <div className = 'chat-preview'>
                 <ChatPreviewContainer

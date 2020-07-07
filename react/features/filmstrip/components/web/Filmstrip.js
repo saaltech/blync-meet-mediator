@@ -12,12 +12,12 @@ import {
 import { translate } from '../../../base/i18n';
 import { Icon, IconMenuDown, IconMenuUp } from '../../../base/icons';
 import { connect } from '../../../base/redux';
-import ParticipantsCount from '../../../conference/components/web/ParticipantsCount';
 import { dockToolbox } from '../../../toolbox';
 import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 import { setFilmstripHovered, setFilmstripVisible } from '../../actions';
 import { shouldRemoteVideosBeVisible } from '../../functions';
 
+import FilmstripHeader from './FilmstripHeader';
 import Toolbar from './Toolbar';
 
 declare var APP: Object;
@@ -216,7 +216,7 @@ class Filmstrip extends Component <Props> {
             <div
                 className = { `filmstrip ${this.props._className}` }
                 style = { filmstripStyle }>
-                <ParticipantsCount />
+                <FilmstripHeader />
                 { toolbar }
                 <div
                     className = { this.props._videosClassName }
