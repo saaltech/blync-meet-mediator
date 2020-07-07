@@ -562,7 +562,8 @@
         "setDisplayNameLabel": "Set your display name",
         "setEmailInput": "Enter e-mail",
         "setEmailLabel": "Set your gravatar email",
-        "title": "Profile"
+        "title": "Profile",
+        "logout": "Logout"
     },
     "raisedHand": "Would like to speak",
     "recording": {
@@ -879,7 +880,8 @@
         "placeholderUsername": "Enter your username",
         "placeholderPassword": "Enter your password",
         "fieldPassword": "Password",
-        "fieldUsername": "Username"
+        "fieldUsername": "Username",
+        "signinLabel": "Sign in"
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",

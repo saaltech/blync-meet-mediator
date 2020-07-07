@@ -1,24 +1,15 @@
 /* @flow */
 
 import React from 'react';
-import { connect as reduxConnect } from 'react-redux';
-import type { Dispatch } from 'redux';
 
-import { ColorSchemeRegistry } from '../../base/color-scheme';
 import { translate } from '../../base/i18n';
-import { JitsiConnectionErrors } from '../../base/lib-jitsi-meet';
-import type { StyleType } from '../../base/styles';
-import { authenticateAndUpgradeRole, cancelLogin } from '../actions';
-import { appLogin } from '../functions'
+import { resolveAppLogin } from '../actions'
 import { InputField } from '../../base/premeeting';
-
 
 import {
     Icon,
     IconSignInLock
 } from '../../base/icons';
-// Register styles.
-import './styles';
 
 import { useState, useEffect } from 'react';
 // import Router from 'next/router';
@@ -28,7 +19,7 @@ function LoginComponent(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formDisabled, setFormDisabled] = useState(true);
-
+  
   useEffect(() => {
     if(email != "" && password != "") {
         setFormDisabled(false)
@@ -54,12 +45,34 @@ function LoginComponent(props) {
           return;
       }
       event.preventDefault();
-      await doRequest();
+      // TODO: uncomment this once the api is ready
+      //await doRequest();
+      // TODO: this is not once the above is implemented
+      onSuccess(null)
   };
 
   const onSuccess = (data) => {
         // TODO: implement appLogin
-        appLogin(data);
+        data = {
+            "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjVmMDJlYzA0NzIyNTljNmFhYjRjMzljYiJ9.eyJqdGkiOiJ-UUVWRUNMMUhfMW5TWFFSfm9tcW0iLCJzdWIiOiI1ZjAzNDJhMDRiNDc3NjQ1NmE0M2I3MjciLCJpc3MiOiJodHRwOi8vbG9jYWwtdGVzdGluZy1tZWV0aW5nLW9yeXhfaWRwIiwiaWF0IjoxNTk0MDU1MTY5LCJleHAiOjE1OTQwNjIzNjksInNjb3BlIjoib3BlbmlkIiwibmFtZSI6Ik1hbm9qIEJoYWdhdCIsImVtYWlsIjoibWFub2pAc2FhbC5haSIsInJvbGUiOiJtYW5hZ2VyIiwiZ2VuZGVyIjoiTWFsZSIsIm1vYmlsZSI6IjA1NDc5MzUwOTgiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJncm91cCI6ImExMjMtMTIzLTQ1Ni03ODkiLCJrZXkiOiJtYW5vakBzYWFsLmFpIiwiYXVkIjoibG9jYWwtbWVldGluZy1pcnAifQ.DMo8ts0SfNuuv8K0n9GGWhZGIDBGmjUCf_R4ASweiUOMGlaNtNcoiYaw2AeR6lC47glQMVsiuSBskxNvhRnyy6AyXlC6tAuGmnb5KIbF-aAU0OT-NmNhKgeN1FPLL-r780d24LI0ISyqrLxHcH11vm3by4YXB9qe5GoiWwWfr8Pw7KNwfdGharWzavhjJvwSzjIgY8p4T43PTaEqXNXxtF4NyB69lCzCaBezBlo8IkYTodTpKCKFVT0mOmjETro2tHXADebjC8SPHiGtW_cZmdQw1Qpm63faX-_GAFEg9gVuQP040MojxhTIISRHmgkq6FGmYI8GKa9UAIYtv9NIsg",
+            "expires_in": 7200,
+            "token_type": "Bearer",
+            "refresh_token": "JdNXdMNL7cA3eJ6j329tuIfSBDW",
+            "user": {
+                "id": "5f0342a04b4776456a43b727",
+                "name": "Neehal Shaikh",
+                "email": "neehal@saal.ai",
+                "role": "manager",
+                "gender": "Male",
+                "mobile": "576898675",
+                "avatar": "https://gravatar.com/avatar/abc123",
+                "group": "a123-123-456-789",
+                "key": "neehal@saal.ai"
+            },
+            "meeting_access_token": "here another token will come"
+        }
+
+        APP.store.dispatch(resolveAppLogin(data))
   }
 
   return (
@@ -73,7 +86,7 @@ function LoginComponent(props) {
             }
             <div className="content">
                 <Icon src = { IconSignInLock } />
-                <h2>Sign In</h2>
+                <h2>{ t('loginPage.signinLabel') }</h2>
                 <div className="form-field">
                     <div className = 'form-label'>{t('loginPage.fieldUsername')}</div>
                     <InputField

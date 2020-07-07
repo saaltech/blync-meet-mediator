@@ -15,7 +15,7 @@ import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
 
-import { LoginComponent, decideAppLogin } from '../../../features/app-auth'
+import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth'
 
 /**
  * The pattern used to validate room name.
@@ -192,7 +192,6 @@ class WelcomePage extends AbstractWelcomePage {
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
 
-        console.log("_showAppLogin: ", _showAppLogin)
         return (
             <div
                 className = { `welcome ${showAdditionalContent
@@ -212,7 +211,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                 <div className = 'header'>
                     {
-                        _showAppLogin &&
+                        _showAppLogin ?
                         <div
                             className = { `welcome-page-button signin` }
                             id = 'enter_room_button'
@@ -223,6 +222,13 @@ class WelcomePage extends AbstractWelcomePage {
                                 t('welcomepage.signinLabel')
                             }
                         </div>
+                        :
+                        <div className = { `welcome-page-button profile` }>
+                            <Profile 
+                                showMenu={true}
+                            />
+                        </div>
+                        
                     }
                     {/*<div className = 'welcome-page-settings'>
                         <SettingsButton

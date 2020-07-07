@@ -15,3 +15,6 @@ export const APP_LOGIN = 'APP_LOGIN';
  * }
  */
 export const SHOW_LOGIN = 'SHOW_LOGIN';
+
+
+export const EXPIRE_TOKEN = 'EXPIRE_TOKEN';

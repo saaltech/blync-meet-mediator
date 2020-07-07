@@ -252,6 +252,13 @@ body.welcome-page {
             top: 25px;
         }
 
+        &.profile {
+            background: transparent;
+            right: 30;
+            top: 25px;
+            padding: 0px;
+        }
+
         &.go {
             width: $welcomePageButtonWidth;
             left: $welcomePageEnterRoomWidth;
