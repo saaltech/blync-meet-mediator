@@ -58,7 +58,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         super(props);
         this.state = {
             meetNow: true,
-            showTrackPreview: false
+            showTrackPreviews: false
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -85,7 +85,7 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, navigatedFromHome, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreview } = this.state;
+        const { meetNow, showTrackPreviews } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
 
         return (
@@ -94,7 +94,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                 id = 'lobby-screen'>
                 <Background backgroundColor='black'/>
                 {
-                    meetNowSelected ?
+                    showTrackPreviews && meetNow ?
                     <Preview
                             videoMuted = { videoMuted }
                             videoTrack = { videoTrack } >
@@ -105,7 +105,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                         { this.props.footer }
                     </Preview>
                     :
-                    <div className={`hostPrejoinOptionPage 'schedule`}>
+                    <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
 
                     </div>
                 }

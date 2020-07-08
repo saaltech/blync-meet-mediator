@@ -38,7 +38,7 @@ function HostPrejoin(props) {
   const [meetingTo, setMeetingTo] = useState(null);
   const { isMeetNow } = props;
   const [shareable, setShareable] = useState(false);
-  const { joinConference, joinNow } = props;
+  const { joinConference } = props;
 
   const { getConference, fetchErrors } = useRequest({
     url: '/api/v1/conferences/'+ meetingId,
@@ -124,43 +124,43 @@ function HostPrejoin(props) {
         }
     ))
     
-      if (meetNow) {
+      /*if (meetNow) {
         props.onJoin()
       }
-      else {
+      else {*/
         setShareableAction(true)
-      }
+      //}
       
 
   }
 
   const setShareableAction  = (_shareable) => {
-      if(joinNow) {
+      /*if(joinNow) {
         window.location.href = window.location.origin + "?back=true";
         return;
-      }
+      }*/
     
       setShareable(_shareable)
     
-      /*if(meetNow && _shareable) {
+      if(meetNow && _shareable) {
         props.showTrackPreviews(true)
       }
       else {
         props.showTrackPreviews(false)
-      }*/
+      }
   }
 
   return (
       <div className={`hostPrejoin`}>
 
         {
-            (shareable || joinNow) && 
+            shareable && 
             <Icon className="backArrow"
                 src = { IconArrowBack } onClick={() => setShareableAction(!shareable)}/>
         }
 
         {
-            ((shareable && meetNow) || joinNow) &&
+            shareable && meetNow &&
             <div className="page-title"> Join Now </div>
         }
 
@@ -170,7 +170,7 @@ function HostPrejoin(props) {
         
         <div className="modesSection">
         {
-            !shareable && !joinNow &&
+            !shareable &&
             <ul>
                 <li className={`${meetNow ? 'selected': ''}`}
                     onClick={() => setMeetNowAndUpdatePage(true)}> 
@@ -188,7 +188,7 @@ function HostPrejoin(props) {
             
 
             <MeetingInfo 
-                shareable={shareable || joinNow}
+                shareable={shareable}
                 meetNow={meetNow}
                 meetingId={{
                     meetingId
@@ -212,17 +212,18 @@ function HostPrejoin(props) {
             />
 
             {
-                !shareable && !joinNow &&
+                !shareable &&
                 <div className="prejoin-page-button next" onClick={saveConferenceAction}>Next</div>
             }
             {
-                joinNow && 
+                shareable && meetNow &&
                 <div className="prejoin-page-button next" 
                     onClick={() => {
                         APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
                         joinConference();
                     }}>
-                    Join</div>
+                    Join Now
+                </div>
             }
 
             {

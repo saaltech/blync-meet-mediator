@@ -185,17 +185,17 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @returns {void}
      */
     _onJoin() {
-        const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
-        //const room = this.state.room || this.state.generatedRoomname;
+        //const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
+        const room = this.state.room || this.state.generatedRoomname;
 
-        /*sendAnalytics(
+        sendAnalytics(
             createWelcomePageEvent('clicked', 'joinButton', {
                 isGenerated: !this.state.room,
                 room
             }));
-            */
+            
 
-        if (meetingDetails) {
+        if (room) {
             this.setState({ joining: true });
 
             // By the time the Promise of appNavigate settles, this component
@@ -205,7 +205,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
             console.log("roomDetails:   ", meetingDetails)
             this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
-                //.then(onAppNavigateSettled, onAppNavigateSettled);
+                .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }
 

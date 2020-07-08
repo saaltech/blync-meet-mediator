@@ -210,11 +210,6 @@ class WelcomePage extends AbstractWelcomePage {
         return (
             <div>
                 {
-                    goClicked || getQueryVariable('back') ?
-                    <PostWelcomePageScreen 
-                        meetingRoom={_postWelcomePageScreen} 
-                        onJoin={this._onJoin}/>
-                    :
                     <div
                         className = { `welcome ${showAdditionalContent
                             ? 'with-content' : 'without-content'}` }
@@ -281,7 +276,7 @@ class WelcomePage extends AbstractWelcomePage {
                             </div>
                             <div id = 'enter_room'>
                                 <div className = 'enter-room-input-container'>
-                                    <form onSubmit = { this._showPostWelcomePageScreen }>
+                                    <form onSubmit = { this._onFormSubmit }>
                                         <input
                                             autoFocus = { true }
                                             className = 'enter-room-input'
@@ -293,16 +288,18 @@ class WelcomePage extends AbstractWelcomePage {
                                             ref = { this._setRoomInputRef }
                                             title = { t('welcomepage.roomNameAllowedChars') }
                                             type = 'text'
-                                            value = { this.state.room } />
+                                            // value = { this.state.room } 
+                                            />
                                         { this._renderInsecureRoomNameWarning() }
                                     </form>
                                 </div>
                                 <div
                                     className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
                                     id = 'enter_room_button'
-                                    onClick = {this._showPostWelcomePageScreen}>
                                     
-                                    {/*onClick = { this._onFormSubmit }> */
+                                    onClick = { this._onFormSubmit }>
+                                    {/*onClick = {this._showPostWelcomePageScreen}>*/}
+                                    {
                                         showResponsiveText
                                             ? t('welcomepage.goSmall')
                                             : t('welcomepage.go')
@@ -358,6 +355,10 @@ class WelcomePage extends AbstractWelcomePage {
         }
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
+            this.setState({
+                goClicked: true
+            })
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room))
             this._onJoin();
         }
     }
