@@ -8,12 +8,12 @@ import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
 import { connect as reactReduxConnect } from '../../../base/redux';
-import { Chat } from '../../../chat';
+import { ChatPreview, Chat } from '../../../chat';
 import { Filmstrip } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
-import { Prejoin, isPrejoinPageVisible } from '../../../prejoin';
+import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
     Toolbox,
     fullScreenChanged,
@@ -28,10 +28,8 @@ import {
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
-import InviteMore from './InviteMore';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
-import { default as Subject } from './Subject';
 
 declare var APP: Object;
 declare var config: Object;
@@ -195,8 +193,6 @@ class Conference extends AbstractConference<Props, *> {
                 onMouseMove = { this._onShowToolbar }>
 
                 <Notice />
-                <Subject />
-                <InviteMore />
                 <div id = 'videospace'>
                     <LargeVideo />
                     <KnockingParticipantList />
@@ -211,7 +207,8 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                { !filmstripOnly && _showPrejoin && <Prejoin />}
+                <ChatPreview />
+                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );
     }
@@ -278,7 +275,8 @@ function _mapStateToProps(state) {
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
-        _showPrejoin: isPrejoinPageVisible(state)
+        _showPrejoin: isPrejoinPageVisible(state),
+        _interimPrejoin: isInterimPrejoinPageVisible(state)
     };
 }
 

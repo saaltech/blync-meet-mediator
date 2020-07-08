@@ -17,6 +17,7 @@ import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 import { setFilmstripHovered, setFilmstripVisible } from '../../actions';
 import { shouldRemoteVideosBeVisible } from '../../functions';
 
+import FilmstripHeader from './FilmstripHeader';
 import Toolbar from './Toolbar';
 
 declare var APP: Object;
@@ -211,9 +212,11 @@ class Filmstrip extends Component <Props> {
         }
 
         return (
+
             <div
                 className = { `filmstrip ${this.props._className}` }
                 style = { filmstripStyle }>
+                <FilmstripHeader />
                 { toolbar }
                 <div
                     className = { this.props._videosClassName }

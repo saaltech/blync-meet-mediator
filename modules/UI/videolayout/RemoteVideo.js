@@ -41,6 +41,7 @@ function createContainer(spanId) {
 
     container.innerHTML = `
         <div class = 'videocontainer__background'></div>
+        <div class = 'videocontainer__host'>Host</div>
         <div class = 'videocontainer__toptoolbar'></div>
         <div class = 'videocontainer__toolbar'></div>
         <div class = 'videocontainer__hoverOverlay'></div>
@@ -133,6 +134,7 @@ export default class RemoteVideo extends SmallVideo {
         this.updateStatusBar();
         this.addAudioLevelIndicator();
         this.addPresenceLabel();
+        this.initializeHost();
 
         return this.container;
     }
@@ -198,7 +200,7 @@ export default class RemoteVideo extends SmallVideo {
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
             remoteMenuPosition = 'left bottom';
         } else {
-            remoteMenuPosition = 'top center';
+            remoteMenuPosition = 'bottom center';
         }
 
         ReactDOM.render(

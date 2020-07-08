@@ -9,11 +9,11 @@
      * the toolbar and subtract from 100%.
      */
     height: calc(100% - #{$newToolbarSizeWithPadding});
-    left: -$sidebarWidth;
+    right: 0;
     overflow: hidden;
     position: absolute;
     top: 0;
-    transition: left 0.5s;
+    //transition: left 0.5s;
     width: $sidebarWidth;
     z-index: $sideToolbarContainerZ;
 
@@ -21,9 +21,9 @@
      * The sidebar (chat) is off-screen when hidden. Move it flush to the left
      * side of the window when it should be visible.
      */
-    &.slideInExt {
-        left: 0;
-    }
+    // &.slideInExt {
+    //     right: 0;
+    // }
 }
 
 #chatconversation {
@@ -123,11 +123,6 @@
         padding: 4px;
         position: absolute;
         left: 5px;
-        width: 40px;
-
-        &:hover {
-            color: rgba(255, 255, 255, 0.8);
-        }
     }
 
     .chat-close {
@@ -427,5 +422,147 @@
         &.privatemessage {
             background-color: $chatPrivateMessageBackgroundColor;
         }
+    }
+}
+
+
+.chat {
+    &__switcher {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 37px;
+    }
+
+    &__switcher button {
+        background: white;
+        border: 1px solid #9A9A9A;
+        height: 36px;
+        min-width: 107px;
+        padding: 9px 24px;
+        font-size: 13px;;
+        color: #9A9A9A;
+        outline: none;
+    }
+
+    &__switcher &__switcher-btn--active {
+        background: $chatPrimaryColor;
+        border: none;
+        color:white;
+    }
+
+
+    &__switcher button:first-child {
+        border-radius: 18px 0px 0px 18px;
+        border-right: 0;
+    }
+
+    &__switcher button:last-child {
+        border-radius: 0 18px 18px 0;
+    }
+
+    &__back-icon {
+        fill: #000;
+    }
+
+    &__private-user-name {
+        height: 53px;
+        margin-bottom: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #E7EFF4;
+        color: #393939;
+        font-size: 22px;
+    }
+}
+
+.chat-users {
+    @extend #chatconversation;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+    &__list {
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    &__list  li {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        border-top: 1px solid #EAEAEA;
+        padding: 20px 0;
+        cursor: pointer;
+    }
+
+    &__list  li:last-child {
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    &__avatar {
+        width: 44px !important;
+        height: 44px !important;
+        border: 2px solid #EAEAEA !important;
+    }
+
+    &__user-details {
+        padding: 0 24px;
+        flex: 1;
+    }
+
+    &__user-header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__username {
+        color: #393939;
+        font-size: 16px;
+    }
+
+    &__status--new-message {
+        width: 9px;
+        height: 9px;
+        background: #00C062;
+        display: inline-block;
+        border-radius: 10px;
+        margin: 0 5px;
+    }
+
+    &__user-details-body {
+        color: #C7C7C7;
+        font-size: 14px;
+        padding-top: 10px;
+    }
+
+    &__chat-time {
+        font-size: 14px; 
+        color: #C7C7C7;
+    }
+
+    &__search {
+        height: 53px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background: #E7EFF4;
+        padding: 0 20px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+
+    &__search svg {
+        fill: #393939;
+    }
+    &__search input {
+        border: none;
+        height: 100%;
+        flex: 1;
+        background: transparent;
+        color: #393939;
+        font-size: 14px;
+        padding: 0 .5rem;
     }
 }

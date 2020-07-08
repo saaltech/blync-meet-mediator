@@ -179,6 +179,8 @@
         "IamHost": "",
         "incorrectRoomLockPassword": "",
         "incorrectPassword": "",
+        "invalidHost": "Sorry, You cannot host this meeting. Please wait for the host to join.",
+        "guestErrorMessage": "Please wait for the host to join.",
         "inlineInstallationMsg": "",
         "inlineInstallExtension": "",
         "internalError": "",
@@ -769,7 +771,10 @@
         "roomnameHint": "",
         "sendFeedback": "",
         "terms": "الشروط",
-        "title": "تداول آمِن ومميّز عبر الفيديو و مجاني تمامًا"
+        "title": "Start a new meeting",
+        "subTitle": "Collaborate Anytime Anywhere",
+        "placeholderEnterRoomName": "Enter the room name",
+        "startSession": "Go ahead, enter the meeting name and start or join the session."
     },
     "lonelyMeetingExperience": {
         "button": "ادع أشخاصا آخرين",
@@ -786,6 +791,7 @@
         "initiated": "بدأت المكالمة",
         "joinWithoutAudio": "انضم بدون صوت",
         "joinMeeting": "انضم إلى الاجتماع",
+        "joinNow": "Join now",
         "joinAudioByPhone": "انضم بصوت الهاتف",
         "iWantToDialIn": "أريد الاتصال",
         "doNotShow": "لا تظهر هذا مرة أخرى",

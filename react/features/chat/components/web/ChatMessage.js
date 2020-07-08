@@ -6,11 +6,12 @@ import { toArray } from 'react-emoji-render';
 
 import { translate } from '../../../base/i18n';
 import { Linkify } from '../../../base/react';
-import { MESSAGE_TYPE_LOCAL } from '../../constants';
 import AbstractChatMessage, {
     type Props
 } from '../AbstractChatMessage';
-import PrivateMessageButton from '../PrivateMessageButton';
+
+// import { MESSAGE_TYPE_LOCAL } from '../../constants';
+// import PrivateMessageButton from '../PrivateMessageButton';
 
 /**
  * Renders a single chat message.
@@ -23,7 +24,6 @@ class ChatMessage extends AbstractChatMessage<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { message } = this.props;
         const processedMessage = [];
 
         // content is an array of text and emoji components
@@ -39,16 +39,15 @@ class ChatMessage extends AbstractChatMessage<Props> {
 
         return (
             <div className = 'chatmessage-wrapper'>
-                <div className = { `chatmessage ${message.privateMessage ? 'privatemessage' : ''}` }>
+                <div className = { 'chatmessage ' }>
                     <div className = 'replywrapper'>
                         <div className = 'messagecontent'>
                             { this.props.showDisplayName && this._renderDisplayName() }
                             <div className = 'usermessage'>
                                 { processedMessage }
                             </div>
-                            { message.privateMessage && this._renderPrivateNotice() }
                         </div>
-                        { message.privateMessage && message.messageType !== MESSAGE_TYPE_LOCAL
+                        {/* { message.privateMessage && message.messageType !== MESSAGE_TYPE_LOCAL
                             && (
                                 <div className = 'messageactions'>
                                     <PrivateMessageButton
@@ -56,7 +55,7 @@ class ChatMessage extends AbstractChatMessage<Props> {
                                         reply = { true }
                                         showLabel = { false } />
                                 </div>
-                            ) }
+                            ) } */}
                     </div>
                 </div>
                 { this.props.showTimestamp && this._renderTimestamp() }

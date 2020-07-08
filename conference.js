@@ -306,6 +306,42 @@ class ConferenceConnector {
         // not enough rights to create conference
         case JitsiConferenceErrors.AUTHENTICATION_REQUIRED: {
             // Schedule reconnect to check if someone else created the room.
+
+
+            function isHostPrejoinError() {
+                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin']
+                pageErrorMessageKey = "submitting" === pageErrorMessageKey ? null : pageErrorMessageKey;
+                if(pageErrorMessageKey ) {
+                    return true;
+                }
+                else {
+                    return false
+                }
+            }
+
+            if(isHostPrejoinError()) {
+                return;
+            }
+
+            this.reconnectTimeout = setTimeout(() => {
+                if(isHostPrejoinError()) {
+                    return;
+                }
+                APP.store.dispatch(conferenceWillJoin(room));
+                room.join();
+            }, 5000);
+
+            const { password }
+                = APP.store.getState()['features/base/conference'];
+
+            AuthHandler.requireAuth(room, password);
+
+            break;
+        }
+
+        // not enough rights to host the conference
+        case JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED: {
+            // Schedule reconnect to check if someone else created the room.
             this.reconnectTimeout = setTimeout(() => {
                 APP.store.dispatch(conferenceWillJoin(room));
                 room.join();
@@ -728,7 +764,7 @@ export default {
      * @param {{ roomName: string }} options
      * @returns {Promise}
      */
-    async init({ roomName }) {
+    async init({ roomName, refreshTracksOnly = false }) {
         const initialOptions = {
             startAudioOnly: config.startAudioOnly,
             startScreenSharing: config.startScreenSharing,
@@ -738,6 +774,27 @@ export default {
             startWithVideoMuted: config.startWithVideoMuted
                 || isUserInteractionRequiredForUnmute(APP.store.getState())
         };
+        if(refreshTracksOnly) {
+            try {
+                // Initialize the device list first. This way, when creating tracks
+                // based on preferred devices, loose label matching can be done in
+                // cases where the exact ID match is no longer available, such as
+                // when the camera device has switched USB ports.
+                // when in startSilent mode we want to start with audio muted
+                await this._initDeviceList();
+            } catch (error) {
+                logger.warn('initial device list initialization failed', error);
+            }
+            const { tryCreateLocalTracks, errors } = this.createInitialLocalTracks(initialOptions);
+            const tracks = await tryCreateLocalTracks;
+
+            // Initialize device list a second time to ensure device labels
+            // get populated in case of an initial gUM acceptance; otherwise
+            // they may remain as empty strings.
+            this._initDeviceList(true);
+
+            return APP.store.dispatch(initPrejoin(tracks, errors));
+        }
 
         this.roomName = roomName;
 

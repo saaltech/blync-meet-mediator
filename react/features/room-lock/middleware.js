@@ -5,7 +5,8 @@ import {
     CONFERENCE_FAILED,
     CONFERENCE_JOINED,
     LOCK_STATE_CHANGED,
-    SET_PASSWORD_FAILED
+    SET_PASSWORD_FAILED,
+    setPassword
 } from '../base/conference';
 import { hideDialog } from '../base/dialog';
 import { JitsiConferenceErrors } from '../base/lib-jitsi-meet';
@@ -19,6 +20,9 @@ import { _openPasswordRequiredPrompt } from './actions';
 import { PasswordRequiredPrompt, RoomLockPrompt } from './components';
 import { LOCKED_REMOTELY } from './constants';
 import logger from './logger';
+
+import { setPrejoinPageVisibility,
+    setPrejoinPageErrorMessageKey } from '../prejoin'
 
 declare var APP: Object;
 
@@ -112,7 +116,32 @@ function _conferenceFailed({ dispatch }, next, action) {
             error.recoverable = true;
         }
         if (error.recoverable) {
-            dispatch(_openPasswordRequiredPrompt(conference));
+            // The below 'if' block is the custom flow.
+            let password = window.sessionStorage.getItem('roomPassword')
+            if(password) {
+                window.sessionStorage.removeItem('roomPassword');
+                dispatch(setPassword(conference, conference.join, password));
+                return true;
+            }
+            else {
+                    APP.conference.init({
+                        roomName: APP.conference.roomName
+                    }).then(()=>{
+                         // Show PrejoinPage
+                         APP.store.dispatch(setPrejoinPageVisibility(true))
+                         //_setInterimPrejoinPage(true)
+
+                         APP.store.dispatch(setPrejoinPageErrorMessageKey('dialog.guestPasswordError'))
+                        // Show error on the page
+                        //_setPrejoinPageErrorMessage('dialog.passwordLabel')
+
+                    }).catch(error => {
+                        //APP.API.notifyConferenceLeft(APP.conference.roomName);
+                        logger.error(error);
+                    });
+
+                // dispatch(_openPasswordRequiredPrompt(conference));
+            }
         }
     } else {
         dispatch(hideDialog(PasswordRequiredPrompt));

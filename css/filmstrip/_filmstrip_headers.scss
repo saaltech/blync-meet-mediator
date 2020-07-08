@@ -1,0 +1,117 @@
+.film-strip-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 5px 0;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 999;
+
+
+    &__container {
+        width: 100%;
+        background: #00C062;
+        padding: 9px 17px;
+        color: #FFF;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        position: relative;
+    }
+
+    &__title {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__title-text {
+        padding: 0 10px;
+    }
+
+    &__actions {
+        position: absolute;
+        top: 50%;
+        left: auto;
+        right: 25px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    &__action-button {
+        padding: 11px 4px;
+        background: none;
+        border: none;
+        margin: 0 8px;
+        outline: none;
+    }
+
+    &__participants {
+        padding: 30px;
+    }
+
+    &__participants-title {
+        color: #393939;
+        margin-bottom: 20px;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    &__participants-list  {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    &__participants-list th {
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+    &__participants-list th, 
+    &__participants-list td {
+        padding: 15px 0;
+        color: #393939;
+        vertical-align: middle;
+        text-align: left;
+
+        &:first-child {
+            width: 200px;
+        }
+
+        &:last-child {
+            text-align: center;
+        }
+    }
+
+    &__participants-list tr:not(:last-child) td {
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+
+    &__participant {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    &__participant-name {
+        display: flex;
+        margin-left: 23px;
+    }
+
+    &__participants-list .avatar {
+        width: 44px !important;
+        min-width: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        border: 2px solid #EAEAEA;
+        opacity: 1;
+        display: inline-block;
+    }
+
+}
+

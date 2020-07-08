@@ -6,6 +6,9 @@ import { AudioSettingsButton, VideoSettingsButton } from '../../../../toolbox';
 
 import CopyMeetingUrl from './CopyMeetingUrl';
 import Preview from './Preview';
+import Background from '../../../../welcome/components/background';
+import { connect } from '../../../redux';
+import { getCurrentConferenceUrl } from '../../../connection';
 
 type Props = {
 
@@ -39,35 +42,54 @@ type Props = {
  * Implements a pre-meeting screen that can be used at various pre-meeting phases, for example
  * on the prejoin screen (pre-connection) or lobby (post-connection).
  */
-export default class PreMeetingScreen extends PureComponent<Props> {
+class PreMeetingScreen extends PureComponent<Props> {
     /**
      * Implements {@code PureComponent#render}.
      *
      * @inheritdoc
      */
     render() {
-        const { title, videoMuted, videoTrack } = this.props;
+        const { title, videoMuted, videoTrack, url } = this.props;
+        let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
 
         return (
             <div
                 className = 'premeeting-screen'
                 id = 'lobby-screen'>
+                <Background backgroundColor='black'/>
                 <Preview
-                    videoMuted = { videoMuted }
-                    videoTrack = { videoTrack } />
-                <div className = 'content'>
-                    <div className = 'title'>
-                        { title }
-                    </div>
-                    <CopyMeetingUrl />
-                    { this.props.children }
+                        videoMuted = { videoMuted }
+                        videoTrack = { videoTrack } >
                     <div className = 'media-btn-container'>
                         <AudioSettingsButton visible = { true } />
                         <VideoSettingsButton visible = { true } />
                     </div>
                     { this.props.footer }
+                </Preview>
+
+                <div className = 'content'>
+                    <a href="/" className="close-icon"></a>
+                    <div className = 'title'>
+                        { urlToShow }
+                    </div>
+                    <CopyMeetingUrl />
+                    { this.props.children }
                 </div>
             </div>
         );
     }
 }
+
+/**
+ * Maps (parts of) the redux state to the React {@code Component} props.
+ *
+ * @param {Object} state - The redux state.
+ * @returns {Object}
+ */
+function mapStateToProps(state) {
+    return {
+        url: getCurrentConferenceUrl(state)
+    };
+}
+
+export default connect(mapStateToProps)(PreMeetingScreen);

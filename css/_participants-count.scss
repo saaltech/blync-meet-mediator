@@ -1,26 +1,21 @@
 .participants-count {
-    background: #fff;
-    border-radius: 4px;
-    color: #5e6d7a;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 13px;
-    line-height: 20px;
-    margin-left: 16px;
-    padding: 4px 8px;
-    pointer-events: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 5px 0;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    
 
-    &-number {
-        margin-right: 8px;
-        vertical-align: middle;
-    }
 
-    &-icon {
-        background: url('../images/user-groups.svg');
-        background-repeat: no-repeat;
-        display: inline-block;
-        height: 16px;
-        width: 16px;
-        vertical-align: middle;
+    &__container {
+        width: 100%;
+        background: #00C062;
+        padding: 9px 17px;
+        color: #FFF;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
     }
 }

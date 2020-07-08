@@ -7,15 +7,17 @@
 
 .horizontal-filmstrip .filmstrip {
     position: absolute;
-    bottom: 0;
+    top: 0;
+    bottom: auto;
     right: 0;
     padding: 10px 5px;
     @extend %align-right;
-    transition: bottom .3s;
+    transition: transform .3s;
     z-index: $filmstripVideosZ;
     box-sizing: border-box;
     width: 100%;
     position: fixed;
+    flex-direction: column;
 
     /*
      * Firefox sets flex items to min-height: auto and min-width: auto,
@@ -30,7 +32,11 @@
     }
 
     &.reduce-height {
-        bottom: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
+        // top: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
+    }
+
+    &__toolbar {
+        display: none;
     }
 
     &__videos {
@@ -46,7 +52,10 @@
             border: $thumbnailsBorder solid transparent;
             transition: bottom 2s;
             flex-grow: 1;
-            @include minHWAutoFix()
+            @include minHWAutoFix();
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /**
@@ -86,17 +95,16 @@
     }
 
     &.hide-videos {
+        // transform: translateY(-110%);
         .remote-videos-container {
-            opacity: 0;
+            // opacity: 0;
             pointer-events: none;
         }
     }
 
     #filmstripRemoteVideos {
         @include minHWAutoFix();
-
         display: flex;
-        flex: 1;
         width: auto;
         justify-content: flex-end;
         flex-direction: row;
@@ -115,6 +123,9 @@
 
     .videocontainer {
         margin-bottom: 10px;
+        &.active-speaker {
+            border: 4px solid #00C062;
+        }
     }
 }
 

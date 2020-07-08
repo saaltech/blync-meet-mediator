@@ -69,6 +69,7 @@ $flagsImagePath: "../images/";
 @import 'policy';
 @import 'popover';
 @import 'filmstrip/filmstrip_toolbar';
+@import 'filmstrip/filmstrip_headers';
 @import 'filmstrip/horizontal_filmstrip';
 @import 'filmstrip/small_video';
 @import 'filmstrip/tile_view';
@@ -89,14 +90,15 @@ $flagsImagePath: "../images/";
 @import 'promotional-footer';
 @import 'chrome-extension-banner';
 @import 'settings-button';
-@import 'meter';
-@import 'audio-preview';
-@import 'video-preview';
+@import 'icons';
+// @import 'meter';
+// @import 'audio-preview';
+// @import 'video-preview';
 @import 'prejoin';
 @import 'prejoin-dialog';
 @import 'country-picker';
 @import 'modals/invite/invite_more';
 @import 'modals/security/security';
 @import 'premeeting-screens';
-
+@import 'chat-preview'
 /* Modules END */

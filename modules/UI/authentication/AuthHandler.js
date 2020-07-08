@@ -3,9 +3,13 @@
 import Logger from 'jitsi-meet-logger';
 
 import { openConnection } from '../../../connection';
+import { toJid } from '../../../react/features/base/connection/functions';
 import { setJWT } from '../../../react/features/base/jwt';
+import { setInterimPrejoinPage, setPrejoinPageVisibility,
+    setPrejoinPageErrorMessageKey } from '../../../react/features/prejoin'
 import {
-    JitsiConnectionErrors
+    JitsiConnectionErrors,
+    JitsiConferenceErrors
 } from '../../../react/features/base/lib-jitsi-meet';
 import UIUtil from '../util/UIUtil';
 
@@ -15,6 +19,8 @@ const logger = Logger.getLogger(__filename);
 
 let externalAuthWindow;
 let authRequiredDialog;
+
+let loginDialog;
 
 const isTokenAuthEnabled
     = typeof config.tokenAuthUrl === 'string' && config.tokenAuthUrl.length;
@@ -161,8 +167,99 @@ function initJWTTokenListener(room) {
  * @param {JitsiConference} room
  * @param {string} [lockPassword] password to use if the conference is locked
  */
-function doXmppAuth(room, lockPassword) {
-    const loginDialog = LoginDialog.showAuthDialog(
+function doXmppAuth (room, lockPassword) {
+    let participantType = window.sessionStorage.getItem("participantType");
+    let hostUsername = participantType == "host" ? 
+        (window.sessionStorage.getItem("hostUsername") || "") : "";
+    let hostPassword = participantType == "host" ?
+        (window.sessionStorage.getItem("hostPassword") || "") : "";
+    
+    const { showPrejoin } = APP.store.getState()['features/prejoin'];
+    if(showPrejoin) {
+        return;
+    }
+    if(participantType) {
+        room.authenticateAndUpgradeRole({
+            id: toJid(hostUsername, config.hosts),
+            password: hostPassword,
+            roomPassword: lockPassword,
+
+            /** Called when the XMPP login succeeds. */
+            onLoginSuccessful() {
+                console.log('connection.FETCH_SESSION_ID')
+            }
+        })
+        .then(
+            /* onFulfilled */ () => {
+                console.log('connection.GOT_SESSION_ID')
+
+                // hide PrejoinPage 
+                _setPrejoinPageVisibility(false)
+                _setInterimPrejoinPage(false)
+
+                // Clear PrejoinPage error
+                _setPrejoinPageErrorMessage(null)
+                
+
+            },
+            /* onRejected */ error => {
+                logger.error('NEW FLOW authenticateAndUpgradeRole failed', error);
+                
+                //show the old flow if error occurs
+                //oldLoginFlow(room, lockPassword);
+
+                //setTimeout(() => {
+                   
+                
+               /*const { interimPrejoin } = APP.store.getState()['features/prejoin'];
+               if(interimPrejoin) {
+                    _setPrejoinPageErrorMessage(error)
+                   return;
+               }*/
+                    
+
+                    /*
+                        // Show PrejoinPage
+                        _setPrejoinPageVisibility(true)
+                        _setInterimPrejoinPage(true)
+
+                        // Show error on the page
+                        _setPrejoinPageErrorMessage(error)
+                        */
+                    
+                   
+                    APP.conference.init({
+                        roomName: APP.conference.roomName//,
+                        //refreshTracksOnly: true
+                    }).then(()=>{
+                         // Show PrejoinPage
+                         _setPrejoinPageVisibility(true)
+                         _setInterimPrejoinPage(true)
+
+                        // Show error on the page
+                        if(participantType == 'guest') {
+                            error.connectionError = "dialog.guestErrorMessage"
+                        }
+
+                        _setPrejoinPageErrorMessage(error)
+
+                    }).catch(error => {
+                        //APP.API.notifyConferenceLeft(APP.conference.roomName);
+                        logger.error(error);
+                    });
+                    
+                    //handleLoginError(error)
+                //}, 1)
+            }
+        )
+    }
+    // else {
+    //     oldLoginFlow(room, lockPassword)
+    // }
+}
+
+function oldLoginFlow(room, lockPassword) {
+    loginDialog = LoginDialog.showAuthDialog(
         /* successCallback */ (id, password) => {
             room.authenticateAndUpgradeRole({
                 id,
@@ -184,18 +281,62 @@ function doXmppAuth(room, lockPassword) {
                 /* onRejected */ error => {
                     logger.error('authenticateAndUpgradeRole failed', error);
 
-                    const { authenticationError, connectionError } = error;
-
-                    if (authenticationError) {
-                        loginDialog.displayError(
-                            'connection.GET_SESSION_ID_ERROR',
-                            { msg: authenticationError });
-                    } else if (connectionError) {
-                        loginDialog.displayError(connectionError);
-                    }
+                    handleLoginError(error)
                 });
         },
         /* cancelCallback */ () => loginDialog.close());
+}
+
+function _setInterimPrejoinPage(visible) {
+    APP.store.dispatch(setInterimPrejoinPage(visible))
+}
+
+function _setPrejoinPageVisibility(visible) {
+    APP.store.dispatch(setPrejoinPageVisibility(visible))
+}
+
+
+
+function _setPrejoinPageErrorMessage(error) {
+    let messageKey = error ? 'dialog.connectErrorWithMsg' : null;
+    if(!messageKey) {
+        return null;
+    }
+    
+    let errorKey = '';
+    const { authenticationError, connectionError, message } = error;
+    if (authenticationError) {
+        errorKey = (message === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) ? 
+                                message : 'connection.GET_SESSION_ID_ERROR';
+    } else if (connectionError) {
+        errorKey = connectionError;
+    }
+    if (errorKey === JitsiConnectionErrors.PASSWORD_REQUIRED) {
+        // this is a password required error, as login window was already
+        // open once, this means username or password is wrong
+        messageKey = 'dialog.incorrectPassword';
+    } else if (errorKey === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) {
+        // this is a CONFERENCE_HOST_NOT_AUTHORIZED error, as login window was already
+        // open once, this means username or password does not match that of the host.
+        messageKey = 'dialog.invalidHost';
+    } else if (errorKey) {
+        messageKey = errorKey
+    }
+
+    APP.store.dispatch(setPrejoinPageErrorMessageKey(messageKey))
+    
+}
+
+function handleLoginError(error) {
+    const { authenticationError, connectionError, message } = error;
+    if (authenticationError) {
+        let error = (message === JitsiConferenceErrors.CONFERENCE_HOST_NOT_AUTHORIZED) ? message : 'connection.GET_SESSION_ID_ERROR';
+        loginDialog.displayError(
+            error,
+            { msg: authenticationError });
+    } else if (connectionError) {
+        loginDialog.displayError(connectionError);
+    }
 }
 
 /**
@@ -238,13 +379,20 @@ function logout(room) {
  * @param {string} [lockPassword] password to use if the conference is locked
  */
 function requireAuth(room, lockPassword) {
-    if (authRequiredDialog) {
-        return;
+    let participantType = window.sessionStorage.getItem("participantType");
+    if(participantType) {
+        //if(loginDialog)
+        //    return;
+        authenticate(room, lockPassword)
     }
-
-    authRequiredDialog = LoginDialog.showAuthRequiredDialog(
-        room.getName(), authenticate.bind(null, room, lockPassword)
-    );
+    else {
+        if (authRequiredDialog) {
+            return;
+        }
+        authRequiredDialog = LoginDialog.showAuthRequiredDialog(
+            room.getName(), authenticate.bind(null, room, lockPassword)
+        );
+    }
 }
 
 /**

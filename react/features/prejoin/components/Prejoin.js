@@ -9,6 +9,7 @@ import { Icon, IconPhone, IconVolumeOff } from '../../base/icons';
 import { ActionButton, InputField, PreMeetingScreen } from '../../base/premeeting';
 import { connect } from '../../base/redux';
 import { getDisplayName, updateSettings } from '../../base/settings';
+import { setPrejoinPageErrorMessageKey } from '../../prejoin';
 import {
     joinConference as joinConferenceAction,
     joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
@@ -20,7 +21,8 @@ import {
     isJoinByPhoneButtonVisible,
     isDeviceStatusVisible,
     isJoinByPhoneDialogVisible,
-    isPrejoinVideoMuted
+    isPrejoinVideoMuted,
+    getPageErrorMessageKey
 } from '../functions';
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
@@ -115,7 +117,12 @@ class Prejoin extends Component<Props, State> {
         super(props);
 
         this.state = {
-            showJoinByPhoneButtons: false
+            showJoinByPhoneButtons: false,
+            isHost: false,
+            participantTypeOptionSpecified: false,
+            hostUsername: '',
+            hostPassword: '',
+            participantType: 'guest'
         };
 
         this._closeDialog = this._closeDialog.bind(this);
@@ -124,6 +131,11 @@ class Prejoin extends Component<Props, State> {
         this._onDropdownClose = this._onDropdownClose.bind(this);
         this._onOptionsClick = this._onOptionsClick.bind(this);
         this._setName = this._setName.bind(this);
+        this._setParticpantType = this._setParticpantType.bind(this);
+        this._setHostUsername = this._setHostUsername.bind(this);
+        this._setHostPassword = this._setHostPassword.bind(this);
+        this._setRoomPassword = this._setRoomPassword.bind(this);
+        this._setDetailsToStore = this._setDetailsToStore.bind(this);
     }
 
     _onCheckboxChange: () => void;
@@ -167,6 +179,18 @@ class Prejoin extends Component<Props, State> {
         });
     }
 
+    componentDidMount() {
+        window.sessionStorage.setItem('participantType', 'guest');
+        window.sessionStorage.removeItem('roomPassword');
+        this.setState({
+            isHost: false,
+            participantTypeOptionSpecified: false,
+            hostUsername: window.sessionStorage.getItem('hostUsername') || '',
+            hostPassword: window.sessionStorage.getItem('hostPassword') || '',
+            roomPassword: ''
+        });
+    }
+
     _setName: () => void;
 
     /**
@@ -179,6 +203,75 @@ class Prejoin extends Component<Props, State> {
         this.props.updateSettings({
             displayName
         });
+    }
+
+    _setParticpantType: () => void;
+
+    /**
+     * Sets the participantType property in localstorage.
+     *
+     * @param {*} event
+     */
+    _setParticpantType(event) {
+        const value = event.target.value;
+
+        // window.sessionStorage.setItem("participantType", value);
+        this.setState({
+            isHost: value === 'host',
+            participantTypeOptionSpecified: true,
+            participantType: value
+        });
+    }
+
+    _setHostUsername: () => void;
+
+    /**
+     * Sets the hostUsername property in localstorage.
+     *
+     * @param {*} username
+     */
+    _setHostUsername(username) {
+        // window.sessionStorage.setItem("hostUsername", username);
+        this.setFieldInState('hostUsername', username);
+    }
+
+    _setHostPassword: () => void;
+
+    /**
+     * Sets the hostPassword property in localstorage.
+     *
+     * @param {*} password
+     */
+    _setHostPassword(password) {
+        // window.sessionStorage.setItem("hostPassword", password);
+        this.setFieldInState('hostPassword', password);
+    }
+
+    _setRoomPassword: () => void;
+
+    /**
+     * Sets the roomPassword property in localstorage.
+     *
+     * @param {*} roomPassword
+     */
+    _setRoomPassword(roomPassword) {
+        //window.sessionStorage.setItem('roomPassword', roomPassword);
+        this.setFieldInState('roomPassword', roomPassword);
+    }
+
+    setFieldInState(field, value) {
+        const obj = {};
+
+        obj[field] = value;
+        this.setState(obj);
+    }
+
+    _setDetailsToStore() {
+        window.sessionStorage.setItem('hostUsername', this.state.hostUsername);
+        window.sessionStorage.setItem('hostPassword', this.state.hostPassword);
+        window.sessionStorage.setItem('roomPassword', this.state.roomPassword);
+        window.sessionStorage.setItem('participantType', this.state.participantType);
+
     }
 
     _closeDialog: () => void;
@@ -219,10 +312,12 @@ class Prejoin extends Component<Props, State> {
             showCameraPreview,
             showDialog,
             t,
-            videoTrack
+            videoTrack,
+            pageErrorMessageKey
         } = this.props;
 
-        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName, _showDialog } = this;
+        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName,
+            _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
         const { showJoinByPhoneButtons } = this.state;
 
         return (
@@ -233,11 +328,79 @@ class Prejoin extends Component<Props, State> {
                 videoTrack = { videoTrack }>
                 <div className = 'prejoin-input-area-container'>
                     <div className = 'prejoin-input-area'>
-                        <InputField
-                            onChange = { _setName }
-                            onSubmit = { joinConference }
-                            placeHolder = { t('dialog.enterDisplayName') }
-                            value = { name } />
+                        <div className = 'prejoin-input-form-fields'>
+                            <div className = 'prejoin-field'>
+                                <div className = 'prejoin-label'>Your Name</div>
+                                <InputField
+                                    onChange = { _setName }
+                                    placeHolder = { t('dialog.enterDisplayName') }
+                                    value = { name } />
+                            </div>
+
+
+                            {
+
+                                /**
+                                 * Authenticated rooms should be enabled.
+                                 * or else, this host/username/password has no effect
+                                 */
+                            }
+                            <div className = 'prejoin-field'>
+                                <input
+                                    type = 'radio'
+                                    id = 'host'
+                                    name = 'participantType'
+                                    onChange = { _setParticpantType }
+                                    value = 'host' />
+                                <label htmlFor = 'host'>{t('prejoin.hostuserLabel')}</label><br />
+                                <input
+                                    type = 'radio'
+                                    id = 'guest'
+                                    name = 'participantType'
+                                    onChange = { _setParticpantType }
+                                    value = 'guest' />
+                                <label htmlFor = 'guest'>{ t('prejoin.guestUserLabel') }</label>
+                            </div>
+
+                            {
+                                this.state.participantTypeOptionSpecified && !this.state.isHost
+                                && <div className = 'prejoin-field'>
+                                    <div className = 'prejoin-label'>{t('prejoin.meetingPasswordField')}</div>
+                                    <InputField
+                                        onChange = { _setRoomPassword }
+
+                                        // onSubmit = { joinConference }
+                                        placeHolder = { t('prejoin.meetingPasswordPlaceholder') } />
+                                </div>
+                            }
+
+                            {
+                                this.state.participantTypeOptionSpecified && this.state.isHost
+                                && <>
+                                    <div className = 'prejoin-field'>
+                                        <div className = 'prejoin-label'>{t('prejoin.usernameField')}</div>
+                                        <InputField
+                                            onChange = { _setHostUsername }
+
+                                            // onSubmit = { joinConference }
+                                            value = { this.state.hostUsername }
+                                            placeHolder = { t('prejoin.usernameField') } />
+                                    </div>
+
+                                    <div className = 'prejoin-field'>
+                                        <div className = 'prejoin-label'>{t('prejoin.passwordField')}</div>
+                                        <InputField
+                                            type = 'password'
+                                            onChange = { _setHostPassword }
+
+                                            // onSubmit = { joinConference }
+                                            value = { this.state.hostPassword }
+                                            placeHolder = { t('prejoin.passwordField') } />
+                                    </div>
+
+                                </>
+                            }
+                        </div>
 
                         <div className = 'prejoin-preview-dropdown-container'>
                             <InlineDialog
@@ -264,14 +427,38 @@ class Prejoin extends Component<Props, State> {
                                 isOpen = { showJoinByPhoneButtons }
                                 onClose = { _onDropdownClose }>
                                 <ActionButton
-                                    disabled = { !name }
+                                    disabled = { !name
+                                        || !this.state.participantTypeOptionSpecified
+                                        || pageErrorMessageKey === 'submitting' }
                                     hasOptions = { true }
-                                    onClick = { joinConference }
+                                    onClick = { () => {
+                                        this._setDetailsToStore();
+                                        APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+                                        joinConference();
+                                    } }
                                     onOptionsClick = { _onOptionsClick }
                                     type = 'primary'>
-                                    { t('prejoin.joinMeeting') }
+                                    { t('prejoin.joinNow') }
                                 </ActionButton>
                             </InlineDialog>
+                            <div className = 'cancel-join'>
+                                {
+                                    pageErrorMessageKey !== 'submitting'
+                                        ? <a href = { '/' }>
+                                    Cancel
+                                        </a>
+                                        : 'Cancel'
+                                }
+
+                            </div>
+
+                            <div className = 'error-msg'>
+                                {
+                                    pageErrorMessageKey
+                                    && pageErrorMessageKey !== 'submitting'
+                                     && t(pageErrorMessageKey)
+                                }
+                            </div>
                         </div>
                     </div>
 
@@ -316,7 +503,8 @@ function mapStateToProps(state): Object {
         showDialog: isJoinByPhoneDialogVisible(state),
         hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
         showCameraPreview: !isPrejoinVideoMuted(state),
-        videoTrack: getActiveVideoTrack(state)
+        videoTrack: getActiveVideoTrack(state),
+        pageErrorMessageKey: getPageErrorMessageKey(state)
     };
 }
 

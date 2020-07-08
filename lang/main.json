@@ -72,7 +72,9 @@
         },
         "privateNotice": "Private message to {{recipient}}",
         "title": "Chat",
-        "you": "you"
+        "you": "you",
+        "everyone": "Everyone",
+        "private": "Private"
     },
     "chromeExtensionBanner": {
         "installExtensionText": "Install the extension for Google Calendar and Office 365 integration",
@@ -206,6 +208,8 @@
         "IamHost": "I am the host",
         "incorrectRoomLockPassword": "Incorrect password",
         "incorrectPassword": "Incorrect username or password",
+        "invalidHost": "Sorry, You cannot host this meeting. Please wait for the host to join.",
+        "guestErrorMessage": "Please wait for the host to join.",
         "inlineInstallationMsg": "You need to install our desktop sharing extension.",
         "inlineInstallExtension": "Install now",
         "internalError": "Oops! Something went wrong. The following error occurred: {{error}}",
@@ -244,6 +248,7 @@
         "muteParticipantTitle": "Mute this participant?",
         "Ok": "OK",
         "passwordLabel": "The meeting has been locked by a participant. Please enter the $t(lockRoomPassword) to join.",
+        "guestPasswordError": "The meeting has been locked by a participant. Please enter the correct room $t(lockRoomPassword) to join.",
         "passwordNotSupported": "Setting a meeting $t(lockRoomPassword) is not supported.",
         "passwordNotSupportedTitle": "$t(lockRoomPasswordUppercase) not supported",
         "passwordRequired": "$t(lockRoomPasswordUppercase) required",
@@ -520,6 +525,7 @@
         "iWantToDialIn": "I want to dial in",
         "joinAudioByPhone": "Join with phone audio",
         "joinMeeting": "Join meeting",
+        "joinNow": "Join now",
         "joinWithoutAudio": "Join without audio",
         "initiated": "Call initiated",
         "linkCopied": "Link copied to clipboard",
@@ -530,7 +536,13 @@
         "screenSharingError": "Screen sharing error:",
         "videoOnlyError": "Video error:",
         "videoTrackError": "Could not create video track.",
-        "viewAllNumbers": "view all numbers"
+        "viewAllNumbers": "view all numbers",
+        "usernameField": "User Name",
+        "passwordField": "Password",
+        "meetingPasswordField": "Meeting Password",
+        "meetingPasswordPlaceholder": "Password (if set by the host)",
+        "guestUserLabel": "I am a guest user",
+        "hostuserLabel": "I am the host"
     },
     "presenceStatus": {
         "busy": "Busy",
@@ -840,7 +852,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "Connect your calendar to view all your meetings in {{app}}. Plus, add {{provider}} meetings to your calendar and start them with one click.",
-        "enterRoomTitle": "Start a new meeting",
+        "enterRoomTitle": "Start or join a meeting",
         "getHelp": "Get help",
         "roomNameAllowedChars": "Meeting name should not contain any of these characters: ?, &, :, ', \", %, #.",
         "go": "GO",
@@ -858,7 +870,8 @@
         "terms": "Terms",
         "title": "vMeet",
         "subTitle": "Collaborate Anytime Anywhere",
-        "placeholderEnterRoomName": "Enter the room name"
+        "placeholderEnterRoomName": "Enter the room name",
+        "startSession": "Go ahead, enter the meeting name and start or join the session."
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",

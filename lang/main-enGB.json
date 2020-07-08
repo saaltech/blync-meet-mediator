@@ -734,7 +734,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "",
-        "enterRoomTitle": "Start a new meeting",
+        "enterRoomTitle": "Start or join a new meeting",
         "go": "GO",
         "join": "JOIN",
         "info": "Info",
@@ -749,7 +749,8 @@
         "terms": "Terms",
         "title": "vMeet",
         "subTitle": "Collaborate Anytime Anywhere",
-        "placeholderEnterRoomName": "Enter the room name"
+        "placeholderEnterRoomName": "Enter the room name",
+        "startSession": "Go ahead, enter the meeting name and start or join the session."
     },
     "documentSharing": {
         "title": ""

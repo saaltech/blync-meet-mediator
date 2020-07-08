@@ -29,7 +29,7 @@ var interfaceConfig = {
     DISPLAY_WELCOME_PAGE_TOOLBAR_ADDITIONAL_CONTENT: false,
     APP_NAME: 'vMeet',
     NATIVE_APP_NAME: 'vMeet',
-    PROVIDER_NAME: 'Jitsi',
+    PROVIDER_NAME: 'Saal',
     LANG_DETECTION: true, // Allow i18n to detect the system language
     INVITATION_POWERED_BY: false,
 
@@ -82,7 +82,7 @@ var interfaceConfig = {
     // Enables feedback star animation.
     ENABLE_FEEDBACK_ANIMATION: false,
     DISABLE_FOCUS_INDICATOR: true,
-    DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
+    DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
 
     /**
      * Whether the speech to text transcription subtitles panel is disabled.

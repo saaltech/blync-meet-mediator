@@ -7,7 +7,8 @@ export type Props = {
     /**
      * The messages array to render.
      */
-    messages: Array<Object>
+    messages: Array<Object>,
+    localParticipant: ?Object
 }
 
 /**

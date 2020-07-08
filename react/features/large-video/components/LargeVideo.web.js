@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 
-import { Watermarks } from '../../base/react';
 import { connect } from '../../base/redux';
 import { fetchCustomBrandingData } from '../../dynamic-branding';
 import { Captions } from '../../subtitles/';
@@ -68,8 +67,6 @@ class LargeVideo extends Component<Props> {
                 </div>
                 <div id = 'etherpad' />
 
-                <Watermarks />
-
                 <div id = 'dominantSpeaker'>
                     <div className = 'dynamic-shadow' />
                     <div id = 'dominantSpeakerAvatarContainer' />
@@ -109,9 +106,9 @@ class LargeVideo extends Component<Props> {
      */
     _getCustomSyles() {
         const styles = {};
-        const { _customBackgroundColor, _customBackgroundImageUrl } = this.props;
+        const { _customBackgroundImageUrl } = this.props;
 
-        styles.backgroundColor = _customBackgroundColor || interfaceConfig.DEFAULT_BACKGROUND;
+        styles.backgroundColor = '#242424';
 
         if (_customBackgroundImageUrl) {
             styles.backgroundImage = `url(${_customBackgroundImageUrl})`;

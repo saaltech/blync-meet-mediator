@@ -352,6 +352,20 @@ export default class SmallVideo {
     }
 
     /**
+     * Selects the HTML image element which displays hosts label.
+     *
+     * @return {jQuery|HTMLElement} a jQuery selector pointing to the HTML image
+     * element which displays the hosts label.
+     */
+    $host() {
+        if (!this.container) {
+            return null;
+        }
+
+        return this.$container.find('.videocontainer__host');
+    }
+
+    /**
      * Returns the display name element, which appears on the video thumbnail.
      *
      * @return {jQuery} a jQuery selector pointing to the display name element of
@@ -562,6 +576,36 @@ export default class SmallVideo {
     }
 
     /**
+     * Updates the react component displaying the host label
+     * url.
+     *
+     * @returns {void}
+     */
+    initializeHost() {
+        const hostLabel = this.$host();
+
+        if (!hostLabel) {
+            return;
+        }
+        const user = APP.store.getState()['features/base/participants']
+        .find(p => p.id === this.id);
+
+        console.log(user, this.id, 'useruseruseruseruseruseruser');
+
+        if (!user) {
+            hostLabel.hide();
+
+            return;
+        }
+
+        if (user._role === 'moderator' || user.role === 'moderator') {
+            hostLabel.show();
+        } else {
+            hostLabel.hide();
+        }
+    }
+
+    /**
      * Unmounts any attached react components (particular the avatar image) from
      * the avatar container.
      *
@@ -701,14 +745,14 @@ export default class SmallVideo {
         let statsPopoverPosition, tooltipPosition;
 
         if (currentLayout === LAYOUTS.TILE_VIEW) {
-            statsPopoverPosition = 'right top';
-            tooltipPosition = 'right';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'left';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'top';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         }
 
         ReactDOM.render(
@@ -846,8 +890,8 @@ export default class SmallVideo {
         }
         case LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW: {
             const state = APP.store.getState();
-            const { local, remote } = state['features/filmstrip'].horizontalViewDimensions;
-            const size = this.isLocal ? local : remote;
+            const { local } = state['features/filmstrip'].horizontalViewDimensions;
+            const size = local;
 
             if (typeof size !== 'undefined') {
                 const { height, width } = size;

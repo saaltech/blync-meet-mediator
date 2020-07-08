@@ -97,3 +97,4 @@ export { default as IconVolumeEmpty } from './volume-empty.svg';
 export { default as IconVolumeOff } from './volume-off.svg';
 export { default as IconWarning } from './warning.svg';
 export { default as IconYahoo } from './yahoo.svg';
+export { default as IconWhatsapp } from './whatsapp.svg';

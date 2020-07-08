@@ -7,7 +7,7 @@
      * see.
      */
     .active-speaker {
-        box-shadow: 0 0 5px 3px $videoThumbnailSelected
+        border: 4px solid #00C062 !important;
     }
 
     #filmstripRemoteVideos {
@@ -25,6 +25,12 @@
         &:hover:not(.active-speaker) {
             border: none;
             box-shadow: none;
+        }
+    }
+
+    .videocontainer {
+        &.active-speaker {
+            border: 4px solid #00C062;
         }
     }
 
@@ -46,7 +52,13 @@
         position: fixed;
         top: 0;
         width: 100%;
-        z-index: $filmstripVideosZ
+        z-index: $filmstripVideosZ;
+        flex-direction: column;
+    }
+
+    .filmstrip .participants-count, .filmstrip .film-strip-header {
+        top: 30px;
+        padding: 10px 20px;
     }
 
     /**

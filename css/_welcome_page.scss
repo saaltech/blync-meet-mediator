@@ -1,10 +1,70 @@
 body.welcome-page {
     background: inherit;
     overflow: auto;
+    .leftwatermark {
+        display: block;
+    }
 }
 
+@media only screen and (max-width: 800px) {
+    .welcome-page-background {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    
+        &.left-bg {
+            display: none;
+        }
+    
+        &.right-bg {
+            background-image: url('./../images/person_bg.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+        }
+    }
+}
+
+@media only screen and (min-width: 801px) {
+    .welcome-page-background {
+        position: absolute;
+        height: 100%;
+        width: 50%;
+    
+        &.left-bg {
+            background-image: url('./../images/chat_bubbles_bg.png');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: 0% 80%;
+        }
+    
+        &.right-bg {
+            left: 50%;
+            background-image: url('./../images/person_bg.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+        }
+    }
+}
+
+.close-icon
+{
+  display: block;
+  box-sizing: border-box;
+  width: 15px;
+  height: 15px;
+  background: -webkit-linear-gradient(-45deg, transparent 0%, transparent 46%, black 46%,  black 56%,transparent 56%, transparent 100%), -webkit-linear-gradient(45deg, transparent 0%, transparent 46%, black 46%,  black 56%,transparent 56%, transparent 100%);
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+}
+
+
 .welcome {
-    background-image: $welcomePageBackground;
+    background-color: $welcomePageBackgroundColor;
     display: flex;
     flex-direction: column;
     font-family: $welcomePageFontFamily;
@@ -18,18 +78,19 @@ body.welcome-page {
         background-repeat: $welcomePageHeaderBackgroundRepeat;
         background-size: $welcomePageHeaderBackgroundSize;
         padding-bottom: $welcomePageHeaderPaddingBottom;
-        align-items: center;
+        //align-items: center;
         display: flex;
         flex-direction: column;
         min-height: fit-content;
         overflow: hidden;
         position: relative;
-        text-align: center;
+        //text-align: center;
+        margin-left: 32px;
 
         .header-text {
             display: flex;
             flex-direction: column;
-            margin-top: $watermarkHeight + $welcomePageHeaderTextMarginTop;
+            margin-top: 20%; //$watermarkHeight + $welcomePageHeaderTextMarginTop;
             margin-bottom: $welcomePageHeaderTextMarginBottom;
             max-width: calc(100% - 40px);
             width: 70%;
@@ -74,6 +135,7 @@ body.welcome-page {
             background-color: #fff;
             padding: $welcomePageEnterRoomPadding;
             border-radius: $welcomePageEnterRoomBorderRadius;
+            border: 4px solid #005C85;
 
             .enter-room-input-container {
                 width: 100%;
@@ -115,6 +177,13 @@ body.welcome-page {
                 }
             }
 
+        }
+
+        .note {
+            margin-top: 20px;
+            color: $welcomePageStartSessionTitle;
+            font-size: 16px;
+            font-weight: 100;
         }
 
         .tab-container {
@@ -172,7 +241,7 @@ body.welcome-page {
     .welcome-page-button {
 
         &.disabled {
-            opacity: 0.5;
+            background: rgb(172, 220, 197);
             cursor: not-allowed;
         }
 
@@ -181,13 +250,17 @@ body.welcome-page {
         height: $welcomePageButtonHeight;
         font-size: $welcomePageButtonFontSize;
         font-weight: $welcomePageButtonFontWeight;
-        background: #0074E0;
+        background: #00C062;
         border-radius: $welcomePageButtonBorderRadius;
         color: #FFFFFF;
         text-align: center;
         vertical-align: middle;
         line-height: $welcomePageButtonLineHeight;
         cursor: pointer;
+
+        position: absolute;
+        left: $welcomePageEnterRoomWidth;
+        padding: 5px;
     }
 
     .welcome-page-settings {
@@ -200,6 +273,10 @@ body.welcome-page {
         * {
             cursor: pointer;
             font-size: 32px;
+        }
+
+        .jitsi-icon svg {
+            fill: $welcomePageDescriptionColor
         }
     }
 
