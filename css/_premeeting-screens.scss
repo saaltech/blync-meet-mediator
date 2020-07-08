@@ -16,6 +16,24 @@
     top: 0;
     z-index: $toolbarZ + 1;
 
+    .hostPrejoinOptionPage {
+        width: calc(100% - 350px);
+        height: 100%;
+        z-index: 1;
+        background-size: 70%;
+        background-color: #F0F0F0;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+
+    .meetNow {
+        background-image: url('./../images/meet-now.png');
+    }
+
+    .schedule {
+        background-image: url('./../images/schedule.png');
+    }
+
     .content {
         align-items: center;
         //background-image: linear-gradient(transparent, black);
@@ -63,6 +81,13 @@
             .url {
                 display: flex;
                 padding: 8px 10px;
+
+                .url-text {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 250px;
+                }
 
                 &:hover {
                     background: #1C2025;

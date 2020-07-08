@@ -1,0 +1,22 @@
+.meetinginfo {
+    color: #393939;
+    padding: 15px;
+
+    .meeting-title {
+        font-size: 35px;
+        padding: 20px 0 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .meeting-id {
+        color: #969696;
+        font-size: 14px;
+    }
+
+    .you-are-host {
+        color: #4D4D4D;
+        padding: 20px 0px 20px;
+    }
+}

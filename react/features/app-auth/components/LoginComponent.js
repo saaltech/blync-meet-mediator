@@ -60,16 +60,16 @@ function LoginComponent(props) {
             "refresh_token": "JdNXdMNL7cA3eJ6j329tuIfSBDW",
             "user": {
                 "id": "5f0342a04b4776456a43b727",
-                "name": "Neehal Shaikh",
-                "email": "neehal@saal.ai",
+                "name": "Vikram Poduval",
+                "email": "vikram@saal.ai",
                 "role": "manager",
                 "gender": "Male",
                 "mobile": "576898675",
                 "avatar": "https://gravatar.com/avatar/abc123",
                 "group": "a123-123-456-789",
-                "key": "neehal@saal.ai"
+                "key": "vikram@saal.ai"
             },
-            "meeting_access_token": "here another token will come"
+            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJkZXYtYmx5bmMtbWVldGluZyIsImlzcyI6ImRldi1ibHluYy1tZWV0aW5nIiwiaWF0IjoxNTk0MTg4ODA3LCJleHAiOjE2MjU3NDM0NTgsInNjb3BlIjoib3BlbmlkIiwiYXVkIjoic21lZXRpbmciLCJyb29tIjoiKiIsInJvbGUiOiJtYW5hZ2VyIiwiY29udGV4dCI6eyJ1c2VyIjp7Im5hbWUiOiJWaWtyYW0gUG9kdXZhbCIsImVtYWlsIjoidmlrcmFtQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.rDCyEYq6EopALXGD2WKNYhh78KvuQzbhHb2Sdel-SeQ"
         }
 
         APP.store.dispatch(resolveAppLogin(data))

@@ -1,0 +1,249 @@
+/* @flow */
+
+import React from 'react';
+
+import { translate } from '../../base/i18n';
+
+import MeetingInfo from './MeetingInfo'; 
+import useRequest from '../../hooks/use-request';
+import { Profile } from '../../app-auth';
+import { InputField } from '../../base/premeeting';
+import { connect } from '../../base/redux';
+import { setPrejoinPageErrorMessageKey } from '../../prejoin';
+import {
+    Icon,
+    IconArrowBack
+} from '../../base/icons';
+
+import { setPostWelcomePageScreen } from '../../app-auth/actions';
+
+import {
+    joinConference as joinConferenceAction,
+    joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
+    setSkipPrejoin as setSkipPrejoinAction,
+    setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
+} from '../actions';
+
+
+import { useState } from 'react';
+
+function HostPrejoin(props) {
+    console.log("Props ", props)
+  const [meetNow, setMeetNow] = useState(true);
+  const [meetingId, setMeetingId] = useState(props.meetingDetails.meetingId);
+  const [meetingName, setMeetingName] = useState(props.meetingDetails.meetingName);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [meetingPassword, setMeetingPassword] = useState('');
+  const [meetingFrom, setMeetingFrom] = useState(null);
+  const [meetingTo, setMeetingTo] = useState(null);
+  const { isMeetNow } = props;
+  const [shareable, setShareable] = useState(false);
+  const { joinConference, joinNow } = props;
+
+  const { getConference, fetchErrors } = useRequest({
+    url: '/api/v1/conferences/'+ meetingId,
+    method: 'get',
+    onSuccess: (data) => updateConferenceState(data)
+  });
+
+  const formRequestBody = () => {
+    return {
+        "conferenceId": meetingId,
+        "conferenceName": meetingName,
+        "conferenceSecret": meetingPassword,
+        "scheduledFrom": meetingFrom, //"2020-07-08T09:34:00.567Z",
+        "scheduledTo": meetingTo //"2020-07-08T09:34:00.567Z"
+    }
+  }
+
+  const { updateConference, updateErrors } = useRequest({
+    url: '/api/v1/conferences',
+    method: 'put',
+    body: formRequestBody(),
+    onSuccess: (data) => updateConferenceState(data)
+  });
+
+  const { saveConference, saveErrors } = useRequest({
+    url: '/api/v1/conferences',
+    method: 'post',
+    body: formRequestBody(),
+    onSuccess: (data) => updateConferenceState(data)
+  });
+
+  const updateConferenceState = (data) => {
+    /*
+        {
+            "conferenceId": "string",
+            "conferenceName": "string",
+            "conferenceStatus": "NOT_STARTED",
+            "conferenceSecret": "string",
+            "createdDateTime": "2020-07-08T09:43:59.668Z",
+            "hostJids": [
+                "string"
+            ],
+            "id": "string",
+            "lastModifiedDateTime": "2020-07-08T09:43:59.668Z",
+            "ownerId": "string",
+            "scheduledFrom": "2020-07-08T09:43:59.668Z",
+            "scheduledTo": "2020-07-08T09:43:59.668Z"
+        }
+    */
+        setMeetingId(data.conferenceId);
+        setMeetingName(data.conferenceName);
+        setMeetingPassword(data.conferenceSecret);
+        setMeetingFrom(data.scheduledFrom)
+        setMeetingTo(data.scheduledTo)
+  }
+  
+  const setMeetNowAndUpdatePage = (value) => {
+    setMeetNow(value)
+    isMeetNow(value)
+  }
+
+  const goToHome = () => {
+    window.location.href = window.location.origin
+  }
+
+  const saveConferenceAction = () => {
+      //TODO: 
+      /*
+        - Check whether to update the conference or save new conference, and call the API
+        - Store this info in redux ['features/app-auth'].meetingDetails
+        - call the prejoin page. if meetNow
+      */
+
+      // Store just the meetingId and meetNow flag in redux. (Until backend is integrated store full object)
+      APP.store.dispatch(setPostWelcomePageScreen( null,
+        {
+          meetingId,
+          meetingName,
+          meetingPassword,
+          meetingFrom,
+          meetingTo,
+          meetNow
+        }
+    ))
+    
+      if (meetNow) {
+        props.onJoin()
+      }
+      else {
+        setShareableAction(true)
+      }
+      
+
+  }
+
+  const setShareableAction  = (_shareable) => {
+      if(joinNow) {
+        window.location.href = window.location.origin + "?back=true";
+        return;
+      }
+    
+      setShareable(_shareable)
+    
+      /*if(meetNow && _shareable) {
+        props.showTrackPreviews(true)
+      }
+      else {
+        props.showTrackPreviews(false)
+      }*/
+  }
+
+  return (
+      <div className={`hostPrejoin`}>
+
+        {
+            (shareable || joinNow) && 
+            <Icon className="backArrow"
+                src = { IconArrowBack } onClick={() => setShareableAction(!shareable)}/>
+        }
+
+        {
+            ((shareable && meetNow) || joinNow) &&
+            <div className="page-title"> Join Now </div>
+        }
+
+        <div className="profileSection">
+            <Profile />
+        </div>
+        
+        <div className="modesSection">
+        {
+            !shareable && !joinNow &&
+            <ul>
+                <li className={`${meetNow ? 'selected': ''}`}
+                    onClick={() => setMeetNowAndUpdatePage(true)}> 
+                    Meet Now 
+                </li>
+                <li 
+                    className={`${!meetNow ? 'selected': ''}`}
+                    onClick={() => setMeetNowAndUpdatePage(false)}> 
+                    Schedule
+                </li>
+            </ul>
+        }
+        
+
+            
+
+            <MeetingInfo 
+                shareable={shareable || joinNow}
+                meetNow={meetNow}
+                meetingId={{
+                    meetingId
+                }}
+                meetingName={{
+                    meetingName, setMeetingName
+                }}
+                meetingPassword={{
+                    meetingPassword, setMeetingPassword
+                }}
+                meetingPassword={{
+                    meetingPassword, setMeetingPassword
+                }}
+                meetingFrom={{
+                    meetingFrom, setMeetingFrom
+                }}
+                meetingTo={{
+                    meetingTo, setMeetingTo
+                }}
+                
+            />
+
+            {
+                !shareable && !joinNow &&
+                <div className="prejoin-page-button next" onClick={saveConferenceAction}>Next</div>
+            }
+            {
+                joinNow && 
+                <div className="prejoin-page-button next" 
+                    onClick={() => {
+                        APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+                        joinConference();
+                    }}>
+                    Join</div>
+            }
+
+            {
+                shareable && !meetNow &&
+                <div className="prejoin-page-button next" onClick={goToHome}>Close</div>
+            }
+            
+            
+        </div>
+      </div>
+  );
+};
+
+function mapStateToProps(state): Object {
+    return {
+        meetingDetails: APP.store.getState()['features/app-auth'].meetingDetails
+    };
+}
+
+const mapDispatchToProps = {
+    joinConference: joinConferenceAction
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(translate(HostPrejoin));

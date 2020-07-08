@@ -5,12 +5,17 @@ import type { Dispatch } from 'redux';
 import {
     SET_USER_SIGNED_OUT,
     APP_LOGIN,
-    EXPIRE_TOKEN
+    EXPIRE_TOKEN,
+    SET_POST_WELCOME_SCREEN_DETAILS
 } from './actionTypes';
 import { LoginComponent } from './components';
 import logger from './logger';
 
 import { isTokenExpired } from './functions'
+
+import {
+    getRandomArbitrary
+} from './functions'
 
 /**
  * Set Login tokens or error if any and called only when login in
@@ -50,4 +55,20 @@ export function decideAppLogin() {
     return (dispatch: Dispatch<any>, getState: Function) => {
         dispatch({ type: SET_USER_SIGNED_OUT, payload: !isTokenExpired() });
     }
+}
+
+export function setPostWelcomePageScreen(room: string, meetingObj) {
+
+    if(!meetingObj) {
+        meetingObj = {
+            meetingName: room,
+            meetingId: getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
+                getRandomArbitrary(100,999)
+        }
+    }
+    
+    return {
+        type: SET_POST_WELCOME_SCREEN_DETAILS,
+        meetingDetails : meetingObj
+    };
 }

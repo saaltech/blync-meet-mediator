@@ -1,3 +1,95 @@
+.prejoin-page-button {
+
+    &.next {
+        background: #005C85;
+        width: 100px;
+        border-radius: $welcomePageButtonBorderRadius;
+    }
+    
+    min-width: $welcomePageButtonMinWidth;
+    height: $welcomePageButtonHeight;
+    font-size: $welcomePageButtonFontSize;
+    font-weight: $welcomePageButtonFontWeight;
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: $welcomePageButtonLineHeight;
+    cursor: pointer;
+    padding: 5px;
+    margin: 10px auto;
+}
+
+.hostPrejoin {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    color: #393939;
+
+    .page-title {
+        position: absolute;
+        top: 15px;
+        font-weight: bold;
+        left: 40%;
+    }
+
+    .profileSection {
+        margin: 70 auto 0;
+    }
+
+    .modesSection {
+        width: 350px;
+
+        ul {
+            border-bottom: 2px solid #C7C7C7 !important;
+            height: 35px;
+            margin-top: 70px;
+            display: flex;
+            list-style: none;
+            padding: 20px 20px 0;
+            text-align: center;
+        }
+
+        li {
+            flex: 1;
+            margin: 0 5px 0 0;
+            color: #9A9A9A;
+
+            &.selected {
+                border-bottom: 4px solid #005C85;
+                color: #005C85;
+            }
+        } 
+    }
+
+    .jitsi-icon {
+
+        &.backArrow {
+            left: 15px;
+            top: 10px;
+            display: block;
+            box-sizing: border-box;
+            position: absolute;
+
+            svg {
+                height: 28px;
+                width: 28px;
+            }
+        }
+        
+        svg {
+            fill: #393939;
+        }
+    }
+    
+    
+}
+
 .prejoin {
 
     &-input-area {

@@ -288,3 +288,17 @@ export function isInterimPrejoinPageVisible(state: Object): boolean {
 export function getPageErrorMessageKey(state: Object): boolean {
     return state['features/prejoin']?.pageErrorMessageKey;
 }
+
+
+export function getQueryVariable(variable)
+{
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){
+            return pair[1];
+        }
+    }
+    return(false);
+}

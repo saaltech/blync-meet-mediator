@@ -5,7 +5,8 @@ import { assign, ReducerRegistry } from '../base/redux';
 import {
     APP_LOGIN,
     SET_USER_SIGNED_OUT,
-    EXPIRE_TOKEN
+    EXPIRE_TOKEN,
+    SET_POST_WELCOME_SCREEN_DETAILS
 } from './actionTypes';
 
 import { PersistenceRegistry } from '../base/storage';
@@ -45,7 +46,12 @@ ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
                 isUserSignedOut: true
             })
         }
-        
+
+        case SET_POST_WELCOME_SCREEN_DETAILS: {
+            return assign(state, {
+                meetingDetails: action.meetingDetails 
+            }) //postWelcomePageScreen
+        }
     }
     return state;
 });

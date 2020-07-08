@@ -6,3 +6,7 @@ export function isTokenExpired() {
     }
     return isValid;
 }
+
+export function getRandomArbitrary(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+}

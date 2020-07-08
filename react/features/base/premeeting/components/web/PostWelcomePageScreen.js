@@ -38,16 +38,14 @@ type Props = {
      */
     videoTrack?: Object,
     
-    navigatedFromHome?: boolean,
-
-    meetNowSelected?: boolean
+    navigatedFromHome?: boolean
 }
 
 /**
  * Implements a pre-meeting screen that can be used at various pre-meeting phases, for example
  * on the prejoin screen (pre-connection) or lobby (post-connection).
  */
-class PreMeetingScreen extends PureComponent<Props> {
+class PostWelcomePageScreen extends PureComponent<Props> {
     /**
      * Implements {@code PureComponent#render}.
      *
@@ -58,7 +56,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         super(props);
         this.state = {
             meetNow: true,
-            showTrackPreview: false
+            showTrackPreviews: false
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -84,53 +82,24 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     render() {
-        const { title, videoMuted, videoTrack, url, navigatedFromHome, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreview } = this.state;
-        let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
+        const { navigatedFromHome, meetingRoom } = this.props;
+        const { meetNow, showTrackPreviews } = this.state;
 
         return (
             <div
-                className = 'premeeting-screen'
-                id = 'lobby-screen'>
+                className = 'premeeting-screen'>
                 <Background backgroundColor='black'/>
-                {
-                    meetNowSelected ?
-                    <Preview
-                            videoMuted = { videoMuted }
-                            videoTrack = { videoTrack } >
-                        <div className = 'media-btn-container'>
-                            <AudioSettingsButton visible = { true } />
-                            <VideoSettingsButton visible = { true } />
-                        </div>
-                        { this.props.footer }
-                    </Preview>
-                    :
-                    <div className={`hostPrejoinOptionPage 'schedule`}>
-
-                    </div>
-                }
+                <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
+                </div>
                 
-
                 <div className = 'content'>
                     <a href="/" className="close-icon"></a>
-                    {
-                        navigatedFromHome ?
-                        <HostPrejoin 
-                            isMeetNow={this.setMeetNow} 
-                            //Show join now after page reload in case of `meet now` option
-                            joinNow={meetNowSelected}
-                            meetingName={urlToShow}
-                            showTrackPreviews={this.showTrackPreviews}
-                        />
-                        :
-                        <>
-                            <div className = 'title'>
-                                { urlToShow }
-                            </div>
-                            <CopyMeetingUrl />
-                            { this.props.children }
-                        </>
-                    }
+                    <HostPrejoin 
+                        isMeetNow={this.setMeetNow} 
+                        meetingRoom={meetingRoom}
+                        showTrackPreviews={this.showTrackPreviews}
+                        onJoin={this.props.onJoin}
+                    />
                 </div>
             </div>
         );
@@ -145,9 +114,8 @@ class PreMeetingScreen extends PureComponent<Props> {
  */
 function mapStateToProps(state) {
     return {
-        url: getCurrentConferenceUrl(state),
-        meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails.meetNow
+        url: getCurrentConferenceUrl(state)
     };
 }
 
-export default connect(mapStateToProps)(PreMeetingScreen);
+export default connect(mapStateToProps)(PostWelcomePageScreen);
