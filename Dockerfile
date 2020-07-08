@@ -1,6 +1,6 @@
 # Stage 1, "dpkg-stage"
 # scr.saal.ai/saal-meeting-base:1 from base.dockerfile
-FROM scr.saal.ai/saal-meeting-base:1 as dpkg-package
+FROM scr.saal.ai/saal-meeting-base:latest as dpkg-package
 RUN mkdir /saal-repo
 RUN mkdir /saal-repo/saal-meeting
 ADD . /saal-repo/saal-meeting/
@@ -13,7 +13,7 @@ RUN apt install -y nodejs build-essential debhelper
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
 # Stage 2, "web stage"
-FROM scr.saal.ai/jitsi-base:1
+FROM scr.saal.ai/jitsi-base:latest
 
 ADD https://dl.eff.org/certbot-auto /usr/local/bin/
 
