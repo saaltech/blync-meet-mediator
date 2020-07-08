@@ -7,6 +7,7 @@ module.exports = {
     ],
     'rules': {
         'react/jsx-no-bind': 0,
+        'react-native/no-inline-styles': 0,
         'max-len': [
             2,
             150,

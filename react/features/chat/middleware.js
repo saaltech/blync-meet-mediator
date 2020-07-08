@@ -1,5 +1,4 @@
 // @flow
-import toast from 'toastr';
 
 import { APP_WILL_MOUNT, APP_WILL_UNMOUNT } from '../base/app';
 import {

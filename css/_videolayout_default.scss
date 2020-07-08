@@ -35,7 +35,7 @@
 .videocontainer {
     position: relative;
     text-align: center;
-
+    z-index: 1 !important; 
     &__background {
         @include topLeft();
         background-color: black;
@@ -50,8 +50,10 @@
         border-radius: 6px;
         background: #D76751;
         position: absolute;
-        left: 6px;
-        top: 8px;
+        left: auto;
+        right: 6px;
+        bottom: 8px;
+        z-index: 4;
     }
 
     /**
@@ -91,12 +93,14 @@
         bottom: 0;
         height: $thumbnailToolbarHeight;
         padding: 0 5px 0 5px;
+        z-index: 3;
     }
 
     &__toptoolbar {
         $toolbarIconMargin: 5px;
         top: 0;
         padding-bottom: 0;
+        z-index: 10;
         /**
          * Override text-align center as icons need to be left justified.
          */
@@ -181,7 +185,7 @@
     }
 
     &__hoverOverlay {
-        background: rgba(0,0,0,.6);
+        background: rgba(0,0,0,.2);
         border-radius: $borderRadius;
         position: absolute;
         top: 0px;
@@ -190,6 +194,7 @@
         height: 100%;
         visibility: hidden;
         z-index: $zindex2;
+        pointer-events: none;
     }
 }
 
@@ -361,7 +366,7 @@
  * Toolbar icons positioned on the right.
  */
 .moderator-icon {
-    display: inline-block;
+    display: none;
 
     &.right {
         float: right;
@@ -608,8 +613,16 @@
 }
 
 .display-avatar-with-name {
+    .videocontainer__background {
+        background: darken(#B2A474, 5) !important;
+    }
+
     .avatar-container {
         visibility: visible;
+    }
+
+    .avatar-container .avatar {
+        background-color: rgba(0, 0, 0, 0.3) !important;
     }
 
     .displayNameContainer {

@@ -27,12 +27,9 @@ import {
     abstractMapStateToProps
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
-import ParticipantsCount from '../web/ParticipantsCount';
 
-import InviteMore from './InviteMore';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
-import { default as Subject } from './Subject';
 
 declare var APP: Object;
 declare var config: Object;
@@ -197,7 +194,6 @@ class Conference extends AbstractConference<Props, *> {
 
                 <Notice />
                 <div id = 'videospace'>
-                    <Subject />
                     <LargeVideo />
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
@@ -216,7 +212,6 @@ class Conference extends AbstractConference<Props, *> {
 
 
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
-                <InviteMore />
             </div>
         );
     }
