@@ -209,9 +209,6 @@ class Conference extends AbstractConference<Props, *> {
 
                 <ChatPreview />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
-
-
-                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );
     }
