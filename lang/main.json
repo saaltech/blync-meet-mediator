@@ -853,7 +853,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "Connect your calendar to view all your meetings in {{app}}. Plus, add {{provider}} meetings to your calendar and start them with one click.",
-        "enterRoomTitle": "Start or join a meeting",
+        "enterRoomTitle": "Create a new meeting",
         "getHelp": "Get help",
         "roomNameAllowedChars": "Meeting name should not contain any of these characters: ?, &, :, ', \", %, #.",
         "go": "GO",
@@ -872,7 +872,7 @@
         "title": "vMeet",
         "subTitle": "Collaborate Anytime Anywhere",
         "placeholderEnterRoomName": "Enter the room name",
-        "startSession": "Go ahead, enter the meeting name and start or join the session.",
+        "startSession": "Go ahead, enter the meeting name and start the session.",
         "signinLabel": "Sign in"
     },
     "loginPage": {

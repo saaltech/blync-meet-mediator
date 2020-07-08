@@ -99,3 +99,4 @@ export { default as IconWarning } from './warning.svg';
 export { default as IconYahoo } from './yahoo.svg';
 export { default as IconWhatsapp } from './whatsapp.svg';
 export { default as IconSignInLock } from './signin-lock.svg';
+export { default as IconLogout } from './logout.svg';

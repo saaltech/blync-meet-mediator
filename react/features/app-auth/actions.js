@@ -3,7 +3,7 @@
 import type { Dispatch } from 'redux';
 
 import {
-    SHOW_LOGIN,
+    SET_USER_SIGNED_OUT,
     APP_LOGIN,
     EXPIRE_TOKEN
 } from './actionTypes';
@@ -34,7 +34,6 @@ export function resolveAppLogout() {
     return (dispatch: Dispatch<any>, getState: Function) => {
 
         dispatch({ type: EXPIRE_TOKEN });
-        dispatch(decideAppLogin())
     };
 }
 
@@ -49,6 +48,6 @@ export function decideAppLogin() {
     // TODO: in future we could have verify token functionality here by making an IRP call
     // For now, just verify the meeting_access_token expiry
     return (dispatch: Dispatch<any>, getState: Function) => {
-        dispatch({ type: SHOW_LOGIN, payload: !isTokenExpired() });
+        dispatch({ type: SET_USER_SIGNED_OUT, payload: !isTokenExpired() });
     }
 }

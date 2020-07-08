@@ -282,7 +282,7 @@ export function _mapStateToProps(state: Object) {
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
         _settings: state['features/base/settings'],
-        _showAppLogin : state['features/app-auth'].showAppLogin
+        _isUserSignedOut : state['features/app-auth'].isUserSignedOut
 
     };
 }

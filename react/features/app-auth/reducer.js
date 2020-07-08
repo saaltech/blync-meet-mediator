@@ -4,7 +4,7 @@ import { assign, ReducerRegistry } from '../base/redux';
 
 import {
     APP_LOGIN,
-    SHOW_LOGIN,
+    SET_USER_SIGNED_OUT,
     EXPIRE_TOKEN
 } from './actionTypes';
 
@@ -33,15 +33,16 @@ ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
             });
         }
 
-        case SHOW_LOGIN: {
+        case SET_USER_SIGNED_OUT: {
             return assign(state, {
-                showAppLogin: action.payload
+                isUserSignedOut: action.payload
             })
         }
 
         case EXPIRE_TOKEN: {
             return assign(state, {
-                expires: 0
+                expires: 0,
+                isUserSignedOut: true
             })
         }
         

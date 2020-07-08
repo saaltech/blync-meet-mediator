@@ -11,10 +11,10 @@ export const APP_LOGIN = 'APP_LOGIN';
  * The type of (redux) action which signifies if the user is signed in.
  *
  * {
- *     type: SHOW_LOGIN
+ *     type: SET_USER_SIGNED_OUT
  * }
  */
-export const SHOW_LOGIN = 'SHOW_LOGIN';
+export const SET_USER_SIGNED_OUT = 'SET_USER_SIGNED_OUT';
 
 
 export const EXPIRE_TOKEN = 'EXPIRE_TOKEN';

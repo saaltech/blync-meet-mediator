@@ -44,6 +44,21 @@
             padding: 5px 20px;
             width: 100px;
             text-align: left;
+
+            li {
+                height: 30px;
+                padding: 2px 0px 0px;
+            }
+
+            .jitsi-icon {
+                float: left;
+            }
+
+            .menuLabel {
+                position: relative;
+                top: -5px;
+                left: 15px;
+            }
         }
     }
 }

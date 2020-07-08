@@ -185,12 +185,14 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     render() {
-        const { t, _showAppLogin } = this.props;
+        const { t, _isUserSignedOut } = this.props;
         const { hideLogin } = this.state;
         const { APP_NAME } = interfaceConfig;
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
+        const titleArr = t('welcomepage.enterRoomTitle').split(" ")
+        const separatedTitle = titleArr.pop()
 
         return (
             <div
@@ -201,7 +203,7 @@ class WelcomePage extends AbstractWelcomePage {
                 <Background />
 
                 {
-                    _showAppLogin && !hideLogin && 
+                    _isUserSignedOut && !hideLogin && 
                     <LoginComponent 
                         closeAction={ this._closeLogin }
                         isOverlay={true}
@@ -211,7 +213,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                 <div className = 'header'>
                     {
-                        _showAppLogin ?
+                        _isUserSignedOut ?
                         <div
                             className = { `welcome-page-button signin` }
                             id = 'enter_room_button'
@@ -223,7 +225,10 @@ class WelcomePage extends AbstractWelcomePage {
                             }
                         </div>
                         :
-                        <div className = { `welcome-page-button profile` }>
+                        <div className = { `welcome-page-button profile` }
+                            onClick = { () => this.setState({
+                                hideLogin: true
+                            }) }>
                             <Profile 
                                 showMenu={true}
                             />
@@ -243,7 +248,8 @@ class WelcomePage extends AbstractWelcomePage {
                     <div className = 'header-image' />
                     <div className = 'header-text'>
                         <h1 className = 'header-text-title'>
-                            { t('welcomepage.enterRoomTitle') }
+                            <span>{ titleArr.join(" ") } </span>
+                            <span>{ separatedTitle }</span>
                         </h1>
                         {/* <h3 className = 'header-text-sub-title'>
                             { t('welcomepage.subTitle') }
@@ -320,7 +326,7 @@ class WelcomePage extends AbstractWelcomePage {
     _onFormSubmit(event) {
         event.preventDefault();
 
-        if (this.props._showAppLogin) {
+        if (this.props._isUserSignedOut) {
             this.setState({
                 hideLogin: false
             })

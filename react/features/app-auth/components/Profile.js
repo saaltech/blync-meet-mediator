@@ -17,7 +17,8 @@ import Avatar from 'react-avatar';
 import {
     Icon,
     IconMenuDown,
-    IconMenuUp
+    IconMenuUp,
+    IconLogout
 } from '../../base/icons';
 
 function Profile(props) {
@@ -64,7 +65,12 @@ function Profile(props) {
                     <ul 
                         ref={wrapperRef}
                         className="profileMenu">
-                        <li onClick={logout}> { t('profile.logout') } </li>
+                        <li onClick={logout}> 
+                            <Icon src = { IconLogout } /> 
+                            <div className="menuLabel">
+                               { t('profile.logout') } 
+                            </div>
+                        </li>
                     </ul>
                 }
             </div>
