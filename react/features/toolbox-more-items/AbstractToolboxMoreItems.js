@@ -5,6 +5,8 @@ import type { Dispatch } from 'redux';
 
 import { setOverflowMenuVisible } from '../toolbox';
 
+import { enableNotification } from './actions';
+
 /**
  * The type of the React {@code Component} props of {@code AbstractToolboxMoreItems}.
  */
@@ -13,7 +15,7 @@ export type Props = {
     /**
      * True if the chat window should be rendered.
      */
-    _isOpen: boolean,
+    _overflowMenuVisible: boolean,
 
     /**
      * The Redux dispatch function.
@@ -25,7 +27,13 @@ export type Props = {
      */
     t: Function,
 
-    _onClose: Function,
+    _onClosePanel: Function,
+
+    _hideNotification: Function,
+
+    _showNotification: Function,
+
+    _notificationVisible: boolean
 };
 
 /**
@@ -46,12 +54,30 @@ export default class AbstractToolboxMoreItems<P: Props, S> extends Component<P, 
 export function _mapDispatchToProps(dispatch: Dispatch<any>) {
     return {
         /**
-         * Toggles the chat window.
+         * Toggles notifications.
          *
          * @returns {Function}
          */
-        _onClose() {
+        _onClosePanel() {
             dispatch(setOverflowMenuVisible(false));
+        },
+
+        /**
+         * Closes notifications.
+         *
+         * @returns {Function}
+         */
+        _hideNotification() {
+            dispatch(enableNotification(false));
+        },
+
+        /**
+         * Closes notifications.
+         *
+         * @returns {Function}
+         */
+        _showNotification() {
+            dispatch(enableNotification(true));
         }
     };
 }
@@ -69,9 +95,13 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { overflowMenuVisible: isOpen } = state['features/toolbox'];
+    const { notificationVisiable } = state['features/toolbox-more'];
+
+    const { overflowMenuVisible } = state['features/toolbox'];
+
 
     return {
-        _isOpen: isOpen
+        _overflowMenuVisible: overflowMenuVisible,
+        _notificationVisible: notificationVisiable
     };
 }

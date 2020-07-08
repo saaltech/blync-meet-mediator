@@ -6,8 +6,12 @@
     z-index: $zindex3;
     height: 60vh;
     overflow: hidden;
-    display: flex;
+    display: none;
     flex-direction: column;
+
+    &--visible {
+        display: flex;
+    }
 
     &::before {
         content: '';

@@ -11,23 +11,19 @@ import AbstractChatPreview, {
 
 import ChatPreviewContainer from './ChatPreviewContainer';
 
-
-type State = {
-
-}
-
 /**
  * Implements a React native component that renders the chat preview
  */
-class ChatPreview extends AbstractChatPreview<Props, State> {
+class ChatPreview extends AbstractChatPreview<Props, *> {
     /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
      */
     render() {
+
         return (
-            <div className = 'chat-preview'>
+            <div className = { `chat-preview ${this.props._isOpen ? 'chat-preview--visible' : ''}` }>
                 <ChatPreviewContainer
                     localParticipant = { this.props._localParticipant }
                     messages = { this.props._messages } />

@@ -9,6 +9,7 @@ type Props = {
     children: Object,
     title: string,
     onClose: Function,
+    noBodyPadding: boolean
 }
 
 /**
@@ -23,7 +24,7 @@ export default class OptionsPanel extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { isOpen, children, title, onClose } = this.props;
+        const { isOpen, children, title, onClose, noBodyPadding } = this.props;
 
         return (
             <div className = { `options-panel ${isOpen ? 'options-panel--visible' : ''}` }>
@@ -41,7 +42,7 @@ export default class OptionsPanel extends Component<Props> {
                             src = { IconClose } />
                     </button>
                 </div>
-                <div className = 'options-panel__body'>
+                <div className = { `options-panel__body ${noBodyPadding ? 'options-panel__body--no-padding' : ''} ` }>
                     {children}
                 </div>
             </div>

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { OptionsPanel } from '../../base/options-panel';
+import { OptionsPanel, OptionItemCheck } from '../../base/options-panel';
 import { connect } from '../../base/redux';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
@@ -23,15 +23,31 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
      * @returns {ReactElement}
      */
     render() {
-        const { _isOpen, _onClose } = this.props;
+        const { _overflowMenuVisible, _onClosePanel, _notificationVisible, _showNotification, _hideNotification } = this.props;
 
         return (
             <OptionsPanel
-                isOpen = { _isOpen }
-                onClose = { _onClose }
+                isOpen = { _overflowMenuVisible }
+                onClose = { _onClosePanel }
                 title = 'Permissions'>
-                <div className = { 'toolbox-settings ' }>
-                    Toolbox Settings
+                <div className = { 'toolbox-more-items ' }>
+                    <div className = 'toolbox-more-items__title'>
+                        Meeting
+                    </div>
+                    <div>
+                        <OptionItemCheck
+                            checked = { _notificationVisible }
+                            label = 'Toast Notifications'
+                            onCheck = { () => {
+                                if (!_notificationVisible) {
+                                    _showNotification();
+
+                                    return;
+                                }
+
+                                _hideNotification();
+                            } } />
+                    </div>
                 </div>
             </OptionsPanel>
         );
