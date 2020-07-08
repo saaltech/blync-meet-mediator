@@ -1,0 +1,53 @@
+.options-panel {
+    background-color: $newToolbarBackgroundColor;
+    box-sizing: border-box;
+    color: #393939;
+    flex-direction: column;
+    height: calc(100% - #{$newToolbarSizeWithPadding});
+    right: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: $sidebarWidth;
+    z-index: $sideToolbarContainerZ;
+    display: none;
+
+
+    &--visible {
+        display: flex;
+    }
+
+    &__header {
+        padding: 19px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__close-btn {
+        border: none;
+        background: none;
+        outline: none;
+        padding: 16px;
+    }
+
+    &__close-btn .jitsi-icon svg {
+        fill: #414F50;
+    }
+
+    &__title {
+        font-size: 21px;
+        line-height: 72px;
+        letter-spacing: 0px;
+        color: #393939;
+        font-weight: bold;
+        padding: 16px;
+    }
+
+    &__body {
+        flex: 1;
+        height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}

@@ -24,7 +24,7 @@ $flagsImagePath: "../images/";
 /* Flags END */
 
 /* Modules BEGIN */
-
+@import 'options-panel';
 @import 'aui_reset';
 @import 'atlaskit_overrides';
 @import 'base';
@@ -91,6 +91,7 @@ $flagsImagePath: "../images/";
 @import 'chrome-extension-banner';
 @import 'settings-button';
 @import 'icons';
+
 // @import 'meter';
 // @import 'audio-preview';
 // @import 'video-preview';
