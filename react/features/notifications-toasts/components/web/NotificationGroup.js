@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 
 import { Avatar } from '../../../base/avatar';
 import { translate } from '../../../base/i18n';
-import { getParticipantById } from '../../../base/participants';
 
 import ChatMessage from './ChatMessage';
 import Expire from './Expire';
@@ -85,7 +84,7 @@ class ToastGroup extends Component<Props> {
         return (
 
             <Expire
-                timer = { 600000 }>
+                timer = { 6000 }>
                 <div className = { `chat-preview-group ${className} chat-preview-group--${String(type).toLowerCase()}` }>
                     <Avatar participantId = { userId } />
                     <div className = 'chat-preview-group__container'>
