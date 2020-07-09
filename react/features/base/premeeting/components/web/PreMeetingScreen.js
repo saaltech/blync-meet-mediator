@@ -146,7 +146,8 @@ class PreMeetingScreen extends PureComponent<Props> {
 function mapStateToProps(state) {
     return {
         url: getCurrentConferenceUrl(state),
-        meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails.meetNow
+        meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails
+            && APP.store.getState()['features/app-auth'].meetingDetails.meetNow
     };
 }
 

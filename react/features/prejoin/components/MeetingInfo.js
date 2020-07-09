@@ -30,19 +30,22 @@ function MeetingInfo(props) {
             meetNow &&
             <div className="you-are-host"> You are the host of this meeting</div>
         }
-
-        <div className="form-field make-private">
-            <InputField
-                type = "checkbox"
-                onChange = {() => setIsPrivate(!isPrivate)}
-                value = { isPrivate } 
-                id = "makePrivate"
-                disabled = { shareable }/>
-            <label className = 'form-label' for="makePrivate">
-            {'Make this a private meeting'}
-            </label>
-            <div className = 'form-label sub-label'>{'(Participants will need a meeting link along with password to join this meeting)'}</div>
-        </div>
+        {
+          (!shareable || (isPrivate && shareable)) &&
+          <div className="form-field make-private">
+              <InputField
+                  type = "checkbox"
+                  onChange = {() => setIsPrivate(!isPrivate)}
+                  value = { isPrivate } 
+                  id = "makePrivate"
+                  disabled = { shareable }/>
+              <label className = 'form-label' htmlFor="makePrivate">
+              {'Make this a private meeting'}
+              </label>
+              <div className = 'form-label sub-label'>{'(Participants will need a meeting link along with password to join this meeting)'}</div>
+          </div>
+        }
+        
 
         { 
           isPrivate && 

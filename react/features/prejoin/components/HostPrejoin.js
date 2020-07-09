@@ -232,6 +232,8 @@ function HostPrejoin(props) {
                 shareable && !meetNow &&
                 <div className="prejoin-page-button next" onClick={goToHome}>Close</div>
             }
+
+            <div className="cancel" onClick={goToHome}>Cancel</div>
             
             
         </div>
