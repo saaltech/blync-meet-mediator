@@ -5,6 +5,7 @@ import { toArray } from 'react-emoji-render';
 
 
 import { translate } from '../../../base/i18n';
+import { IconUserCheck, IconUserCancel, IconRaisedHand, Icon } from '../../../base/icons';
 import { Linkify } from '../../../base/react';
 import AbstractChatMessage, {
     type Props
@@ -45,17 +46,12 @@ class ChatMessage extends AbstractChatMessage<Props> {
                             { this.props.showDisplayName && this._renderDisplayName() }
                             <div className = 'usermessage'>
                                 { processedMessage }
+                                {
+                                    this.props.message.type !== 'default'
+                                 && <Icon src = { this._getMessageIcon(this.props.message) } />
+                                }
                             </div>
                         </div>
-                        {/* { message.privateMessage && message.messageType !== MESSAGE_TYPE_LOCAL
-                            && (
-                                <div className = 'messageactions'>
-                                    <PrivateMessageButton
-                                        participantID = { message.id }
-                                        reply = { true }
-                                        showLabel = { false } />
-                                </div>
-                            ) } */}
                     </div>
                 </div>
                 { this.props.showTimestamp && this._renderTimestamp() }
@@ -68,6 +64,29 @@ class ChatMessage extends AbstractChatMessage<Props> {
     _getMessageText: () => string;
 
     _getPrivateNoticeMessage: () => string;
+
+
+    /**
+     * Returns the icon type for message.
+     *
+     * @param {Object} message - : Message.
+     * @returns {React$Element<*>}
+     */
+    _getMessageIcon(message: Object) {
+
+        switch (message.type) {
+        case 'PARTICIPANT_JOINED':
+            return IconUserCheck;
+
+
+        case 'PARTICIPANT_LEFT':
+            return IconUserCancel;
+
+        case 'RAISED_HAND':
+            return IconRaisedHand;
+        }
+
+    }
 
     /**
      * Renders the display name of the sender.

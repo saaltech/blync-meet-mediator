@@ -53,6 +53,27 @@
         color: #393939;
     }
 
+    .usermessage {
+        display: flex;
+        align-items: center;
+    }
+
+    .usermessage .jitsi-icon {
+        padding: 0 .5rem;
+    }
+
+    &--participant_joined .chatmessage {
+        background-color: #D1FFE9;
+    }
+
+    &--participant_left .chatmessage {
+        background-color: #FFD9D5;
+    }
+
+    &--raised_hand .chatmessage {
+        background-color: #D7EBF7;
+    }
+
     .chatmessage-wrapper:not(:last-child) .chatmessage {
         margin-bottom: 10px;
     }
