@@ -186,3 +186,4 @@ export function _abstractMapStateToProps(state: Object) {
             : interfaceConfig.ENFORCE_NOTIFICATION_AUTO_DISMISS_TIMEOUT
     };
 }
+

@@ -2,9 +2,12 @@
 
 import truncate from 'lodash/truncate';
 import React, { Component } from 'react';
+import { type Dispatch } from 'redux';
 
 import { Avatar } from '../../../base/avatar';
 import { translate } from '../../../base/i18n';
+import { connect } from '../../../base/redux';
+import { hideNotification } from '../../actions';
 
 import ChatMessage from './ChatMessage';
 import Expire from './Expire';
@@ -22,6 +25,7 @@ type Props = {
     notification: Object,
 
     t: Function,
+    _hideNotification: Function,
 };
 
 /**
@@ -82,8 +86,8 @@ class ToastGroup extends Component<Props> {
 
 
         return (
-
             <Expire
+                hideNotification = { () => this.props._hideNotification(notification.id) }
                 timer = { 6000 }>
                 <div className = { `chat-preview-group ${className} chat-preview-group--${String(type).toLowerCase()}` }>
                     <Avatar participantId = { userId } />
@@ -104,4 +108,35 @@ class ToastGroup extends Component<Props> {
     }
 }
 
-export default translate(ToastGroup);
+/**
+ * Maps redux actions to the props of the component.
+ *
+ * @param {Function} dispatch - The redux action {@code dispatch} function.
+ * @returns {{
+    *     _onSendMessage: Function,
+    *     _onToggleChat: Function
+    * }}
+    * @private
+    */
+export function _mapDispatchToProps(
+        dispatch: Dispatch<any>
+) {
+    return {
+        _hideNotification: (id: string) => dispatch(hideNotification(id))
+    };
+}
+
+/**
+    * Maps (parts of) the redux state to {@link Chat} React {@code Component}
+    * props.
+    *
+    * @param {Object} state - The redux store/state.
+    * @private
+    * @returns {{ }}
+    */
+export function _mapStateToProps() {
+    return { };
+}
+
+
+export default translate(connect(_mapStateToProps, _mapDispatchToProps)(ToastGroup));

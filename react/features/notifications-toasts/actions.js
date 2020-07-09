@@ -26,17 +26,18 @@ export function clearNotifications() {
 /**
  * Removes the notification with the passed in id.
  *
- * @param {string} uid - The unique identifier for the notification to be
+ * @param {string} id - The unique identifier for the notification to be
  * removed.
  * @returns {{
  *     type: HIDE_NOTIFICATION,
- *     uid: number
+ *     id: number
  * }}
  */
-export function hideNotification(uid: number) {
+export function hideNotification(id: string) {
+
     return {
         type: HIDE_NOTIFICATION,
-        uid
+        id
     };
 }
 

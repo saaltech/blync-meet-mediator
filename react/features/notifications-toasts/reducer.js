@@ -40,7 +40,7 @@ ReducerRegistry.register('features/notifications-toasts',
             return {
                 ...state,
                 notifications: state.notifications.filter(
-                    notification => notification.uid !== action.uid)
+                    notification => notification.id !== action.id)
             };
 
         case SET_NOTIFICATIONS_ENABLED:
