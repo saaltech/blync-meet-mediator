@@ -41,5 +41,9 @@
 
     .meeting-password {
         margin: 15px 30px;
+
+        input.field:disabled {
+            background-color: #f0f0f0;
+        }
     }
 }

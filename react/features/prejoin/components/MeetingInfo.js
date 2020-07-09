@@ -48,13 +48,13 @@ function MeetingInfo(props) {
         
 
         { 
-          isPrivate && 
+          (!shareable || (shareable && isPrivate)) &&
           <div className="form-field meeting-password">
               <InputField
                   onChange = {value => setMeetingPassword(value.trim())}
                   placeHolder = { 'Meeting password' }
                   value = { meetingPassword } 
-                  disabled = { shareable } />
+                  disabled = { shareable || !isPrivate } />
           </div>
         }
         

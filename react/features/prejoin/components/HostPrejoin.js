@@ -39,7 +39,7 @@ function HostPrejoin(props) {
   const [shareable, setShareable] = useState(false);
   const { joinConference } = props;
 
-  const { getConference, fetchErrors } = useRequest({
+  const [ getConference, fetchErrors ] = useRequest({
     url: '/api/v1/conferences/'+ meetingId,
     method: 'get',
     onSuccess: (data) => updateConferenceState(data)
@@ -55,19 +55,21 @@ function HostPrejoin(props) {
     }
   }
 
-  const { updateConference, updateErrors } = useRequest({
+  const [ updateConference, updateErrors ] = useRequest({
     url: '/api/v1/conferences',
     method: 'put',
     body: formRequestBody(),
     onSuccess: (data) => updateConferenceState(data)
   });
 
-  const { saveConference, saveErrors } = useRequest({
+  const [ saveConference, saveErrors ] = useRequest({
     url: '/api/v1/conferences',
     method: 'post',
     body: formRequestBody(),
     onSuccess: (data) => updateConferenceState(data)
   });
+
+  console.log(getConference, updateConference, saveConference)
 
   const updateConferenceState = (data) => {
     /*
@@ -233,7 +235,11 @@ function HostPrejoin(props) {
                 <div className="prejoin-page-button next" onClick={goToHome}>Close</div>
             }
 
-            <div className="cancel" onClick={goToHome}>Cancel</div>
+            {
+                !(shareable && !meetNow) &&
+                <div className="cancel" onClick={goToHome}>Cancel</div>
+            }
+            
             
             
         </div>
