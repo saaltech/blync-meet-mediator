@@ -7,7 +7,7 @@ ADD . /saal-repo/saal-meeting/
 WORKDIR /saal-repo/saal-meeting
 RUN find . -type f -name "*.*" -exec chmod 644 {} +
 # RUN npm cache clean -f
-RUN npm install
+RUN npm install --registry https://npr.saal.ai
 RUN make
 RUN apt install -y nodejs build-essential debhelper
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
@@ -29,12 +29,13 @@ RUN \
 	apt-get -d install -y ./jitsi-meet-web-config_*.deb && \
 	apt-get install -y ./jitsi-meet-web_*.deb && \
   dpkg -x ./jitsi-meet-web-config_*.deb /jitsi-meet-web-config && \
-  dpkg -x ./jitsi-meet-web_*.deb /jitsi-meet-web && \
-  mv /jitsi-meet-web-config/usr/share/jitsi-meet-web-config/config.js /defaults && \
-	mv /jitsi-meet-web/usr/share/jitsi-meet/interface_config.js /defaults && \
+  cp /jitsi-meet-web-config/usr/share/jitsi-meet-web-config/config.js /defaults && \
+	cp /usr/share/jitsi-meet/interface_config.js /defaults && \
   rm -rf /var/lib/apt/lists/ && \
 	rm -f /etc/nginx/conf.d/default.conf && \
-	rm -rf /var/cache/apt
+	rm -rf /var/cache/apt && \
+  rm ./jitsi-meet-web*.deb && \
+  rm -rf /jitsi-meet-web-config
 
 RUN \
 	chmod a+x /usr/local/bin/certbot-auto && \
