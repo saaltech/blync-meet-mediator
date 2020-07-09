@@ -7,7 +7,8 @@ import {
     SET_FILMSTRIP_HOVERED,
     SET_FILMSTRIP_VISIBLE,
     SET_HORIZONTAL_VIEW_DIMENSIONS,
-    SET_TILE_VIEW_DIMENSIONS
+    SET_TILE_VIEW_DIMENSIONS,
+    SET_FILMSTRIP_COLLAPSED
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -41,7 +42,9 @@ const DEFAULT_STATE = {
      * @public
      * @type {boolean}
      */
-    visible: true
+    visible: true,
+
+    collapsed: false
 };
 
 ReducerRegistry.register(
@@ -74,6 +77,11 @@ ReducerRegistry.register(
                 visible: action.visible
             };
 
+        case SET_FILMSTRIP_COLLAPSED:
+            return {
+                ...state,
+                collapsed: action.collapsed
+            };
         case SET_HORIZONTAL_VIEW_DIMENSIONS:
             return {
                 ...state,
