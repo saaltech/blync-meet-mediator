@@ -12,7 +12,7 @@ function MeetingInfo(props) {
   const {meetingId, setMeetingId} = props.meetingId;
   const {meetingName, setMeetingName} = props.meetingName;
   const [meetingPassword, setMeetingPassword] = useState('');
-  const [isPrivate, setIsPrivate] = useState(meetingPassword ? true : false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const {meetingFrom, setMeetingFrom} = props.meetingFrom;
   const {meetingTo, setMeetingTo} = props.meetingTo;
 
@@ -24,20 +24,37 @@ function MeetingInfo(props) {
         <div className="meeting-id">{meetingId}</div>
         {
             !meetNow &&
-            <div>Date time field here</div>
+            <div className="you-are-host">Date time field here</div>
         }
         {
             meetNow &&
             <div className="you-are-host"> You are the host of this meeting</div>
         }
 
-        <div className="form-field">
-            <div className = 'form-label'>{'(Participants will need a meeting link along with password to join this meeting)'}</div>
+        <div className="form-field make-private">
             <InputField
-                onChange = {value => setMeetingPassword(value.trim())}
-                placeHolder = { 'Meeting password' }
-                value = { meetingPassword } />
+                type = "checkbox"
+                onChange = {() => setIsPrivate(!isPrivate)}
+                value = { isPrivate } 
+                id = "makePrivate"
+                disabled = { shareable }/>
+            <label className = 'form-label' for="makePrivate">
+            {'Make this a private meeting'}
+            </label>
+            <div className = 'form-label sub-label'>{'(Participants will need a meeting link along with password to join this meeting)'}</div>
         </div>
+
+        { 
+          isPrivate && 
+          <div className="form-field meeting-password">
+              <InputField
+                  onChange = {value => setMeetingPassword(value.trim())}
+                  placeHolder = { 'Meeting password' }
+                  value = { meetingPassword } 
+                  disabled = { shareable } />
+          </div>
+        }
+        
 
         
         {

@@ -28,7 +28,6 @@ import {
 import { useState } from 'react';
 
 function HostPrejoin(props) {
-    console.log("Props ", props)
   const [meetNow, setMeetNow] = useState(true);
   const [meetingId, setMeetingId] = useState(props.meetingDetails.meetingId);
   const [meetingName, setMeetingName] = useState(props.meetingDetails.meetingName);
@@ -195,6 +194,9 @@ function HostPrejoin(props) {
                 }}
                 meetingName={{
                     meetingName, setMeetingName
+                }}
+                isPrivate={{
+                    isPrivate, setIsPrivate
                 }}
                 meetingPassword={{
                     meetingPassword, setMeetingPassword

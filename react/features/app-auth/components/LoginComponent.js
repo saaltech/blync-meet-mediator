@@ -69,7 +69,7 @@ function LoginComponent(props) {
                 "group": "a123-123-456-789",
                 "key": "vikram@saal.ai"
             },
-            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJkZXYtYmx5bmMtbWVldGluZyIsImlzcyI6ImRldi1ibHluYy1tZWV0aW5nIiwiaWF0IjoxNTk0MTg4ODA3LCJleHAiOjE2MjU3NDM0NTgsInNjb3BlIjoib3BlbmlkIiwiYXVkIjoic21lZXRpbmciLCJyb29tIjoiKiIsInJvbGUiOiJtYW5hZ2VyIiwiY29udGV4dCI6eyJ1c2VyIjp7Im5hbWUiOiJWaWtyYW0gUG9kdXZhbCIsImVtYWlsIjoidmlrcmFtQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.rDCyEYq6EopALXGD2WKNYhh78KvuQzbhHb2Sdel-SeQ"
+            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJkZXYtYmx5bmMtbWVldGluZyIsImlzcyI6ImRldi1ibHluYy5zYWFsLmFpIiwiaWF0IjoxNTk0MTg4ODA3LCJleHAiOjE2MjU3NDM0NTgsInNjb3BlIjoib3BlbmlkIiwiYXVkIjoic21lZXRpbmciLCJyb29tIjoiKiIsInJvbGUiOiJtYW5hZ2VyIiwiY29udGV4dCI6eyJ1c2VyIjp7Im5hbWUiOiJWaWtyYW0gUG9kdXZhbCIsImVtYWlsIjoidmlrcmFtQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ._SJ2B2g7jOrfh2OvYPu-8dJup_CkqxAkF7g5s6x5Nok"
         }
 
         APP.store.dispatch(resolveAppLogin(data))

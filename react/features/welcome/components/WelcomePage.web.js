@@ -206,7 +206,6 @@ class WelcomePage extends AbstractWelcomePage {
         const titleArr = t('welcomepage.enterRoomTitle').split(" ")
         const separatedTitle = titleArr.pop()
 
-        console.log("_postWelcomePageScreen ", _postWelcomePageScreen)
         return (
             <div>
                 {

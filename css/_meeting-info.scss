@@ -1,6 +1,6 @@
 .meetinginfo {
     color: #393939;
-    padding: 15px;
+    padding: 20px 40px;
 
     .meeting-title {
         font-size: 35px;
@@ -18,5 +18,28 @@
     .you-are-host {
         color: #4D4D4D;
         padding: 20px 0px 20px;
+    }
+
+    .make-private {
+        text-align: left;
+
+        input.field {
+            height: 20px;
+            width: 20px;
+            margin-right: 10px;
+            position: relative;
+            top: 3px;
+        }
+
+        .sub-label {
+            color: #4D4D4D;
+            margin-left: 30px;
+            font-size: 14px;
+            opacity: 0.5;
+        }
+    }
+
+    .meeting-password {
+        margin: 15px 30px;
     }
 }

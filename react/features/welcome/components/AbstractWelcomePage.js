@@ -203,7 +203,6 @@ export class AbstractWelcomePage extends Component<Props, *> {
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
-            console.log("roomDetails:   ", meetingDetails)
             this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
