@@ -1,6 +1,6 @@
 // @flow
 
-import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS } from './actionTypes';
+import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_FILMSTRIP_COLLAPSED } from './actionTypes';
 import { calculateThumbnailSizeForHorizontalView, calculateThumbnailSizeForTileView } from './functions';
 
 /**
@@ -51,4 +51,19 @@ export function setHorizontalViewDimensions(clientHeight: number = 0) {
     };
 }
 
+/**
+ * Sets the whether filmstrip is collapsed or not.
+ *
+ * @param {boolean} collapsed - Collapse status.
+ * @returns {{
+    *     type: SET_HORIZONTAL_VIEW_DIMENSIONS,
+    *     dimensions: Object
+    * }}
+    */
+export function setFilmStripCollapsed(collapsed: boolean) {
+    return {
+        type: SET_FILMSTRIP_COLLAPSED,
+        collapsed
+    };
+}
 export * from './actions.native';

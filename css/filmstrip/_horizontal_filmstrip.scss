@@ -10,7 +10,6 @@
     top: 0;
     bottom: auto;
     right: 0;
-    padding: 10px 5px;
     @extend %align-right;
     transition: transform .3s;
     z-index: $filmstripVideosZ;
@@ -35,6 +34,74 @@
         // top: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
     }
 
+    &__videos-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 25px;
+        // border-radius: 14px 0px 6px 0px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        opacity: 1;
+        position: relative;
+        overflow: hidden;
+        padding-left: 70px;
+
+        &::before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            filter: blur(1rem);
+            background: rgba($color: #000000, $alpha: .70);
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: transform .3s .2s;
+        }
+    }
+
+   
+
+    &__actions {
+        position: absolute;
+        left: 0;
+        height: 100%;
+        display: flex;
+        z-index: 1;
+
+        svg path {
+            fill: #FFF !important;
+        }
+    }
+
+    &__collapse-btn {
+        width: 39px;
+        background: #00C062;
+        border: none;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        outline: none;
+
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    &__strip-holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 0;
+        transition: transform .3s;
+    }
+
+    &__videos-container--collapsed::before {
+        opacity: 0;
+    }
+
+    &__videos-container--collapsed .filmstrip__strip-holder {
+        transform: translateX(-150%);   
+    }
+
     &__toolbar {
         display: none;
     }
@@ -49,13 +116,13 @@
         overflow: visible !important;
 
         &#remoteVideos {
-            border: $thumbnailsBorder solid transparent;
             transition: bottom 2s;
             flex-grow: 1;
             @include minHWAutoFix();
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
+            margin-top: 13px;
         }
 
         /**
@@ -122,9 +189,9 @@
     }
 
     .videocontainer {
-        margin-bottom: 10px;
         &.active-speaker {
             border: 4px solid #00C062;
+            box-sizing: border-box;
         }
     }
 }
