@@ -10,6 +10,7 @@ import Background from '../../../../welcome/components/background';
 import { connect } from '../../../redux';
 import { getCurrentConferenceUrl } from '../../../connection';
 import HostPrejoin from '../../../../prejoin/components/HostPrejoin'
+import GuestPrejoin from '../../../../prejoin/components/GuestPrejoin'
 
 type Props = {
 
@@ -84,7 +85,7 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     render() {
-        const { title, videoMuted, videoTrack, url, navigatedFromHome, meetNowSelected } = this.props;
+        const { title, videoMuted, videoTrack, url, navigatedFromHome = false, meetNowSelected } = this.props;
         const { meetNow, showTrackPreviews } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
 
@@ -124,11 +125,18 @@ class PreMeetingScreen extends PureComponent<Props> {
                         />
                         :
                         <>
+                            <GuestPrejoin 
+                                meetingId={urlToShow}
+                            />
+                            {
+                            /*<hr />
                             <div className = 'title'>
                                 { urlToShow }
                             </div>
                             <CopyMeetingUrl />
                             { this.props.children }
+                            */
+                            }
                         </>
                     }
                 </div>

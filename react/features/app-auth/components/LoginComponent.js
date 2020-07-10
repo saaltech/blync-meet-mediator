@@ -5,6 +5,7 @@ import React from 'react';
 import { translate } from '../../base/i18n';
 import { resolveAppLogin } from '../actions'
 import { InputField } from '../../base/premeeting';
+import { config } from '../../../config'
 
 import {
     Icon,
@@ -31,10 +32,10 @@ function LoginComponent(props) {
 
   const { closeAction, isOverlay = false, t} = props
   const [ doRequest, errors ] = useRequest({
-    url: '/auth/user/signin',
+    url: config.unauthenticatedIRP + '/auth/api/users/sign-in',
     method: 'post',
     body: {
-      email,
+      username: email,
       password
     },
     onSuccess: (data) => onSuccess(data)
@@ -46,7 +47,7 @@ function LoginComponent(props) {
       }
       event.preventDefault();
       // TODO: uncomment this once the api is ready
-      //await doRequest();
+      await doRequest(false);
       // TODO: this is not once the above is implemented
       onSuccess(null)
   };
@@ -69,10 +70,13 @@ function LoginComponent(props) {
                 "group": "a123-123-456-789",
                 "key": "vikram@saal.ai"
             },
-            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJkZXYtYmx5bmMuc2FhbC5haSIsImlzcyI6ImRldi1ibHluYy1tZWV0aW5nIiwiaWF0IjoxNTk0MTg4ODA3LCJleHAiOjE2MjU3NDM0NTgsInNjb3BlIjoib3BlbmlkIiwiYXVkIjoic21lZXRpbmciLCJyb29tIjoiKiIsInJvbGUiOiJtYW5hZ2VyIiwiY29udGV4dCI6eyJ1c2VyIjp7Im5hbWUiOiJWaWtyYW0gUG9kdXZhbCIsImVtYWlsIjoidmlrcmFtQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.Gi7a8X6aWIfxGy2opHTSamWCo9-XZaFe_r9sp4pAW9I"
+            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJtZWV0aW5nLm5zcXVhcmV6LmNvbSIsImlzcyI6Im1lZXRpbmduc3F1YXJleiIsImlhdCI6MTU5NDE4ODgwNywiZXhwIjoxNjI1OTA2NjA2LCJzY29wZSI6Im9wZW5pZCIsImF1ZCI6InNtZWV0aW5nIiwicm9vbSI6IioiLCJyb2xlIjoibWFuYWdlciIsImNvbnRleHQiOnsidXNlciI6eyJuYW1lIjoiTmVlaGFsIFNoYWlraCIsImVtYWlsIjoibmVlaGFsQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.o88nFjeph2DcZkIOSUxvegoFQftoFlyOOH6bQyB4c7M"
         }
 
         APP.store.dispatch(resolveAppLogin(data))
+
+        closeAction()
+
   }
 
   return (
@@ -84,7 +88,7 @@ function LoginComponent(props) {
             {
                 isOverlay && <div onClick={closeAction} className="close-icon"></div>
             }
-            <div className="content">
+            <div className={`${isOverlay ? 'content': 'inline-content'}`}>
                 <Icon src = { IconSignInLock } />
                 <h2>{ t('loginPage.signinLabel') }</h2>
                 <div className="form-field">

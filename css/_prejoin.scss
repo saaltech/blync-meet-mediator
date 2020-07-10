@@ -16,7 +16,7 @@
     line-height: $welcomePageButtonLineHeight;
     cursor: pointer;
     padding: 5px;
-    margin: 10px auto;
+    margin: 15px auto;
 }
 
 .hostPrejoin {
@@ -30,6 +30,14 @@
     overflow: hidden;
     text-align: center;
     color: #393939;
+
+    .login-message {
+        padding-top: 50px;
+    }
+
+    .sign-in-link {
+        color: #00C062;
+    }
 
     .page-title {
         position: absolute;
@@ -91,6 +99,14 @@
         }
     }
     
+    .no-account {
+        > :last-child {
+            color: #00C062;
+            font-weight: bold;
+            padding: 5px;
+            cursor: pointer;
+        }
+    }
     
 }
 

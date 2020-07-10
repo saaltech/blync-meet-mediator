@@ -43,7 +43,30 @@
         margin: 15px 30px;
 
         input.field:disabled {
-            background-color: #f0f0f0;
+            border-color: #70707057;
+            background-color: #F4F4F4;
+            
         }
+    }
+
+    .password-error {
+        position: relative;
+
+        input.field {
+            border-color: #FF0000
+        }
+
+        .error-block {
+            color: #FF0000;
+            text-align: left;
+            position: absolute;
+            top: 70px;
+        }
+    }
+
+    input.field:disabled {
+        border-color: #70707057;
+        background-color: #F4F4F4;
+        
     }
 }

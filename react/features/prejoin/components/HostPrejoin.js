@@ -15,6 +15,8 @@ import {
     IconArrowBack
 } from '../../base/icons';
 
+import { config } from '../../../config'
+
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 
 import {
@@ -40,7 +42,7 @@ function HostPrejoin(props) {
   const { joinConference } = props;
 
   const [ getConference, fetchErrors ] = useRequest({
-    url: '/api/v1/conferences/'+ meetingId,
+    url: config.conferenceManager + config.conferenceEP + '/'+ meetingId,
     method: 'get',
     onSuccess: (data) => updateConferenceState(data)
   });
@@ -56,20 +58,18 @@ function HostPrejoin(props) {
   }
 
   const [ updateConference, updateErrors ] = useRequest({
-    url: '/api/v1/conferences',
+    url: config.conferenceManager + config.conferenceEP,
     method: 'put',
-    body: formRequestBody(),
+    body: formRequestBody,
     onSuccess: (data) => updateConferenceState(data)
   });
 
   const [ saveConference, saveErrors ] = useRequest({
-    url: '/api/v1/conferences',
+    url: config.conferenceManager + config.conferenceEP,
     method: 'post',
-    body: formRequestBody(),
+    body: formRequestBody,
     onSuccess: (data) => updateConferenceState(data)
   });
-
-  console.log(getConference, updateConference, saveConference)
 
   const updateConferenceState = (data) => {
     /*
@@ -105,7 +105,7 @@ function HostPrejoin(props) {
     window.location.href = window.location.origin
   }
 
-  const saveConferenceAction = () => {
+  const saveConferenceAction = async () => {
       //TODO: 
       /*
         - Check whether to update the conference or save new conference, and call the API
@@ -114,6 +114,18 @@ function HostPrejoin(props) {
       */
 
       // Store just the meetingId and meetNow flag in redux. (Until backend is integrated store full object)
+      if(meetNow) {
+        setMeetingFrom('')
+        setMeetingTo('')
+      }
+
+      if(!isPrivate) {
+          setMeetingPassword('')
+      }
+
+      // Make DB save call
+      await saveConference();
+
       APP.store.dispatch(setPostWelcomePageScreen( null,
         {
           meetingId,
@@ -199,9 +211,6 @@ function HostPrejoin(props) {
                 }}
                 isPrivate={{
                     isPrivate, setIsPrivate
-                }}
-                meetingPassword={{
-                    meetingPassword, setMeetingPassword
                 }}
                 meetingPassword={{
                     meetingPassword, setMeetingPassword

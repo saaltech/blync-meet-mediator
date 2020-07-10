@@ -50,7 +50,7 @@
         width: 70px;
     }
 
-    .content {
+    .content, .inline-content {
         text-align: center;
         padding: 35px 40px;
 
@@ -96,6 +96,10 @@
         .error {
             color: #bc1515
         }
+    }
+
+    .inline-content {
+        padding: 10px 40px 0px;
     }
 
     .login-page-button {
