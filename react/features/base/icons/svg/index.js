@@ -100,3 +100,5 @@ export { default as IconYahoo } from './yahoo.svg';
 export { default as IconWhatsapp } from './whatsapp.svg';
 export { default as IconUserCheck } from './user-check.svg';
 export { default as IconUserCancel } from './user-cancel.svg';
+export { default as IconReport } from './report.svg';
+export { default as IconChatBubble } from './chat-bubble.svg';

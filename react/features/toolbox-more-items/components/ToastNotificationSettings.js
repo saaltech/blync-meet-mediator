@@ -1,8 +1,14 @@
 // @flow
+import { Checkbox } from '@atlaskit/checkbox';
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { OptionsPanel, OptionItemCheck, OptionDivider, OptionTitle } from '../../base/options-panel';
+import {
+    OptionsPanel,
+    OptionItemCheck,
+    OptionDivider,
+    OptionTitle
+} from '../../base/options-panel';
 import { connect } from '../../base/redux';
 import AbstractToastNotificationSetting, {
     type Props,
@@ -81,6 +87,12 @@ class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, 
                         } } />
                 </div>
                 <OptionDivider />
+                <div style = {{ padding: '26px 0' }}>
+                    <Checkbox
+                        label = 'Remember these setting when I host meetings in future.'
+                        size = 'large' />
+                </div>
+
             </OptionsPanel>
         );
     }

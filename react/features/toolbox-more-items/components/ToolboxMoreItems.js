@@ -2,7 +2,14 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { OptionsPanel, OptionItemCheck, OptionDivider, OptionTitle } from '../../base/options-panel';
+import { IconSettings, IconReport, IconChatBubble } from '../../base/icons';
+import {
+    OptionsPanel,
+    OptionItemCheck,
+    OptionDivider,
+    OptionTitle,
+    OptionItem
+} from '../../base/options-panel';
 import { connect } from '../../base/redux';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
@@ -27,9 +34,7 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
 
         return (
             <OptionsPanel
-
-                // isOpen = { _overflowMenuVisible }
-                isOpen = { true }
+                isOpen = { _overflowMenuVisible }
                 onClose = { _onClosePanel }
                 title = 'Permissions'>
                 <div className = { 'toolbox-more-items ' }>
@@ -95,6 +100,27 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                                 this.props._showToastNotificationOptions();
                             } } />
                     </div>
+
+                    <OptionDivider />
+
+                    <div>
+                        <OptionItem
+                            icon = { IconSettings }
+                            label = 'Settings' />
+                    </div>
+
+                    <div>
+                        <OptionItem
+                            icon = { IconChatBubble }
+                            label = 'Feedback' />
+                    </div>
+
+                    <div>
+                        <OptionItem
+                            icon = { IconReport }
+                            label = 'Report' />
+                    </div>
+                    <OptionDivider />
                 </div>
             </OptionsPanel>
         );

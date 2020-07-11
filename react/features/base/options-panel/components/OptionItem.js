@@ -2,12 +2,12 @@
 
 import React, { Component } from 'react';
 
-import { Icon, IconMenu, IconCheck } from '../../icons';
+import { Icon } from '../../icons';
 
 
 type Props = {
     checked: boolean,
-    onCheck: Function,
+    onClick: Function,
     onOpenMenu: ?Function,
     label: string,
     icon: ?Object,
@@ -18,7 +18,7 @@ type Props = {
  * Implements the options items
  * @extends Component
  */
-class OptionItemCheck extends Component<Props> {
+class OptionItem extends Component<Props> {
 
     /**
      * Implements React's {@link Component#render()}.
@@ -27,7 +27,7 @@ class OptionItemCheck extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { checked, label, onCheck, onOpenMenu } = this.props;
+        const { checked, label, onClick, icon } = this.props;
 
         return (
             <label
@@ -35,27 +35,16 @@ class OptionItemCheck extends Component<Props> {
                 onClick = { e => {
                     e.stopPropagation();
                     e.preventDefault();
-                    onCheck();
+                    onClick();
                 } }>
                 <div className = 'option-item-check__label'>
                     <div className = 'option-item-check__mark'>
-                        {checked && <Icon src = { IconCheck } />}
+                        {icon && <Icon src = { icon } />}
                     </div>
                     {label}
                 </div>
-                {onOpenMenu && <button
-                    className = 'option-item-check__menu-btn'
-                    onClick = { e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onOpenMenu();
-                    } }
-                    type = 'button'>
-
-                    <Icon src = { IconMenu } />
-                </button>}
             </label>
         );
     }
 }
-export default OptionItemCheck;
+export default OptionItem;
