@@ -9,7 +9,7 @@ import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { Chat } from '../../../chat';
-import { Filmstrip } from '../../../filmstrip';
+import { Filmstrip, SpeakersList } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
@@ -176,6 +176,7 @@ class Conference extends AbstractConference<Props, *> {
      * @returns {ReactElement}
      */
     render() {
+        console.log(SpeakersList, 'SpeakersListSpeakersListSpeakersList');
         const {
             // XXX The character casing of the name filmStripOnly utilized by
             // interfaceConfig is obsolete but legacy support is required.
@@ -207,6 +208,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 <ToolboxMoreItems />
                 <ToastNotificationSettings />
+                <SpeakersList />
 
                 { this.renderNotificationsContainer() }
 

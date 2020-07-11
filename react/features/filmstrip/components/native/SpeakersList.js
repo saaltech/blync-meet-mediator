@@ -3,15 +3,12 @@
 import React, { Component } from 'react';
 import type { Dispatch } from 'redux';
 
-import { setShowSpeakersList } from '../..';
+import { setShowSpeakersList } from '../../';
 import { getConferenceName } from '../../../base/conference/functions';
-import { Icon, IconArrowDownSmall } from '../../../base/icons';
 import { getParticipantCount, getParticipants } from '../../../base/participants/functions';
 import { connect } from '../../../base/redux';
-import ConferenceTimer from '../../../conference/components/ConferenceTimer';
 import { isToolboxVisible } from '../../../toolbox';
-
-import ParticipantsStats from './ParticipantsStats';
+import ParticipantsStats from '../web/ParticipantsStats';
 
 /**
  * The type of the React {@code Component} props of {@link Subject}.
@@ -38,32 +35,17 @@ type Props = {
 
     _participants: Array<Object>,
 
-    _setShowSpeakersList: Function,
-
-    _showSpeakersList: boolean
+    _showSpeakersList: boolean,
+     _setShowSpeakersList: Function
 };
 
 /**
- * FilmstripHeader react component.
+ * SpeakersList react component.
  *
- * @class FilmstripHeader
+ * @class SpeakersList
  */
-class FilmstripHeader extends Component<Props> {
+class SpeakersList extends Component<Props> {
 
-    /**
-     * Render participants list.
-     *
-     * @inheritdoc
-     * @returns {ReactElement}
-     */
-    _renderParticipantsList() {
-
-        return (<div className = 'film-strip-header__participants'>
-            <div className = 'film-strip-header__participants-title'>Speaker</div>
-
-            <ParticipantsStats />
-        </div>);
-    }
 
     /**
      * Implements React's {@link Component#render()}.
@@ -72,34 +54,16 @@ class FilmstripHeader extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _subject, _visible, _show, _showSpeakersList } = this.props;
+        const { _show, _showSpeakersList } = this.props;
 
         if (!_show) {
             return null;
         }
 
         return (
-            <div className = { `film-strip-header ${_visible ? 'visible' : ''}` }>
-                <div className = 'film-strip-header__container'>
-                    <div className = 'film-strip-header__title'>
-                        <span className = 'film-strip-header__title-text'>{ _subject }</span>
-                        <ConferenceTimer />
-                    </div>
-                    <div className = 'film-strip-header__actions'>
-                        <div className = 'film-strip-header__online-users'>
-                            Online users ({this.props._participantCount})
-                        </div>
-
-                        <button
-                            className = 'film-strip-header__action-button'
-                            onClick = { () => this.props._setShowSpeakersList(!_showSpeakersList) }
-                            type = 'button'>
-                            <Icon
-                                size = { 16 }
-                                src = { IconArrowDownSmall } />
-                        </button>
-                    </div>
-                </div>
+            <div className = { `speakers-list speakers-list__participants ${_showSpeakersList ? 'speakers-list--visible' : ''}` }>
+                <div className = 'speakers-list__participants-title'>Speaker</div>
+                <ParticipantsStats />
             </div>
         );
     }
@@ -122,7 +86,6 @@ function _mapDispatchToProps(dispatch: Dispatch<any>) {
     };
 }
 
-
 /**
  * Maps (parts of) the Redux state to the associated
  * {@code Subject}'s props.
@@ -139,8 +102,7 @@ function _mapStateToProps(state) {
     const { showSpeakersList } = state['features/filmstrip'];
 
     return {
-        // _show: participantCount > 1,
-        _show: true,
+        _show: participantCount > 1,
         _subject: getConferenceName(state),
         _participantCount: participantCount,
         _visible: isToolboxVisible(state) && participantCount > 1,
@@ -149,4 +111,4 @@ function _mapStateToProps(state) {
     };
 }
 
-export default connect(_mapStateToProps, _mapDispatchToProps)(FilmstripHeader);
+export default connect(_mapStateToProps, _mapDispatchToProps)(SpeakersList);

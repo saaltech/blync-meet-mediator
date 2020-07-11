@@ -3,7 +3,8 @@
 import {
     SET_FILMSTRIP_ENABLED,
     SET_FILMSTRIP_HOVERED,
-    SET_FILMSTRIP_VISIBLE
+    SET_FILMSTRIP_VISIBLE,
+    SET_SHOW_SPEAKERS_LIST
 } from './actionTypes';
 
 /**
@@ -50,6 +51,23 @@ export function setFilmstripHovered(hovered: boolean) {
 export function setFilmstripVisible(visible: boolean) {
     return {
         type: SET_FILMSTRIP_VISIBLE,
+        visible
+    };
+}
+
+
+/**
+ * Sets whether the filmstrip is visible.
+ *
+ * @param {boolean} visible - Whether the filmstrip is visible.
+ * @returns {{
+    *     type: SET_SHOW_SPEAKERS_LIST,
+    *     visible: boolean
+    * }}
+    */
+export function setShowSpeakersList(visible: boolean) {
+    return {
+        type: SET_SHOW_SPEAKERS_LIST,
         visible
     };
 }
