@@ -12,4 +12,5 @@ config.conferenceManager =
 config.conferenceEP = "/auth/api/v1/conferences"
 config.unauthConferenceEP = "/unauth/api/v1/conferences"
 config.verifySecretEP = "/unauth/api/v1/conferences/validatesecret"
+config.meetingStatusEP = "/unauth/api/v1/conferences/status"
 config.jidEP = "/auth/api/v1/jid"

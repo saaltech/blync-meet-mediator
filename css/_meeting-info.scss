@@ -2,6 +2,10 @@
     color: #393939;
     padding: 20px 40px;
 
+    .mandatory span {
+        color: #FF0000;
+    }
+
     .meeting-title {
         font-size: 35px;
         padding: 20px 0 5px;

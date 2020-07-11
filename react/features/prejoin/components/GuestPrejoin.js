@@ -4,10 +4,11 @@ import React from 'react';
 
 import { translate } from '../../base/i18n';
 
-import MeetingInfo from './MeetingInfo'; 
+import MeetingInfo from './MeetingInfo';
 import useRequest from '../../hooks/use-request';
 import { LoginComponent, Profile } from '../../app-auth';
 import { InputField } from '../../base/premeeting';
+import { getDisplayName, updateSettings } from '../../base/settings';
 import { connect } from '../../base/redux';
 import { setPrejoinPageErrorMessageKey } from '../';
 import {
@@ -31,222 +32,276 @@ import JoinMeetingForm from './JoinMeetingForm';
 import { setFatalError } from '../../overlay';
 
 function GuestPrejoin(props) {
-  const [meetingId, setMeetingId] = useState(props.meetingId);
-  const [meetingName, setMeetingName] = useState('');
-  const [meetingPassword, setMeetingPassword] = useState('');
-  const [meetingFrom, setMeetingFrom] = useState(null);
-  const [meetingTo, setMeetingTo] = useState(null);
-  const [hostId, setHostId] = useState('');
-  const [hideLogin, setHideLogin] = useState(true)
-  const { joinConference, _isUserSignedOut = true } = props;
-  const [isMeetingHost, setIsMeetingHost] = useState(false)
-  const [shareable, setShareable] = useState(false);
-  const [continueAsGuest, setContinueAsGuest] = useState(false);
-  const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
-  const [showPasswordError, setShowPasswordError] = useState('')
+    const [meetingId, setMeetingId] = useState(props.meetingId);
+    useEffect(() => {
+        // Fetch the meeting details using the id in the address bar
+        setTimeout(async () => {
+            if (_isUserSignedOut)
+                await unauthGetConference()
+            else
+                await getConference()
+        }, 3000)
+    }, [meetingId]);
 
-  const [guestName, setGuestName] = useState('')
-  const [guestEmail, setGuestEmail] = useState('')
+    const [meetingName, setMeetingName] = useState('');
+    const [meetingPassword, setMeetingPassword] = useState('');
+    const [meetingFrom, setMeetingFrom] = useState(null);
+    const [meetingTo, setMeetingTo] = useState(null);
+    const { joinConference, _isUserSignedOut = true } = props;
+    const [isMeetingHost, setIsMeetingHost] = useState(false)
+    const [continueAsGuest, setContinueAsGuest] = useState(false);
+    const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
+    const [showPasswordError, setShowPasswordError] = useState('')
 
-  useEffect(() => {
-    // Fetch the meeting details using the id in the address bar
-    setTimeout(async () => { 
-        if(_isUserSignedOut)
-            await unauthGetConference()
-        else
-            await getConference()
-    }, 3000)
-  }, [meetingId]);
+    const [guestName, setGuestName] = useState('')
+    useEffect(() => {
+        continueAsGuest && guestName.trim() !== "" &&
+            props.updateSettings({
+                displayName: guestName
+            })
+    }, [guestName])
 
-  const [ unauthGetConference, fetchUnauthErrors ] = useRequest({
-    url: config.conferenceManager + config.unauthConferenceEP + '/'+ meetingId,
-    method: 'get',
-    onSuccess: (data) => updateConferenceState(data)
-  });
+    const [guestEmail, setGuestEmail] = useState('')
+    useEffect(() => {
+        continueAsGuest && guestEmail.trim() !== "" &&
+            props.updateSettings({
+                email: guestEmail
+            })
+    }, [guestEmail])
 
-  const [ getConference, fetchErrors ] = useRequest({
-    url: config.conferenceManager + config.conferenceEP + '/'+ meetingId,
-    method: 'get',
-    onSuccess: (data) => updateConferenceState(data)
-  });
 
-  const formVerifySecretBody = () => {
+    const [unauthGetConference, fetchUnauthErrors] = useRequest({
+        url: config.conferenceManager + config.unauthConferenceEP + '/' + meetingId,
+        method: 'get',
+        onSuccess: (data) => updateConferenceState(data)
+    });
+
+    const [getConference, fetchErrors] = useRequest({
+        url: config.conferenceManager + config.conferenceEP + '/' + meetingId,
+        method: 'get',
+        onSuccess: (data) => updateConferenceState(data)
+    });
+
+    const formVerifySecretBody = () => {
         return {
-        conferenceId: meetingId,
-        conferenceSecret: meetingPassword
+            conferenceId: meetingId,
+            conferenceSecret: meetingPassword
         }
     }
 
-  const [ verifySecret, verifySecretErrors ] = useRequest({
-    url: config.conferenceManager + config.verifySecretEP,
-    method: 'post',
-    body: formVerifySecretBody,
-    onSuccess: (data) => updateConferenceState(data)
-  });
+    const handleVerifySecret = (data) => {
+        if (data.status === "SUCCESS") {
+            window.sessionStorage.setItem('roomPassword', meetingPassword);
+            checkMeetingStatus();
+        }
+        else {
+            setShowPasswordError("Incorrect room password")
+        }
+    }
 
-  
+    const [verifySecret, verifySecretErrors] = useRequest({
+        url: config.conferenceManager + config.verifySecretEP,
+        method: 'post',
+        body: formVerifySecretBody,
+        onSuccess: (data) => handleVerifySecret(data)
+    });
 
-  const updateConferenceState = (data) => {
+
+    const [meetingStarted, setMeetingStarted] = useState(null)
+
+    const [meetingStatusCheck, meetingStatusErrors] = useRequest({
+        url: config.conferenceManager + config.meetingStatusEP + "/" + meetingId,
+        method: 'get',
+        onSuccess: (data) => {}
+    });
+
+
+    const updateConferenceState = (data) => {
         setMeetingId(data.conferenceId);
         setMeetingName(data.conferenceName);
         setMeetingFrom(data.scheduledFrom)
         setMeetingTo(data.scheduledTo)
 
-        //TODO: uncomment this below after completing the not host flow
+        //TODO: uncomment the seection below after completing the non-host flow
         setIsMeetingHost(/*data.isHost ||*/ false)
-  }
-  
-  const setMeetNowAndUpdatePage = (value) => {
-    setMeetNow(value)
-    isMeetNow(value)
-  }
+    }
 
-  const goToHome = () => {
-    window.location.href = window.location.origin
-  }
+    const setMeetNowAndUpdatePage = (value) => {
+        setMeetNow(value)
+        isMeetNow(value)
+    }
 
-  const addTokenToURL = async () => {
-      await getConference()
-      window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
-  }
+    const goToHome = () => {
+        window.location.href = window.location.origin
+    }
 
-  const handleJoinNow = async () => {
+    const addTokenToURL = async () => {
+        await getConference()
+        window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
+    }
+
+    const checkMeetingStatus = async () => {
+        setMeetingStarted(false);
+        const decideToJoin = (response, intervalTimer) => {
+            if (response && response.status === "STARTED") {
+                intervalTimer && clearInterval(intervalTimer);
+                setMeetingStarted(true)
+                _joinConference()
+            }
+        }
+
+        decideToJoin(await meetingStatusCheck())
+
+        let intervalTimer = setInterval(async () => {
+            decideToJoin(await meetingStatusCheck(), intervalTimer)
+        }, 5000)
+    }
+
+    const handleJoinNow = async () => {
 
         //Verify conference secret(when join form is displayed)
-        if(showJoinMeetingForm || 
+        if (showJoinMeetingForm ||
             (!_isUserSignedOut && !isMeetingHost) ||
             continueAsGuest) {
-                let response = await verifySecret(true)
-                if(response.status === "SUCCESS") {
-                    window.sessionStorage.setItem('roomPassword', meetingPassword);
-                    _joinConference();
-                }
-                else {
-                    setShowPasswordError("Incorrect room password")
-                }
-
+            await verifySecret(true)
             return;
         }
 
-        if(isMeetingHost) {
+        if (isMeetingHost) {
             _joinConference();
         }
         else {
             setShowJoinMeetingForm(true)
         }
 
-  }
+    }
 
-  const _joinConference = () => {
-    APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
-    joinConference();
-  }
+    const _joinConference = () => {
+        APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+        joinConference();
+    }
 
-  return (
-      <div className={`hostPrejoin`}>
-        {/* onClick={() => setHideLogin(false)} */}
-        {
-            !_isUserSignedOut ?
-            <>
-                <div className="profileSection">
-                    <Profile />
-                </div>
-            </>
-            :
-            <>
-                {
-                    !continueAsGuest &&
-                    <div className="login-message">
-                        <span>Please</span>
-                        <span className="sign-in-link"> sign in </span> 
-                        <span>if you are the host.</span>
-                    </div>
-                }
-            </>
-        }
-            
-        <MeetingInfo 
-            shareable={false}
-            isPureJoinFlow={{
-                isMeetingHost
-            }}
-            meetingId={{
-                meetingId
-            }}
-            meetingName={{
-                meetingName, setMeetingName
-            }}
-            meetingPassword={{
-                meetingPassword, setMeetingPassword
-            }}
-            meetingFrom={{
-                meetingFrom, setMeetingFrom
-            }}
-            meetingTo={{
-                meetingTo, setMeetingTo
-            }}
-        />
+    const joinNowDisabled = continueAsGuest && guestName.trim() === ""
 
+    return (
+        <div className={`hostPrejoin`}>
+            {/* onClick={() => setHideLogin(false)} */}
+            {
+                !_isUserSignedOut ?
+                    <>
+                        <div className="profileSection">
+                            <Profile />
+                        </div>
+                    </>
+                    :
+                    <>
+                        {
+                            !continueAsGuest &&
+                            <div className="login-message">
+                                <span>Please</span>
+                                <span className="sign-in-link"> sign in </span>
+                                <span>if you are the host.</span>
+                            </div>
+                        }
+                    </>
+            }
 
-        {
-            (_isUserSignedOut && !continueAsGuest) &&  
-            <>
-                <LoginComponent 
-                    closeAction={() => {
-                        //Reload the page with JWT token
-                        addTokenToURL()
-                    }}
-                />
-
-                <div className="no-account">
-                    <div>Don't have an account?</div>
-                    <div onClick={() => setContinueAsGuest(true)}> Continue as a Guest </div>
-                </div>
-            </>
-        }
-        
-        {
-            showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
-            continueAsGuest &&
-            <JoinMeetingForm 
-                isUserSignedOut = {_isUserSignedOut}
-                meetingId = {meetingId}
+            <MeetingInfo
+                shareable={false}
+                isPureJoinFlow={{
+                    isMeetingHost
+                }}
+                meetingId={{
+                    meetingId
+                }}
+                meetingName={{
+                    meetingName, setMeetingName
+                }}
                 meetingPassword={{
                     meetingPassword, setMeetingPassword
                 }}
-                guestName={{
-                    guestName, setGuestName
+                meetingFrom={{
+                    meetingFrom, setMeetingFrom
                 }}
-                guestEmail={{
-                    guestEmail, setGuestEmail
+                meetingTo={{
+                    meetingTo, setMeetingTo
                 }}
-                passwordError={showPasswordError}
             />
 
-        }
+            {
+                meetingStarted !== null && meetingStarted == false ?
+                <div className="waiting-display">
+                    <h2>Please wait for the host to join the meeting...</h2>
+                    <img src={"images/loading.png"} />
+                </div>
+                :
+                <>
+                    {
+                        (_isUserSignedOut && !continueAsGuest) &&
+                        <>
+                            <LoginComponent
+                                closeAction={() => {
+                                    //Reload the page with JWT token
+                                    addTokenToURL()
+                                }}
+                            />
 
-        {
-            (!_isUserSignedOut || continueAsGuest) &&
-            <div className="prejoin-page-button next" 
-                onClick={async () => handleJoinNow()}>
-                Join Now
-            </div>
-        }
+                            <div className="no-account">
+                                <div>Don't have an account?</div>
+                                <div onClick={() => setContinueAsGuest(true)}> Continue as a Guest </div>
+                            </div>
+                        </>
+                    }
+
+                    {
+                        showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
+                        continueAsGuest &&
+                        <JoinMeetingForm
+                            isUserSignedOut={_isUserSignedOut}
+                            meetingId={meetingId}
+                            meetingPassword={{
+                                meetingPassword, setMeetingPassword
+                            }}
+                            guestName={{
+                                guestName, setGuestName
+                            }}
+                            guestEmail={{
+                                guestEmail, setGuestEmail
+                            }}
+                            passwordError={showPasswordError}
+                        />
+
+                    }
+
+                    {
+                        (!_isUserSignedOut || continueAsGuest) &&
+                        <div
+                            className={`prejoin-page-button next 
+                            ${joinNowDisabled ? 'disabled' : ''} `}
+                            onClick={async () => !joinNowDisabled && handleJoinNow()}>
+                            Join Now
+                        </div>
+                    }
+                </>
+            }
             
+
         </div>
-  );
+    );
 };
 
 function mapStateToProps(state): Object {
     return {
         //meetingDetails: APP.store.getState()['features/app-auth'].meetingDetails,
-        _isUserSignedOut : state['features/app-auth'].isUserSignedOut,
-        _user : state['features/app-auth'].user
+        _isUserSignedOut: state['features/app-auth'].isUserSignedOut,
+        _user: state['features/app-auth'].user,
+        _displayName: getDisplayName(state)
     };
 }
 
 const mapDispatchToProps = {
-    joinConference: joinConferenceAction
+    joinConference: joinConferenceAction,
+    updateSettings
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate(GuestPrejoin));

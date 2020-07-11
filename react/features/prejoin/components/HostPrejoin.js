@@ -106,9 +106,9 @@ function HostPrejoin(props) {
   }
 
   const saveConferenceAction = async () => {
-      //TODO: 
+      //
       /*
-        - Check whether to update the conference or save new conference, and call the API
+        - Save/Update new conference (call the API)
         - Store this info in redux ['features/app-auth'].meetingDetails
         - call the prejoin page. if meetNow
       */

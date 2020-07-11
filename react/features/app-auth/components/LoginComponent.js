@@ -48,7 +48,7 @@ function LoginComponent(props) {
       event.preventDefault();
       // TODO: uncomment this once the api is ready
       await doRequest(false);
-      // TODO: this is not once the above is implemented
+      // TODO: this is not require once the above is implemented
       onSuccess(null)
   };
 
@@ -70,7 +70,11 @@ function LoginComponent(props) {
                 "group": "a123-123-456-789",
                 "key": "vikram@saal.ai"
             },
-            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJtZWV0aW5nLm5zcXVhcmV6LmNvbSIsImlzcyI6Im1lZXRpbmduc3F1YXJleiIsImlhdCI6MTU5NDE4ODgwNywiZXhwIjoxNjI1OTA2NjA2LCJzY29wZSI6Im9wZW5pZCIsImF1ZCI6InNtZWV0aW5nIiwicm9vbSI6IioiLCJyb2xlIjoibWFuYWdlciIsImNvbnRleHQiOnsidXNlciI6eyJuYW1lIjoiTmVlaGFsIFNoYWlraCIsImVtYWlsIjoibmVlaGFsQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.o88nFjeph2DcZkIOSUxvegoFQftoFlyOOH6bQyB4c7M"
+            // meeting.nsquarez.com
+            "meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJtZWV0aW5nLm5zcXVhcmV6LmNvbSIsImlzcyI6Im1lZXRpbmduc3F1YXJleiIsImlhdCI6MTU5NDE4ODgwNywiZXhwIjoxNjI1OTA2NjA2LCJzY29wZSI6Im9wZW5pZCIsImF1ZCI6InNtZWV0aW5nIiwicm9vbSI6IioiLCJyb2xlIjoibWFuYWdlciIsImNvbnRleHQiOnsidXNlciI6eyJuYW1lIjoiTmVlaGFsIFNoYWlraCIsImVtYWlsIjoibmVlaGFsQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.o88nFjeph2DcZkIOSUxvegoFQftoFlyOOH6bQyB4c7M",
+            
+            // dev-blync.saal.ai
+            //"meeting_access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJtNVhlWnZQYzBMcDY5WHM5Yl83MmciLCJzdWIiOiJkZXYtYmx5bmMuc2FhbC5haSIsImlzcyI6ImRldi1ibHluYy1tZWV0aW5nIiwiaWF0IjoxNTk0MTg4ODA3LCJleHAiOjE2MjU3NDM0NTgsInNjb3BlIjoib3BlbmlkIiwiYXVkIjoic21lZXRpbmciLCJyb29tIjoiKiIsInJvbGUiOiJtYW5hZ2VyIiwiY29udGV4dCI6eyJ1c2VyIjp7Im5hbWUiOiJWaWtyYW0gUG9kdXZhbCIsImVtYWlsIjoidmlrcmFtQHNhYWwuYWkiLCJhdmF0YXIiOiJodHRwczovZ3JhdmF0YXIuY29tL2F2YXRhci9hYmMxMjMiLCJnZW5kZXIiOiJNYWxlIiwibW9iaWxlIjoiMDU0NzkzNTA5OCIsImlkIjoiNWYwMzQyYTA0YjQ3NzY0NTZhNDNiNzI3In0sImdyb3VwIjoiYTEyMy0xMjMtNDU2LTc4OSJ9fQ.Gi7a8X6aWIfxGy2opHTSamWCo9-XZaFe_r9sp4pAW9I"
         }
 
         APP.store.dispatch(resolveAppLogin(data))
