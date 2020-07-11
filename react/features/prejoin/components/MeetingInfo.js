@@ -93,9 +93,7 @@ function MeetingInfo(props) {
         {
           shareable && 
           <>
-            <br />
-            <hr />
-            <br />
+            <div className="divider"></div>
             <ShareMeeting meetingUrl={meetingUrl}/>
           </>
         }

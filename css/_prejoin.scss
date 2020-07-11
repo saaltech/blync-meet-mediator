@@ -32,7 +32,8 @@
     background-color: white;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
     text-align: center;
     color: #393939;
 
@@ -87,11 +88,11 @@
     .jitsi-icon {
 
         &.backArrow {
-            left: 15px;
             top: 10px;
             display: block;
             box-sizing: border-box;
-            position: absolute;
+            position: fixed;
+            right: 305px;
 
             svg {
                 height: 28px;
@@ -120,6 +121,31 @@
             margin-top: 50px;
         }
     }
+    
+}
+
+.shareMeeting {
+
+    .label {
+        font-size: 20px;
+        padding: 0 0 15px;
+    }
+
+    .share-meeting-details {
+        padding: 20px 0px;
+
+        .label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .modalities {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    
     
 }
 
