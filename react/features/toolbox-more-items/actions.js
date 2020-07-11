@@ -1,7 +1,8 @@
 // @flow
 import {
     TOAST_NOTIFICATION_ENABLED,
-    SHOW_TOAST_NOTIFICATION_OPTIONS
+    SHOW_TOAST_NOTIFICATION_OPTIONS,
+    UPDATE_TOAST_NOTIFICATION_OPTIONS
 } from './actionTypes';
 
 declare var interfaceConfig: Object;
@@ -37,5 +38,22 @@ export function showToastNotificationOptions(visible: boolean) {
     return {
         type: SHOW_TOAST_NOTIFICATION_OPTIONS,
         toastNotificationVisible: visible
+    };
+}
+
+
+/**
+ * Signals a request to update toast notifications options .
+ *
+ * @param {Object} options -
+ * @returns {{
+    *     type: SET_FULL_SCREEN,
+    *     fullScreen: boolean
+    * }}
+    */
+export function updateToastNotificationOptions(options: Object) {
+    return {
+        type: UPDATE_TOAST_NOTIFICATION_OPTIONS,
+        options
     };
 }

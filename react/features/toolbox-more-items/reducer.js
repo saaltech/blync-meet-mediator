@@ -4,7 +4,8 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     TOAST_NOTIFICATION_ENABLED,
-    SHOW_TOAST_NOTIFICATION_OPTIONS
+    SHOW_TOAST_NOTIFICATION_OPTIONS,
+    UPDATE_TOAST_NOTIFICATION_OPTIONS
 } from './actionTypes';
 
 declare var interfaceConfig: Object;
@@ -26,7 +27,13 @@ declare var interfaceConfig: Object;
 function _getInitialState() {
     return {
         notificationVisible: true,
-        toastNotificationVisible: false
+        toastNotificationVisible: false,
+        toastNotificationSettings: {
+            showRaisedHand: true,
+            showJoinedMeeting: true,
+            showLeftMeeting: true,
+            showChat: true
+        }
     };
 }
 
@@ -44,6 +51,15 @@ ReducerRegistry.register(
             return {
                 ...state,
                 toastNotificationVisible: action.toastNotificationVisible
+            };
+
+        case UPDATE_TOAST_NOTIFICATION_OPTIONS:
+            return {
+                ...state,
+                toastNotificationSettings: {
+                    ...state.toastNotificationSettings,
+                    ...action.options
+                }
             };
         }
 

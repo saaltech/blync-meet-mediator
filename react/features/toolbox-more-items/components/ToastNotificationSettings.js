@@ -22,7 +22,11 @@ class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, 
      * @returns {ReactElement}
      */
     render() {
-        const { _toastNotificationVisible, _hideToastNotificationOptions } = this.props;
+        const {
+            _toastNotificationVisible,
+            _hideToastNotificationOptions,
+            _toastNotificationSettings,
+            _updateToastNotificationOptions } = this.props;
 
         return (
             <OptionsPanel
@@ -35,26 +39,46 @@ class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, 
                 </OptionTitle>
                 <div>
                     <OptionItemCheck
-                        checked = { true }
-                        label = 'Raise Hand' />
+                        checked = { _toastNotificationSettings.showRaisedHand }
+                        label = 'Raise Hand'
+                        onCheck = { () => {
+                            _updateToastNotificationOptions({
+                                showRaisedHand: !_toastNotificationSettings.showRaisedHand
+                            });
+                        } } />
                 </div>
                 <OptionDivider />
                 <div>
                     <OptionItemCheck
-                        checked = { true }
-                        label = 'Join Meeting' />
+                        checked = { _toastNotificationSettings.showJoinedMeeting }
+                        label = 'Join Meeting'
+                        onCheck = { () => {
+                            _updateToastNotificationOptions({
+                                showJoinedMeeting: !_toastNotificationSettings.showJoinedMeeting
+                            });
+                        } } />
                 </div>
                 <OptionDivider />
                 <div>
                     <OptionItemCheck
-                        checked = { true }
-                        label = 'Left Meeting' />
+                        checked = { _toastNotificationSettings.showLeftMeeting }
+                        label = 'Left Meeting'
+                        onCheck = { () => {
+                            _updateToastNotificationOptions({
+                                showLeftMeeting: !_toastNotificationSettings.showLeftMeeting
+                            });
+                        } } />
                 </div>
                 <OptionDivider />
                 <div>
                     <OptionItemCheck
-                        checked = { true }
-                        label = 'Chat' />
+                        checked = { _toastNotificationSettings.showChat }
+                        label = 'Chat'
+                        onCheck = { () => {
+                            _updateToastNotificationOptions({
+                                showChat: !_toastNotificationSettings.showChat
+                            });
+                        } } />
                 </div>
                 <OptionDivider />
             </OptionsPanel>

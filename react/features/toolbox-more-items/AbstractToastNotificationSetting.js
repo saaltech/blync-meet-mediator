@@ -3,10 +3,8 @@
 import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
-import { setOverflowMenuVisible } from '../toolbox';
-
 import {
-    enableNotification,
+    updateToastNotificationOptions,
     showToastNotificationOptions
 } from './actions';
 
@@ -14,11 +12,6 @@ import {
  * The type of the React {@code Component} props of {@code AbstractToastNotificationSetting}.
  */
 export type Props = {
-
-    /**
-     * True if the chat window should be rendered.
-     */
-    _overflowMenuVisible: boolean,
 
     _toastNotificationVisible: boolean,
 
@@ -32,17 +25,9 @@ export type Props = {
      */
     t: Function,
 
-    _onClosePanel: Function,
-
-    _hideNotification: Function,
-
-    _showNotification: Function,
-
-    _notificationVisible: boolean,
-
-    _showToastNotificationOptions: Function,
-
     _hideToastNotificationOptions: Function,
+    _updateToastNotificationOptions: Function,
+    _toastNotificationSettings: Object,
 };
 
 /**
@@ -62,37 +47,9 @@ export default class AbstractToastNotificationSetting<P: Props, S> extends Compo
  */
 export function _mapDispatchToProps(dispatch: Dispatch<any>) {
     return {
-        /**
-         * Toggles notifications.
-         *
-         * @returns {Function}
-         */
-        _onClosePanel() {
-            dispatch(setOverflowMenuVisible(false));
+        _updateToastNotificationOptions(options: Object) {
+            dispatch(updateToastNotificationOptions(options));
         },
-
-        /**
-         * Closes notifications.
-         *
-         * @returns {Function}
-         */
-        _hideNotification() {
-            dispatch(enableNotification(false));
-        },
-
-        /**
-         * Closes notifications.
-         *
-         * @returns {Function}
-         */
-        _showNotification() {
-            dispatch(enableNotification(true));
-        },
-
-        _showToastNotificationOptions() {
-            dispatch(showToastNotificationOptions(true));
-        },
-
         _hideToastNotificationOptions() {
             dispatch(showToastNotificationOptions(false));
         }
@@ -112,14 +69,11 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { notificationVisible, toastNotificationVisible } = state['features/toolbox-more'];
-
-    const { overflowMenuVisible } = state['features/toolbox'];
+    const { toastNotificationVisible, toastNotificationSettings } = state['features/toolbox-more'];
 
 
     return {
-        _overflowMenuVisible: overflowMenuVisible,
-        _notificationVisible: notificationVisible,
+        _toastNotificationSettings: toastNotificationSettings,
         _toastNotificationVisible: toastNotificationVisible
     };
 }
