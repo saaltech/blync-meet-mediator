@@ -70,16 +70,18 @@ class CopyMeetingUrl extends Component<Props, State> {
      *
      * @returns {void}
      */
-    _copyUrl() {
+    async _copyUrl() {
         const textarea = this.textarea.current;
 
         try {
             textarea.select();
-            document.execCommand('copy');
+            //document.execCommand('copy');
+            await navigator.clipboard.writeText(textarea.value)
             textarea.blur();
             this._showLinkCopied();
             window.setTimeout(this._hideLinkCopied, COPY_TIMEOUT);
         } catch (err) {
+            console.log(err)
             logger.error('error when copying the meeting url');
         }
     }

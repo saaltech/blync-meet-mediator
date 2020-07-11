@@ -26,7 +26,6 @@ import {
     setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
 } from '../actions';
 
-
 import { useState } from 'react';
 
 function HostPrejoin(props) {
@@ -35,7 +34,7 @@ function HostPrejoin(props) {
   const [meetingName, setMeetingName] = useState(props.meetingDetails.meetingName);
   const [isPrivate, setIsPrivate] = useState(false);
   const [meetingPassword, setMeetingPassword] = useState('');
-  const [meetingFrom, setMeetingFrom] = useState(null);
+  const [meetingFrom, setMeetingFrom] = useState('');
   const [meetingTo, setMeetingTo] = useState(null);
   const { isMeetNow } = props;
   const [shareable, setShareable] = useState(false);
@@ -113,6 +112,10 @@ function HostPrejoin(props) {
         - call the prejoin page. if meetNow
       */
 
+     if(scheduleDisabled) {
+         return
+     }
+
       // Store just the meetingId and meetNow flag in redux. (Until backend is integrated store full object)
       if(meetNow) {
         setMeetingFrom('')
@@ -162,6 +165,8 @@ function HostPrejoin(props) {
         props.showTrackPreviews(false)
       }
   }
+
+  const scheduleDisabled = !meetNow && !meetingFrom
 
   return (
       <div className={`hostPrejoin`}>
@@ -226,7 +231,12 @@ function HostPrejoin(props) {
 
             {
                 !shareable &&
-                <div className="prejoin-page-button next" onClick={saveConferenceAction}>Next</div>
+                <div 
+                    className={`prejoin-page-button next 
+                        ${scheduleDisabled ? 'disabled': ''}`} 
+                    onClick={saveConferenceAction}>
+                    Next
+                </div>
             }
             {
                 shareable && meetNow &&

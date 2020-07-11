@@ -2,6 +2,23 @@
     color: #393939;
     padding: 20px 40px;
 
+    .picker-field {
+        text-align: center;
+        width: 265px;
+        border-radius: 20px;
+        height: 35px;
+        border-color: #70707057;
+        border-width: 1px;
+    }
+
+    .date-time-popper {
+        left: -30px !important;
+
+        .react-datepicker__time-list {
+            flex-direction: column !important;
+        }
+    }
+
     .mandatory span {
         color: #FF0000;
     }

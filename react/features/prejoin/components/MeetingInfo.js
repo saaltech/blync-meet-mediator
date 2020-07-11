@@ -5,6 +5,7 @@ import { translate } from '../../base/i18n';
 import { useState } from 'react';
 import { InputField } from '../../base/premeeting';
 import ShareMeeting from './ShareMeeting';
+import DatePicker from "react-datepicker";
 
 function MeetingInfo(props) {
   const meetNow = props.meetNow;
@@ -27,7 +28,33 @@ function MeetingInfo(props) {
         <div className="meeting-id">{meetingId}</div>
         {
             !meetNow && !isPureJoinFlow &&
-            <div className="you-are-host">Date time field here</div>
+            <div className="you-are-host">
+              <div 
+                className = 'form-label mandatory'
+                style={{
+                  textAlign: 'left',
+                  marginBottom: '10px'
+                }}
+                >
+              {'Date / Time '} 
+                {
+                  !shareable && 
+                    <span>*</span>
+                }
+              </div>
+              <DatePicker
+                  className="picker-field"
+                  popperClassName={"date-time-popper"}
+                  placeholderText="Select start date/time"
+                  disabled={shareable}
+                  minDate={new Date()}
+                  selected={meetingFrom && new Date(meetingFrom)}
+                  onChange={(value) => setMeetingFrom(value.getTime())}
+                  showTimeSelect={true}
+                  timeFormat="HH:mm"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+              />
+            </div>
         }
         {
             (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost)) &&
