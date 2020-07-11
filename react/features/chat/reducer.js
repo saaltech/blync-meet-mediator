@@ -10,7 +10,8 @@ import {
     SET_PRIVATE_MESSAGE_RECIPIENT,
     TOGGLE_CHAT,
     MARK_AS_READ,
-    MARK_PUBLIC_AS_READ
+    MARK_PUBLIC_AS_READ,
+    HIDE_CHAT
 } from './actionTypes';
 import { CHAT_VIEW_MODAL_ID } from './constants';
 
@@ -122,7 +123,14 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
 
     case TOGGLE_CHAT:
         return updateChatState(state);
+
+    case HIDE_CHAT:
+        return {
+            ...state,
+            isOpen: false
+        };
     }
+
 
     return state;
 });

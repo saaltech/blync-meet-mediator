@@ -104,8 +104,6 @@ class SpeakersList extends Component<Props> {
 
         const { _showSpeakersList } = this.props;
 
-        console.log(_showSpeakersList, '_showSpeakersList_showSpeakersList');
-
         if (!_showSpeakersList) {
             return null;
         }

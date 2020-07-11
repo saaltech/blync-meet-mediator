@@ -32,7 +32,7 @@ import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
-import { ChatCounter, toggleChat } from '../../../chat';
+import { ChatCounter, toggleChat, hideChat } from '../../../chat';
 import { E2EEButton } from '../../../e2ee';
 import { SharedDocumentButton } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
@@ -413,6 +413,7 @@ class Toolbox extends Component<Props, State> {
      */
     _doToggleChat() {
         this.props.dispatch(toggleChat());
+        this.props.dispatch(setOverflowMenuVisible(false));
     }
 
     /**
@@ -555,6 +556,8 @@ class Toolbox extends Component<Props, State> {
      */
     _onSetOverflowVisible(visible) {
         this.props.dispatch(setOverflowMenuVisible(visible));
+
+        this.props.dispatch(hideChat());
     }
 
     _onShortcutToggleChat: () => void;
@@ -754,7 +757,7 @@ class Toolbox extends Component<Props, State> {
             {
                 enable: !this.props._chatOpen
             }));
-
+        this.props.dispatch(setOverflowMenuVisible(false));
         this._doToggleChat();
     }
 
