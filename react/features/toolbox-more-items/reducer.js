@@ -3,7 +3,8 @@
 import { ReducerRegistry } from '../base/redux';
 
 import {
-    TOAST_NOTIFICATION_ENABLED
+    TOAST_NOTIFICATION_ENABLED,
+    SHOW_TOAST_NOTIFICATION_OPTIONS
 } from './actionTypes';
 
 declare var interfaceConfig: Object;
@@ -24,7 +25,8 @@ declare var interfaceConfig: Object;
  */
 function _getInitialState() {
     return {
-        notificationVisiable: true
+        notificationVisible: true,
+        toastNotificationVisible: false
     };
 }
 
@@ -35,9 +37,16 @@ ReducerRegistry.register(
         case TOAST_NOTIFICATION_ENABLED:
             return {
                 ...state,
-                notificationVisiable: action.notificationVisiable
+                notificationVisible: action.notificationVisible
+            };
+
+        case SHOW_TOAST_NOTIFICATION_OPTIONS:
+            return {
+                ...state,
+                toastNotificationVisible: action.toastNotificationVisible
             };
         }
+
 
         return state;
     });

@@ -97,14 +97,14 @@ export function _mapStateToProps(state: Object) {
     } = state['features/chat'];
 
     const {
-        notificationVisiable
+        notificationVisible
     } = state['features/toolbox-more'];
 
     const _localParticipant = getLocalParticipant(state);
 
 
     return {
-        _isOpen: notificationVisiable,
+        _isOpen: notificationVisible,
         _messages: messages,
         _localParticipant
     };

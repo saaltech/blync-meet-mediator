@@ -11,7 +11,7 @@ import {
 } from './actions';
 
 /**
- * The type of the React {@code Component} props of {@code AbstractToolboxMoreItems}.
+ * The type of the React {@code Component} props of {@code AbstractToastNotificationSetting}.
  */
 export type Props = {
 
@@ -19,6 +19,8 @@ export type Props = {
      * True if the chat window should be rendered.
      */
     _overflowMenuVisible: boolean,
+
+    _toastNotificationVisible: boolean,
 
     /**
      * The Redux dispatch function.
@@ -46,7 +48,7 @@ export type Props = {
 /**
  * Implements an abstract chat panel.
  */
-export default class AbstractToolboxMoreItems<P: Props, S> extends Component<P, S> {}
+export default class AbstractToastNotificationSetting<P: Props, S> extends Component<P, S> {}
 
 /**
  * Maps redux actions to the props of the component.
@@ -89,12 +91,10 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
 
         _showToastNotificationOptions() {
             dispatch(showToastNotificationOptions(true));
-            dispatch(setOverflowMenuVisible(false));
         },
 
         _hideToastNotificationOptions() {
             dispatch(showToastNotificationOptions(false));
-            dispatch(setOverflowMenuVisible(true));
         }
     };
 }
@@ -112,13 +112,14 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { notificationVisible } = state['features/toolbox-more'];
+    const { notificationVisible, toastNotificationVisible } = state['features/toolbox-more'];
 
     const { overflowMenuVisible } = state['features/toolbox'];
 
 
     return {
         _overflowMenuVisible: overflowMenuVisible,
-        _notificationVisible: notificationVisible
+        _notificationVisible: notificationVisible,
+        _toastNotificationVisible: toastNotificationVisible
     };
 }

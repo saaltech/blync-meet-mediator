@@ -21,7 +21,7 @@ import {
     setToolboxAlwaysVisible,
     showToolbox
 } from '../../../toolbox';
-import { ToolboxMoreItems } from '../../../toolbox-more-items';
+import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-more-items';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification } from '../../functions';
 import {
@@ -206,6 +206,7 @@ class Conference extends AbstractConference<Props, *> {
                 { filmstripOnly || <Chat /> }
 
                 <ToolboxMoreItems />
+                <ToastNotificationSettings />
 
                 { this.renderNotificationsContainer() }
 

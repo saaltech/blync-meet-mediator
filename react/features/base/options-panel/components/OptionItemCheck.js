@@ -32,6 +32,7 @@ class OptionItemCheck extends Component<Props> {
             <label
                 className = { `option-item-check ${checked ? 'option-item-check--checked' : ''}` }
                 onClick = { e => {
+                    e.stopPropagation();
                     e.preventDefault();
                     onCheck();
                 } }>
@@ -45,6 +46,7 @@ class OptionItemCheck extends Component<Props> {
                     className = 'option-item-check__menu-btn'
                     onClick = { e => {
                         e.preventDefault();
+                        e.stopPropagation();
                         onOpenMenu();
                     } }
                     type = 'button'>

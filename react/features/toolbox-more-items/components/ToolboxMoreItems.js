@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { OptionsPanel, OptionItemCheck } from '../../base/options-panel';
+import { OptionsPanel, OptionItemCheck, OptionDivider, OptionTitle } from '../../base/options-panel';
 import { connect } from '../../base/redux';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
@@ -27,13 +27,56 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
 
         return (
             <OptionsPanel
-                isOpen = { _overflowMenuVisible }
+
+                // isOpen = { _overflowMenuVisible }
+                isOpen = { true }
                 onClose = { _onClosePanel }
                 title = 'Permissions'>
                 <div className = { 'toolbox-more-items ' }>
-                    <div className = 'toolbox-more-items__title'>
+                    <OptionTitle className = 'toolbox-more-items__title'>
                         Meeting
+                    </OptionTitle>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { true }
+                            label = 'Lock Meeting' />
                     </div>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { false }
+                            label = 'Enable Waiting Room' />
+                    </div>
+                    <OptionDivider />
+                    <OptionTitle className = 'toolbox-more-items__title'>
+                        Allow Participants To:
+                    </OptionTitle>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { true }
+                            label = 'Share Screen' />
+                    </div>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { true }
+                            label = 'Chat' />
+                    </div>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { true }
+                            label = 'Rename Themselves' />
+                    </div>
+                    <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { true }
+                            label = 'Unmute Themselves' />
+                    </div>
+
                     <div>
                         <OptionItemCheck
                             checked = { _notificationVisible }
@@ -46,6 +89,10 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                                 }
 
                                 _hideNotification();
+                            } }
+
+                            onOpenMenu = { () => {
+                                this.props._showToastNotificationOptions();
                             } } />
                     </div>
                 </div>

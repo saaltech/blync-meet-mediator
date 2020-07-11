@@ -68,14 +68,14 @@ export function _mapStateToProps(state: Object) {
     } = state['features/notifications-toasts'];
 
     const {
-        notificationVisiable
+        notificationVisible
     } = state['features/toolbox-more'];
 
     const _localParticipant = getLocalParticipant(state);
 
 
     return {
-        _isOpen: notificationVisiable,
+        _isOpen: notificationVisible,
         _notifications: notifications,
         _localParticipant
     };
