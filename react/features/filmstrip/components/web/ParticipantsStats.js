@@ -126,12 +126,12 @@ class ParticipantsStats extends Component<Props, State> {
         return (
             <tr key = { userId }>
                 <td>
-                    <div className = 'film-strip-header__participant'>
+                    <div className = 'speakers-list__participant'>
                         <Avatar
                             opacity = { 1 }
                             participantId = { userId } />
 
-                        <span className = 'film-strip-header__participant-name'>
+                        <span className = 'speakers-list__participant-name'>
                             {displayName}
                         </span>
                     </div>
@@ -155,7 +155,7 @@ class ParticipantsStats extends Component<Props, State> {
         const items = userIds.map(userId => this._renderStatItem(userId));
 
         return (
-            <table className = 'film-strip-header__participants-list'>
+            <table className = 'speakers-list__participants-list'>
                 <tbody>
                     <tr>
                         <th>

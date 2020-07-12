@@ -13,7 +13,7 @@
     overflow: hidden;
     position: absolute;
     top: 0;
-    //transition: left 0.5s;
+    transition: left 0.5s;
     width: $sidebarWidth;
     z-index: $sideToolbarContainerZ;
 
@@ -21,9 +21,9 @@
      * The sidebar (chat) is off-screen when hidden. Move it flush to the left
      * side of the window when it should be visible.
      */
-    // &.slideInExt {
-    //     right: 0;
-    // }
+    &.slideInExt {
+        right: 0;
+    }
 }
 
 #chatconversation {
@@ -103,45 +103,36 @@
 }
 
 .chat-header {
+    padding: 19px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: $chatHeaderBackgroundColor;
-    height: 70px;
-    position: relative;
-    width: 100%;
-    z-index: 1;
 
     .chat-label {
+        font-size: 21px;
+        letter-spacing: 0px;
+        color: #393939;
+        font-weight: bold;
+        padding: 16px;
         align-items: center;
-        bottom: 8px;
+
         color: #393939;
         cursor: pointer;
         display: flex;
-        font-size: 18px;
+        font-size: 21px;
         font-weight: bold;
-        height: 40px;
-        justify-content: center;
-        line-height: 15px;
-        padding: 4px;
-        position: absolute;
-        left: 5px;
     }
 
     .chat-close {
-        align-items: center;
-        bottom: 8px;
-        color: white;
+        border: none;
+        background: none;
+        outline: none;
+        padding: 16px;
         cursor: pointer;
-        display: flex;
-        font-size: 18px;
-        height: 40px;
-        justify-content: center;
-        line-height: 15px;
-        padding: 4px;
-        position: absolute;
-        right: 5px;
-        width: 40px;
 
         .jitsi-icon svg {
-            fill: #393939;
+            fill: #414F50 !important;
         }
 
         &:hover {

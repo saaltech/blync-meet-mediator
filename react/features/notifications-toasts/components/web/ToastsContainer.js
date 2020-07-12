@@ -1,18 +1,24 @@
 // @flow
 
-import React from 'react';
+import React, { Component } from 'react';
 
-import AbstractMessageContainer, { type Props }
-    from '../AbstractMessageContainer';
+import NotificationGroup from './NotificationGroup';
 
-import ChatPreviewGroup from './ChatPreviewGroup';
+export type Props = {
+
+    /**
+     * The notifications array to render.
+     */
+    notifications: Array<Object>,
+    localParticipant: ?Object
+}
+
 
 /**
  * Displays all received chat messages, grouped by sender.
  *
- * @extends AbstractMessageContainer
  */
-export default class ChatPreviewContainer extends AbstractMessageContainer<Props> {
+export default class ToastsContainer extends Component<Props> {
     /**
      * Whether or not chat has been scrolled to the bottom of the screen. Used
      * to determine if chat should be scrolled automatically to the bottom when
@@ -24,7 +30,7 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
      * Reference to the HTML element at the end of the list of displayed chat
      * messages. Used for scrolling to the end of the chat messages.
      */
-    _messagesListEndRef: Object;
+    _notificationsListEndRef: Object;
 
     /**
      * A React ref to the HTML element containing all {@code ChatMessageGroup}
@@ -44,7 +50,7 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
         this._isScrolledToBottom = true;
 
         this._messageListRef = React.createRef();
-        this._messagesListEndRef = React.createRef();
+        this._notificationsListEndRef = React.createRef();
 
         this._onChatScroll = this._onChatScroll.bind(this);
     }
@@ -55,13 +61,13 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
      * @inheritdoc
      */
     render() {
-        const messages = [ ...this.props.messages ]
+        const notifications = [ ...this.props.notifications ]
         .filter(msg => msg.senderId !== this.props.localParticipant?.id)
         .reverse()
-        .map(message => (
-            <ChatPreviewGroup
-                key = { message.chatId }
-                message = { message } />
+        .map(notification => (
+            <NotificationGroup
+                key = { notification.id }
+                notification = { notification } />
         ));
 
         return (
@@ -69,8 +75,8 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
                 id = 'chatconversation'
                 onScroll = { this._onChatScroll }
                 ref = { this._messageListRef }>
-                { messages }
-                <div ref = { this._messagesListEndRef } />
+                { notifications }
+                <div ref = { this._notificationsListEndRef } />
             </div>
         );
     }
@@ -96,7 +102,7 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
      * @returns {void}
      */
     scrollToBottom(withAnimation: boolean) {
-        this._messagesListEndRef.current.scrollIntoView({
+        this._notificationsListEndRef.current.scrollIntoView({
             behavior: withAnimation ? 'smooth' : 'auto',
             block: 'nearest'
         });

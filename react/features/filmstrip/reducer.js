@@ -8,7 +8,8 @@ import {
     SET_FILMSTRIP_VISIBLE,
     SET_HORIZONTAL_VIEW_DIMENSIONS,
     SET_TILE_VIEW_DIMENSIONS,
-    SET_FILMSTRIP_COLLAPSED
+    SET_FILMSTRIP_COLLAPSED,
+    SET_SHOW_SPEAKERS_LIST
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -44,7 +45,9 @@ const DEFAULT_STATE = {
      */
     visible: true,
 
-    collapsed: false
+    collapsed: false,
+
+    showSpeakersList: false
 };
 
 ReducerRegistry.register(
@@ -55,6 +58,12 @@ ReducerRegistry.register(
             return {
                 ...state,
                 enabled: action.enabled
+            };
+
+        case SET_SHOW_SPEAKERS_LIST:
+            return {
+                ...state,
+                showSpeakersList: action.visible
             };
 
         case SET_FILMSTRIP_HOVERED:

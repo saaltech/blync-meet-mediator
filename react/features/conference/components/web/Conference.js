@@ -8,11 +8,12 @@ import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
 import { connect as reactReduxConnect } from '../../../base/redux';
-import { ChatPreview, Chat } from '../../../chat';
-import { Filmstrip } from '../../../filmstrip';
+import { Chat } from '../../../chat';
+import { Filmstrip, SpeakersList } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
+import { NotificationsToasts } from '../../../notifications-toasts';
 import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
     Toolbox,
@@ -20,6 +21,7 @@ import {
     setToolboxAlwaysVisible,
     showToolbox
 } from '../../../toolbox';
+import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-more-items';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification } from '../../functions';
 import {
@@ -203,11 +205,15 @@ class Conference extends AbstractConference<Props, *> {
                 { filmstripOnly || _showPrejoin || <Toolbox /> }
                 { filmstripOnly || <Chat /> }
 
+                <ToolboxMoreItems />
+                <ToastNotificationSettings />
+                <SpeakersList />
+
                 { this.renderNotificationsContainer() }
 
                 <CalleeInfoContainer />
 
-                <ChatPreview />
+                <NotificationsToasts />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );

@@ -1,8 +1,9 @@
 /* @flow */
 
 import React, { Component } from 'react';
-import Popup from 'reactjs-popup';
+import type { Dispatch } from 'redux';
 
+import { setShowSpeakersList } from '../..';
 import { getConferenceName } from '../../../base/conference/functions';
 import { Icon, IconArrowDownSmall } from '../../../base/icons';
 import { getParticipantCount, getParticipants } from '../../../base/participants/functions';
@@ -36,6 +37,10 @@ type Props = {
     _participantCount: number,
 
     _participants: Array<Object>,
+
+    _setShowSpeakersList: Function,
+
+    _showSpeakersList: boolean
 };
 
 /**
@@ -67,7 +72,7 @@ class FilmstripHeader extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _subject, _visible, _show } = this.props;
+        const { _subject, _visible, _show, _showSpeakersList } = this.props;
 
         if (!_show) {
             return null;
@@ -85,38 +90,38 @@ class FilmstripHeader extends Component<Props> {
                             Online users ({this.props._participantCount})
                         </div>
 
-                        <Popup
-                            closeOnDocumentClick = { true }
-                            contentStyle = {{
-                                width: '392px',
-                                minHeight: '482px',
-                                top: '40px !important',
-                                left: '-287.828px',
-                                boxShadow: '0px 8px 15px rgba(0, 0, 0,  0.3)',
-                                borderRadius: '6px',
-                                border: 'none',
-                                zIndex: '999',
-                                overflowY: 'scroll',
-                                overflowX: 'hidden',
-                                height: '482px'
-                            }}
-                            on = 'hover'
-                            position = 'left top'
-                            trigger = { <button
-                                className = 'film-strip-header__action-button'
-                                type = 'button'>
-                                <Icon
-                                    size = { 16 }
-                                    src = { IconArrowDownSmall } />
-                            </button> }>
-                            {this._renderParticipantsList()}
-                        </Popup>
+                        <button
+                            className = 'film-strip-header__action-button'
+                            onClick = { () => this.props._setShowSpeakersList(!_showSpeakersList) }
+                            type = 'button'>
+                            <Icon
+                                size = { 16 }
+                                src = { IconArrowDownSmall } />
+                        </button>
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+/**
+ * Maps dispatching of some action to React component props.
+ *
+ * @param {Function} dispatch - Redux action dispatcher.
+ * @private
+ * @returns {{
+    *     _onUnmount: Function
+    * }}
+    */
+function _mapDispatchToProps(dispatch: Dispatch<any>) {
+    return {
+        _setShowSpeakersList(visible) {
+            dispatch(setShowSpeakersList(visible));
+        }
+    };
+}
+
 
 /**
  * Maps (parts of) the Redux state to the associated
@@ -131,14 +136,17 @@ class FilmstripHeader extends Component<Props> {
  */
 function _mapStateToProps(state) {
     const participantCount = getParticipantCount(state);
+    const { showSpeakersList } = state['features/filmstrip'];
 
     return {
-        _show: participantCount > 1,
+        // _show: participantCount > 1,
+        _show: true,
         _subject: getConferenceName(state),
         _participantCount: participantCount,
         _visible: isToolboxVisible(state) && participantCount > 1,
-        _participants: getParticipants(state)
+        _participants: getParticipants(state),
+        _showSpeakersList: showSpeakersList
     };
 }
 
-export default connect(_mapStateToProps)(FilmstripHeader);
+export default connect(_mapStateToProps, _mapDispatchToProps)(FilmstripHeader);

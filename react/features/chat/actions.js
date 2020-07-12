@@ -7,7 +7,8 @@ import {
     SET_PRIVATE_MESSAGE_RECIPIENT,
     TOGGLE_CHAT,
     MARK_AS_READ,
-    MARK_PUBLIC_AS_READ
+    MARK_PUBLIC_AS_READ,
+    HIDE_CHAT
 } from './actionTypes';
 
 /**
@@ -97,6 +98,19 @@ export function setPrivateMessageRecipient(participant: Object) {
 export function toggleChat() {
     return {
         type: TOGGLE_CHAT
+    };
+}
+
+/**
+* Toggles display of the chat side panel.
+*
+* @returns {{
+*     type: HIDE_CHAT
+* }}
+*/
+export function hideChat() {
+    return {
+        type: HIDE_CHAT
     };
 }
 

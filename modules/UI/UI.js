@@ -154,6 +154,12 @@ UI.start = function() {
 
     sharedVideoManager = new SharedVideoManager(eventEmitter);
 
+    // This disables the legacy notification and only allows the newly created
+    // notification for vmeet. This should be removed when the legacy notification
+    // has been completely removed
+    APP.store.dispatch(setNotificationsEnabled(false));
+
+
     if (interfaceConfig.filmStripOnly) {
         $('body').addClass('filmstrip-only');
         APP.store.dispatch(setNotificationsEnabled(false));

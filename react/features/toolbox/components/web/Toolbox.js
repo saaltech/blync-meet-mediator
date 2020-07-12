@@ -32,7 +32,7 @@ import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
-import { ChatCounter, toggleChat } from '../../../chat';
+import { ChatCounter, toggleChat, hideChat } from '../../../chat';
 import { E2EEButton } from '../../../e2ee';
 import { SharedDocumentButton } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
@@ -76,8 +76,8 @@ import HangupButton from '../HangupButton';
 import HelpButton from '../HelpButton';
 
 import AudioSettingsButton from './AudioSettingsButton';
+import MoreActionsButton from './MoreActionsButton';
 import MuteEveryoneButton from './MuteEveryoneButton';
-import OverflowMenuButton from './OverflowMenuButton';
 import OverflowMenuProfileItem from './OverflowMenuProfileItem';
 import ToolbarButton from './ToolbarButton';
 import VideoSettingsButton from './VideoSettingsButton';
@@ -353,6 +353,7 @@ class Toolbox extends Component<Props, State> {
             <div
                 className = { rootClassNames }
                 id = 'new-toolbox'
+
                 onMouseOut = { this._onMouseOut }
                 onMouseOver = { this._onMouseOver }>
                 <div className = 'toolbox-background' />
@@ -413,6 +414,7 @@ class Toolbox extends Component<Props, State> {
      */
     _doToggleChat() {
         this.props.dispatch(toggleChat());
+        this.props.dispatch(setOverflowMenuVisible(false));
     }
 
     /**
@@ -555,6 +557,8 @@ class Toolbox extends Component<Props, State> {
      */
     _onSetOverflowVisible(visible) {
         this.props.dispatch(setOverflowMenuVisible(visible));
+
+        this.props.dispatch(hideChat());
     }
 
     _onShortcutToggleChat: () => void;
@@ -754,7 +758,7 @@ class Toolbox extends Component<Props, State> {
             {
                 enable: !this.props._chatOpen
             }));
-
+        this.props.dispatch(setOverflowMenuVisible(false));
         this._doToggleChat();
     }
 
@@ -1253,10 +1257,7 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-right'>
                     <HangupButton
-                        visible = { this._shouldShowButton('hangup') }
-                        /*showIcon = { false }
-                        showLabel = { true } */
-                        />
+                        visible = { this._shouldShowButton('hangup') } />
                     <div className = 'enclosed-group'>
                         { buttonsRight.indexOf('localrecording') !== -1
                             && <LocalRecordingButton
@@ -1274,7 +1275,7 @@ class Toolbox extends Component<Props, State> {
 
                         { buttonsLeft.indexOf('desktop') !== -1
                             && this._renderDesktopSharingButton() }
-                            
+
                         { buttonsLeft.indexOf('chat') !== -1
                             && <div className = 'toolbar-button-with-badge'>
                                 <ToolbarButton
@@ -1295,7 +1296,7 @@ class Toolbox extends Component<Props, State> {
                                 tooltip = { t('toolbar.invite') } /> }
                         { buttonsRight.indexOf('security') !== -1
                             && <SecurityDialogButton customClass = 'security-toolbar-button' /> }
-                        { buttonsRight.indexOf('overflowmenu') !== -1
+                        {/* { buttonsRight.indexOf('overflowmenu') !== -1
                             && <OverflowMenuButton
                                 isOpen = { _overflowMenuVisible }
                                 onVisibilityChange = { this._onSetOverflowVisible }>
@@ -1304,9 +1305,20 @@ class Toolbox extends Component<Props, State> {
                                     className = 'overflow-menu'>
                                     { overflowMenuContent }
                                 </ul>
-                            </OverflowMenuButton> }
+                            </OverflowMenuButton> } */}
+
+                        { buttonsRight.indexOf('overflowmenu') !== -1
+                            && <MoreActionsButton
+                                isOpen = { _overflowMenuVisible }
+                                onVisibilityChange = { this._onSetOverflowVisible }>
+                                <ul
+                                    aria-label = { t(toolbarAccLabel) }
+                                    className = 'overflow-menu'>
+                                    { overflowMenuContent }
+                                </ul>
+                            </MoreActionsButton> }
                     </div>
-                    
+
                 </div>
             </div>);
     }
