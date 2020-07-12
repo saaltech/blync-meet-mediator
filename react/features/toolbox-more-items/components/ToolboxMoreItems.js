@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 // @flow
 import React from 'react';
 
@@ -11,6 +12,9 @@ import {
     OptionItem
 } from '../../base/options-panel';
 import { connect } from '../../base/redux';
+import {
+    showToolbox
+} from '../../toolbox/actions';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
     _mapStateToProps,
@@ -23,6 +27,26 @@ import AbstractToolboxMoreItems, {
  * @extends Component
  */
 class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
+    _onMouseOut
+    _onMouseOver
+
+    constructor(props) {
+        super(props);
+
+        // this._onMouseOut = this._onMouseOut.bind(this);
+        this._onMouseOver = this._onMouseOver.bind(this);
+    }
+
+    /**
+     * Dispatches an action signaling the toolbar is being hovered.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onMouseOver() {
+        this.props.dispatch(showToolbox(2000));
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -36,6 +60,9 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
             <OptionsPanel
                 isOpen = { _overflowMenuVisible }
                 onClose = { _onClosePanel }
+
+                // onMouseOut = { this._onMouseOut }
+                onMouseOver = { this._onMouseOver }
                 title = 'Permissions'>
                 <div className = { 'toolbox-more-items ' }>
                     <OptionTitle className = 'toolbox-more-items__title'>

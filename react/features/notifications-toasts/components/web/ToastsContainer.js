@@ -117,7 +117,6 @@ export default class ToastsContainer extends Component<Props> {
      * @returns {void}
      */
     _onChatScroll() {
-        console.log('assfadfasdfsfsdf');
         const element = this._messageListRef.current;
 
         this._isScrolledToBottom

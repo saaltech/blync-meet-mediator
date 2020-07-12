@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 // @flow
 import { Checkbox } from '@atlaskit/checkbox';
 import React from 'react';
@@ -10,6 +11,9 @@ import {
     OptionTitle
 } from '../../base/options-panel';
 import { connect } from '../../base/redux';
+import {
+    showToolbox
+} from '../../toolbox/actions';
 import AbstractToastNotificationSetting, {
     type Props,
     _mapDispatchToProps,
@@ -21,6 +25,26 @@ import AbstractToastNotificationSetting, {
  * @extends Component
  */
 class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, *> {
+    _onMouseOut
+    _onMouseOver
+
+    constructor(props) {
+        super(props);
+
+        // this._onMouseOut = this._onMouseOut.bind(this);
+        this._onMouseOver = this._onMouseOver.bind(this);
+    }
+
+    /**
+     * Dispatches an action signaling the toolbar is being hovered.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onMouseOver() {
+        this.props.dispatch(showToolbox(2000));
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -39,6 +63,7 @@ class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, 
                 className = 'toast-notification-settings'
                 isOpen = { _toastNotificationVisible }
                 onClose = { _hideToastNotificationOptions }
+                onMouseOver = { this._onMouseOver }
                 title = 'Toast Notifications'>
                 <OptionTitle className = 'toolbox-more-items__title'>
                     Advanced Settings:

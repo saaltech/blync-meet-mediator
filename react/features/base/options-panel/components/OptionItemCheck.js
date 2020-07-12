@@ -35,7 +35,7 @@ class OptionItemCheck extends Component<Props> {
                 onClick = { e => {
                     e.stopPropagation();
                     e.preventDefault();
-                    onCheck();
+                    onCheck && onCheck();
                 } }>
                 <div className = 'option-item-check__label'>
                     <div className = 'option-item-check__mark'>
