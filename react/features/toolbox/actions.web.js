@@ -92,7 +92,8 @@ export function hideToolbox(force: boolean = false): Function {
                     || overflowMenuVisible
                     || state['features/invite'].calleeInfoVisible
                     || state['features/chat'].isOpen
-                    || state['features/toolbox-more'].toastNotificationVisible)) {
+                    || state['features/toolbox-more'].toastNotificationVisible
+                )) {
             dispatch(
                 setToolboxTimeout(
                     () => dispatch(hideToolbox()),

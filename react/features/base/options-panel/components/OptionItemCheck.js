@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { Icon, IconMenu, IconCheck } from '../../icons';
+import { Icon, IconCheck, IconMore } from '../../icons';
 
 
 type Props = {
@@ -52,7 +52,7 @@ class OptionItemCheck extends Component<Props> {
                     } }
                     type = 'button'>
 
-                    <Icon src = { IconMenu } />
+                    <Icon src = { IconMore } />
                 </button>}
             </label>
         );
