@@ -73,7 +73,6 @@ function GuestPrejoin(props) {
             })
     }, [guestEmail])
 
-
     const [unauthGetConference, fetchUnauthErrors] = useRequest({
         url: config.conferenceManager + config.unauthConferenceEP + '/' + meetingId,
         method: 'get',
@@ -131,7 +130,7 @@ function GuestPrejoin(props) {
 
         setIsMeetingHost(data.isHost)
 
-        setShowJoinMeetingForm(!data.isHost)
+        setShowJoinMeetingForm(!_isUserSignedOut && !data.isHost)
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -145,7 +144,9 @@ function GuestPrejoin(props) {
 
     const addTokenToURL = async () => {
         await getConference()
-        window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
+        if(!getQueryVariable('jwt')) {
+            window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
+        }
     }
 
     const checkMeetingStatus = async () => {
@@ -195,11 +196,13 @@ function GuestPrejoin(props) {
 
     const joinNowDisabled = continueAsGuest && guestName.trim() === ""
 
-    if(!_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
-        //Host has already signed-in, so there will be no JWT token in the url
-        window.sessionStorage.setItem('isJWTSet', true);
-        addTokenToURL()
-    }
+    useEffect(() => {
+        if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
+            //Host has already signed-in, so there will be no JWT token in the url
+            window.sessionStorage.setItem('isJWTSet', true);
+            addTokenToURL()
+        }
+    })
 
     return (
         <div className={`hostPrejoin`}>

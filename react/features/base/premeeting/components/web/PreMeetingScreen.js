@@ -11,6 +11,9 @@ import { connect } from '../../../redux';
 import { getCurrentConferenceUrl } from '../../../connection';
 import HostPrejoin from '../../../../prejoin/components/HostPrejoin'
 import GuestPrejoin from '../../../../prejoin/components/GuestPrejoin'
+import {
+    getQueryVariable
+} from '../../../../prejoin/functions';
 
 type Props = {
 
@@ -59,7 +62,8 @@ class PreMeetingScreen extends PureComponent<Props> {
         super(props);
         this.state = {
             meetNow: true,
-            showTrackPreviews: false
+            showTrackPreviews: false,
+            navigatedFromHome: undefined
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -68,7 +72,8 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     componentDidMount() {
         this.setState({
-            meetNow: true
+            meetNow: true,
+            navigatedFromHome: getQueryVariable('home') ? true: false
         });
     }
 
@@ -85,10 +90,13 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     render() {
-        const { title, videoMuted, videoTrack, url, navigatedFromHome = false, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreviews } = this.state;
+        const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
+        const { meetNow, showTrackPreviews, navigatedFromHome } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
-
+        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
+        if(guestFlow) {
+            window.sessionStorage.removeItem('isJWTSet')
+        }
         return (
             <div
                 className = 'premeeting-screen'
@@ -115,7 +123,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                 <div className = 'content'>
                     <a href="/" className="close-icon"></a>
                     {
-                        navigatedFromHome ?
+                        navigatedFromHome && 
                         <HostPrejoin 
                             isMeetNow={this.setMeetNow} 
                             //Show join now after page reload in case of `meet now` option
@@ -123,21 +131,12 @@ class PreMeetingScreen extends PureComponent<Props> {
                             meetingName={urlToShow}
                             showTrackPreviews={this.showTrackPreviews}
                         />
-                        :
-                        <>
-                            <GuestPrejoin 
-                                meetingId={urlToShow}
-                            />
-                            {
-                            /*<hr />
-                            <div className = 'title'>
-                                { urlToShow }
-                            </div>
-                            <CopyMeetingUrl />
-                            { this.props.children }
-                            */
-                            }
-                        </>
+                    }
+                    {
+                        guestFlow && 
+                        <GuestPrejoin 
+                            meetingId={urlToShow}
+                        />
                     }
                 </div>
             </div>
