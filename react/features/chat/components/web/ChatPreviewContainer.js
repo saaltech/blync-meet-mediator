@@ -111,7 +111,6 @@ export default class ChatPreviewContainer extends AbstractMessageContainer<Props
      * @returns {void}
      */
     _onChatScroll() {
-        console.log('assfadfasdfsfsdf');
         const element = this._messageListRef.current;
 
         this._isScrolledToBottom

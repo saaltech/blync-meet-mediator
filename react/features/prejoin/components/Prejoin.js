@@ -22,11 +22,13 @@ import {
     isDeviceStatusVisible,
     isJoinByPhoneDialogVisible,
     isPrejoinVideoMuted,
-    getPageErrorMessageKey
+    getPageErrorMessageKey,
+    getQueryVariable
 } from '../functions';
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
 import DeviceStatus from './preview/DeviceStatus';
+import HostPrejoin from './HostPrejoin'
 
 type Props = {
 
@@ -187,7 +189,10 @@ class Prejoin extends Component<Props, State> {
             participantTypeOptionSpecified: false,
             hostUsername: window.sessionStorage.getItem('hostUsername') || '',
             hostPassword: window.sessionStorage.getItem('hostPassword') || '',
-            roomPassword: ''
+            roomPassword: '',
+
+            /* indicates that we have come to prejoin from home page*/
+            navigatedFromHome: getQueryVariable('home') 
         });
     }
 
@@ -318,14 +323,15 @@ class Prejoin extends Component<Props, State> {
 
         const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName,
             _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
-        const { showJoinByPhoneButtons } = this.state;
+        const { showJoinByPhoneButtons, navigatedFromHome } = this.state;
 
         return (
             <PreMeetingScreen
                 footer = { this._renderFooter() }
                 title = { t('prejoin.joinMeeting') }
                 videoMuted = { !showCameraPreview }
-                videoTrack = { videoTrack }>
+                videoTrack = { videoTrack }
+                navigatedFromHome = { navigatedFromHome }>
                 <div className = 'prejoin-input-area-container'>
                     <div className = 'prejoin-input-area'>
                         <div className = 'prejoin-input-form-fields'>

@@ -14,6 +14,8 @@ import {
     JitsiConnectionEvents
 } from './react/features/base/lib-jitsi-meet';
 
+import { saveHostJidToUserMapping } from './react/features/app-auth/functions'
+
 const logger = Logger.getLogger(__filename);
 
 /**
@@ -152,6 +154,7 @@ function connect(id, password, roomName) {
          *
          */
         function handleConnectionEstablished() {
+            saveHostJidToUserMapping(connection)
             APP.store.dispatch(connectionEstablished(connection, Date.now()));
             unsubscribe();
             resolve(connection);

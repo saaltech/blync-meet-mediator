@@ -10,10 +10,19 @@ import { CalendarList } from '../../calendar-sync';
 import { RecentList } from '../../recent-list';
 import { SettingsButton, SETTINGS_TABS } from '../../settings';
 
+import { setPostWelcomePageScreen } from '../../app-auth/actions';
+import {
+    getQueryVariable
+} from '../../prejoin/functions';
+
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
+
+import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth'
+
+import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen'
 
 /**
  * The pattern used to validate room name.
@@ -57,7 +66,9 @@ class WelcomePage extends AbstractWelcomePage {
             generateRoomnames:
                 interfaceConfig.GENERATE_ROOMNAMES_ON_WELCOME_PAGE,
             selectedTab: 0,
-            formDisabled: true
+            formDisabled: true,
+            hideLogin: true,
+            goClicked: false
         };
 
         /**
@@ -111,6 +122,8 @@ class WelcomePage extends AbstractWelcomePage {
         this._setAdditionalToolbarContentRef
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
+        this._closeLogin = this._closeLogin.bind(this);
+        this._showPostWelcomePageScreen = this._showPostWelcomePageScreen.bind(this)
     }
 
     /**
@@ -121,7 +134,11 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
+        this.props.dispatch(decideAppLogin())
         super.componentDidMount();
+        this.setState({
+            goClicked: false
+        })
 
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
@@ -167,6 +184,12 @@ class WelcomePage extends AbstractWelcomePage {
         }
     }
 
+    _closeLogin() {
+        this.setState({
+            hideLogin: true
+        })
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -174,82 +197,126 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     render() {
-        const { t } = this.props;
+        const { t, _isUserSignedOut, _postWelcomePageScreen } = this.props;
+        const { hideLogin, goClicked } = this.state;
         const { APP_NAME } = interfaceConfig;
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
+        const titleArr = t('welcomepage.enterRoomTitle').split(" ")
+        const separatedTitle = titleArr.pop()
 
         return (
-            <div
-                className = { `welcome ${showAdditionalContent
-                    ? 'with-content' : 'without-content'}` }
-                id = 'welcome_page'>
+            <div>
+                {
+                    <div
+                        className = { `welcome ${showAdditionalContent
+                            ? 'with-content' : 'without-content'}` }
+                        id = 'welcome_page'>
 
-                <Background />
+                        <Background />
 
-                <div className = 'header'>
-                    <div className = 'welcome-page-settings'>
-                        <SettingsButton
-                            defaultTab = { SETTINGS_TABS.CALENDAR } />
-                        { showAdditionalToolbarContent
-                            ? <div
-                                className = 'settings-toolbar-content'
-                                ref = { this._setAdditionalToolbarContentRef } />
-                            : null
+                        {
+                            _isUserSignedOut && !hideLogin && 
+                            <LoginComponent 
+                                closeAction={ this._closeLogin }
+                                isOverlay={true}
+                                t = {t}
+                            />
                         }
-                    </div>
-                    <div className = 'header-image' />
-                    <div className = 'header-text'>
-                        <h1 className = 'header-text-title'>
-                            { t('welcomepage.enterRoomTitle') }
-                        </h1>
-                        {/* <h3 className = 'header-text-sub-title'>
-                            { t('welcomepage.subTitle') }
-                        </h3>
-                        <p className = 'header-text-description'>
-                            { t('welcomepage.appDescription',
-                                { app: APP_NAME }) }
-                    </p>*/}
-                    </div>
-                    <div id = 'enter_room'>
-                        <div className = 'enter-room-input-container'>
-                            <form onSubmit = { this._onFormSubmit }>
-                                <input
-                                    autoFocus = { true }
-                                    className = 'enter-room-input'
-                                    id = 'enter_room_field'
-                                    onChange = { this._onRoomNameChanged }
 
-                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
-                                    ref = { this._setRoomInputRef }
-                                    title = { t('welcomepage.roomNameAllowedChars') }
-                                    type = 'text'
-                                    value = { this.state.room } />
-                                { this._renderInsecureRoomNameWarning() }
-                            </form>
-                        </div>
-                        <div
-                            className = { `welcome-page-button ${this.state.formDisabled ? 'disabled' : ''}` }
-                            id = 'enter_room_button'
-                            onClick = { this._onFormSubmit }>
+                        <div className = 'header'>
                             {
-                                showResponsiveText
-                                    ? t('welcomepage.goSmall')
-                                    : t('welcomepage.go')
+                                _isUserSignedOut ?
+                                <div
+                                    className = { `welcome-page-button signin` }
+                                    id = 'enter_room_button'
+                                    onClick = { () => this.setState({
+                                        hideLogin: false
+                                    }) }>
+                                    {
+                                        t('welcomepage.signinLabel')
+                                    }
+                                </div>
+                                :
+                                <div className = { `welcome-page-button profile` }
+                                    onClick = { () => this.setState({
+                                        hideLogin: true
+                                    }) }>
+                                    <Profile 
+                                        showMenu={true}
+                                    />
+                                </div>
+                                
                             }
+                            {/*<div className = 'welcome-page-settings'>
+                                <SettingsButton
+                                    defaultTab = { SETTINGS_TABS.CALENDAR } />
+                                { showAdditionalToolbarContent
+                                    ? <div
+                                        className = 'settings-toolbar-content'
+                                        ref = { this._setAdditionalToolbarContentRef } />
+                                    : null
+                                }
+                            </div>*/}
+                            <div className = 'header-image' />
+                            <div className = 'header-text'>
+                                <h1 className = 'header-text-title'>
+                                    <span>{ titleArr.join(" ") } </span>
+                                    <span>{ separatedTitle }</span>
+                                </h1>
+                                {/* <h3 className = 'header-text-sub-title'>
+                                    { t('welcomepage.subTitle') }
+                                </h3>
+                                <p className = 'header-text-description'>
+                                    { t('welcomepage.appDescription',
+                                        { app: APP_NAME }) }
+                            </p>*/}
+                            </div>
+                            <div id = 'enter_room'>
+                                <div className = 'enter-room-input-container'>
+                                    <form onSubmit = { this._onFormSubmit }>
+                                        <input
+                                            autoFocus = { true }
+                                            className = 'enter-room-input'
+                                            id = 'enter_room_field'
+                                            onChange = { this._onRoomNameChanged }
+
+                                            // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                            placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
+                                            ref = { this._setRoomInputRef }
+                                            title = { t('welcomepage.roomNameAllowedChars') }
+                                            type = 'text'
+                                            // value = { this.state.room } 
+                                            />
+                                        { this._renderInsecureRoomNameWarning() }
+                                    </form>
+                                </div>
+                                <div
+                                    className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
+                                    id = 'enter_room_button'
+                                    
+                                    onClick = { this._onFormSubmit }>
+                                    {/*onClick = {this._showPostWelcomePageScreen}>*/}
+                                    {
+                                        showResponsiveText
+                                            ? t('welcomepage.goSmall')
+                                            : t('welcomepage.go')
+                                    }
+                                </div>
+                            </div>
+                            <div className = 'note'> { t('welcomepage.startSession') } </div>
+                            {/* this._renderTabs() */}
                         </div>
+                        { showAdditionalContent
+                            ? <div
+                                className = 'welcome-page-content'
+                                ref = { this._setAdditionalContentRef } />
+                            : null }
                     </div>
-                    <div className = 'note'> { t('welcomepage.startSession') } </div>
-                    {/* this._renderTabs() */}
-                </div>
-                { showAdditionalContent
-                    ? <div
-                        className = 'welcome-page-content'
-                        ref = { this._setAdditionalContentRef } />
-                    : null }
+                }
             </div>
+            
         );
     }
 
@@ -279,8 +346,40 @@ class WelcomePage extends AbstractWelcomePage {
     _onFormSubmit(event) {
         event.preventDefault();
 
+        if (this.props._isUserSignedOut) {
+            this.setState({
+                hideLogin: false
+            })
+            return;
+        }
+
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
+            this.setState({
+                goClicked: true
+            })
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room))
             this._onJoin();
+        }
+    }
+
+    /**
+     * 
+     */
+    _showPostWelcomePageScreen (event) {
+        if(event) {
+            event.preventDefault();
+        }
+        if (this.props._isUserSignedOut) {
+            this.setState({
+                hideLogin: false
+            })
+            return;
+        }
+        if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
+            this.setState({
+                goClicked: true
+            })
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room))
         }
     }
 

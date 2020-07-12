@@ -91,6 +91,8 @@ $flagsImagePath: "../images/";
 @import 'chrome-extension-banner';
 @import 'settings-button';
 @import 'icons';
+@import 'login-component';
+@import 'user-profile';
 // @import 'meter';
 // @import 'audio-preview';
 // @import 'video-preview';
@@ -100,5 +102,6 @@ $flagsImagePath: "../images/";
 @import 'modals/invite/invite_more';
 @import 'modals/security/security';
 @import 'premeeting-screens';
-@import 'chat-preview'
+@import 'chat-preview';
+@import 'meeting-info';
 /* Modules END */

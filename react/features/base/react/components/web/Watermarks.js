@@ -139,8 +139,9 @@ class Watermarks extends Component<Props, State> {
                 {
                     this._renderJitsiWatermark()
                 }
-                {
+                {/*
                     this._renderBrandWatermark()
+                    */
                 }
                 {
                     this._renderPoweredBy()
