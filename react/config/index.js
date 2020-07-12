@@ -1,11 +1,11 @@
 export const config = {};
 
 config.unauthenticatedIRP =
-  process.env.REACT_APP_ENV === "prod" ? "/irp" : ""; //https://dev-blync.saal.ai/irp
+  process.env.REACT_APP_ENV === "prod" ? "/irp" : "/irp";
 config.authenticatedIRP =
-  process.env.REACT_APP_ENV === "prod" ? "/authenticate-irp" : "";
+  process.env.REACT_APP_ENV === "prod" ? "/authenticate-irp" : "/authenticate-irp";
 config.conferenceManager =
-  process.env.REACT_APP_ENV === "prod" ? "/blync-mgmt" : "";
+  process.env.REACT_APP_ENV === "prod" ? "/blync-mgmt" : "/blync-mgmt";
 
 // ==== blync-mgmt Endpoints ====
 //
