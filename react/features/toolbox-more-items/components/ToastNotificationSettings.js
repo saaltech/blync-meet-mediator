@@ -36,8 +36,6 @@ class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, 
             _toastNotificationSettings,
             _updateToastNotificationOptions } = this.props;
 
-        console.log(_toastNotificationVisible, '_toastNotificationVisible_toastNotificationVisible_toastNotificationVisible');
-
         return (
             <OptionsPanel
                 className = 'toast-notification-settings'
