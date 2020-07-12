@@ -24,12 +24,11 @@ export default class OptionsPanel extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { isOpen, children, title, onClose, noBodyPadding, ...rest } = this.props;
+        const { isOpen, children, title, onClose, noBodyPadding } = this.props;
 
         return (
             <div
-                className = { `options-panel ${isOpen ? 'options-panel--visible' : ''}` }
-                { ...rest }>
+                className = { `options-panel ${isOpen ? 'options-panel--visible' : ''}` }>
                 <div className = 'options-panel__header'>
                     <div className = 'options-panel__title'>
                         {title}

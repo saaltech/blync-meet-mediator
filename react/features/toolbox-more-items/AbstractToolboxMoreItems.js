@@ -91,7 +91,8 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
 
         _showToastNotificationOptions() {
             dispatch(showToastNotificationOptions(true));
-            dispatch(setOverflowMenuVisible(false));
+
+            // dispatch(setOverflowMenuVisible(false));
         },
 
         _hideToastNotificationOptions() {
