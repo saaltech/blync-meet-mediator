@@ -70,6 +70,10 @@
         opacity: 1;
     }
 
+    &--disabled {
+        opacity: .5 !important;
+    }
+
     &__label {
         display: flex;
         align-items: center;
@@ -92,6 +96,10 @@
         border: none;
         background: none;
         outline: none;
+    }
+
+    &__children {
+        padding-left: 45px;
     }
 }
 

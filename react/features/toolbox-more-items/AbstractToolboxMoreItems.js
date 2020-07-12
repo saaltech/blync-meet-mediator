@@ -7,7 +7,8 @@ import { setOverflowMenuVisible } from '../toolbox';
 
 import {
     enableNotification,
-    showToastNotificationOptions
+    showToastNotificationOptions,
+    updateToastNotificationOptions
 } from './actions';
 
 /**
@@ -41,6 +42,9 @@ export type Props = {
     _showToastNotificationOptions: Function,
 
     _hideToastNotificationOptions: Function,
+    _updateToastNotificationOptions: Function,
+    _toastNotificationSettings: Object,
+    _fullScreen: boolean,
 };
 
 /**
@@ -98,6 +102,10 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
         _hideToastNotificationOptions() {
             dispatch(showToastNotificationOptions(false));
             dispatch(setOverflowMenuVisible(true));
+        },
+
+        _updateToastNotificationOptions(options: Object) {
+            dispatch(updateToastNotificationOptions(options));
         }
     };
 }
@@ -115,13 +123,15 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { notificationVisible } = state['features/toolbox-more'];
-
-    const { overflowMenuVisible } = state['features/toolbox'];
+    const { notificationVisible, toastNotificationVisible, toastNotificationSettings } = state['features/toolbox-more'];
+    const { overflowMenuVisible, fullScreen } = state['features/toolbox'];
 
 
     return {
+        _fullScreen: fullScreen,
         _overflowMenuVisible: overflowMenuVisible,
-        _notificationVisible: notificationVisible
+        _notificationVisible: notificationVisible,
+        _toastNotificationSettings: toastNotificationSettings,
+        _toastNotificationVisible: toastNotificationVisible
     };
 }

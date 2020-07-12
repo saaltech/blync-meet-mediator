@@ -3,15 +3,15 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
-import { IconSettings, IconReport, IconChatBubble } from '../../base/icons';
 import {
     OptionsPanel,
     OptionItemCheck,
-    OptionDivider,
-    OptionTitle,
-    OptionItem
+    OptionDivider
 } from '../../base/options-panel';
 import { connect } from '../../base/redux';
+import {
+    setFullScreen
+} from '../../toolbox/actions';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
     _mapStateToProps,
@@ -32,7 +32,17 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
      * @returns {ReactElement}
      */
     render() {
-        const { _overflowMenuVisible, _onClosePanel, _notificationVisible, _showNotification, _hideNotification } = this.props;
+        const {
+            _fullScreen,
+            t,
+            _overflowMenuVisible,
+            _onClosePanel,
+            _notificationVisible,
+            _showNotification,
+            _hideNotification,
+            _toastNotificationSettings,
+            _updateToastNotificationOptions
+        } = this.props;
 
         return (
             <OptionsPanel
@@ -40,7 +50,7 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                 onClose = { _onClosePanel }
                 title = 'Permissions'>
                 <div className = { 'toolbox-more-items ' }>
-                    <OptionTitle className = 'toolbox-more-items__title'>
+                    {/* <OptionTitle className = 'toolbox-more-items__title'>
                         Meeting
                     </OptionTitle>
                     <OptionDivider />
@@ -54,8 +64,8 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                         <OptionItemCheck
                             checked = { false }
                             label = 'Enable Waiting Room' />
-                    </div>
-                    <OptionDivider />
+                    </div> */}
+                    {/* <OptionDivider />
                     <OptionTitle className = 'toolbox-more-items__title'>
                         Allow Participants To:
                     </OptionTitle>
@@ -77,12 +87,7 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                             checked = { true }
                             label = 'Rename Themselves' />
                     </div>
-                    <OptionDivider />
-                    <div>
-                        <OptionItemCheck
-                            checked = { true }
-                            label = 'Unmute Themselves' />
-                    </div>
+                     */}
 
                     <div>
                         <OptionItemCheck
@@ -96,14 +101,70 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                                 }
 
                                 _hideNotification();
-                            } }
-
-                            onOpenMenu = { () => {
-                                this.props._showToastNotificationOptions();
-                            } } />
+                            } }>
+                            <div>
+                                <OptionItemCheck
+                                    checked = { _toastNotificationSettings.showRaisedHand }
+                                    disabled = { !_notificationVisible }
+                                    label = 'Raise Hand'
+                                    onCheck = { () => {
+                                        _updateToastNotificationOptions({
+                                            showRaisedHand: !_toastNotificationSettings.showRaisedHand
+                                        });
+                                    } } />
+                            </div>
+                            <OptionDivider />
+                            <div>
+                                <OptionItemCheck
+                                    checked = { _toastNotificationSettings.showJoinedMeeting }
+                                    disabled = { !_notificationVisible }
+                                    label = 'Join Meeting'
+                                    onCheck = { () => {
+                                        _updateToastNotificationOptions({
+                                            showJoinedMeeting: !_toastNotificationSettings.showJoinedMeeting
+                                        });
+                                    } } />
+                            </div>
+                            <OptionDivider />
+                            <div>
+                                <OptionItemCheck
+                                    checked = { _toastNotificationSettings.showLeftMeeting }
+                                    disabled = { !_notificationVisible }
+                                    label = 'Left Meeting'
+                                    onCheck = { () => {
+                                        _updateToastNotificationOptions({
+                                            showLeftMeeting: !_toastNotificationSettings.showLeftMeeting
+                                        });
+                                    } } />
+                            </div>
+                            <OptionDivider />
+                            <div>
+                                <OptionItemCheck
+                                    checked = { _toastNotificationSettings.showChat }
+                                    disabled = { !_notificationVisible }
+                                    label = 'Chat'
+                                    onCheck = { () => {
+                                        _updateToastNotificationOptions({
+                                            showChat: !_toastNotificationSettings.showChat
+                                        });
+                                    } } />
+                            </div>
+                        </OptionItemCheck>
                     </div>
 
                     <OptionDivider />
+                    <div>
+                        <OptionItemCheck
+                            checked = { _fullScreen }
+                            label = { _fullScreen ? t('toolbar.exitFullScreen') : t('toolbar.enterFullScreen') }
+                            onCheck = { () => {
+                                const fullScreen = !this.props._fullScreen;
+
+                                this.props.dispatch(setFullScreen(fullScreen));
+                            } } />
+                    </div>
+
+                    {/* <OptionDivider />
 
                     <div>
                         <OptionItem
@@ -121,7 +182,7 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                         <OptionItem
                             icon = { IconReport }
                             label = 'Report' />
-                    </div>
+                    </div> */}
                     <OptionDivider />
                 </div>
             </OptionsPanel>
