@@ -21,9 +21,10 @@ export default ({ url, method, body, onSuccess }) => {
 
       return response.data;
     } catch (err) {
-      console.log(err)
+      console.log("Request Failed: ", err)
+      console.log("Error Details: ", err.response)
       setErrors(
-        err.response.data.errors || "Unable to process"
+        err.response.data.errors || err.response.data.error || "Unable to process"
       );
     }
   };

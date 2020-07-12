@@ -42,7 +42,7 @@ export async function saveHostJidToUserMapping(connection) {
         connection.xmpp.connection._stropheConn.jid) {
         try {
             await axios.post(
-                config.authenticatedIRP + config.jidEP, 
+                config.conferenceManager + config.jidEP, 
                 { 
                     jid: connection.xmpp.connection._stropheConn.jid
                 }, 

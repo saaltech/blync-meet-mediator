@@ -31,6 +31,10 @@ import { useState, useEffect } from 'react';
 import JoinMeetingForm from './JoinMeetingForm';
 import { setFatalError } from '../../overlay';
 
+import {
+    getQueryVariable
+} from '../functions';
+
 function GuestPrejoin(props) {
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
@@ -38,7 +42,7 @@ function GuestPrejoin(props) {
         setTimeout(async () => {
             if (_isUserSignedOut)
                 await unauthGetConference()
-            else
+            else 
                 await getConference()
         }, 3000)
     }, [meetingId]);
@@ -110,7 +114,7 @@ function GuestPrejoin(props) {
     const [meetingStarted, setMeetingStarted] = useState(null)
 
     const [meetingStatusCheck, meetingStatusErrors] = useRequest({
-        url: config.conferenceManager + config.meetingStatusEP + "/" + meetingId,
+        url: config.conferenceManager + config.unauthConferenceEP + "/" + meetingId,
         method: 'get',
         onSuccess: (data) => {}
     });
@@ -123,7 +127,7 @@ function GuestPrejoin(props) {
         setMeetingTo(data.scheduledTo)
 
         //TODO: uncomment the seection below after completing the non-host flow
-        setIsMeetingHost(/*data.isHost ||*/ false)
+        setIsMeetingHost(data.isHost || false)
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -143,18 +147,22 @@ function GuestPrejoin(props) {
     const checkMeetingStatus = async () => {
         setMeetingStarted(false);
         const decideToJoin = (response, intervalTimer) => {
-            if (response && response.status === "STARTED") {
+            if (response && response.conferenceStatus === "STARTED") {
                 intervalTimer && clearInterval(intervalTimer);
                 setMeetingStarted(true)
                 _joinConference()
+                return true;
             }
         }
 
-        decideToJoin(await meetingStatusCheck())
+        let joined = decideToJoin(await meetingStatusCheck())
 
-        let intervalTimer = setInterval(async () => {
-            decideToJoin(await meetingStatusCheck(), intervalTimer)
-        }, 5000)
+        if(!joined) {
+            let intervalTimer = setInterval(async () => {
+                decideToJoin(await meetingStatusCheck(), intervalTimer)
+            }, 5000)
+        }
+        
     }
 
     const handleJoinNow = async () => {
@@ -182,6 +190,12 @@ function GuestPrejoin(props) {
     }
 
     const joinNowDisabled = continueAsGuest && guestName.trim() === ""
+
+    if(!_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
+        //Host has already signed-in, so there will be no JWT token in the url
+        window.sessionStorage.setItem('isJWTSet', true);
+        addTokenToURL()
+    }
 
     return (
         <div className={`hostPrejoin`}>
