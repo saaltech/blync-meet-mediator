@@ -1,3 +1,4 @@
+/* global APP */
 /* eslint-disable require-jsdoc */
 // @flow
 import React from 'react';
@@ -8,6 +9,7 @@ import {
     OptionItemCheck,
     OptionDivider
 } from '../../base/options-panel';
+import { getLocalParticipant } from '../../base/participants';
 import { connect } from '../../base/redux';
 import {
     setFullScreen
@@ -43,12 +45,13 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
             _toastNotificationSettings,
             _updateToastNotificationOptions
         } = this.props;
+        const { name: participantName } = getLocalParticipant(APP.store.getState());
 
         return (
             <OptionsPanel
                 isOpen = { _overflowMenuVisible }
                 onClose = { _onClosePanel }
-                title = 'Permissions'>
+                title = { participantName }>
                 <div className = { 'toolbox-more-items ' }>
                     {/* <OptionTitle className = 'toolbox-more-items__title'>
                         Meeting
