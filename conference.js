@@ -3,6 +3,7 @@
 import EventEmitter from 'events';
 import Logger from 'jitsi-meet-logger';
 
+
 import * as JitsiMeetConferenceEvents from './ConferenceEvents';
 import { openConnection } from './connection';
 import { ENDPOINT_TEXT_MESSAGE_NAME } from './modules/API/constants';
@@ -113,6 +114,7 @@ import {
     maybeOpenFeedbackDialog,
     submitFeedback
 } from './react/features/feedback';
+import { setFilmStripCollapsed } from './react/features/filmstrip';
 import { showNotification } from './react/features/notifications';
 import { mediaPermissionPromptVisibilityChanged } from './react/features/overlay';
 import { suspendDetected } from './react/features/power-monitor';
@@ -309,22 +311,23 @@ class ConferenceConnector {
 
 
             function isHostPrejoinError() {
-                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin']
-                pageErrorMessageKey = "submitting" === pageErrorMessageKey ? null : pageErrorMessageKey;
-                if(pageErrorMessageKey ) {
+                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin'];
+
+                pageErrorMessageKey = pageErrorMessageKey === 'submitting' ? null : pageErrorMessageKey;
+                if (pageErrorMessageKey) {
                     return true;
                 }
-                else {
-                    return false
-                }
+
+                return false;
+
             }
 
-            if(isHostPrejoinError()) {
+            if (isHostPrejoinError()) {
                 return;
             }
 
             this.reconnectTimeout = setTimeout(() => {
-                if(isHostPrejoinError()) {
+                if (isHostPrejoinError()) {
                     return;
                 }
                 APP.store.dispatch(conferenceWillJoin(room));
@@ -774,7 +777,8 @@ export default {
             startWithVideoMuted: config.startWithVideoMuted
                 || isUserInteractionRequiredForUnmute(APP.store.getState())
         };
-        if(refreshTracksOnly) {
+
+        if (refreshTracksOnly) {
             try {
                 // Initialize the device list first. This way, when creating tracks
                 // based on preferred devices, loose label matching can be done in
@@ -1979,6 +1983,7 @@ export default {
                     APP.store.dispatch(toggleScreenshotCaptureEffect(true));
                 }
                 sendAnalytics(createScreenSharingEvent('started'));
+                APP.store.dispatch(setFilmStripCollapsed(true));
                 logger.log('Screen sharing started');
             })
             .catch(error => {

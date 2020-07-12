@@ -1354,6 +1354,7 @@ function _mapStateToProps(state) {
         enableFeaturesBasedOnToken
     } = state['features/base/config'];
     const sharedVideoStatus = state['features/shared-video'].status;
+
     const {
         fullScreen,
         overflowMenuVisible

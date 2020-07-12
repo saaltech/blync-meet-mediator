@@ -17,6 +17,7 @@
     width: 100%;
     position: fixed;
     flex-direction: column;
+    transform: translateY(-40px);
 
     /*
      * Firefox sets flex items to min-height: auto and min-width: auto,
@@ -32,6 +33,8 @@
 
     &.reduce-height {
         // top: calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight});
+        // top: -40px;
+        transform: translateY(0px);
     }
 
     &__videos-container {
