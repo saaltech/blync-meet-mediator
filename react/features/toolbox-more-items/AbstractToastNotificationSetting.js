@@ -47,6 +47,7 @@ export default class AbstractToastNotificationSetting<P: Props, S> extends Compo
  */
 export function _mapDispatchToProps(dispatch: Dispatch<any>) {
     return {
+        dispatch,
         _updateToastNotificationOptions(options: Object) {
             dispatch(updateToastNotificationOptions(options));
         },

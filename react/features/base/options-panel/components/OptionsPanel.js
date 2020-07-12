@@ -27,7 +27,8 @@ export default class OptionsPanel extends Component<Props> {
         const { isOpen, children, title, onClose, noBodyPadding } = this.props;
 
         return (
-            <div className = { `options-panel ${isOpen ? 'options-panel--visible' : ''}` }>
+            <div
+                className = { `options-panel ${isOpen ? 'options-panel--visible' : ''}` }>
                 <div className = 'options-panel__header'>
                     <div className = 'options-panel__title'>
                         {title}

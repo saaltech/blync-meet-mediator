@@ -21,6 +21,8 @@ import AbstractToastNotificationSetting, {
  * @extends Component
  */
 class ToastNotificationSettings extends AbstractToastNotificationSetting<Props, *> {
+
+
     /**
      * Implements React's {@link Component#render()}.
      *

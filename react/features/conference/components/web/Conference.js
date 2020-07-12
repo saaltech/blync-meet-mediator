@@ -176,7 +176,6 @@ class Conference extends AbstractConference<Props, *> {
      * @returns {ReactElement}
      */
     render() {
-        console.log(SpeakersList, 'SpeakersListSpeakersListSpeakersList');
         const {
             // XXX The character casing of the name filmStripOnly utilized by
             // interfaceConfig is obsolete but legacy support is required.

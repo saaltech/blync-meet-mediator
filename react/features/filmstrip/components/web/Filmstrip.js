@@ -176,8 +176,6 @@ class Filmstrip extends Component <Props> {
      * @returns {ReactElement}
      */
     render() {
-        console.log(this.props._collapsed, 'collapsedcollapsedcollapsed');
-
         // Note: Appending of {@code RemoteVideo} views is handled through
         // VideoLayout. The views do not get blown away on render() because
         // ReactDOMComponent is only aware of the given JSX and not new appended

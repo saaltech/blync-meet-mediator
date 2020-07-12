@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import { Icon, IconMenu, IconCheck } from '../../icons';
+import { Icon, IconCheck, IconMore } from '../../icons';
 
 
 type Props = {
@@ -11,6 +11,8 @@ type Props = {
     onOpenMenu: ?Function,
     label: string,
     icon: ?Object,
+    children: ?Object,
+    disabled: ?boolean
 }
 
 
@@ -27,34 +29,46 @@ class OptionItemCheck extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { checked, label, onCheck, onOpenMenu } = this.props;
+        const { checked, label, onCheck, onOpenMenu, disabled } = this.props;
 
         return (
-            <label
-                className = { `option-item-check ${checked ? 'option-item-check--checked' : ''}` }
-                onClick = { e => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onCheck();
-                } }>
-                <div className = 'option-item-check__label'>
-                    <div className = 'option-item-check__mark'>
-                        {checked && <Icon src = { IconCheck } />}
-                    </div>
-                    {label}
-                </div>
-                {onOpenMenu && <button
-                    className = 'option-item-check__menu-btn'
+            <div>
+                <label
+                    className = { `
+                    option-item-check
+                    ${checked ? 'option-item-check--checked' : ''}
+                    ${disabled ? 'option-item-check--disabled' : ''}
+                    ` }
                     onClick = { e => {
-                        e.preventDefault();
+                        if (disabled) {
+                            return;
+                        }
                         e.stopPropagation();
-                        onOpenMenu();
-                    } }
-                    type = 'button'>
+                        e.preventDefault();
+                        onCheck && onCheck();
+                    } }>
+                    <div className = 'option-item-check__label'>
+                        <div className = 'option-item-check__mark'>
+                            {checked && <Icon src = { IconCheck } />}
+                        </div>
+                        {label}
+                    </div>
+                    {onOpenMenu && <button
+                        className = 'option-item-check__menu-btn'
+                        onClick = { e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onOpenMenu();
+                        } }
+                        type = 'button'>
 
-                    <Icon src = { IconMenu } />
-                </button>}
-            </label>
+                        <Icon src = { IconMore } />
+                    </button>}
+                </label>
+                {this.props.children && <div className = 'option-item-check__children'>
+                    {this.props.children}
+                </div>}
+            </div>
         );
     }
 }
