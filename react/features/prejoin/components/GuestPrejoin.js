@@ -126,8 +126,12 @@ function GuestPrejoin(props) {
         setMeetingFrom(data.scheduledFrom)
         setMeetingTo(data.scheduledTo)
 
-        //TODO: uncomment the seection below after completing the non-host flow
-        setIsMeetingHost(data.isHost || false)
+        //TODO: comment the section below after completing the non-host flow
+        // data.isHost = false
+
+        setIsMeetingHost(data.isHost)
+
+        setShowJoinMeetingForm(!data.isHost)
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -268,8 +272,8 @@ function GuestPrejoin(props) {
                     }
 
                     {
-                        showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
-                        continueAsGuest &&
+                        (showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
+                        continueAsGuest )&&
                         <JoinMeetingForm
                             isUserSignedOut={_isUserSignedOut}
                             meetingId={meetingId}
