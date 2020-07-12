@@ -60,6 +60,8 @@ export default class AbstractToolboxMoreItems<P: Props, S> extends Component<P, 
  */
 export function _mapDispatchToProps(dispatch: Dispatch<any>) {
     return {
+        dispatch,
+
         /**
          * Toggles notifications.
          *

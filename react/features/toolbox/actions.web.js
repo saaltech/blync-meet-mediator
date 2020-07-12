@@ -77,7 +77,8 @@ export function hideToolbox(force: boolean = false): Function {
         const {
             alwaysVisible,
             hovered,
-            timeoutMS
+            timeoutMS,
+            overflowMenuVisible
         } = state['features/toolbox'];
 
         if (alwaysVisible) {
@@ -88,8 +89,10 @@ export function hideToolbox(force: boolean = false): Function {
 
         if (!force
                 && (hovered
+                    || overflowMenuVisible
                     || state['features/invite'].calleeInfoVisible
-                    || state['features/chat'].isOpen)) {
+                    || state['features/chat'].isOpen
+                    || state['features/toolbox-more'].toastNotificationVisible)) {
             dispatch(
                 setToolboxTimeout(
                     () => dispatch(hideToolbox()),
