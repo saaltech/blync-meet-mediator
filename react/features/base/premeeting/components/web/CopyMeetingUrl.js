@@ -70,16 +70,18 @@ class CopyMeetingUrl extends Component<Props, State> {
      *
      * @returns {void}
      */
-    _copyUrl() {
+    async _copyUrl() {
         const textarea = this.textarea.current;
 
         try {
             textarea.select();
-            document.execCommand('copy');
+            //document.execCommand('copy');
+            await navigator.clipboard.writeText(textarea.value)
             textarea.blur();
             this._showLinkCopied();
             window.setTimeout(this._hideLinkCopied, COPY_TIMEOUT);
         } catch (err) {
+            console.log(err)
             logger.error('error when copying the meeting url');
         }
     }
@@ -151,10 +153,13 @@ class CopyMeetingUrl extends Component<Props, State> {
      */
     render() {
         const { showCopyLink, showLinkCopied } = this.state;
-        const { url, t } = this.props;
+        let { url, t, meetingUrl } = this.props;
         const { _copyUrl, _showCopyLink, _hideCopyLink } = this;
         const src = showLinkCopied ? IconCheck : IconCopy;
 
+        if(!url && meetingUrl){
+             url = meetingUrl
+        }
         return (
             <div
                 className = 'copy-meeting'
@@ -163,7 +168,8 @@ class CopyMeetingUrl extends Component<Props, State> {
                 <div
                     className = { `url ${showLinkCopied ? 'done' : ''}` }
                     onClick = { _copyUrl } >
-                    { !showCopyLink && !showLinkCopied && url }
+                    { !showCopyLink && !showLinkCopied && 
+                        <div className="url-text">{url}</div> }
                     { showCopyLink && t('prejoin.copyAndShare') }
                     { showLinkCopied && t('prejoin.linkCopied') }
                     <Icon

@@ -185,6 +185,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @returns {void}
      */
     _onJoin() {
+        //const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
         const room = this.state.room || this.state.generatedRoomname;
 
         sendAnalytics(
@@ -192,6 +193,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 isGenerated: !this.state.room,
                 room
             }));
+            
 
         if (room) {
             this.setState({ joining: true });
@@ -200,8 +202,8 @@ export class AbstractWelcomePage extends Component<Props, *> {
             // may have already been unmounted.
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
-
-            this.props.dispatch(appNavigate(room))
+            const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
+            this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }
@@ -281,6 +283,9 @@ export function _mapStateToProps(state: Object) {
         _enableInsecureRoomNameWarning: state['features/base/config'].enableInsecureRoomNameWarning || false,
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
-        _settings: state['features/base/settings']
+        _settings: state['features/base/settings'],
+        _isUserSignedOut : state['features/app-auth'].isUserSignedOut,
+        _postWelcomePageScreen: state['features/app-auth'].meetingDetails
+
     };
 }

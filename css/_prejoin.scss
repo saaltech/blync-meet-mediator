@@ -1,3 +1,154 @@
+.prejoin-page-button {
+
+    &.next {
+        background: #005C85;
+        width: 100px;
+        border-radius: $welcomePageButtonBorderRadius;
+    }
+
+    &.disabled {
+        background: #5497b4;
+        cursor: not-allowed;
+    }
+    
+    min-width: $welcomePageButtonMinWidth;
+    height: $welcomePageButtonHeight;
+    font-size: $welcomePageButtonFontSize;
+    font-weight: $welcomePageButtonFontWeight;
+    color: #FFFFFF;
+    text-align: center;
+    vertical-align: middle;
+    line-height: $welcomePageButtonLineHeight;
+    cursor: pointer;
+    padding: 5px;
+    margin: 15px auto;
+}
+
+.hostPrejoin {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 100;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: center;
+    color: #393939;
+
+    .login-message {
+        padding-top: 50px;
+    }
+
+    .sign-in-link {
+        color: #00C062;
+    }
+
+    .page-title {
+        position: absolute;
+        top: 15px;
+        font-weight: bold;
+        left: 40%;
+    }
+
+    .profileSection {
+        margin: 70 auto 0;
+    }
+
+    .modesSection {
+        width: 350px;
+
+        ul {
+            border-bottom: 2px solid #C7C7C7 !important;
+            height: 35px;
+            margin-top: 70px;
+            display: flex;
+            list-style: none;
+            padding: 20px 20px 0;
+            text-align: center;
+        }
+
+        li {
+            flex: 1;
+            margin: 0 5px 0 0;
+            color: #9A9A9A;
+
+            &.selected {
+                border-bottom: 4px solid #005C85;
+                color: #005C85;
+            }
+        } 
+
+        .cancel {
+            padding: 20px;
+        }
+    }
+
+    .jitsi-icon {
+
+        &.backArrow {
+            top: 10px;
+            display: block;
+            box-sizing: border-box;
+            position: fixed;
+            right: 305px;
+
+            svg {
+                height: 28px;
+                width: 28px;
+            }
+        }
+        
+        svg {
+            fill: #393939;
+        }
+    }
+    
+    .no-account {
+        > :last-child {
+            color: #00C062;
+            font-weight: bold;
+            padding: 5px;
+            cursor: pointer;
+        }
+    }
+
+    .waiting-display {
+        margin: 30px;
+        color: #393939;
+        img {
+            margin-top: 50px;
+        }
+    }
+    
+}
+
+.shareMeeting {
+
+    .label {
+        font-size: 20px;
+        padding: 0 0 15px;
+    }
+
+    .share-meeting-details {
+        padding: 20px 0px;
+
+        .label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .modalities {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    
+    
+}
+
 .prejoin {
 
     &-input-area {

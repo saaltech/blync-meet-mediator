@@ -37,6 +37,32 @@ const config = {
         https: true,
         inline: true,
         proxy: {
+            
+            '/auth/api/users/sign-in': {
+                target: 'http://localhost:8010/',
+                secure: false
+            },
+
+            '/unauth/api/v1/conferences': {
+                target: 'http://localhost:8011/',
+                secure: false
+            },
+
+            '/auth/api/v1/conferences': {
+                target: 'http://localhost:8011/',
+                secure: false
+            },
+
+            '/unauth/api/v1/conferences/validatesecret': {
+                target: 'http://localhost:8011/',
+                secure: false
+            },
+
+            '/auth/api/v1/jid': {
+                target: 'http://localhost:8011/',
+                secure: false
+            },
+
             '/': {
                 bypass: devServerProxyBypass,
                 secure: false,
@@ -45,6 +71,7 @@ const config = {
                     'Host': new URL(devServerProxyTarget).host
                 }
             }
+
         }
     },
     devtool: 'source-map',

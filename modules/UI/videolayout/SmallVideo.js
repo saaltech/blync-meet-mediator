@@ -590,8 +590,6 @@ export default class SmallVideo {
         const user = APP.store.getState()['features/base/participants']
         .find(p => p.id === this.id);
 
-        console.log(user, this.id, 'useruseruseruseruseruseruser');
-
         if (!user) {
             hostLabel.hide();
 

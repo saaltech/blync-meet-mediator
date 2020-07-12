@@ -43,7 +43,8 @@ import {
     onStartMutedPolicyChanged,
     p2pStatusChanged,
     sendLocalParticipant,
-    setDesktopSharingEnabled
+    setDesktopSharingEnabled,
+    setPassword
 } from './react/features/base/conference';
 import {
     checkAndNotifyForNewDevice,
@@ -2146,6 +2147,21 @@ export default {
                 APP.API.notifyUserRoleChanged(id, role);
             } else {
                 APP.store.dispatch(participantRoleChanged(id, role));
+            }
+
+            
+
+            if(role !== "moderator") {
+                return;
+            }
+            let state = APP.store.getState();
+            let meeting = state['features/app-auth'].meetingDetails;
+            let conference = state['features/base/conference'].conference;
+            if(conference.options.name === meeting.meetingId) {
+                // Set Meeting password to the room if set by host
+                if(meeting.meetingPassword) {
+                    APP.store.dispatch(setPassword(conference, conference.lock, meeting.meetingPassword))
+                }
             }
         });
 

@@ -1,0 +1,74 @@
+// @flow
+
+import type { Dispatch } from 'redux';
+
+import {
+    SET_USER_SIGNED_OUT,
+    APP_LOGIN,
+    EXPIRE_TOKEN,
+    SET_POST_WELCOME_SCREEN_DETAILS
+} from './actionTypes';
+import { LoginComponent } from './components';
+import logger from './logger';
+
+import { isTokenExpired } from './functions'
+
+import {
+    getRandomArbitrary
+} from './functions'
+
+/**
+ * Set Login tokens or error if any and called only when login in
+ *
+ * @returns {{
+ *     type: APP_LOGIN
+ * }}
+ */
+export function resolveAppLogin(details) {
+    return (dispatch: Dispatch<any>, getState: Function) => {
+        if(details.expires_in > 0) {
+            details.expires = (new Date()).getTime() + (details.expires_in * 1000)
+        }
+
+        dispatch({ type: APP_LOGIN, payload: details });
+        dispatch(decideAppLogin())
+    };
+}
+
+export function resolveAppLogout() {
+    return (dispatch: Dispatch<any>, getState: Function) => {
+
+        dispatch({ type: EXPIRE_TOKEN });
+    };
+}
+
+/**
+ * Opens {@link LoginComponent} which will ask to enter username and password
+ * for the current conference.
+ *
+ * @protected
+ * @returns {Action}
+ */
+export function decideAppLogin() {
+    // TODO: in future we could have verify token functionality here by making an IRP call
+    // For now, just verify the meeting_access_token expiry
+    return (dispatch: Dispatch<any>, getState: Function) => {
+        dispatch({ type: SET_USER_SIGNED_OUT, payload: !isTokenExpired() });
+    }
+}
+
+export function setPostWelcomePageScreen(room: string, meetingObj) {
+
+    if(!meetingObj) {
+        meetingObj = {
+            meetingName: room,
+            meetingId: getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
+                getRandomArbitrary(100,999)
+        }
+    }
+    
+    return {
+        type: SET_POST_WELCOME_SCREEN_DETAILS,
+        meetingDetails : meetingObj
+    };
+}

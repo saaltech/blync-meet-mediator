@@ -9,6 +9,11 @@ import Preview from './Preview';
 import Background from '../../../../welcome/components/background';
 import { connect } from '../../../redux';
 import { getCurrentConferenceUrl } from '../../../connection';
+import HostPrejoin from '../../../../prejoin/components/HostPrejoin'
+import GuestPrejoin from '../../../../prejoin/components/GuestPrejoin'
+import {
+    getQueryVariable
+} from '../../../../prejoin/functions';
 
 type Props = {
 
@@ -35,7 +40,11 @@ type Props = {
     /**
      * The video track to render as preview (if omitted, the default local track will be rendered).
      */
-    videoTrack?: Object
+    videoTrack?: Object,
+    
+    navigatedFromHome?: boolean,
+
+    meetNowSelected?: boolean
 }
 
 /**
@@ -48,32 +57,87 @@ class PreMeetingScreen extends PureComponent<Props> {
      *
      * @inheritdoc
      */
-    render() {
-        const { title, videoMuted, videoTrack, url } = this.props;
-        let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            meetNow: true,
+            showTrackPreviews: false,
+            navigatedFromHome: undefined
+        };
+
+        this.setMeetNow = this.setMeetNow.bind(this);
+        this.showTrackPreviews = this.showTrackPreviews.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({
+            meetNow: true,
+            navigatedFromHome: getQueryVariable('home') ? true: false
+        });
+    }
+
+    setMeetNow(value){
+        this.setState({
+            meetNow: value
+        })
+    }
+
+    showTrackPreviews(value) {
+        this.setState({
+            showTrackPreviews: value
+        })
+    }
+
+    render() {
+        const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
+        const { meetNow, showTrackPreviews, navigatedFromHome } = this.state;
+        let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
+        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
+        if(guestFlow) {
+            window.sessionStorage.removeItem('isJWTSet')
+        }
         return (
             <div
                 className = 'premeeting-screen'
                 id = 'lobby-screen'>
                 <Background backgroundColor='black'/>
-                <Preview
-                        videoMuted = { videoMuted }
-                        videoTrack = { videoTrack } >
-                    <div className = 'media-btn-container'>
-                        <AudioSettingsButton visible = { true } />
-                        <VideoSettingsButton visible = { true } />
+                {
+                    showTrackPreviews && meetNow ?
+                    <Preview
+                            videoMuted = { videoMuted }
+                            videoTrack = { videoTrack } >
+                        <div className = 'media-btn-container'>
+                            <AudioSettingsButton visible = { true } />
+                            <VideoSettingsButton visible = { true } />
+                        </div>
+                        { this.props.footer }
+                    </Preview>
+                    :
+                    <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
+
                     </div>
-                    { this.props.footer }
-                </Preview>
+                }
+                
 
                 <div className = 'content'>
                     <a href="/" className="close-icon"></a>
-                    <div className = 'title'>
-                        { urlToShow }
-                    </div>
-                    <CopyMeetingUrl />
-                    { this.props.children }
+                    {
+                        navigatedFromHome && 
+                        <HostPrejoin 
+                            isMeetNow={this.setMeetNow} 
+                            //Show join now after page reload in case of `meet now` option
+                            joinNow={meetNowSelected}
+                            meetingName={urlToShow}
+                            showTrackPreviews={this.showTrackPreviews}
+                        />
+                    }
+                    {
+                        guestFlow && 
+                        <GuestPrejoin 
+                            meetingId={urlToShow}
+                        />
+                    }
                 </div>
             </div>
         );
@@ -88,7 +152,9 @@ class PreMeetingScreen extends PureComponent<Props> {
  */
 function mapStateToProps(state) {
     return {
-        url: getCurrentConferenceUrl(state)
+        url: getCurrentConferenceUrl(state),
+        meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails
+            && APP.store.getState()['features/app-auth'].meetingDetails.meetNow
     };
 }
 

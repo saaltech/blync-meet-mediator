@@ -11,6 +11,11 @@ import keyboardshortcut from './modules/keyboardshortcut/keyboardshortcut';
 import remoteControl from './modules/remotecontrol/RemoteControl';
 import translation from './modules/translation/translation';
 
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import es from 'date-fns/locale/es';
+import "react-datepicker/dist/react-datepicker.css"
+registerLocale('es', es)
+
 window.APP = {
     API,
     conference,
