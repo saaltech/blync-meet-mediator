@@ -6,7 +6,7 @@ import type { Dispatch } from 'redux';
 import {
     updateToastNotificationOptions,
     showToastNotificationOptions
-} from './actions';
+} from '../actions';
 
 /**
  * The type of the React {@code Component} props of {@code AbstractToastNotificationSetting}.

@@ -2,14 +2,14 @@
 import { Checkbox } from '@atlaskit/checkbox';
 import React from 'react';
 
-import { translate } from '../../base/i18n';
+import { translate } from '../../../base/i18n';
 import {
     OptionsPanel,
     OptionItemCheck,
     OptionDivider,
     OptionTitle
-} from '../../base/options-panel';
-import { connect } from '../../base/redux';
+} from '../../../base/options-panel';
+import { connect } from '../../../base/redux';
 import AbstractToastNotificationSetting, {
     type Props,
     _mapDispatchToProps,

@@ -3,17 +3,17 @@
 // @flow
 import React from 'react';
 
-import { translate } from '../../base/i18n';
+import { translate } from '../../../base/i18n';
 import {
     OptionsPanel,
     OptionItemCheck,
     OptionDivider
-} from '../../base/options-panel';
-import { getLocalParticipant } from '../../base/participants';
-import { connect } from '../../base/redux';
+} from '../../../base/options-panel';
+import { getLocalParticipant } from '../../../base/participants';
+import { connect } from '../../../base/redux';
 import {
     setFullScreen
-} from '../../toolbox/actions';
+} from '../../../toolbox/actions';
 import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
     _mapStateToProps,
