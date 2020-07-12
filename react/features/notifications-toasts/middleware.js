@@ -1,42 +1,20 @@
 /* @flow */
-
-// import { getCurrentConference } from '../base/conference';
-
 import {
     PARTICIPANT_JOINED,
     PARTICIPANT_LEFT,
-
-    //     PARTICIPANT_ROLE,
-    //     PARTICIPANT_UPDATED,
-    //     getParticipantById,
-    //     getParticipantDisplayName
     getLocalParticipant,
     getParticipantById
 } from '../base/participants';
 import {
     MiddlewareRegistry
-
-    // StateListenerRegistry
 } from '../base/redux';
 import {
     ADD_MESSAGE
 } from '../chat/actionTypes';
 
-
-// import {
-//     SHOW_NOTIFICATION
-// } from './actionTypes';
-
 import {
-
-    // clearNotifications,
     showNotification
-
-    // showParticipantJoinedNotification
 } from './actions';
-
-// import { NOTIFICATION_TIMEOUT } from './constants';
-// import { joinLeaveNotificationsDisabled } from './functions';
 
 declare var interfaceConfig: Object;
 
@@ -88,7 +66,7 @@ MiddlewareRegistry.register(store => next => action => {
 
         const { toastNotificationSettings } = state['features/toolbox-more'];
 
-        if (!toastNotificationSettings.showJoined) {
+        if (!toastNotificationSettings.showJoinedMeeting) {
             return;
         }
 
@@ -109,7 +87,7 @@ MiddlewareRegistry.register(store => next => action => {
 
         const { toastNotificationSettings } = state['features/toolbox-more'];
 
-        if (!toastNotificationSettings.showLeft) {
+        if (!toastNotificationSettings.showLeftMeeting) {
             return;
         }
 

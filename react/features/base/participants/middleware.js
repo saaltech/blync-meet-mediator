@@ -423,13 +423,13 @@ function _raiseHandUpdated({ dispatch, getState }, conference, participantId, ne
         raisedHand
     }));
 
+    const { toastNotificationSettings } = getState()['features/toolbox-more'];
+
+    if (!toastNotificationSettings.showRaisedHand) {
+        return;
+    }
+
     if (raisedHand) {
-        // dispatch(showNotification({
-        //     titleArguments: {
-        //         name: getParticipantDisplayName(getState, participantId)
-        //     },
-        //     titleKey: 'notify.raisedHand'
-        // }, NOTIFICATION_TIMEOUT));
 
         dispatch(showNotification({
             userId: participantId,
