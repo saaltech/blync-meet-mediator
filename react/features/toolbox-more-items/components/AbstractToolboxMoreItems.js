@@ -3,13 +3,12 @@
 import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
-import { setOverflowMenuVisible } from '../toolbox';
-
+import { setOverflowMenuVisible } from '../../toolbox';
 import {
     enableNotification,
     showToastNotificationOptions,
     updateToastNotificationOptions
-} from './actions';
+} from '../actions';
 
 /**
  * The type of the React {@code Component} props of {@code AbstractToolboxMoreItems}.
