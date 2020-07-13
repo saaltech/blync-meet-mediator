@@ -36,9 +36,11 @@ export default ({ url, method, body, onSuccess }) => {
             }
           }
         }
-        // if it fails, Clear features/app-auth and move to home page
-        invalidateAndGoHome();
-        return;
+        else {
+          // if it fails, Clear features/app-auth and move to home page
+          invalidateAndGoHome();
+          return;
+        }
       }
 
       const response = await axios[method](url, 
