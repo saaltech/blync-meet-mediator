@@ -68,6 +68,7 @@ class WelcomePage extends AbstractWelcomePage {
             selectedTab: 0,
             formDisabled: true,
             hideLogin: true,
+            sessionExpiredQuery: false,
             goClicked: false
         };
 
@@ -134,6 +135,12 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
+        if(getQueryVariable("sessionExpired")) {
+            this.setState({
+                hideLogin: false,
+                sessionExpiredQuery: true
+            })
+        }
         this.props.dispatch(decideAppLogin())
         super.componentDidMount();
         this.setState({
@@ -198,7 +205,7 @@ class WelcomePage extends AbstractWelcomePage {
      */
     render() {
         const { t, _isUserSignedOut, _postWelcomePageScreen } = this.props;
-        const { hideLogin, goClicked } = this.state;
+        const { hideLogin, goClicked, sessionExpiredQuery } = this.state;
         const { APP_NAME } = interfaceConfig;
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
@@ -222,6 +229,7 @@ class WelcomePage extends AbstractWelcomePage {
                                 closeAction={ this._closeLogin }
                                 isOverlay={true}
                                 t = {t}
+                                errorMsg={sessionExpiredQuery ? "Session expired.": ""}
                             />
                         }
 

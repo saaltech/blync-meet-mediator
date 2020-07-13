@@ -18,3 +18,4 @@ config.jidEP = "/auth/api/v1/jid"
 
 // IRP Endpoints
 config.signInEP = '/api/users/sign-in'
+config.refreshToken = '/api/users/accesstoken/refresh'
