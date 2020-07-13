@@ -64,6 +64,7 @@ function GuestPrejoin(props) {
     const [continueAsGuest, setContinueAsGuest] = useState(false);
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState('')
+    const [isSecretEnabled, setIsSecretEnabled] = useState(false)
 
     const [guestName, setGuestName] = useState('')
     useEffect(() => {
@@ -139,6 +140,8 @@ function GuestPrejoin(props) {
         setIsMeetingHost(data.isHost)
 
         setShowJoinMeetingForm(!_isUserSignedOut && !data.isHost)
+
+        setIsSecretEnabled(data.isSecretEnabled)
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -278,6 +281,7 @@ function GuestPrejoin(props) {
                         (showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
                         continueAsGuest )&&
                         <JoinMeetingForm
+                            isSecretEnabled={isSecretEnabled}
                             isUserSignedOut={_isUserSignedOut}
                             meetingId={meetingId}
                             meetingPassword={{
