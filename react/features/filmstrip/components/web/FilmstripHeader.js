@@ -79,7 +79,7 @@ class FilmstripHeader extends Component<Props> {
         }
 
         return (
-            <div className = { `film-strip-header ${_visible ? 'visible' : ''}` }>
+            <div className = { `film-strip-header ${_visible ? 'film-strip-header--visible' : ''}` }>
                 <div className = 'film-strip-header__container'>
                     <div className = 'film-strip-header__title'>
                         <span className = 'film-strip-header__title-text'>{ _subject }</span>
