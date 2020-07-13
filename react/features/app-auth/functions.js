@@ -56,20 +56,3 @@ export function validateToken(){
         return isTokenValid
     }
 }
-
-export async function saveHostJidToUserMapping(connection) {
-
-    if(connection.xmpp && connection.xmpp.connection &&
-        connection.xmpp.connection._stropheConn.jid) {
-        try {
-            await axios.post(
-                config.conferenceManager + config.jidEP, 
-                { 
-                    jid: connection.xmpp.connection._stropheConn.jid
-                }, 
-                setToken(true, true));
-            } catch (err) {
-            console.log("Unable to save Jid to Host mapping",err)
-            }
-    }
-}

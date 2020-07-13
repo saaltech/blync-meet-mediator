@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { setToken, validateToken } from '../app-auth/functions';
-import { resolveAppLogout, resolveAppLogin } from '../app-auth/actions';
+import { resolveAppLogout, resolveAppLogin, invalidateAndGoHome } from '../app-auth/actions';
 import { config } from '../../config'
 
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
 
-  const doRequest = async (tokenRequired = true) => {
+  const doRequest = async (tokenRequired = false) => {
     try {
       setErrors(null);
       let validToken = !tokenRequired || validateToken();
@@ -63,12 +63,6 @@ export default ({ url, method, body, onSuccess }) => {
       );
     }
   };
-
-
-  const invalidateAndGoHome = () => {
-    APP.store.dispatch(resolveAppLogout());
-    window.location.href = window.location.origin + "?sessionExpired=true";
-  }
 
   return [ doRequest, errors ];
 };
