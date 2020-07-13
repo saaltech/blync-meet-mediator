@@ -109,11 +109,6 @@ async function validationFromNonComponents(tokenRequired) {
             }
           }
         }
-        else {
-          // if it fails, Clear features/app-auth and move to home page
-          invalidateAndGoHome();
-          return false;
-        }
       }
 
       return true
