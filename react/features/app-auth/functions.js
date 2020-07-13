@@ -36,6 +36,27 @@ export function setToken(tokenRequired, authenticationHeader = false) {
     }
   }
 
+export function validateToken(){
+    let isTokenValid = true;
+    let appAuth = APP.store.getState()['features/app-auth']
+
+    let tokenExpiryTimestamp = (appAuth && appAuth.expires) || -1;
+    let tokenExpiryTime = -1
+    try {
+        tokenExpiryTime = parseInt(tokenExpiryTimestamp);
+        if (
+            tokenExpiryTime < 1 ||
+            (tokenExpiryTime < (new Date()).getTime())
+        ){
+            isTokenValid = false
+        }
+    } catch (err) {
+        console.error(err);
+    } finally {
+        return isTokenValid
+    }
+}
+
 export async function saveHostJidToUserMapping(connection) {
 
     if(connection.xmpp && connection.xmpp.connection &&

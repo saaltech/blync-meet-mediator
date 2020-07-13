@@ -20,6 +20,7 @@ function LoginComponent(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formDisabled, setFormDisabled] = useState(true);
+  const { errorMsg } = props;
   
   useEffect(() => {
     if(email != "" && password != "") {
@@ -119,7 +120,7 @@ function LoginComponent(props) {
                     }
                 </div>
 
-                <div className="error">{errors}</div>
+                <div className="error">{errors || errorMsg}</div>
             </div>
         </div>
       </div>
