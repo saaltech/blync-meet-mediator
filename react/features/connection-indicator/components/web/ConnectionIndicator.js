@@ -153,7 +153,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
 
         return (<div
             className = 'popover-trigger'
-            title = { this.props.connectionStatus === JitsiParticipantConnectionStatus.ACTIVE ? 'Good' : 'Bad' }>
+            title = { `Connection: ${this._getConnectionStatusTip()}` }>
             <div
                 className = { indicatorContainerClassNames }
                 style = {{ fontSize: this.props.iconSize }}>
@@ -165,6 +165,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
 
         // return (
         //     <Popover
+
         //         className = { rootClassNames }
         //         content = { this._renderStatisticsTable() }
         //         disablePopover = { !this.props.enableStatsDisplay }

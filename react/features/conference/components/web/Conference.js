@@ -8,6 +8,7 @@ import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
 import { Icon, IconShareDesktop } from '../../../base/icons';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
 import { Chat } from '../../../chat';
@@ -93,7 +94,8 @@ type Props = AbstractProps & {
 
     dispatch: Function,
     t: Function,
-    _screensharing: boolean
+    _screensharing: boolean,
+    _isModerator: boolean
 }
 
 /**
@@ -210,7 +212,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 <ToolboxMoreItems />
                 <ToastNotificationSettings />
-                <SpeakersList />
+                {this.props._isModerator && <SpeakersList />}
 
                 { this.renderNotificationsContainer() }
 
@@ -284,6 +286,7 @@ class Conference extends AbstractConference<Props, *> {
  */
 function _mapStateToProps(state) {
     const localVideo = getLocalVideoTrack(state['features/base/tracks']);
+    const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
         ...abstractMapStateToProps(state),
@@ -292,7 +295,8 @@ function _mapStateToProps(state) {
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
         _showPrejoin: isPrejoinPageVisible(state),
-        _interimPrejoin: isInterimPrejoinPageVisible(state)
+        _interimPrejoin: isInterimPrejoinPageVisible(state),
+        _isModerator: isModerator
     };
 }
 
