@@ -127,7 +127,7 @@ function HostPrejoin(props) {
       }
 
       // Make DB save call
-      await saveConference();
+      await saveConference(true);
 
       APP.store.dispatch(setPostWelcomePageScreen( null,
         {

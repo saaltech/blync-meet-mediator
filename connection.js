@@ -14,7 +14,7 @@ import {
     JitsiConnectionEvents
 } from './react/features/base/lib-jitsi-meet';
 
-import { saveHostJidToUserMapping } from './react/features/app-auth/functions'
+import { saveHostJidToUserMapping } from './react/features/app-auth/actions'
 
 const logger = Logger.getLogger(__filename);
 

@@ -48,7 +48,7 @@ function GuestPrejoin(props) {
                 if (_isUserSignedOut)
                     await unauthGetConference()
                 else 
-                    await getConference()
+                    await getConference(true)
             }, 3000)
         }
         // Fetch the meeting details using the id in the address bar
@@ -151,7 +151,7 @@ function GuestPrejoin(props) {
     }
 
     const addTokenToURL = async () => {
-        await getConference()
+        await getConference(true)
         if(!getQueryVariable('jwt')) {
             window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
         }
@@ -184,7 +184,7 @@ function GuestPrejoin(props) {
         if (showJoinMeetingForm ||
             (!_isUserSignedOut && !isMeetingHost) ||
             continueAsGuest) {
-            await verifySecret(true)
+            await verifySecret()
             return;
         }
 
