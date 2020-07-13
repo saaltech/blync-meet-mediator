@@ -184,7 +184,7 @@ function GuestPrejoin(props) {
         if (showJoinMeetingForm ||
             (!_isUserSignedOut && !isMeetingHost) ||
             continueAsGuest) {
-            await verifySecret(true)
+            await verifySecret()
             return;
         }
 
