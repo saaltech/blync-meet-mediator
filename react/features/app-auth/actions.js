@@ -1,6 +1,8 @@
 // @flow
 
 import type { Dispatch } from 'redux';
+import axios from 'axios';
+import { config } from '../../config'
 
 import {
     SET_USER_SIGNED_OUT,
@@ -11,7 +13,7 @@ import {
 import { LoginComponent } from './components';
 import logger from './logger';
 
-import { isTokenExpired } from './functions'
+import { isTokenExpired, setToken, validateToken } from './functions'
 
 import {
     getRandomArbitrary
@@ -34,6 +36,11 @@ export function resolveAppLogin(details) {
         dispatch(decideAppLogin())
     };
 }
+
+export function invalidateAndGoHome() {
+    APP.store.dispatch(resolveAppLogout());
+    window.location.href = window.location.origin + "?sessionExpired=true";
+  }
 
 export function resolveAppLogout() {
     return (dispatch: Dispatch<any>, getState: Function) => {
@@ -71,4 +78,61 @@ export function setPostWelcomePageScreen(room: string, meetingObj) {
         type: SET_POST_WELCOME_SCREEN_DETAILS,
         meetingDetails : meetingObj
     };
+}
+
+
+async function validationFromNonComponents(tokenRequired) {
+    let validToken = !tokenRequired || validateToken();
+
+      //TODO check for !validToken once testing is done
+      if(!validToken) {
+        // Try refreshToken call
+        let appAuth = APP.store.getState()['features/app-auth']
+        let refreshToken = appAuth && appAuth.refreshToken
+
+        if(refreshToken) {
+          try {
+            const res = await axios.post(
+              config.refreshToken, 
+              {
+                refresh_token: refreshToken
+              })
+              APP.store.dispatch(resolveAppLogin(data))
+              return true;
+          }
+          catch(e) {
+            console.log("refresh Token error", e)
+            if(e && e.response && e.response.status == 401) {
+              // only in case of invalid grant
+              invalidateAndGoHome();
+              return false;
+            }
+          }
+        }
+        else {
+          // if it fails, Clear features/app-auth and move to home page
+          invalidateAndGoHome();
+          return false;
+        }
+      }
+
+      return true
+}
+
+export async function saveHostJidToUserMapping(connection) {
+
+    if(connection.xmpp && connection.xmpp.connection &&
+        connection.xmpp.connection._stropheConn.jid &&
+        validationFromNonComponents(true)) {
+        try {
+            await axios.post(
+                config.conferenceManager + config.jidEP, 
+                { 
+                    jid: connection.xmpp.connection._stropheConn.jid
+                }, 
+                setToken(true, true));
+        } catch (err) {
+            console.log("Unable to save Jid to Host mapping",err)
+        }
+    }
 }
