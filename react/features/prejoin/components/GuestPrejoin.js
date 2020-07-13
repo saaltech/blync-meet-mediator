@@ -205,7 +205,8 @@ function GuestPrejoin(props) {
         joinConference();
     }
 
-    const joinNowDisabled = continueAsGuest && guestName.trim() === ""
+    const joinNowDisabled = continueAsGuest
+        && (guestName.trim() === "" || (isSecretEnabled && meetingPassword.trim() === ""))
 
     return (
         <div className={`hostPrejoin`}>
