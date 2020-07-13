@@ -18,7 +18,7 @@ import AbstractToolboxMoreItems, {
     _mapDispatchToProps,
     _mapStateToProps,
     type Props
-} from '../AbstractToolBoxMoreItems';
+} from '../AbstractToolboxMoreItems';
 
 
 /**
