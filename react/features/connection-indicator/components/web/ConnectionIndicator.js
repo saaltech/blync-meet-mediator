@@ -5,7 +5,6 @@ import React from 'react';
 import { translate } from '../../../base/i18n';
 import { Icon, IconConnectionActive, IconConnectionInactive } from '../../../base/icons';
 import { JitsiParticipantConnectionStatus } from '../../../base/lib-jitsi-meet';
-import { Popover } from '../../../base/popover';
 import { ConnectionStatsTable } from '../../../connection-stats';
 import AbstractConnectionIndicator, {
     INDICATOR_DISPLAY_THRESHOLD,
@@ -13,6 +12,7 @@ import AbstractConnectionIndicator, {
     type State as AbstractState
 } from '../AbstractConnectionIndicator';
 
+// import { Popover } from '../../../base/popover';
 declare var interfaceConfig: Object;
 
 /**
@@ -141,30 +141,46 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
      * @returns {ReactElement}
      */
     render() {
-        const visibilityClass = this._getVisibilityClass();
-        const rootClassNames = `indicator-container ${visibilityClass}`;
+        console.log(JitsiParticipantConnectionStatus, 'JitsiParticipantConnectionStatusJitsiParticipantConnectionStatus');
+
+        // const visibilityClass = this._getVisibilityClass();
+
+        // const rootClassNames = `indicator-container ${visibilityClass}`;
 
         const colorClass = this._getConnectionColorClass();
         const indicatorContainerClassNames
             = `connection-indicator indicator ${colorClass}`;
 
-        return (
-            <Popover
-                className = { rootClassNames }
-                content = { this._renderStatisticsTable() }
-                disablePopover = { !this.props.enableStatsDisplay }
-                position = { this.props.statsPopoverPosition }>
-                <div className = 'popover-trigger'>
-                    <div
-                        className = { indicatorContainerClassNames }
-                        style = {{ fontSize: this.props.iconSize }}>
-                        <div className = 'connection indicatoricon'>
-                            { this._renderIcon() }
-                        </div>
-                    </div>
+
+        return (<div
+            className = 'popover-trigger'
+            title = { this.props.connectionStatus === JitsiParticipantConnectionStatus.ACTIVE ? 'Good' : 'Bad' }>
+            <div
+                className = { indicatorContainerClassNames }
+                style = {{ fontSize: this.props.iconSize }}>
+                <div className = 'connection indicatoricon'>
+                    { this._renderIcon() }
                 </div>
-            </Popover>
-        );
+            </div>
+        </div>);
+
+        // return (
+        //     <Popover
+        //         className = { rootClassNames }
+        //         content = { this._renderStatisticsTable() }
+        //         disablePopover = { !this.props.enableStatsDisplay }
+        //         position = { this.props.statsPopoverPosition }>
+        //         <div className = 'popover-trigger'>
+        //             <div
+        //                 className = { indicatorContainerClassNames }
+        //                 style = {{ fontSize: this.props.iconSize }}>
+        //                 <div className = 'connection indicatoricon'>
+        //                     { this._renderIcon() }
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </Popover>
+        // );
     }
 
     /**

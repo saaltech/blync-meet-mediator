@@ -46,7 +46,6 @@ import {
     LiveStreamButton,
     RecordButton
 } from '../../../recording';
-import { SecurityDialogButton } from '../../../security';
 import {
     SETTINGS_TABS,
     SettingsButton,
@@ -82,6 +81,7 @@ import OverflowMenuProfileItem from './OverflowMenuProfileItem';
 import ToolbarButton from './ToolbarButton';
 import VideoSettingsButton from './VideoSettingsButton';
 
+// import { SecurityDialogButton } from '../../../security';
 /**
  * The type of the React {@code Component} props of {@link Toolbox}.
  */
@@ -1096,21 +1096,23 @@ class Toolbox extends Component<Props, State> {
                 );
             case 'closedcaptions':
                 return <ClosedCaptionButton showLabel = { true } />;
-            case 'security':
-                return (
-                    <SecurityDialogButton
-                        key = 'security'
-                        showLabel = { true } />
-                );
-            case 'invite':
-                return (
-                    <OverflowMenuItem
-                        accessibilityLabel = { t('toolbar.accessibilityLabel.invite') }
-                        icon = { IconInviteMore }
-                        key = 'invite'
-                        onClick = { this._onToolbarOpenInvite }
-                        text = { t('toolbar.invite') } />
-                );
+
+                // case 'security':
+                // return (
+                //     <SecurityDialogButton
+                //         key = 'security'
+                //         showLabel = { true } />
+                // );
+
+            // case 'invite':
+            //     return (
+            //         <OverflowMenuItem
+            //             accessibilityLabel = { t('toolbar.accessibilityLabel.invite') }
+            //             icon = { IconInviteMore }
+            //             key = 'invite'
+            //             onClick = { this._onToolbarOpenInvite }
+            //             text = { t('toolbar.invite') } />
+            //     );
             case 'tileview':
                 return <TileViewButton showLabel = { true } />;
             case 'localrecording':
@@ -1198,12 +1200,13 @@ class Toolbox extends Component<Props, State> {
         if (overflowHasItems) {
             buttonsRight.push('overflowmenu');
         }
-        if (this._shouldShowButton('invite')) {
-            buttonsRight.push('invite');
-        }
-        if (this._shouldShowButton('security') || this._shouldShowButton('info')) {
-            buttonsRight.push('security');
-        }
+
+        // if (this._shouldShowButton('invite')) {
+        //     buttonsRight.push('invite');
+        // }
+        // if (this._shouldShowButton('security') || this._shouldShowButton('info')) {
+        //     buttonsRight.push('security');
+        // }
 
         if (this._shouldShowButton('tileview')) {
             buttonsRight.push('tileview');
@@ -1290,15 +1293,15 @@ class Toolbox extends Component<Props, State> {
                                 <ChatCounter />
                             </div> }
 
-                        { buttonsRight.indexOf('invite') !== -1
+                        {/* { buttonsRight.indexOf('invite') !== -1
                             && <ToolbarButton
                                 accessibilityLabel =
                                     { t('toolbar.accessibilityLabel.invite') }
                                 icon = { IconInviteMore }
                                 onClick = { this._onToolbarOpenInvite }
-                                tooltip = { t('toolbar.invite') } /> }
-                        { buttonsRight.indexOf('security') !== -1
-                            && <SecurityDialogButton customClass = 'security-toolbar-button' /> }
+                                tooltip = { t('toolbar.invite') } /> } */}
+                        {/* { buttonsRight.indexOf('security') !== -1
+                            && <SecurityDialogButton customClass = 'security-toolbar-button' /> } */}
                         {/* { buttonsRight.indexOf('overflowmenu') !== -1
                             && <OverflowMenuButton
                                 isOpen = { _overflowMenuVisible }
