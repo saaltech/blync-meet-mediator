@@ -102,6 +102,11 @@
         transform: translateX(-150%);   
     }
 
+    &__videos-container--collapsed .filmstrip__collapse-btn svg {
+        transform: rotate(180deg);
+    }
+
+
     &__toolbar {
         display: none;
     }

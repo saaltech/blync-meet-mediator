@@ -6,7 +6,8 @@ import type { Dispatch } from 'redux';
 import { setShowSpeakersList } from '../..';
 import { getConferenceName } from '../../../base/conference/functions';
 import { Icon, IconArrowDownSmall } from '../../../base/icons';
-import { getParticipantCount, getParticipants } from '../../../base/participants/functions';
+import { PARTICIPANT_ROLE } from '../../../base/participants';
+import { getParticipantCount, getParticipants, getLocalParticipant } from '../../../base/participants/functions';
 import { connect } from '../../../base/redux';
 import ConferenceTimer from '../../../conference/components/ConferenceTimer';
 import { isToolboxVisible } from '../../../toolbox';
@@ -40,7 +41,9 @@ type Props = {
 
     _setShowSpeakersList: Function,
 
-    _showSpeakersList: boolean
+    _showSpeakersList: boolean,
+
+    _isModerator: boolean
 };
 
 /**
@@ -90,14 +93,14 @@ class FilmstripHeader extends Component<Props> {
                             Online users ({this.props._participantCount})
                         </div>
 
-                        <button
+                        {this.props._isModerator && <button
                             className = 'film-strip-header__action-button'
                             onClick = { () => this.props._setShowSpeakersList(!_showSpeakersList) }
                             type = 'button'>
                             <Icon
                                 size = { 16 }
                                 src = { IconArrowDownSmall } />
-                        </button>
+                        </button>}
                     </div>
                 </div>
             </div>
@@ -137,6 +140,7 @@ function _mapDispatchToProps(dispatch: Dispatch<any>) {
 function _mapStateToProps(state) {
     const participantCount = getParticipantCount(state);
     const { showSpeakersList } = state['features/filmstrip'];
+    const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
         // _show: participantCount > 1,
@@ -145,7 +149,8 @@ function _mapStateToProps(state) {
         _participantCount: participantCount,
         _visible: isToolboxVisible(state) && participantCount > 1,
         _participants: getParticipants(state),
-        _showSpeakersList: showSpeakersList
+        _showSpeakersList: showSpeakersList,
+        _isModerator: isModerator
     };
 }
 
