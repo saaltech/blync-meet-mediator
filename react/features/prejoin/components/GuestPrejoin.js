@@ -38,13 +38,21 @@ import {
 function GuestPrejoin(props) {
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
+        if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
+            //Host has already signed-in, so there will be no JWT token in the url
+            window.sessionStorage.setItem('isJWTSet', true);
+            addTokenToURL()
+        }
+        else {
+            setTimeout(async () => {
+                if (_isUserSignedOut)
+                    await unauthGetConference()
+                else 
+                    await getConference()
+            }, 3000)
+        }
         // Fetch the meeting details using the id in the address bar
-        setTimeout(async () => {
-            if (_isUserSignedOut)
-                await unauthGetConference()
-            else 
-                await getConference()
-        }, 3000)
+        
     }, [meetingId]);
 
     const [meetingName, setMeetingName] = useState('');
@@ -195,14 +203,6 @@ function GuestPrejoin(props) {
     }
 
     const joinNowDisabled = continueAsGuest && guestName.trim() === ""
-
-    useEffect(() => {
-        if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
-            //Host has already signed-in, so there will be no JWT token in the url
-            window.sessionStorage.setItem('isJWTSet', true);
-            addTokenToURL()
-        }
-    })
 
     return (
         <div className={`hostPrejoin`}>
