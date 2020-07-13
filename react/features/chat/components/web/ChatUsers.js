@@ -120,7 +120,13 @@ export default class ChatUsers extends Component<Props, State> {
      * @returns {ReactElement}
      */
     render() {
-        const participants = this._getEngagedUsers().filter(user => {
+        const { localParticipant } = this.props;
+        let _participants = this._getEngagedUsers();
+
+        if (this.state.search) {
+            _participants = (this.props.participants || []).filter(participant => participant.id !== localParticipant.id);
+        }
+        const participants = _participants.filter(user => {
             if (!this.state.search) {
                 return user;
             }
@@ -144,7 +150,7 @@ export default class ChatUsers extends Component<Props, State> {
                 <ul className = 'chat-users__list'>
                     {
                         (participants || []).map(participant => {
-                            const lastMessage = this._getLastMessage(participant);
+                            const lastMessage = this._getLastMessage(participant) || {};
 
                             return (<li
                                 key = { participant.id }
@@ -159,13 +165,13 @@ export default class ChatUsers extends Component<Props, State> {
                                         <span className = 'chat-users__username'>{participant.name}</span>
                                         {!lastMessage.hasRead && <span className = 'chat-users__status--new-message' />}
                                     </div>
-                                    <div className = 'chat-users__user-details-body'>
+                                    {lastMessage.message && <div className = 'chat-users__user-details-body'>
                                         {truncate(lastMessage.message, { length: 70 })}
-                                    </div>
+                                    </div>}
                                 </div>
-                                <div className = 'chat-users__chat-time'>
+                                {lastMessage.message && <div className = 'chat-users__chat-time'>
                                     {this._getTimeSinceMessage(lastMessage)}
-                                </div>
+                                </div>}
                             </li>);
                         })
                     }
