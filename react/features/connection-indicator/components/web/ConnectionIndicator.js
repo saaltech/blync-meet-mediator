@@ -5,6 +5,7 @@ import React from 'react';
 import { translate } from '../../../base/i18n';
 import { Icon, IconConnectionActive, IconConnectionInactive } from '../../../base/icons';
 import { JitsiParticipantConnectionStatus } from '../../../base/lib-jitsi-meet';
+import { Popover } from '../../../base/popover';
 import { ConnectionStatsTable } from '../../../connection-stats';
 import AbstractConnectionIndicator, {
     INDICATOR_DISPLAY_THRESHOLD,
@@ -12,7 +13,6 @@ import AbstractConnectionIndicator, {
     type State as AbstractState
 } from '../AbstractConnectionIndicator';
 
-// import { Popover } from '../../../base/popover';
 declare var interfaceConfig: Object;
 
 /**
@@ -142,9 +142,9 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
      */
     render() {
 
-        // const visibilityClass = this._getVisibilityClass();
+        const visibilityClass = this._getVisibilityClass();
 
-        // const rootClassNames = `indicator-container ${visibilityClass}`;
+        const rootClassNames = `indicator-container ${visibilityClass}`;
 
         const colorClass = this._getConnectionColorClass();
         const indicatorContainerClassNames
@@ -153,7 +153,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
 
         return (<div
             className = 'popover-trigger'
-            title = { this.props.connectionStatus === JitsiParticipantConnectionStatus.ACTIVE ? 'Good' : 'Bad' }>
+            title = { `Connection: ${this._getConnectionStatusTip()}` }>
             <div
                 className = { indicatorContainerClassNames }
                 style = {{ fontSize: this.props.iconSize }}>
@@ -165,6 +165,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
 
         // return (
         //     <Popover
+
         //         className = { rootClassNames }
         //         content = { this._renderStatisticsTable() }
         //         disablePopover = { !this.props.enableStatsDisplay }
