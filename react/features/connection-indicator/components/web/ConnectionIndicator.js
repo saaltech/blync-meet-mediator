@@ -141,7 +141,6 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
      * @returns {ReactElement}
      */
     render() {
-        console.log(JitsiParticipantConnectionStatus, 'JitsiParticipantConnectionStatusJitsiParticipantConnectionStatus');
 
         // const visibilityClass = this._getVisibilityClass();
 
