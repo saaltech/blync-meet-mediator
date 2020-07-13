@@ -7,7 +7,9 @@ import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
+import { Icon, IconShareDesktop } from '../../../base/icons';
 import { connect as reactReduxConnect } from '../../../base/redux';
+import { getLocalVideoTrack } from '../../../base/tracks';
 import { Chat } from '../../../chat';
 import { Filmstrip, SpeakersList } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
@@ -90,7 +92,8 @@ type Props = AbstractProps & {
     _showPrejoin: boolean,
 
     dispatch: Function,
-    t: Function
+    t: Function,
+    _screensharing: boolean
 }
 
 /**
@@ -213,6 +216,10 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
+                {this.props._screensharing && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />Your screen is being shared
+                </div>}
+
                 <NotificationsToasts />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
@@ -276,8 +283,11 @@ class Conference extends AbstractConference<Props, *> {
  * @returns {Props}
  */
 function _mapStateToProps(state) {
+    const localVideo = getLocalVideoTrack(state['features/base/tracks']);
+
     return {
         ...abstractMapStateToProps(state),
+        _screensharing: localVideo && localVideo.videoType === 'desktop',
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),

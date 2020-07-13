@@ -921,9 +921,12 @@ class Toolbox extends Component<Props, State> {
             );
         }
 
-        const tooltip = t(
+        let tooltip = t(
             _desktopSharingEnabled
                 ? 'dialog.shareYourScreen' : _desktopSharingDisabledTooltipKey);
+
+
+        tooltip = _screensharing ? t('toolbar.stopScreenSharing') : tooltip;
 
         return (
             <ToolbarButton
