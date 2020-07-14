@@ -1,5 +1,7 @@
 // @flow
 
+import { init } from 'amplitude-js';
+
 import { i18next } from '../base/i18n';
 import { isLocalParticipantModerator } from '../base/participants';
 import { toState } from '../base/redux';
@@ -244,6 +246,9 @@ export function getInviteText({
     _locationUrl,
     _dialIn,
     _liveStreamViewURL,
+    _password,
+    _fromDate,
+    _meetingName,
     phoneNumber,
     t
 }: Object) {
@@ -256,6 +261,22 @@ export function getInviteText({
     invite += t('info.inviteURLSecondPart', {
         url: inviteURL
     });
+
+    invite += `\n\nName: ${_meetingName}`;
+    invite += `\nURL: ${inviteURL}`;
+
+    if (_password) {
+        invite += `\nPassword: ${_password}`;
+    }
+
+    if (_fromDate) {
+        invite += `\nFrom: ${_fromDate}\n`;
+    }
+
+    // Name: <Meeting Name>
+    // URL:
+    // Password (if it is set)
+    // From: (time, if its the scheduled meeting)
 
     if (_liveStreamViewURL) {
         const liveStream = t('info.inviteLiveStream', {
