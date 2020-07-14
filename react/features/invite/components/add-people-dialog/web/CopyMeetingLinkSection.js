@@ -18,6 +18,7 @@ type Props = {
      * The URL of the conference.
      */
     url: string,
+    inviteText: string,
     custom?: boolean
 };
 
@@ -26,7 +27,7 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function CopyMeetingLinkSection({ t, url, custom = false }: Props) {
+function CopyMeetingLinkSection({ t, url, inviteText, custom = false }: Props) {
     const [ isClicked, setIsClicked ] = useState(false);
     const [ isHovered, setIsHovered ] = useState(false);
 
@@ -37,7 +38,7 @@ function CopyMeetingLinkSection({ t, url, custom = false }: Props) {
      */
     function onClick() {
         setIsHovered(false);
-        if (copyText(url)) {
+        if (copyText(inviteText)) {
             setIsClicked(true);
 
             setTimeout(() => {
@@ -88,7 +89,7 @@ function CopyMeetingLinkSection({ t, url, custom = false }: Props) {
         return (
             <>
                 <div className = 'invite-more-dialog invite-more-dialog-conference-url copy-link-text'>
-                    {isHovered ? t('addPeople.copyLink') : displayUrl}
+                    {isHovered ? 'Copy meeting details' : displayUrl}
                 </div>
                 <Icon src = { IconCopy } />
             </>

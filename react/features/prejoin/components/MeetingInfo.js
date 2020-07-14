@@ -19,6 +19,7 @@ function MeetingInfo(props) {
     const { meetingTo, setMeetingTo } = props.meetingTo;
     const isPureJoinFlow = props.isPureJoinFlow;
 
+
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
 
     return (
@@ -47,9 +48,9 @@ function MeetingInfo(props) {
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select start date/time'
                     disabled = { shareable }
-                    minDate = { meetingFrom }
-                    selected = { meetingTo && new Date(meetingTo) }
-                    onChange = { value => setMeetingTo(value.getTime()) }
+                    minDate = { new Date() }
+                    selected = { meetingFrom && new Date(meetingFrom) }
+                    onChange = { value => setMeetingFrom(value.getTime()) }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMMM d, yyyy h:mm aa' />
@@ -75,9 +76,9 @@ function MeetingInfo(props) {
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select end date/time'
                     disabled = { shareable }
-                    minDate = { new Date() }
-                    selected = { meetingFrom && new Date(meetingFrom) }
-                    onChange = { value => setMeetingFrom(value.getTime()) }
+                    minDate = { meetingFrom }
+                    selected = { meetingTo && new Date(meetingTo) }
+                    onChange = { value => setMeetingTo(value.getTime()) }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMMM d, yyyy h:mm aa' />
@@ -124,10 +125,11 @@ function MeetingInfo(props) {
           && <>
               <div className = 'divider' />
               <ShareMeeting
-
+                  meetingId = { meetingId }
                   meetingUrl = { meetingUrl }
                   meetingName = { meetingName }
                   meetingFrom = { meetingFrom }
+                  meetingTo = { meetingTo }
                   meetingPassword = { meetingPassword } />
           </>
             }
