@@ -151,7 +151,6 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
             <WhatsappShareButton
                 size = { 32 }
                 round = { true }
-                className = 'invite-icon'
                 url = { url }>
                 <Icon src = { IconWhatsapp } />
             </WhatsappShareButton>
@@ -165,15 +164,6 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
                     ? <div className = 'share-meeting-details'>
                         <div className = 'label'>{t('addPeople.shareInvite')}</div>
                         <div className = 'modalities'>
-                            <Tooltip
-                                content = { t('addPeople.copyInvite') }
-                                position = 'top'>
-                                <div
-                                    className = 'copy-invite-icon invite-icon'
-                                    onClick = { _onCopyText }>
-                                    <Icon src = { IconCopy } />
-                                </div>
-                            </Tooltip>
                             {renderEmailIcons()}
                             {renderWhatsappShare(_getInviteText())}
                         </div>
@@ -187,15 +177,6 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
                                 <Icon src = { IconArrowDownSmall } />
                             </div>
                             <div className = { `invite-more-dialog icon-container${isActive ? ' active' : ''}` }>
-                                <Tooltip
-                                    content = { t('addPeople.copyInvite') }
-                                    position = 'top'>
-                                    <div
-                                        className = 'copy-invite-icon'
-                                        onClick = { _onCopyText }>
-                                        <Icon src = { IconCopy } />
-                                    </div>
-                                </Tooltip>
                                 {renderEmailIcons()}
                                 {renderWhatsappShare(_getInviteText())}
                             </div>

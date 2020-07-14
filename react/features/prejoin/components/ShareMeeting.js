@@ -25,12 +25,14 @@ function ShareMeeting(props) {
     const {
         meetingUrl,
         t,
+        meetingId: _meetingId,
         _conferenceName,
         _localParticipantName,
         _inviteUrl,
         _locationUrl,
         meetingName,
         meetingFrom,
+        meetingTo,
         meetingPassword } = props;
 
     const inviteSubject = t('addPeople.inviteMoreMailSubject', {
@@ -46,7 +48,9 @@ function ShareMeeting(props) {
         _liveStreamViewURL: null,
         _password: meetingPassword,
         _fromDate: meetingFrom,
+        _toDate: meetingTo,
         _meetingName: meetingName,
+        _meetingId,
         phoneNumber: null,
         t
     });
@@ -57,6 +61,7 @@ function ShareMeeting(props) {
 
             <CopyMeetingLinkSection
                 url = { _inviteUrl }
+                inviteText = { invite }
                 custom = { true } />
             <InviteByEmailSection
                 inviteSubject = { inviteSubject }

@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 
@@ -19,6 +20,7 @@ function MeetingInfo(props) {
     const { meetingTo, setMeetingTo } = props.meetingTo;
     const isPureJoinFlow = props.isPureJoinFlow;
 
+
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
 
     return (
@@ -36,7 +38,7 @@ function MeetingInfo(props) {
                         textAlign: 'left',
                         marginBottom: '10px'
                     }}>
-                    {'Date / Time '}
+                    {'From Time '}
                     {
                         !shareable
                     && <span>*</span>
@@ -48,8 +50,63 @@ function MeetingInfo(props) {
                     placeholderText = 'Select start date/time'
                     disabled = { shareable }
                     minDate = { new Date() }
+                    minTime = { new Date() }
+                    maxTime = { new Date().setHours(24) }
                     selected = { meetingFrom && new Date(meetingFrom) }
-                    onChange = { value => setMeetingFrom(value.getTime()) }
+                    onChange = { value => {
+                        setMeetingFrom(value);
+                        setMeetingTo(null);
+                    } }
+                    showTimeSelect = { true }
+                    timeFormat = 'HH:mm'
+                    dateFormat = 'MMMM d, yyyy h:mm aa' />
+            </div>
+            }
+            {
+                !meetNow && !isPureJoinFlow
+            && <div className = 'you-are-host'>
+                <div
+                    className = 'form-label mandatory'
+                    style = {{
+                        textAlign: 'left',
+                        marginBottom: '10px'
+                    }}>
+                    {'To Time'}
+                    {
+                        !shareable
+                    && <span>*</span>
+                    }
+                </div>
+                <DatePicker
+                    className = 'picker-field'
+                    popperClassName = { 'date-time-popper' }
+                    placeholderText = 'Select end date/time'
+                    disabled = { shareable }
+                    minDate = { meetingFrom }
+                    minTime = { (() => {
+                        const from = moment(meetingFrom);
+                        const d = new Date(meetingFrom);
+
+                        d.setHours(d.getHours());
+                        const isSameDay = moment(meetingFrom).isSame(moment(), 'day');
+
+                        if (isSameDay) {
+                            return d;
+                        }
+
+                        return moment()
+                        .startOf('day')
+                        .toDate();
+                    })() }
+                    maxTime = { (() => {
+                        const d = new Date();
+
+                        d.setHours(24);
+
+                        return d;
+                    })() }
+                    selected = { meetingTo && new Date(meetingTo) }
+                    onChange = { value => setMeetingTo(value) }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMMM d, yyyy h:mm aa' />
@@ -96,10 +153,11 @@ function MeetingInfo(props) {
           && <>
               <div className = 'divider' />
               <ShareMeeting
-
+                  meetingId = { meetingId }
                   meetingUrl = { meetingUrl }
                   meetingName = { meetingName }
                   meetingFrom = { meetingFrom }
+                  meetingTo = { meetingTo }
                   meetingPassword = { meetingPassword } />
           </>
             }

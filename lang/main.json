@@ -355,7 +355,7 @@
         "invitePhone": "To join by phone instead, tap this: {{number}},,{{conferenceID}}#\n",
         "invitePhoneAlternatives": "Looking for a different dial-in number?\nSee meeting dial-in numbers: {{url}}\n\n\nIf also dialing-in through a room phone, join without connecting to audio: {{silentUrl}}",
         "inviteURLFirstPartGeneral": "You are invited to join a meeting.",
-        "inviteURLFirstPartPersonal": "{{name}} is inviting you to a meeting.\n",
+        "inviteURLFirstPartPersonal": "{{name}} s inviting you to a {{ app }} meeting.\n",
         "inviteURLSecondPart": "\nJoin the meeting:\n{{url}}\n",
         "liveStreamURL": "Live stream:",
         "moreNumbers": "More numbers",
