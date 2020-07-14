@@ -82,7 +82,6 @@ function MeetingInfo(props) {
                     } */}
                 </div>
                 <DatePicker
-                    value = { meetingTo }
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select end date/time'
