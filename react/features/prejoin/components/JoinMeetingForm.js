@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { InputField } from '../../base/premeeting';
 
 function JoinMeetingForm(props) {
-  const { meetingId, passwordError, isUserSignedOut } = props;
+  const { meetingId, passwordError, isUserSignedOut, isSecretEnabled } = props;
   const { meetingPassword, setMeetingPassword } = props.meetingPassword;
 
   const { guestName, setGuestName } = props.guestName
@@ -46,19 +46,23 @@ function JoinMeetingForm(props) {
                />
           </div>
         
-          <div className={`form-field ${passwordError ? 'password-error': ''}`}>
-              <div className = 'form-label'>{'Password'}</div>
-              <InputField
-                  onChange = {value => setMeetingPassword(value.trim())}
-                  placeHolder = { 'Meeting password' }
-                  value = { meetingPassword }
-              />
+        {
+            isSecretEnabled &&
+            <div className={`form-field ${passwordError ? 'password-error': ''}`}>
+                <div className = 'form-label mandatory'>{'Password'} <span>*</span></div>
+                <InputField
+                    onChange = {value => setMeetingPassword(value.trim())}
+                    placeHolder = { 'Meeting password' }
+                    value = { meetingPassword }
+                />
 
-                {
-                    passwordError &&
-                    <div className={`error-block`}> { passwordError }</div>
-                }
-          </div>
+                    {
+                        passwordError &&
+                        <div className={`error-block`}> { passwordError }</div>
+                    }
+            </div>
+        }
+          
           
         
       </div>

@@ -82,6 +82,7 @@
 
         .cancel {
             padding: 20px;
+            cursor: pointer;
         }
     }
 
@@ -347,4 +348,7 @@
         }
     }
 
+}
+.invite-icon {
+    cursor: pointer;
 }

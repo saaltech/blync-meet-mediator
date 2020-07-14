@@ -136,6 +136,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                         guestFlow && 
                         <GuestPrejoin 
                             meetingId={urlToShow}
+                            showTrackPreviews={this.showTrackPreviews}
                         />
                     }
                 </div>
