@@ -83,28 +83,29 @@ function MeetingInfo(props) {
                     placeholderText = 'Select end date/time'
                     disabled = { shareable }
                     minDate = { meetingFrom }
-                    minTime = { (() => {
-                        const from = moment(meetingFrom);
-                        const d = new Date(meetingFrom);
 
-                        d.setHours(d.getHours());
-                        const isSameDay = moment(meetingFrom).isSame(moment(), 'day');
+                    // minTime = { (() => {
+                    //     const from = moment(meetingFrom);
+                    //     const d = new Date(meetingFrom);
 
-                        if (isSameDay) {
-                            return d;
-                        }
+                    //     d.setHours(d.getHours());
+                    //     const isSameDay = moment(meetingFrom).isSame(moment(), 'day');
 
-                        return moment()
-                        .startOf('day')
-                        .toDate();
-                    })() }
-                    maxTime = { (() => {
-                        const d = new Date();
+                    //     if (isSameDay) {
+                    //         return d;
+                    //     }
 
-                        d.setHours(24);
+                    //     return moment()
+                    //     .startOf('day')
+                    //     .toDate();
+                    // })() }
+                    // maxTime = { (() => {
+                    //     const d = new Date();
 
-                        return d;
-                    })() }
+                    //     d.setHours(24);
+
+                    //     return d;
+                    // })() }
                     selected = { meetingTo && new Date(meetingTo) }
                     onChange = { value => setMeetingTo(value) }
                     showTimeSelect = { true }
