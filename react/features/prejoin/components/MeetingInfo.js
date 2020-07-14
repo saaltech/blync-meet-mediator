@@ -55,7 +55,11 @@ function MeetingInfo(props) {
                     selected = { meetingFrom && new Date(meetingFrom) }
                     onChange = { value => {
                         setMeetingFrom(value);
-                        setMeetingTo(null);
+                        const nd = new Date(value.getTime());
+
+                        nd.setHours(nd.getHours() + 1);
+                        setMeetingTo(nd);
+
                     } }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
@@ -72,12 +76,13 @@ function MeetingInfo(props) {
                         marginBottom: '10px'
                     }}>
                     {'To Time'}
-                    {
+                    {/* {
                         !shareable
                     && <span>*</span>
-                    }
+                    } */}
                 </div>
                 <DatePicker
+                    value = { meetingTo }
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select end date/time'
