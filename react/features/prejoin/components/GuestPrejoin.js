@@ -232,7 +232,8 @@ function GuestPrejoin(props) {
         }
     })
 
-    return ( (fetchUnauthErrors || fetchErrors) ?  <div className={`hostPrejoin`}> {'Invalid meeting code'} </div> :
+    return ( (fetchUnauthErrors || fetchErrors) ?  
+        <div className={`hostPrejoin`}> <div className="invalid-meeting-code">{'Invalid meeting code'} </div></div> :
         <div className={`hostPrejoin`}>
             {/* onClick={() => setHideLogin(false)} */}
             {

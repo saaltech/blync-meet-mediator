@@ -37,6 +37,12 @@
     text-align: center;
     color: #393939;
 
+    .invalid-meeting-code {
+        padding: 100px 0px;
+        font-size: 25px;
+        color: #c82323;
+    }
+
     .login-message {
         padding-top: 50px;
     }
