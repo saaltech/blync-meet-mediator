@@ -35,6 +35,8 @@ import {
     getQueryVariable
 } from '../functions';
 
+import { setPostWelcomePageScreen } from '../../app-auth/actions';
+
 function GuestPrejoin(props) {
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
@@ -65,6 +67,7 @@ function GuestPrejoin(props) {
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState('')
     const [isSecretEnabled, setIsSecretEnabled] = useState(false)
+    const [conferenceStatus, setConferenceStatus] = useState('')
 
     const [guestName, setGuestName] = useState('')
     useEffect(() => {
@@ -142,6 +145,16 @@ function GuestPrejoin(props) {
         setShowJoinMeetingForm(!_isUserSignedOut && !data.isHost)
 
         setIsSecretEnabled(data.isSecretEnabled)
+        setConferenceStatus(data.conferenceStatus);
+
+        APP.store.dispatch(setPostWelcomePageScreen(null,
+            {
+                meetingId : data.conferenceId,
+                meetingName : data.conferenceName,
+                meetingFrom : data.scheduledFrom,
+                meetingTo : data.scheduledTo
+            })
+        );
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -208,7 +221,19 @@ function GuestPrejoin(props) {
     const joinNowDisabled = continueAsGuest
         && (guestName.trim() === "" || (isSecretEnabled && meetingPassword.trim() === ""))
 
-    return (
+    
+
+    useEffect(() => {
+        if((!_isUserSignedOut || continueAsGuest)) {
+            props.showTrackPreviews(true)
+        }
+        else {
+            props.showTrackPreviews(false)
+        }
+    })
+
+    return ( (fetchUnauthErrors || fetchErrors) ?  
+        <div className={`hostPrejoin`}> <div className="invalid-meeting-code">{'Invalid meeting code'} </div></div> :
         <div className={`hostPrejoin`}>
             {/* onClick={() => setHideLogin(false)} */}
             {
@@ -222,7 +247,11 @@ function GuestPrejoin(props) {
                     <>
                         {
                             !continueAsGuest &&
-                            <div className="login-message">
+                            <div className="login-message" 
+                                style={{
+                                    visibility: (conferenceStatus === '' || conferenceStatus === "STARTED")
+                                         ? 'hidden': 'visible'
+                                }}>
                                 <span>Please</span>
                                 <span className="sign-in-link"> sign in </span>
                                 <span>if you are the host.</span>
@@ -280,7 +309,7 @@ function GuestPrejoin(props) {
 
                     {
                         (showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
-                        continueAsGuest )&&
+                        continueAsGuest ) &&
                         <JoinMeetingForm
                             isSecretEnabled={isSecretEnabled}
                             isUserSignedOut={_isUserSignedOut}

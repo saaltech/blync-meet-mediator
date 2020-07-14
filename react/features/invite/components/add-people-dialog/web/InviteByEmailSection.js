@@ -132,6 +132,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
                             key = { idx }
                             position = 'top'>
                             <div
+                                className = 'invite-icon'
                                 onClick = { _onSelectProvider(url) }>
                                 <Icon src = { icon } />
                             </div>

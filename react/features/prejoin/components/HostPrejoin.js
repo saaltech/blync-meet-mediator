@@ -109,7 +109,7 @@ function HostPrejoin(props) {
         - call the prejoin page. if meetNow
       */
 
-        if (scheduleDisabled) {
+        if (scheduleDisabled || (isPrivate && !meetingPassword)) {
             return;
         }
 
@@ -234,7 +234,9 @@ function HostPrejoin(props) {
                     !shareable
                 && <div
                     className = { `prejoin-page-button next 
-                        ${scheduleDisabled ? 'disabled' : ''}` }
+                        ${scheduleDisabled ? 'disabled' : ''} 
+                        ${isPrivate && !meetingPassword ? 'disabled' : ''} 
+                        ` }
                     onClick = { saveConferenceAction }>
                     Next
                 </div>
