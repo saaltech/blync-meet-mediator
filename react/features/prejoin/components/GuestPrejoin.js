@@ -208,7 +208,18 @@ function GuestPrejoin(props) {
     const joinNowDisabled = continueAsGuest
         && (guestName.trim() === "" || (isSecretEnabled && meetingPassword.trim() === ""))
 
-    return (
+    
+
+    useEffect(() => {
+        if((!_isUserSignedOut || continueAsGuest)) {
+            props.showTrackPreviews(true)
+        }
+        else {
+            props.showTrackPreviews(false)
+        }
+    })
+
+    return ( (fetchUnauthErrors || fetchErrors) ?  <div className={`hostPrejoin`}> {'Invalid meeting code'} </div> :
         <div className={`hostPrejoin`}>
             {/* onClick={() => setHideLogin(false)} */}
             {
@@ -280,7 +291,7 @@ function GuestPrejoin(props) {
 
                     {
                         (showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
-                        continueAsGuest )&&
+                        continueAsGuest ) &&
                         <JoinMeetingForm
                             isSecretEnabled={isSecretEnabled}
                             isUserSignedOut={_isUserSignedOut}
