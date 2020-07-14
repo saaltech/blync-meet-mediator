@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 
@@ -49,8 +50,13 @@ function MeetingInfo(props) {
                     placeholderText = 'Select start date/time'
                     disabled = { shareable }
                     minDate = { new Date() }
+                    minTime = { new Date() }
+                    maxTime = { new Date().setHours(24) }
                     selected = { meetingFrom && new Date(meetingFrom) }
-                    onChange = { value => setMeetingFrom(value.getTime()) }
+                    onChange = { value => {
+                        setMeetingFrom(value);
+                        setMeetingTo(null);
+                    } }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMMM d, yyyy h:mm aa' />
@@ -77,8 +83,30 @@ function MeetingInfo(props) {
                     placeholderText = 'Select end date/time'
                     disabled = { shareable }
                     minDate = { meetingFrom }
+                    minTime = { (() => {
+                        const from = moment(meetingFrom);
+                        const d = new Date(meetingFrom);
+
+                        d.setHours(d.getHours());
+                        const isSameDay = moment(meetingFrom).isSame(moment(), 'day');
+
+                        if (isSameDay) {
+                            return d;
+                        }
+
+                        return moment()
+                        .startOf('day')
+                        .toDate();
+                    })() }
+                    maxTime = { (() => {
+                        const d = new Date();
+
+                        d.setHours(24);
+
+                        return d;
+                    })() }
                     selected = { meetingTo && new Date(meetingTo) }
-                    onChange = { value => setMeetingTo(value.getTime()) }
+                    onChange = { value => setMeetingTo(value) }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMMM d, yyyy h:mm aa' />
