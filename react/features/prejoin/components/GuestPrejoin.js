@@ -65,6 +65,7 @@ function GuestPrejoin(props) {
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState('')
     const [isSecretEnabled, setIsSecretEnabled] = useState(false)
+    const [conferenceStatus, setConferenceStatus] = useState('')
 
     const [guestName, setGuestName] = useState('')
     useEffect(() => {
@@ -142,6 +143,7 @@ function GuestPrejoin(props) {
         setShowJoinMeetingForm(!_isUserSignedOut && !data.isHost)
 
         setIsSecretEnabled(data.isSecretEnabled)
+        setConferenceStatus(data.conferenceStatus);
     }
 
     const setMeetNowAndUpdatePage = (value) => {
@@ -233,7 +235,11 @@ function GuestPrejoin(props) {
                     <>
                         {
                             !continueAsGuest &&
-                            <div className="login-message">
+                            <div className="login-message" 
+                                style={{
+                                    visibility: (conferenceStatus === '' || conferenceStatus === "STARTED")
+                                         ? 'hidden': 'visible'
+                                }}>
                                 <span>Please</span>
                                 <span className="sign-in-link"> sign in </span>
                                 <span>if you are the host.</span>
