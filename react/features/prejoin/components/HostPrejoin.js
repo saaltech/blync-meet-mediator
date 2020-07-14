@@ -234,8 +234,8 @@ function HostPrejoin(props) {
                     !shareable
                 && <div
                     className = { `prejoin-page-button next 
-                        ${scheduleDisabled ? 'disabled' : ''}
-                        ${isPrivate && !meetingPassword ? 'disabled' : ''}
+                        ${scheduleDisabled ? 'disabled' : ''} 
+                        ${isPrivate && !meetingPassword ? 'disabled' : ''} 
                         ` }
                     onClick = { saveConferenceAction }>
                     Next
