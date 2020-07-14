@@ -47,6 +47,7 @@ function ShareMeeting(props) {
         _password: meetingPassword,
         _fromDate: meetingFrom,
         _meetingName: meetingName,
+        _meetingId: meetingId,
         phoneNumber: null,
         t
     });

@@ -248,29 +248,34 @@ export function getInviteText({
     _liveStreamViewURL,
     _password,
     _fromDate,
+    _toDate,
     _meetingName,
+    _meetingId,
     phoneNumber,
     t
 }: Object) {
     const inviteURL = _decodeRoomURI(_inviteUrl);
 
     let invite = _localParticipantName
-        ? t('info.inviteURLFirstPartPersonal', { name: _localParticipantName })
+        ? t('info.inviteURLFirstPartPersonal', { name: _localParticipantName,
+            app: interfaceConfig.APP_NAME })
         : t('info.inviteURLFirstPartGeneral');
+
+    invite += `\nTopic: ${_meetingName}\n`;
 
     invite += t('info.inviteURLSecondPart', {
         url: inviteURL
     });
 
-    invite += `\n\nName: ${_meetingName}`;
-    invite += `\nURL: ${inviteURL}`;
+    invite += `\n\nMeeting ID: ${_meetingId}`;
 
     if (_password) {
         invite += `\nPassword: ${_password}`;
     }
 
     if (_fromDate) {
-        invite += `\nFrom: ${_fromDate}\n`;
+        invite += `\nStart Time: ${_fromDate}`;
+        invite += `\nEnd Time: ${_toDate}\n`;
     }
 
     // Name: <Meeting Name>

@@ -36,7 +36,7 @@ function MeetingInfo(props) {
                         textAlign: 'left',
                         marginBottom: '10px'
                     }}>
-                    {'Date / Time '}
+                    {'From Time '}
                     {
                         !shareable
                     && <span>*</span>
@@ -46,6 +46,34 @@ function MeetingInfo(props) {
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select start date/time'
+                    disabled = { shareable }
+                    minDate = { meetingFrom }
+                    selected = { meetingTo && new Date(meetingTo) }
+                    onChange = { value => setMeetingTo(value.getTime()) }
+                    showTimeSelect = { true }
+                    timeFormat = 'HH:mm'
+                    dateFormat = 'MMMM d, yyyy h:mm aa' />
+            </div>
+            }
+            {
+                !meetNow && !isPureJoinFlow
+            && <div className = 'you-are-host'>
+                <div
+                    className = 'form-label mandatory'
+                    style = {{
+                        textAlign: 'left',
+                        marginBottom: '10px'
+                    }}>
+                    {'To Time'}
+                    {
+                        !shareable
+                    && <span>*</span>
+                    }
+                </div>
+                <DatePicker
+                    className = 'picker-field'
+                    popperClassName = { 'date-time-popper' }
+                    placeholderText = 'Select end date/time'
                     disabled = { shareable }
                     minDate = { new Date() }
                     selected = { meetingFrom && new Date(meetingFrom) }
