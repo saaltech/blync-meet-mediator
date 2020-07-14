@@ -30,7 +30,7 @@ var interfaceConfig = {
     APP_NAME: 'vMeet',
     NATIVE_APP_NAME: 'vMeet',
     PROVIDER_NAME: 'Saal',
-    LANG_DETECTION: true, // Allow i18n to detect the system language
+    LANG_DETECTION: false, // Allow i18n to detect the system language
     INVITATION_POWERED_BY: false,
 
     /**

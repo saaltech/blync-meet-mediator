@@ -380,6 +380,10 @@
 
 .raisehandindicator {
   background: $raiseHandBg;
+
+  .jitsi-icon svg, .jitsi-icon svg path {
+    fill: #fff;
+  }
 }
 
 .connection-indicator {

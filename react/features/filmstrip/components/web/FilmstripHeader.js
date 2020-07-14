@@ -145,7 +145,7 @@ function _mapStateToProps(state) {
     return {
         // _show: participantCount > 1,
         _show: true,
-        _subject: getConferenceName(state),
+        _subject: state['features/app-auth'].meetingDetails?.meetingName,
         _participantCount: participantCount,
         _visible: isToolboxVisible(state) && participantCount > 1,
         _participants: getParticipants(state),
