@@ -35,6 +35,8 @@ import {
     getQueryVariable
 } from '../functions';
 
+import { setPostWelcomePageScreen } from '../../app-auth/actions';
+
 function GuestPrejoin(props) {
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
@@ -144,6 +146,15 @@ function GuestPrejoin(props) {
 
         setIsSecretEnabled(data.isSecretEnabled)
         setConferenceStatus(data.conferenceStatus);
+
+        APP.store.dispatch(setPostWelcomePageScreen(null,
+            {
+                meetingId : data.conferenceId,
+                meetingName : data.conferenceName,
+                meetingFrom : data.scheduledFrom,
+                meetingTo : data.scheduledTo
+            })
+        );
     }
 
     const setMeetNowAndUpdatePage = (value) => {
