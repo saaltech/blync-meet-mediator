@@ -274,8 +274,8 @@ export function getInviteText({
     }
 
     if (_fromDate) {
-        invite += `\nStart Time: ${new Date(_fromDate).toISOString()}`;
-        invite += `\nEnd Time: ${new Date(_toDate).toISOString()}\n`;
+        invite += `\nStart Time: ${new Date(_fromDate).toString()}`;
+        invite += `\nEnd Time: ${new Date(_toDate).toString()}\n`;
     }
 
     // Name: <Meeting Name>
