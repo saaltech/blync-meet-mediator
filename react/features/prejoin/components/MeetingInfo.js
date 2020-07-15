@@ -32,6 +32,7 @@ function MeetingInfo(props) {
         <div className = 'meetingInfo'>
             <div
                 className = 'meeting-title'
+                title={meetingName ? meetingName : meetingId}
                 style = { !meetingName ? { color: '#969696' } : {} }>{meetingName ? meetingName : meetingId}</div>
             <div className = 'meeting-id'>{meetingId}</div>
             {
