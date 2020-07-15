@@ -286,7 +286,7 @@ class Conference extends AbstractConference<Props, *> {
  */
 function _mapStateToProps(state) {
     const localVideo = getLocalVideoTrack(state['features/base/tracks']);
-    const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
+    const isModerator = (getLocalParticipant(state) || {}).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
         ...abstractMapStateToProps(state),

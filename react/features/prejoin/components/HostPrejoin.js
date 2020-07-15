@@ -27,8 +27,8 @@ import MeetingInfo from './MeetingInfo';
 
 function HostPrejoin(props) {
     const [ meetNow, setMeetNow ] = useState(true);
-    const [ meetingId, setMeetingId ] = useState(props.meetingDetails.meetingId);
-    const [ meetingName, setMeetingName ] = useState(props.meetingDetails.meetingName);
+    const [ meetingId, setMeetingId ] = useState((props.meetingDetails || {}).meetingId);
+    const [ meetingName, setMeetingName ] = useState((props.meetingDetails || {}).meetingName);
     const [ isPrivate, setIsPrivate ] = useState(false);
     const [ meetingPassword, setMeetingPassword ] = useState('');
     const [ meetingFrom, setMeetingFrom ] = useState('');
