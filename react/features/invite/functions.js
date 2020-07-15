@@ -267,7 +267,7 @@ export function getInviteText({
         url: inviteURL
     });
 
-    invite += `\n\nMeeting ID: ${_meetingId}`;
+    invite += `\nMeeting ID: ${_meetingId}`;
 
     if (_password) {
         invite += `\nPassword: ${_password}`;

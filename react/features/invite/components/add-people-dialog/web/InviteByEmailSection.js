@@ -134,7 +134,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
                             <div
                                 className = 'invite-icon'
                                 onClick = { _onSelectProvider(url) }>
-                                <Icon src = { icon } />
+                                <Icon src = { icon } size={30}/>
                             </div>
                         </Tooltip>
                     ))
@@ -149,10 +149,9 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
             content = { 'Whatsapp message' }
             position = 'top'>
             <WhatsappShareButton
-                size = { 32 }
                 round = { true }
                 url = { url }>
-                <Icon src = { IconWhatsapp } />
+                <Icon src = { IconWhatsapp }  size = { 30 } />
             </WhatsappShareButton>
         </Tooltip>);
     }
