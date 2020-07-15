@@ -282,7 +282,7 @@ function GuestPrejoin(props) {
                 meetingStarted !== null && meetingStarted == false ?
                 <div className="waiting-display">
                     <h2>Please wait for the host to join the meeting...</h2>
-                    <img src={"images/loading.png"} />
+                    <img src={"images/loading.gif"} />
                 </div>
                 :
                 <>

@@ -12,7 +12,8 @@ import {
     SET_TOOLBOX_TIMEOUT,
     SET_TOOLBOX_TIMEOUT_MS,
     SET_TOOLBOX_VISIBLE,
-    TOGGLE_TOOLBOX_VISIBLE
+    TOGGLE_TOOLBOX_VISIBLE,
+    LEAVING_MEETING
 } from './actionTypes';
 
 declare var interfaceConfig: Object;
@@ -119,6 +120,12 @@ ReducerRegistry.register(
             return {
                 ...state,
                 timeoutID: undefined
+            };
+
+        case LEAVING_MEETING:
+            return {
+                ...state,
+                leaving: action.leaving
             };
 
         case FULL_SCREEN_CHANGED:

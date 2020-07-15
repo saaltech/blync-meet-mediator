@@ -845,7 +845,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "vMeet is a robust video conferencing platform. It is highly scalable to support large orgnization needs to host single conference with hundreds of participants as well running multiple conferences in parallel. It also allows youtube streaming of your conference to allow the number of participating viewers tp any number that you need. Its fully encrypted, so your discussion and information shared in a conference are secured. It is a low footprint solution and can be installed on commodity hardware infrastucture on premise, allowing you to have complete control of the system. It provides secure access to the system with inbuilt authentication and authorization. It is a fully featured system including conference recording, document sharing, screen/application sharing, private/public chat, conference stats auditing and many more features.",
+        "appDescription": "Jifmeet is a robust video conferencing platform. It is highly scalable to support large orgnization needs to host single conference with hundreds of participants as well running multiple conferences in parallel. It also allows youtube streaming of your conference to allow the number of participating viewers tp any number that you need. Its fully encrypted, so your discussion and information shared in a conference are secured. It is a low footprint solution and can be installed on commodity hardware infrastucture on premise, allowing you to have complete control of the system. It provides secure access to the system with inbuilt authentication and authorization. It is a fully featured system including conference recording, document sharing, screen/application sharing, private/public chat, conference stats auditing and many more features.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
@@ -869,7 +869,7 @@
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
         "terms": "Terms",
-        "title": "vMeet",
+        "title": "Jifmeet",
         "subTitle": "Collaborate Anytime Anywhere",
         "placeholderEnterRoomName": "Enter the room name",
         "startSession": "Go ahead, enter the meeting name and start the session.",
