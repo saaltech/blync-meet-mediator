@@ -48,8 +48,8 @@ function HostPrejoin(props) {
             'conferenceId': meetingId,
             'conferenceName': meetingName,
             'conferenceSecret': meetingPassword,
-            'scheduledFrom': meetingFrom, // "2020-07-08T09:34:00.567Z",
-            'scheduledTo': meetingTo // "2020-07-08T09:34:00.567Z"
+            'scheduledFrom': meetNow ? '' : meetingFrom, // "2020-07-08T09:34:00.567Z",
+            'scheduledTo': meetNow ? '' : meetingTo // "2020-07-08T09:34:00.567Z"
         };
     };
 
@@ -131,8 +131,8 @@ function HostPrejoin(props) {
             meetingId,
             meetingName,
             meetingPassword,
-            meetingFrom,
-            meetingTo,
+            meetingFrom: meetNow ? '' : meetingFrom,
+            meetingTo: meetNow ? '' : meetingTo,
             meetNow
         }
         ));
