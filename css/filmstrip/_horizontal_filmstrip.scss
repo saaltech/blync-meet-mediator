@@ -19,6 +19,15 @@
     flex-direction: column;
     transform: translateY(-40px);
 
+    .remotevideomenu
+    {
+
+        & > div > div > div > div > div {
+            top: unset !important;
+            left:unset !important;
+        }
+    }
+
     /*
      * Firefox sets flex items to min-height: auto and min-width: auto,
      * preventing flex children from shrinking like they do on other browsers.
