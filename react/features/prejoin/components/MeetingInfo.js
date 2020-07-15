@@ -69,6 +69,7 @@ function MeetingInfo(props) {
                     <span>*</span>
                 </div>
                 <DatePicker
+                    onChangeRaw={(e) => e.preventDefault()}
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select start date/time'
@@ -101,6 +102,7 @@ function MeetingInfo(props) {
                     {'To Time'}
                 </div>
                 <DatePicker
+                    onChangeRaw={(e) => e.preventDefault()}
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select end date/time'
