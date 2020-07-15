@@ -93,14 +93,14 @@ class FilmstripHeader extends Component<Props> {
                             Online users ({this.props._participantCount})
                         </div>
 
-                        {this.props._isModerator && <button
+                        {/* {this.props._isModerator && <button
                             className = 'film-strip-header__action-button'
                             onClick = { () => this.props._setShowSpeakersList(!_showSpeakersList) }
                             type = 'button'>
                             <Icon
                                 size = { 16 }
                                 src = { IconArrowDownSmall } />
-                        </button>}
+                        </button>} */}
                     </div>
                 </div>
             </div>
