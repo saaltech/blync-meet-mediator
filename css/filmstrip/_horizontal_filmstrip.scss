@@ -95,6 +95,7 @@
         justify-content: center;
         z-index: 0;
         transition: transform .3s;
+        overflow-x: scroll;
     }
 
     &__videos-container--collapsed::before {
