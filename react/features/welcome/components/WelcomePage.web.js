@@ -2,27 +2,25 @@
 
 import React from 'react';
 
+import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth';
+import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen';
+import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning } from '../../base/icons';
 import { connect } from '../../base/redux';
 import { CalendarList } from '../../calendar-sync';
-import { RecentList } from '../../recent-list';
-import { SettingsButton, SETTINGS_TABS } from '../../settings';
-
-import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import {
     getQueryVariable
 } from '../../prejoin/functions';
+import { RecentList } from '../../recent-list';
+import { SettingsButton, SETTINGS_TABS } from '../../settings';
 
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
 
-import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth'
-
-import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen'
 
 /**
  * The pattern used to validate room name.
@@ -124,7 +122,7 @@ class WelcomePage extends AbstractWelcomePage {
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
         this._closeLogin = this._closeLogin.bind(this);
-        this._showPostWelcomePageScreen = this._showPostWelcomePageScreen.bind(this)
+        this._showPostWelcomePageScreen = this._showPostWelcomePageScreen.bind(this);
     }
 
     /**
@@ -135,17 +133,17 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
-        if(getQueryVariable("sessionExpired")) {
+        if (getQueryVariable('sessionExpired')) {
             this.setState({
                 hideLogin: false,
                 sessionExpiredQuery: true
-            })
+            });
         }
-        this.props.dispatch(decideAppLogin())
+        this.props.dispatch(decideAppLogin());
         super.componentDidMount();
         this.setState({
             goClicked: false
-        })
+        });
 
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
@@ -194,7 +192,7 @@ class WelcomePage extends AbstractWelcomePage {
     _closeLogin() {
         this.setState({
             hideLogin: true
-        })
+        });
     }
 
     /**
@@ -210,8 +208,8 @@ class WelcomePage extends AbstractWelcomePage {
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
-        const titleArr = t('welcomepage.enterRoomTitle').split(" ")
-        const separatedTitle = titleArr.pop()
+        const titleArr = t('welcomepage.enterRoomTitle').split(' ');
+        const separatedTitle = titleArr.pop();
 
         return (
             <div>
@@ -224,40 +222,38 @@ class WelcomePage extends AbstractWelcomePage {
                         <Background />
 
                         {
-                            _isUserSignedOut && !hideLogin && 
-                            <LoginComponent 
-                                closeAction={ this._closeLogin }
-                                isOverlay={true}
-                                t = {t}
-                                errorMsg={sessionExpiredQuery ? "Session expired.": ""}
-                            />
+                            _isUserSignedOut && !hideLogin
+                            && <LoginComponent
+                                closeAction = { this._closeLogin }
+                                isOverlay = { true }
+                                t = { t }
+                                errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' } />
                         }
 
                         <div className = 'header'>
                             {
-                                _isUserSignedOut ?
-                                <div
-                                    className = { `welcome-page-button signin` }
-                                    id = 'enter_room_button'
-                                    onClick = { () => this.setState({
-                                        hideLogin: false
-                                    }) }>
-                                    {
-                                        t('welcomepage.signinLabel')
-                                    }
-                                </div>
-                                :
-                                <div className = { `welcome-page-button profile` }
-                                    onClick = { () => this.setState({
-                                        hideLogin: true
-                                    }) }>
-                                    <Profile 
-                                        showMenu={true}
-                                    />
-                                </div>
-                                
+                                _isUserSignedOut
+                                    ? <div
+                                        className = { 'welcome-page-button signin' }
+                                        id = 'enter_room_button'
+                                        onClick = { () => this.setState({
+                                            hideLogin: false
+                                        }) }>
+                                        {
+                                            t('welcomepage.signinLabel')
+                                        }
+                                    </div>
+                                    : <div
+                                        className = { 'welcome-page-button profile' }
+                                        onClick = { () => this.setState({
+                                            hideLogin: true
+                                        }) }>
+                                        <Profile
+                                            showMenu = { true } />
+                                    </div>
+
                             }
-                            {/*<div className = 'welcome-page-settings'>
+                            {/* <div className = 'welcome-page-settings'>
                                 <SettingsButton
                                     defaultTab = { SETTINGS_TABS.CALENDAR } />
                                 { showAdditionalToolbarContent
@@ -270,7 +266,7 @@ class WelcomePage extends AbstractWelcomePage {
                             <div className = 'header-image' />
                             <div className = 'header-text'>
                                 <h1 className = 'header-text-title'>
-                                    <span>{ titleArr.join(" ") } </span>
+                                    <span>{ titleArr.join(' ') } </span>
                                     <span>{ separatedTitle }</span>
                                 </h1>
                                 {/* <h3 className = 'header-text-sub-title'>
@@ -294,18 +290,16 @@ class WelcomePage extends AbstractWelcomePage {
                                             placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
                                             ref = { this._setRoomInputRef }
                                             title = { t('welcomepage.roomNameAllowedChars') }
-                                            type = 'text'
-                                            // value = { this.state.room } 
-                                            />
+                                            type = 'text' />
                                         { this._renderInsecureRoomNameWarning() }
                                     </form>
                                 </div>
                                 <div
                                     className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
                                     id = 'enter_room_button'
-                                    
+
                                     onClick = { this._onFormSubmit }>
-                                    {/*onClick = {this._showPostWelcomePageScreen}>*/}
+                                    {/* onClick = {this._showPostWelcomePageScreen}>*/}
                                     {
                                         showResponsiveText
                                             ? t('welcomepage.goSmall')
@@ -324,7 +318,7 @@ class WelcomePage extends AbstractWelcomePage {
                     </div>
                 }
             </div>
-            
+
         );
     }
 
@@ -354,40 +348,46 @@ class WelcomePage extends AbstractWelcomePage {
     _onFormSubmit(event) {
         event.preventDefault();
 
+        if (this.state.formDisabled) {
+            return;
+        }
+
         if (this.props._isUserSignedOut) {
             this.setState({
                 hideLogin: false
-            })
+            });
+
             return;
         }
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this.setState({
                 goClicked: true
-            })
-            this.props.dispatch(setPostWelcomePageScreen(this.state.room))
+            });
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room));
             this._onJoin();
         }
     }
 
     /**
-     * 
+     *
      */
-    _showPostWelcomePageScreen (event) {
-        if(event) {
+    _showPostWelcomePageScreen(event) {
+        if (event) {
             event.preventDefault();
         }
         if (this.props._isUserSignedOut) {
             this.setState({
                 hideLogin: false
-            })
+            });
+
             return;
         }
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this.setState({
                 goClicked: true
-            })
-            this.props.dispatch(setPostWelcomePageScreen(this.state.room))
+            });
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room));
         }
     }
 
