@@ -4,7 +4,8 @@ import type { Dispatch } from 'redux';
 
 import {
     FULL_SCREEN_CHANGED,
-    SET_FULL_SCREEN
+    SET_FULL_SCREEN,
+    LEAVING_MEETING
 } from './actionTypes';
 import {
     clearToolboxTimeout,
@@ -149,5 +150,12 @@ export function showToolbox(timeout: number = 0): Object {
                 dispatch(setToolboxTimeoutMS(interfaceConfig.TOOLBAR_TIMEOUT));
             }
         }
+    };
+}
+
+export function leavingMeeting(leaving: boolean) {
+    return {
+        type: LEAVING_MEETING,
+        leaving
     };
 }
