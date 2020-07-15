@@ -1,4 +1,4 @@
-.meetinginfo {
+.meetingInfo {
     color: #393939;
     padding: 20px 40px;
 
@@ -44,6 +44,29 @@
     .you-are-host {
         color: #4D4D4D;
         padding: 20px 0px 20px;
+    }
+
+    .date-field-container {
+        color: #4D4D4D;
+        padding: 10px 0;
+    }
+
+    .date-info {
+        display: flex;
+        margin: 10px 0px;
+
+        > div:last-child {
+            margin: 2px 10px;
+        }
+
+        .to-field {
+            margin-left: 35px !important;
+        }
+
+        label {
+            display: inline-block;
+            width: 45px;
+        }
     }
 
     .make-private {

@@ -8,6 +8,11 @@ import { InputField } from '../../base/premeeting';
 
 import ShareMeeting from './ShareMeeting';
 
+import {
+    Icon,
+    IconCalendar
+} from '../../base/icons';
+
 
 function MeetingInfo(props) {
     const meetNow = props.meetNow;
@@ -30,8 +35,30 @@ function MeetingInfo(props) {
                 style = { !meetingName ? { color: '#969696' } : {} }>{meetingName ? meetingName : meetingId}</div>
             <div className = 'meeting-id'>{meetingId}</div>
             {
-                !meetNow && !isPureJoinFlow
-            && <div className = 'you-are-host'>
+                (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost))
+            && <div className = 'you-are-host'> You are the host of this meeting</div>
+            }
+            {
+                (isPureJoinFlow || shareable) && meetingFrom &&
+                <div className={'date-info'}>
+                    <Icon src={IconCalendar} size={25} />
+                    <div>
+                        <label>From:</label> {moment(meetingFrom).locale('en').format('MMM DD, YYYY hh:mm A')}
+                    </div>
+                </div>
+            }
+            {
+                (isPureJoinFlow || shareable) && meetingTo &&
+                <div className={'date-info'}>
+                    {/*<Icon src={IconCalendar} size={30} />*/}
+                    <div className='to-field'>
+                        <label>To:</label> {moment(meetingTo).locale('en').format('MMM DD, YYYY hh:mm A')}
+                    </div>
+                </div>
+            }
+            {
+                !meetNow && !isPureJoinFlow && !shareable
+            && <div className = 'date-field-container'>
                 <div
                     className = 'form-label mandatory'
                     style = {{
@@ -39,16 +66,12 @@ function MeetingInfo(props) {
                         marginBottom: '10px'
                     }}>
                     {'From Time '}
-                    {
-                        !shareable
-                    && <span>*</span>
-                    }
+                    <span>*</span>
                 </div>
                 <DatePicker
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select start date/time'
-                    disabled = { shareable }
                     minDate = { new Date() }
                     minTime = { new Date() }
                     maxTime = { new Date().setHours(24) }
@@ -63,12 +86,12 @@ function MeetingInfo(props) {
                     } }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
-                    dateFormat = 'MMMM d, yyyy h:mm aa' />
+                    dateFormat = 'MMM d, yyyy h:mm aa' />
             </div>
             }
             {
-                !meetNow && !isPureJoinFlow
-            && <div className = 'you-are-host'>
+                !meetNow && !isPureJoinFlow && !shareable
+            && <div className = 'date-field-container'>
                 <div
                     className = 'form-label mandatory'
                     style = {{
@@ -76,16 +99,11 @@ function MeetingInfo(props) {
                         marginBottom: '10px'
                     }}>
                     {'To Time'}
-                    {/* {
-                        !shareable
-                    && <span>*</span>
-                    } */}
                 </div>
                 <DatePicker
                     className = 'picker-field'
                     popperClassName = { 'date-time-popper' }
                     placeholderText = 'Select end date/time'
-                    disabled = { shareable }
                     minDate = { meetingFrom }
 
                     // minTime = { (() => {
@@ -114,13 +132,10 @@ function MeetingInfo(props) {
                     onChange = { value => setMeetingTo(value) }
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
-                    dateFormat = 'MMMM d, yyyy h:mm aa' />
+                    dateFormat = 'MMM d, yyyy h:mm aa' />
             </div>
             }
-            {
-                (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost))
-            && <div className = 'you-are-host'> You are the host of this meeting</div>
-            }
+            
             {
                 !isPureJoinFlow && (!shareable || (isPrivate && shareable))
           && <div className = 'form-field make-private'>
