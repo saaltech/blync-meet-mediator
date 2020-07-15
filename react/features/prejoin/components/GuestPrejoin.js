@@ -11,10 +11,6 @@ import { InputField } from '../../base/premeeting';
 import { getDisplayName, updateSettings } from '../../base/settings';
 import { connect } from '../../base/redux';
 import { setPrejoinPageErrorMessageKey } from '../';
-import {
-    Icon,
-    IconArrowBack
-} from '../../base/icons';
 
 import { config } from '../../../config'
 

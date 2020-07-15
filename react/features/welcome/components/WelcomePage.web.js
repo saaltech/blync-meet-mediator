@@ -354,6 +354,10 @@ class WelcomePage extends AbstractWelcomePage {
     _onFormSubmit(event) {
         event.preventDefault();
 
+        if(this.state.formDisabled) {
+            return;
+        }
+
         if (this.props._isUserSignedOut) {
             this.setState({
                 hideLogin: false
