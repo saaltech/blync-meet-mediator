@@ -35,7 +35,7 @@ MiddlewareRegistry.register(store => next => action => {
         const { toastNotificationSettings } = state['features/toolbox-more'];
 
         if (!toastNotificationSettings.showChat) {
-            return;
+            return next(action);
         }
 
         const _localParticipant = getLocalParticipant(state);
