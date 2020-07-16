@@ -21,6 +21,7 @@
 
     .remotevideomenu
     {
+        z-index: 5;
 
         & > div > div > div > div > div {
             top: unset !important;
