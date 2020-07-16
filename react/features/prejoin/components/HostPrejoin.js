@@ -23,6 +23,7 @@ import {
 } from '../actions';
 
 import MeetingInfo from './MeetingInfo';
+import Loading from '../../always-on-top/Loading'
 
 
 function HostPrejoin(props) {
@@ -36,6 +37,7 @@ function HostPrejoin(props) {
     const { isMeetNow } = props;
     const [ shareable, setShareable ] = useState(false);
     const { joinConference } = props;
+    const [exiting, setExiting] = useState(false);
 
     const [ getConference, fetchErrors ] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
@@ -98,6 +100,7 @@ function HostPrejoin(props) {
     };
 
     const goToHome = () => {
+        setExiting(true)
         window.location.href = window.location.origin;
     };
 
@@ -167,6 +170,9 @@ function HostPrejoin(props) {
 
     return (
         <div className = { 'hostPrejoin' }>
+            {
+                exiting && <Loading />
+            }
 
             {
                 shareable

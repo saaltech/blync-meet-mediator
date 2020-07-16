@@ -43,7 +43,8 @@ ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
         case EXPIRE_TOKEN: {
             return assign(state, {
                 expires: 0,
-                isUserSignedOut: true
+                isUserSignedOut: true,
+                refreshToken: null
             })
         }
 

@@ -46,6 +46,10 @@ export function invalidateAndGoHome() {
     window.location.href = window.location.origin + "?sessionExpired=true";
   }
 
+export function goHome() {
+    window.location.href = window.location.origin
+  }
+
 export function resolveAppLogout() {
     return (dispatch: Dispatch<any>, getState: Function) => {
 

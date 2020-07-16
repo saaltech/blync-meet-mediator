@@ -15,6 +15,9 @@ import {
     getQueryVariable
 } from '../../../../prejoin/functions';
 
+import Loading from '../../../../always-on-top/Loading'
+import { goHome } from '../../../../app-auth'
+
 type Props = {
 
     /**
@@ -63,7 +66,8 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.state = {
             meetNow: true,
             showTrackPreviews: false,
-            navigatedFromHome: undefined
+            navigatedFromHome: undefined,
+            exiting: false
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -91,7 +95,7 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreviews, navigatedFromHome } = this.state;
+        const { meetNow, showTrackPreviews, navigatedFromHome, exiting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
         let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
         if(guestFlow) {
@@ -102,6 +106,9 @@ class PreMeetingScreen extends PureComponent<Props> {
                 className = 'premeeting-screen'
                 id = 'lobby-screen'>
                 <Background backgroundColor='black'/>
+                {
+                    exiting && <Loading />
+                }
                 {
                     showTrackPreviews && meetNow ?
                     <Preview
@@ -121,7 +128,14 @@ class PreMeetingScreen extends PureComponent<Props> {
                 
 
                 <div className = 'content'>
-                    <a href="/" className="close-icon"></a>
+                    <div 
+                        onClick={() => {
+                            this.setState({exiting: true},
+                            () => {
+                                goHome()
+                            })
+                        }} 
+                        className="close-icon"></div>
                     {
                         navigatedFromHome && 
                         <HostPrejoin 

@@ -40,6 +40,8 @@ import {
     leavingMeeting
 } from '../../../toolbox/actions';
 
+import Loading from '../../../always-on-top/Loading'
+
 declare var APP: Object;
 declare var config: Object;
 declare var interfaceConfig: Object;
@@ -207,9 +209,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 {
                     _leavingMeeting &&
-                    <div className="waiting-display-overlay">
-                        <img src={"images/loading_colored.gif"} />
-                    </div>
+                    <Loading />
                 }
 
                 <Notice />
