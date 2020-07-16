@@ -97,7 +97,7 @@ async function validationFromNonComponents(tokenRequired) {
               {
                 refresh_token: refreshToken
               })
-              APP.store.dispatch(resolveAppLogin(res))
+              APP.store.dispatch(resolveAppLogin(res.data))
               return true;
           }
           catch(e) {
