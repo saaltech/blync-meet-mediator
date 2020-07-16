@@ -25,7 +25,7 @@ export default ({ url, method, body, onSuccess }) => {
               {
                 refresh_token: refreshToken
               })
-              APP.store.dispatch(resolveAppLogin(res.data))
+              APP.store.dispatch(resolveAppLogin(res.data, true))
           }
           catch(e) {
             console.log("refresh Token error", e)
