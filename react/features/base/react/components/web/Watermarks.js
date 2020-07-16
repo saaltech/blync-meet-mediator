@@ -229,12 +229,17 @@ class Watermarks extends Component<Props, State> {
 
             if (link) {
                 reactElement = (
+                    <>
+                        { reactElement }
+                    </>
+                );
+                /*reactElement = (
                     <a
                         href = { link }
                         target = '_new'>
                         { reactElement }
                     </a>
-                );
+                );*/
             }
         }
 
