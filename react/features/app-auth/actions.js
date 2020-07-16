@@ -93,11 +93,11 @@ async function validationFromNonComponents(tokenRequired) {
         if(refreshToken) {
           try {
             const res = await axios.post(
-              config.refreshToken, 
+              config.unauthenticatedIRP + config.refreshToken, 
               {
                 refresh_token: refreshToken
               })
-              APP.store.dispatch(resolveAppLogin(data))
+              APP.store.dispatch(resolveAppLogin(res))
               return true;
           }
           catch(e) {
