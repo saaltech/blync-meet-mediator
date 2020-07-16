@@ -26,10 +26,14 @@ import {
  *     type: APP_LOGIN
  * }}
  */
-export function resolveAppLogin(details) {
+export function resolveAppLogin(details, refreshCall = false) {
     return (dispatch: Dispatch<any>, getState: Function) => {
         if(details.expires_in > 0) {
             details.expires = (new Date()).getTime() + (details.expires_in * 1000)
+        }
+
+        if(refreshCall) {
+            details['user'] = APP.store.getState()['features/app-auth'].user
         }
 
         dispatch({ type: APP_LOGIN, payload: details });
@@ -97,7 +101,7 @@ async function validationFromNonComponents(tokenRequired) {
               {
                 refresh_token: refreshToken
               })
-              APP.store.dispatch(resolveAppLogin(res.data))
+              APP.store.dispatch(resolveAppLogin(res.data, true))
               return true;
           }
           catch(e) {
