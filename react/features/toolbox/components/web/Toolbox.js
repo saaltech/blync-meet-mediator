@@ -67,7 +67,8 @@ import {
 import {
     setFullScreen,
     setOverflowMenuVisible,
-    setToolbarHovered
+    setToolbarHovered,
+    leavingMeeting
 } from '../../actions';
 import { isToolboxVisible } from '../../functions';
 import DownloadButton from '../DownloadButton';
@@ -1263,7 +1264,8 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-right'>
                     <HangupButton
-                        visible = { this._shouldShowButton('hangup') } />
+                        visible = { this._shouldShowButton('hangup') } 
+                        afterClick={() => APP.store.dispatch(leavingMeeting(true))}/>
                     <div className = 'enclosed-group'>
                         { buttonsRight.indexOf('localrecording') !== -1
                             && <LocalRecordingButton

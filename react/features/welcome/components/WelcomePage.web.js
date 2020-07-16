@@ -14,8 +14,6 @@ import {
     getQueryVariable
 } from '../../prejoin/functions';
 import { RecentList } from '../../recent-list';
-import { SettingsButton, SETTINGS_TABS } from '../../settings';
-
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
@@ -253,16 +251,6 @@ class WelcomePage extends AbstractWelcomePage {
                                     </div>
 
                             }
-                            {/* <div className = 'welcome-page-settings'>
-                                <SettingsButton
-                                    defaultTab = { SETTINGS_TABS.CALENDAR } />
-                                { showAdditionalToolbarContent
-                                    ? <div
-                                        className = 'settings-toolbar-content'
-                                        ref = { this._setAdditionalToolbarContentRef } />
-                                    : null
-                                }
-                            </div>*/}
                             <div className = 'header-image' />
                             <div className = 'header-text'>
                                 <h1 className = 'header-text-title'>

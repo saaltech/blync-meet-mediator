@@ -36,6 +36,10 @@ import type { AbstractProps } from '../AbstractConference';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 
+import {
+    leavingMeeting
+} from '../../../toolbox/actions';
+
 declare var APP: Object;
 declare var config: Object;
 declare var interfaceConfig: Object;
@@ -137,6 +141,7 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentDidMount() {
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
+        APP.store.dispatch(leavingMeeting(false))
         this._start();
     }
 
@@ -189,7 +194,8 @@ class Conference extends AbstractConference<Props, *> {
         const {
             _iAmRecorder,
             _layoutClassName,
-            _showPrejoin
+            _showPrejoin,
+            _leavingMeeting
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -198,6 +204,13 @@ class Conference extends AbstractConference<Props, *> {
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
+
+                {
+                    _leavingMeeting &&
+                    <div className="waiting-display-overlay">
+                        <img src={"images/loading_colored.gif"} />
+                    </div>
+                }
 
                 <Notice />
                 <div id = 'videospace'>
@@ -296,7 +309,8 @@ function _mapStateToProps(state) {
         _roomName: getConferenceNameForTitle(state),
         _showPrejoin: isPrejoinPageVisible(state),
         _interimPrejoin: isInterimPrejoinPageVisible(state),
-        _isModerator: isModerator
+        _isModerator: isModerator,
+        _leavingMeeting: state['features/toolbox'].leaving
     };
 }
 
