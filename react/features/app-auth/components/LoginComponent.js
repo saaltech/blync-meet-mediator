@@ -100,30 +100,35 @@ function LoginComponent(props) {
                 <div className = { `${isOverlay ? 'content' : 'inline-content'}` }>
                     <Icon src = { IconSignInLock } />
                     <h2>{ t('loginPage.signinLabel') }</h2>
-                    <div className = 'form-field'>
+                    <form onSubmit={onSubmit}>
+                        <div className = 'form-field'>
                         <div className = 'form-label'>{t('loginPage.fieldUsername')}</div>
-                        <InputField
-                            onChange = { value => setEmail(value.trim()) }
-                            focused = { true }
-                            placeHolder = { t('loginPage.placeholderUsername') }
-                            value = { email } />
-                    </div>
-                    <div className = 'form-field'>
-                        <div className = 'form-label'>{t('loginPage.fieldPassword')}</div>
-                        <InputField
-                            type = 'password'
-                            onChange = { value => setPassword(value.trim()) }
-                            placeHolder = { t('loginPage.placeholderPassword') }
-                            value = { password } />
-                    </div>
+                            <InputField
+                                onChange = { value => setEmail(value.trim()) }
+                                focused = { true }
+                                placeHolder = { t('loginPage.placeholderUsername') }
+                                value = { email } />
+                        </div>
+                        <div className = 'form-field'>
+                            <div className = 'form-label'>{t('loginPage.fieldPassword')}</div>
+                            <InputField
+                                type = 'password'
+                                onChange = { value => setPassword(value.trim()) }
+                                placeHolder = { t('loginPage.placeholderPassword') }
+                                value = { password } />
+                        </div>
 
-                    <div
-                        className = { `login-page-button ${formDisabled ? 'disabled' : ''}` }
-                        onClick = { onSubmit }>
-                        {
-                            t('loginPage.loginLabel')
-                        }
-                    </div>
+                        <div
+                            className = { `login-page-button ${formDisabled ? 'disabled' : ''}` }
+                            onClick = { onSubmit }>
+                            {
+                                t('loginPage.loginLabel')
+                            }
+                        </div>
+
+                        <button type="submit" style={{height: '0px', width: '0px', visibility: 'hidden'}}></button>
+                    </form>
+                    
 
                     <div className = 'error'>{errors || errorMsg}</div>
                 </div>
