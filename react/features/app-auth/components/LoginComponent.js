@@ -41,10 +41,11 @@ function LoginComponent(props) {
     });
 
     const onSubmit = async event => {
+        event.preventDefault();
+
         if (formDisabled) {
             return;
         }
-        event.preventDefault();
 
         // TODO: uncomment this once the api is ready
         await doRequest(false);
