@@ -21,7 +21,7 @@ export default ({ url, method, body, onSuccess }) => {
         if(refreshToken) {
           try {
             const res = await axios.post(
-              config.refreshToken, 
+              config.unauthenticatedIRP + config.refreshToken, 
               {
                 refresh_token: refreshToken
               })
