@@ -2670,7 +2670,8 @@ export default {
     _onConferenceJoined() {
         APP.UI.initConference();
 
-        APP.keyboardshortcut.init();
+        // Disabling keyboard shortcuts
+        // APP.keyboardshortcut.init();
 
         APP.store.dispatch(conferenceJoined(room));
 
