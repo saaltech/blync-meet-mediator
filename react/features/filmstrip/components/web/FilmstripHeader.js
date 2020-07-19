@@ -129,7 +129,7 @@ class FilmstripHeader extends Component<Props> {
                             ` }
                             onClick = { this._onToggleCollapseFilmstrip }>
                             <Icon src = { IconFilm } />
-                            {_filmStripCollapsed ? 'Hide' : 'Show'}
+                            {_filmStripCollapsed ? 'Show' : 'Hide'}
                         </button>
                     </div>
                     <div className = 'film-strip-header__title'>
