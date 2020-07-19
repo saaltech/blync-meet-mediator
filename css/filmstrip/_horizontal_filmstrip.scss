@@ -102,7 +102,7 @@
     &__strip-holder {
         display: flex;
         align-items: center;
-        justify-content: center;
+        // justify-content: center;
         z-index: 0;
         transition: transform .3s;
         overflow-x: scroll;
@@ -150,7 +150,7 @@
         &#filmstripLocalVideo {
             align-self: flex-end;
             display: block;
-            margin-bottom: 8px;
+            // margin-bottom: 8px;
         }
 
         &.hidden {
@@ -194,6 +194,7 @@
         width: auto;
         justify-content: flex-end;
         flex-direction: row;
+        min-width: unset;
 
         #filmstripRemoteVideosContainer {
             flex-direction: row-reverse;
