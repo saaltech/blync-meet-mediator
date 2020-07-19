@@ -121,6 +121,10 @@
     
     .no-account {
         > :last-child {
+            &.disabled {
+                color: #868686 !important;
+                cursor: default;
+            }
             color: #00C062;
             font-weight: bold;
             padding: 5px;
