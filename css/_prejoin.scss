@@ -79,6 +79,7 @@
             flex: 1;
             margin: 0 5px 0 0;
             color: #9A9A9A;
+            cursor: pointer;
 
             &.selected {
                 border-bottom: 4px solid #005C85;
@@ -87,10 +88,13 @@
         } 
 
         .cancel {
-            padding: 20px;
             cursor: pointer;
             width: 50px;
-            margin: 0 auto;
+            margin: 40px auto;
+
+            &:hover {
+                color: red;
+            }
         }
     }
 
@@ -102,6 +106,7 @@
             box-sizing: border-box;
             position: fixed;
             right: 305px;
+            cursor: pointer;
 
             svg {
                 height: 28px;
