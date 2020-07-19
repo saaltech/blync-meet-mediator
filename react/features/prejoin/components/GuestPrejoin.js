@@ -137,7 +137,8 @@ function GuestPrejoin(props) {
         // data.isHost = false
 
         setIsMeetingHost(data.isHost)
-        if(data.isHost) {
+        if(data.isHost && data.conferenceStatus === "STARTED") {
+            window.sessionStorage.setItem('roomPassword', data.conferenceSecret);
             setMeetingPassword(data.conferenceSecret)
         }
 
