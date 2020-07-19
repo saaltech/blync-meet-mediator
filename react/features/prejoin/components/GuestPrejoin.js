@@ -137,6 +137,9 @@ function GuestPrejoin(props) {
         // data.isHost = false
 
         setIsMeetingHost(data.isHost)
+        if(data.isHost) {
+            setMeetingPassword(data.conferenceSecret)
+        }
 
         setShowJoinMeetingForm(!_isUserSignedOut && !data.isHost)
 
