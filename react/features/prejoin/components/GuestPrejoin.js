@@ -304,7 +304,9 @@ function GuestPrejoin(props) {
 
                             <div className="no-account">
                                 <div>Don't have an account?</div>
-                                <div onClick={() => setContinueAsGuest(true)}> Continue as a Guest </div>
+                                <div 
+                                    className={`${disableJoin ? 'disabled' : ''} `}
+                                    onClick={() => !disableJoin && setContinueAsGuest(true)}> Continue as a Guest </div>
                             </div>
                         </>
                     }
