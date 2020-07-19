@@ -34,6 +34,7 @@ import {
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 
 function GuestPrejoin(props) {
+    const [disableJoin, setDisableJoin] = useState(true);
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
         // if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
@@ -147,6 +148,7 @@ function GuestPrejoin(props) {
         setIsSecretEnabled(data.isSecretEnabled)
         setConferenceStatus(data.conferenceStatus);
 
+        setDisableJoin(false)
         APP.store.dispatch(setPostWelcomePageScreen(null,
             {
                 meetingId : data.conferenceId,
@@ -332,8 +334,8 @@ function GuestPrejoin(props) {
                         (!_isUserSignedOut || continueAsGuest) &&
                         <div
                             className={`prejoin-page-button next 
-                            ${joinNowDisabled ? 'disabled' : ''} `}
-                            onClick={async () => !joinNowDisabled && handleJoinNow()}>
+                            ${(disableJoin || joinNowDisabled) ? 'disabled' : ''} `}
+                            onClick={async () => (!disableJoin && !joinNowDisabled) && handleJoinNow()}>
                             Join Now
                         </div>
                     }
