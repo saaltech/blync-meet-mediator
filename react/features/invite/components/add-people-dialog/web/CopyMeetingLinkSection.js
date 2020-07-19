@@ -89,7 +89,7 @@ function CopyMeetingLinkSection({ t, url, inviteText, custom = false }: Props) {
         return (
             <>
                 <div className = 'invite-more-dialog invite-more-dialog-conference-url copy-link-text'>
-                    {isHovered ? 'Copy meeting details' : displayUrl + '#config.disableDeepLinking=true' }
+                    {isHovered ? 'Copy meeting details' : displayUrl }
                 </div>
                 <Icon src = { IconCopy } />
             </>
