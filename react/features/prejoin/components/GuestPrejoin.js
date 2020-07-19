@@ -14,6 +14,10 @@ import { setPrejoinPageErrorMessageKey } from '../';
 
 import { config } from '../../../config'
 
+import {
+    Icon,
+    IconLogo
+} from '../../base/icons';
 
 import {
     joinConference as joinConferenceAction,
@@ -288,7 +292,7 @@ function GuestPrejoin(props) {
                 meetingStarted !== null && meetingStarted == false ?
                 <div className="waiting-display">
                     <h2>Please wait for the host to join the meeting...</h2>
-                    <img src={"images/loading.gif"} />
+                    <Icon src = { IconLogo } size={120}/>
                 </div>
                 :
                 <>
