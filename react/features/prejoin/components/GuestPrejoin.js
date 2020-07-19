@@ -36,19 +36,19 @@ import { setPostWelcomePageScreen } from '../../app-auth/actions';
 function GuestPrejoin(props) {
     const [meetingId, setMeetingId] = useState(props.meetingId);
     useEffect(() => {
-        if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
-            //Host has already signed-in, so there will be no JWT token in the url
-            window.sessionStorage.setItem('isJWTSet', true);
-            addTokenToURL()
-        }
-        else {
+        // if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
+        //     //Host has already signed-in, so there will be no JWT token in the url
+        //     window.sessionStorage.setItem('isJWTSet', true);
+        //     addTokenToURL()
+        // }
+        // else {
             setTimeout(async () => {
                 if (_isUserSignedOut)
                     await unauthGetConference()
                 else 
                     await getConference(true)
             }, 3000)
-        }
+        // }
         // Fetch the meeting details using the id in the address bar
         
     }, [meetingId]);
@@ -162,12 +162,12 @@ function GuestPrejoin(props) {
         window.location.href = window.location.origin
     }
 
-    const addTokenToURL = async () => {
-        await getConference(true)
-        if(!getQueryVariable('jwt')) {
-            window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
-        }
-    }
+    // const addTokenToURL = async () => {
+    //     await getConference(true)
+    //     // if(!getQueryVariable('jwt')) {
+    //     //     window.location.href = window.location.href + "?jwt=" + APP.store.getState()['features/app-auth'].meetingAccessToken
+    //     // }
+    // }
 
     const checkMeetingStatus = async () => {
         setMeetingStarted(false);
@@ -292,7 +292,7 @@ function GuestPrejoin(props) {
                             <LoginComponent
                                 closeAction={() => {
                                     //Reload the page with JWT token
-                                    addTokenToURL()
+                                    //addTokenToURL()
                                 }}
                             />
 

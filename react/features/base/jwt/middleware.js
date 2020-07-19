@@ -101,8 +101,10 @@ function _setConfigOrLocationURL({ dispatch, getState }, next, action) {
 
     const { locationURL } = getState()['features/base/connection'];
 
+    const jwtToken = APP.store.getState()['features/app-auth'] 
+            && APP.store.getState()['features/app-auth'].meetingAccessToken
     dispatch(
-        setJWT(locationURL ? parseJWTFromURLParams(locationURL) : undefined));
+        setJWT(jwtToken || (locationURL ? parseJWTFromURLParams(locationURL) : undefined)));
 
     return result;
 }
