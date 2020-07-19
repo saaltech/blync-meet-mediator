@@ -106,3 +106,4 @@ export { default as IconSignInLock } from './signin-lock.svg';
 export { default as IconLogout } from './logout.svg';
 export { default as IconMore } from './more.svg';
 export { default as IconCalendar } from './calendar.svg';
+export { default as IconLogo } from './logo.svg';
