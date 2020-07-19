@@ -108,6 +108,12 @@
         transition: transform .3s;
         padding: 4px 0;
         overflow-x: scroll;
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #D1D1D1;
+            border-radius: 20px;
+            border: 3px solid #D1D1D1;
+          }
     }
 
     &__videos-container--collapsed::before {
