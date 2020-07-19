@@ -1,18 +1,22 @@
 /* @flow */
+/* global APP */
 
 import React, { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { setShowSpeakersList } from '../..';
-import { getConferenceName } from '../../../base/conference/functions';
-import { Icon, IconArrowDownSmall } from '../../../base/icons';
+import { Icon, IconFilm } from '../../../base/icons';
 import { PARTICIPANT_ROLE } from '../../../base/participants';
 import { getParticipantCount, getParticipants, getLocalParticipant } from '../../../base/participants/functions';
 import { connect } from '../../../base/redux';
 import ConferenceTimer from '../../../conference/components/ConferenceTimer';
 import { isToolboxVisible } from '../../../toolbox';
+import { setFilmStripCollapsed } from '../../actions';
 
 import ParticipantsStats from './ParticipantsStats';
+
+// import { getConferenceName } from '../../../base/conference/functions';
+// import { Icon, IconArrowDownSmall } from '../../../base/icons';
 
 /**
  * The type of the React {@code Component} props of {@link Subject}.
@@ -43,7 +47,9 @@ type Props = {
 
     _showSpeakersList: boolean,
 
-    _isModerator: boolean
+    _isModerator: boolean,
+
+    _filmStripCollapsed: Boolean,
 };
 
 /**
@@ -52,6 +58,19 @@ type Props = {
  * @class FilmstripHeader
  */
 class FilmstripHeader extends Component<Props> {
+
+    _onToggleCollapseFilmstrip: Function;
+
+    /**
+     * Initializes a new {@code Filmstrip} instance.
+     *
+     * @param {Object} props - The read-only properties with which the new
+     * instance is to be initialized.
+     */
+    constructor(props: Props) {
+        super(props);
+        this._onToggleCollapseFilmstrip = this._onToggleCollapseFilmstrip.bind(this);
+    }
 
     /**
      * Render participants list.
@@ -69,13 +88,32 @@ class FilmstripHeader extends Component<Props> {
     }
 
     /**
+     * Dispatches an action to change the collapse state of the filmstrip.
+     *
+     * @param {Object} e - The event object.
+     *
+     * @returns {void}
+     */
+    _onToggleCollapseFilmstrip(e) {
+        e.preventDefault();
+        APP.store.dispatch(setFilmStripCollapsed(!this.props._filmStripCollapsed));
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
      * @returns {ReactElement}
      */
     render() {
-        const { _subject, _visible, _show, _showSpeakersList } = this.props;
+        const {
+            _subject,
+            _visible,
+            _show,
+            _filmStripCollapsed
+
+            // _showSpeakersList
+        } = this.props;
 
         if (!_show) {
             return null;
@@ -84,6 +122,16 @@ class FilmstripHeader extends Component<Props> {
         return (
             <div className = { `film-strip-header ${_visible ? 'film-strip-header--visible' : ''}` }>
                 <div className = 'film-strip-header__container'>
+                    <div>
+                        <button
+                            className = { `film-strip-header__control-btn 
+                                ${_filmStripCollapsed ? 'film-strip-header__control-btn--selected' : ''}
+                            ` }
+                            onClick = { this._onToggleCollapseFilmstrip }>
+                            <Icon src = { IconFilm } />
+                            {_filmStripCollapsed ? 'Hide' : 'Show'}
+                        </button>
+                    </div>
                     <div className = 'film-strip-header__title'>
                         <span className = 'film-strip-header__title-text'>{ _subject }</span>
                         <ConferenceTimer />
@@ -139,7 +187,7 @@ function _mapDispatchToProps(dispatch: Dispatch<any>) {
  */
 function _mapStateToProps(state) {
     const participantCount = getParticipantCount(state);
-    const { showSpeakersList } = state['features/filmstrip'];
+    const { showSpeakersList, collapsed } = state['features/filmstrip'];
     const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
@@ -150,7 +198,8 @@ function _mapStateToProps(state) {
         _visible: isToolboxVisible(state) && participantCount > 1,
         _participants: getParticipants(state),
         _showSpeakersList: showSpeakersList,
-        _isModerator: isModerator
+        _isModerator: isModerator,
+        _filmStripCollapsed: collapsed
     };
 }
 

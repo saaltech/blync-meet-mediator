@@ -10,7 +10,13 @@ import {
     sendAnalytics
 } from '../../../analytics';
 import { translate } from '../../../base/i18n';
-import { Icon, IconMenuDown, IconMenuUp, IconArrowLeft } from '../../../base/icons';
+import {
+    Icon,
+    IconMenuDown,
+    IconMenuUp
+
+    // IconArrowLeft
+} from '../../../base/icons';
 import { connect } from '../../../base/redux';
 import { dockToolbox } from '../../../toolbox';
 import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
@@ -230,14 +236,14 @@ class Filmstrip extends Component <Props> {
                     id = 'remoteVideos'>
 
                     <div className = { `filmstrip__videos-container ${this.props._collapsed ? 'filmstrip__videos-container--collapsed' : ''}` }>
-                        <div className = 'filmstrip__actions'>
+                        {/* <div className = 'filmstrip__actions'>
                             <button
                                 className = 'filmstrip__collapse-btn'
                                 onClick = { this._onToggleCollapseFilmstrip }
                                 type = 'button'>
                                 <Icon src = { IconArrowLeft } />
                             </button>
-                        </div>
+                        </div> */}
 
                         <div className = { 'filmstrip__strip-holder' }>
                             <div
