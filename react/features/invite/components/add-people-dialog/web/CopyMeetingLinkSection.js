@@ -85,11 +85,11 @@ function CopyMeetingLinkSection({ t, url, inviteText, custom = false }: Props) {
         }
 
         const displayUrl = decodeURI(url.replace(/^https?:\/\//i, ''));
-
+    
         return (
             <>
                 <div className = 'invite-more-dialog invite-more-dialog-conference-url copy-link-text'>
-                    {isHovered ? 'Copy meeting details' : displayUrl}
+                    {isHovered ? 'Copy meeting details' : displayUrl + '#config.disableDeepLinking=true' }
                 </div>
                 <Icon src = { IconCopy } />
             </>
