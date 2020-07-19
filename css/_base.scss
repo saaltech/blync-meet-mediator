@@ -162,6 +162,12 @@ form {
     }
 }
 
+.videoMuted, .audioMuted {
+    .jitsi-icon svg path {
+        fill: #fff
+    }
+}
+
 .poweredby {
     position: absolute;
     left: 25;
