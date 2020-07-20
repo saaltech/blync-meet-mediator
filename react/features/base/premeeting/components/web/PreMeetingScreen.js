@@ -67,6 +67,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             meetNow: true,
             showTrackPreviews: false,
             navigatedFromHome: undefined,
+            joinMeeting: false,
             exiting: false
         };
 
@@ -77,7 +78,8 @@ class PreMeetingScreen extends PureComponent<Props> {
     componentDidMount() {
         this.setState({
             meetNow: true,
-            navigatedFromHome: getQueryVariable('home') ? true: false
+            navigatedFromHome: getQueryVariable('home') ? true: false,
+            joinMeeting: getQueryVariable('join') ? true : false
         });
     }
 
@@ -95,7 +97,8 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreviews, navigatedFromHome, exiting } = this.state;
+        const { meetNow, showTrackPreviews, navigatedFromHome, exiting, 
+            joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
         let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
         if(guestFlow) {
@@ -149,6 +152,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     {
                         guestFlow && 
                         <GuestPrejoin 
+                            joinMeeting={ joinMeeting }
                             meetingId={urlToShow}
                             showTrackPreviews={this.showTrackPreviews}
                         />
