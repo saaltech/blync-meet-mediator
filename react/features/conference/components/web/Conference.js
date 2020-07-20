@@ -4,6 +4,7 @@ import _ from 'lodash';
 import React from 'react';
 
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
+import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
@@ -25,6 +26,9 @@ import {
     showToolbox
 } from '../../../toolbox';
 import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-more-items';
+import {
+    leavingMeeting
+} from '../../../toolbox/actions';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification } from '../../functions';
 import {
@@ -36,11 +40,6 @@ import type { AbstractProps } from '../AbstractConference';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 
-import {
-    leavingMeeting
-} from '../../../toolbox/actions';
-
-import Loading from '../../../always-on-top/Loading'
 
 declare var APP: Object;
 declare var config: Object;
@@ -101,7 +100,8 @@ type Props = AbstractProps & {
     dispatch: Function,
     t: Function,
     _screensharing: boolean,
-    _isModerator: boolean
+    _isModerator: boolean,
+    _sharer: Object,
 }
 
 /**
@@ -143,7 +143,7 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentDidMount() {
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
-        APP.store.dispatch(leavingMeeting(false))
+        APP.store.dispatch(leavingMeeting(false));
         this._start();
     }
 
@@ -208,8 +208,8 @@ class Conference extends AbstractConference<Props, *> {
                 onMouseMove = { this._onShowToolbar }>
 
                 {
-                    _leavingMeeting &&
-                    <Loading />
+                    _leavingMeeting
+                    && <Loading />
                 }
 
                 <Notice />
@@ -231,8 +231,12 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                {this.props._screensharing && <div className = 'conference__screen-shared'>
+                {(this.props._screensharing && !this.props._sharer) && <div className = 'conference__screen-shared'>
                     <Icon src = { IconShareDesktop } />Your screen is being shared
+                </div>}
+
+                {this.props._sharer && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />{this.props._sharer.name} is sharing screen
                 </div>}
 
                 <NotificationsToasts />
@@ -298,12 +302,18 @@ class Conference extends AbstractConference<Props, *> {
  * @returns {Props}
  */
 function _mapStateToProps(state) {
-    const localVideo = getLocalVideoTrack(state['features/base/tracks']);
-    const isModerator = (getLocalParticipant(state) || {}).role === PARTICIPANT_ROLE.MODERATOR;
+    const tracks = state['features/base/tracks'];
+    const participants = state['features/base/participants'];
+    const localVideo = getLocalVideoTrack(tracks);
+    const { participantId: screenSharerId } = tracks.find(t => t.videoType === 'desktop') || {};
+    const sharer = participants.find(p => p.id === screenSharerId);
+    const localParticipant = getLocalParticipant(state);
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
         ...abstractMapStateToProps(state),
         _screensharing: localVideo && localVideo.videoType === 'desktop',
+        _sharer: localParticipant.id === screenSharerId ? null : sharer,
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
