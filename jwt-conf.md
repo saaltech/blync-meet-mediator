@@ -92,6 +92,23 @@ Restart Prosody
     systemctl status prosody
     ```
 
-  
+## Jicofo configuration
+
+When using token based authentication, the URL must use EXT_JWT as the scheme:
+
+/etc/jitsi/jicofo/sip-communicator.properties 
+
+```java
+org.jitsi.jicofo.auth.URL=EXT_JWT:jitsi-meet.example.com
+```
+
+## Additional Module required for prosody
+
+```
+luarocks install basexx
+luarocks install luajwtjitsi
+systemctl restart prosody
+```
+
 
 
