@@ -59,14 +59,14 @@ Modify your Prosody config with these three steps:
 /etc/prosody/conf.avail/<domain>.cfg.lua 
 
 1. Adjust plugin_paths to contain the path pointing to jitsi meet Prosody plugins location. 
-``` 
+```lua 
 plugin_paths = { "/usr/share/jitsi-meet/prosody-plugins/" }
 ``` 
 
 2. Under you domain config change authentication to "token" and provide application ID, secret and optionally token lifetime:
 
 update app id and secret used when jwt-plugin instalation
-``` 
+```lua 
 VirtualHost "jitmeet.example.com"
     authentication = "token";
     app_id = "example_app_id"; 
@@ -74,7 +74,24 @@ VirtualHost "jitmeet.example.com"
     allow_empty_token = false;
 ``` 
 3.  Enable room name token verification plugin in your MUC component config section:
-``` 
+```lua
 Component "conference.jitmeet.example.com" "muc"
     modules_enabled = { "token_verification" }
 ``` 
+
+Restart Prosody 
+```
+ systemctl restart prosody
+```
+- Failed to restart prosody.service: Unit prosody.service is masked. do following for unmask prosody
+    ```
+    systemctl enable prosody
+    rm /etc/systemd/system/prosody.service
+    systemctl daemon-reload
+    systemctl restart prosody
+    systemctl status prosody
+    ```
+
+  
+
+
