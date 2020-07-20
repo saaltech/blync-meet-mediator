@@ -3,8 +3,9 @@
     left: 47px;
     top: auto;
     bottom: 30px;
-    z-index: $zindex3;
-    height: 60vh;
+    z-index: $filmstripVideosZ;
+    height: inherit;
+    max-height: 60vh;
     overflow: hidden;
     display: none;
     flex-direction: column;
