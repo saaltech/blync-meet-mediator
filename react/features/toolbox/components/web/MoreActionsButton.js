@@ -72,6 +72,7 @@ class MoreActionsButton extends Component<Props> {
                         { t('toolbar.accessibilityLabel.moreActions') }
                     icon = { IconMenuThumb }
                     onClick = { this._onToggleDialogVisibility }
+                    showArrow = { true }
                     toggled = { isOpen }
                     tooltip = { t('toolbar.moreActions') } />
             </div>

@@ -936,6 +936,7 @@ class Toolbox extends Component<Props, State> {
                 disabled = { !_desktopSharingEnabled }
                 icon = { IconShareDesktop }
                 onClick = { this._onToolbarToggleScreenshare }
+                showArrow = { false }
                 toggled = { _screensharing }
                 tooltip = { tooltip } />
         );
@@ -1264,8 +1265,8 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-right'>
                     <HangupButton
-                        visible = { this._shouldShowButton('hangup') } 
-                        afterClick={() => APP.store.dispatch(leavingMeeting(true))}/>
+                        visible = { this._shouldShowButton('hangup') }
+                        afterClick = { () => APP.store.dispatch(leavingMeeting(true)) } />
                     <div className = 'enclosed-group'>
                         { buttonsRight.indexOf('localrecording') !== -1
                             && <LocalRecordingButton
@@ -1290,6 +1291,7 @@ class Toolbox extends Component<Props, State> {
                                     accessibilityLabel = { t('toolbar.accessibilityLabel.chat') }
                                     icon = { IconChat }
                                     onClick = { this._onToolbarToggleChat }
+                                    showArrow = { true }
                                     toggled = { _chatOpen }
                                     tooltip = { t('toolbar.chat') } />
                                 <ChatCounter />
