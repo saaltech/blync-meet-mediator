@@ -300,9 +300,10 @@ function GuestPrejoin(props) {
                         (_isUserSignedOut && !continueAsGuest) &&
                         <>
                             <LoginComponent
-                                closeAction={() => {
-                                    //Reload the page with JWT token
-                                    //addTokenToURL()
+                                closeAction={async () => {
+                                    //Fetch the conference details for the logged in user
+                                    setDisableJoin(true)
+                                    await getConference(true)
                                 }}
                             />
 
