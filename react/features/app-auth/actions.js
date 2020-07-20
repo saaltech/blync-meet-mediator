@@ -41,10 +41,12 @@ export function resolveAppLogin(details, refreshCall = false) {
     };
 }
 
-export function invalidateAndGoHome() {
+export function invalidateAndGoHome(skipRelogin = false) {
     APP.store.dispatch(resolveAppLogout());
-    window.location.href = window.location.origin + "?sessionExpired=true";
-  }
+    if(!skipRelogin) {
+        window.location.href = window.location.origin + "?sessionExpired=true";
+    }
+}
 
 export function goHome() {
     window.location.href = window.location.origin

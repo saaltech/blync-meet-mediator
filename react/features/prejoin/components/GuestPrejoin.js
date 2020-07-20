@@ -51,7 +51,7 @@ function GuestPrejoin(props) {
                 if (_isUserSignedOut)
                     await unauthGetConference()
                 else 
-                    await getConference(true)
+                    refreshTokenAndFetchConference()
             }, 3000)
         // }
         // Fetch the meeting details using the id in the address bar
@@ -62,7 +62,7 @@ function GuestPrejoin(props) {
     const [meetingPassword, setMeetingPassword] = useState('');
     const [meetingFrom, setMeetingFrom] = useState(null);
     const [meetingTo, setMeetingTo] = useState(null);
-    const { joinConference, _isUserSignedOut = true } = props;
+    const { joinConference, _isUserSignedOut = true, joinMeeting } = props;
     const [isMeetingHost, setIsMeetingHost] = useState(false)
     const [continueAsGuest, setContinueAsGuest] = useState(false);
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
@@ -172,6 +172,15 @@ function GuestPrejoin(props) {
         window.location.href = window.location.origin
     }
 
+    const refreshTokenAndFetchConference = async () => {
+        // Do not navigate to session expiry page if the session has expired.
+        // If session has expired, continue the guest/login flow in joining flow of the meeting.
+        let res = await getConference(true, joinMeeting)
+        if(!res) {
+            await unauthGetConference()
+        }
+    }
+
     // const addTokenToURL = async () => {
     //     await getConference(true)
     //     // if(!getQueryVariable('jwt')) {
@@ -203,7 +212,7 @@ function GuestPrejoin(props) {
     const handleJoinNow = async () => {
 
         //Verify conference secret(when join form is displayed)
-        if (showJoinMeetingForm ||
+        if ((!_isUserSignedOut && showJoinMeetingForm) ||
             (!_isUserSignedOut && !isMeetingHost) ||
             continueAsGuest) {
             await verifySecret()
@@ -300,10 +309,11 @@ function GuestPrejoin(props) {
                         (_isUserSignedOut && !continueAsGuest) &&
                         <>
                             <LoginComponent
-                                closeAction={async () => {
+                                closeAction={ () => {
                                     //Fetch the conference details for the logged in user
                                     setDisableJoin(true)
-                                    await getConference(true)
+                                    refreshTokenAndFetchConference();
+
                                 }}
                             />
 
@@ -317,7 +327,8 @@ function GuestPrejoin(props) {
                     }
 
                     {
-                        (showJoinMeetingForm || (!_isUserSignedOut && !isMeetingHost) ||
+                        ((!_isUserSignedOut && showJoinMeetingForm) || 
+                            (!_isUserSignedOut && !isMeetingHost) ||
                         continueAsGuest ) &&
                         <JoinMeetingForm
                             isSecretEnabled={isSecretEnabled}
