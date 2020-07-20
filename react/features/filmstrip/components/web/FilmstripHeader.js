@@ -11,6 +11,7 @@ import { getParticipantCount, getParticipants, getLocalParticipant } from '../..
 import { connect } from '../../../base/redux';
 import ConferenceTimer from '../../../conference/components/ConferenceTimer';
 import { isToolboxVisible } from '../../../toolbox';
+import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
 import { setFilmStripCollapsed } from '../../actions';
 
 import ParticipantsStats from './ParticipantsStats';
@@ -49,7 +50,9 @@ type Props = {
 
     _isModerator: boolean,
 
-    _filmStripCollapsed: Boolean,
+    _filmStripCollapsed: boolean,
+
+    _showFilmstripSwitcher: boolean,
 };
 
 /**
@@ -110,7 +113,8 @@ class FilmstripHeader extends Component<Props> {
             _subject,
             _visible,
             _show,
-            _filmStripCollapsed
+            _filmStripCollapsed,
+            _showFilmstripSwitcher
 
             // _showSpeakersList
         } = this.props;
@@ -123,14 +127,14 @@ class FilmstripHeader extends Component<Props> {
             <div className = { `film-strip-header ${_visible ? 'film-strip-header--visible' : ''}` }>
                 <div className = 'film-strip-header__container'>
                     <div>
-                        <button
+                        {_showFilmstripSwitcher && <button
                             className = { `film-strip-header__control-btn 
                                 ${_filmStripCollapsed ? 'film-strip-header__control-btn--selected' : ''}
                             ` }
                             onClick = { this._onToggleCollapseFilmstrip }>
                             <Icon src = { IconFilm } />
                             {_filmStripCollapsed ? 'Show' : 'Hide'}
-                        </button>
+                        </button>}
                     </div>
                     <div className = 'film-strip-header__title'>
                         <span className = 'film-strip-header__title-text'>{ _subject }</span>
@@ -189,6 +193,7 @@ function _mapStateToProps(state) {
     const participantCount = getParticipantCount(state);
     const { showSpeakersList, collapsed } = state['features/filmstrip'];
     const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
+    const currLayout = getCurrentLayout(state);
 
     return {
         // _show: participantCount > 1,
@@ -199,7 +204,8 @@ function _mapStateToProps(state) {
         _participants: getParticipants(state),
         _showSpeakersList: showSpeakersList,
         _isModerator: isModerator,
-        _filmStripCollapsed: collapsed
+        _filmStripCollapsed: collapsed,
+        _showFilmstripSwitcher: currLayout === LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW
     };
 }
 
