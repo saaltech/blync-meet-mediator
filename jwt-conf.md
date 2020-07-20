@@ -51,3 +51,30 @@ Include "conf.d/*.cfg.lua"
 ``` 
 c2s_require_encryption=false
 ```
+
+## Manual plugin configuration
+
+Modify your Prosody config with these three steps:
+
+/etc/prosody/conf.avail/<domain>.cfg.lua 
+
+1. Adjust plugin_paths to contain the path pointing to jitsi meet Prosody plugins location. 
+``` 
+plugin_paths = { "/usr/share/jitsi-meet/prosody-plugins/" }
+``` 
+
+2. Under you domain config change authentication to "token" and provide application ID, secret and optionally token lifetime:
+
+update app id and secret used when jwt-plugin instalation
+``` 
+VirtualHost "jitmeet.example.com"
+    authentication = "token";
+    app_id = "example_app_id"; 
+    app_secret = "example_app_secret"; 
+    allow_empty_token = false;
+``` 
+3.  Enable room name token verification plugin in your MUC component config section:
+``` 
+Component "conference.jitmeet.example.com" "muc"
+    modules_enabled = { "token_verification" }
+``` 
