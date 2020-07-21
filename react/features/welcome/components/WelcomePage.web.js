@@ -193,6 +193,10 @@ class WelcomePage extends AbstractWelcomePage {
         });
     }
 
+    componentDidMount() {
+        this.props.dispatch(setPostWelcomePageScreen(null, {}));
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
