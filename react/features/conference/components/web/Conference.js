@@ -102,6 +102,7 @@ type Props = AbstractProps & {
     _screensharing: boolean,
     _isModerator: boolean,
     _sharer: Object,
+    _otherSharers: Array<Object>
 }
 
 /**
@@ -197,7 +198,8 @@ class Conference extends AbstractConference<Props, *> {
             _iAmRecorder,
             _layoutClassName,
             _showPrejoin,
-            _leavingMeeting
+            _leavingMeeting,
+            _otherSharers
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -236,7 +238,8 @@ class Conference extends AbstractConference<Props, *> {
                 </div>}
 
                 {this.props._sharer && <div className = 'conference__screen-shared'>
-                    <Icon src = { IconShareDesktop } />{this.props._sharer.name} is sharing screen
+                    <Icon src = { IconShareDesktop } />
+                    {this.props._sharer.name} {_otherSharers.length > 0 ? `+${_otherSharers.length} other(s) are` : 'is'} sharing screen
                 </div>}
 
                 <NotificationsToasts />
@@ -314,6 +317,7 @@ function _mapStateToProps(state) {
         ...abstractMapStateToProps(state),
         _screensharing: localVideo && localVideo.videoType === 'desktop',
         _sharer: localParticipant.id === screenSharerId ? null : sharer,
+        _otherSharers: tracks.filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
