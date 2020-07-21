@@ -108,6 +108,7 @@
         transition: transform .3s;
         padding: 4px 0;
         overflow-x: scroll;
+        overflow-y: hidden;
 
         &::-webkit-scrollbar-thumb {
             background-color: #D1D1D1;
