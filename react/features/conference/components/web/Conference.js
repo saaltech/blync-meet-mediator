@@ -99,7 +99,7 @@ type Props = AbstractProps & {
 
     dispatch: Function,
     t: Function,
-    _screensharing: boolean,
+    _iAmSharingScreen: boolean,
     _isModerator: boolean,
     _sharer: Object,
     _otherSharers: Array<Object>
@@ -199,7 +199,9 @@ class Conference extends AbstractConference<Props, *> {
             _layoutClassName,
             _showPrejoin,
             _leavingMeeting,
-            _otherSharers
+            _otherSharers,
+            _iAmSharingScreen,
+            _sharer
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -233,14 +235,23 @@ class Conference extends AbstractConference<Props, *> {
 
                 <CalleeInfoContainer />
 
-                {(this.props._screensharing && !this.props._sharer) && <div className = 'conference__screen-shared'>
+                {(_sharer || _iAmSharingScreen) && <div
+                    className = 'conference__screen-shared'
+                    title = { (_otherSharers || []).reduce((agg, t) => `${t.name} \n${agg}`, '') }>
+                    <Icon src = { IconShareDesktop } />
+                    {_iAmSharingScreen && 'Your are sharing screen'}
+                    {!_iAmSharingScreen && _sharer && `${_sharer.name} is sharing screen`}
+                    {(_otherSharers || []).length > 0 && ` +${(_otherSharers || []).length} other(s)` }
+                </div>}
+
+                {/* {(this.props._screensharing && !this.props._sharer) && <div className = 'conference__screen-shared'>
                     <Icon src = { IconShareDesktop } />Your screen is being shared
                 </div>}
 
                 {this.props._sharer && <div className = 'conference__screen-shared'>
                     <Icon src = { IconShareDesktop } />
                     {this.props._sharer.name} {_otherSharers.length > 0 ? `+${_otherSharers.length} other(s) are` : 'is'} sharing screen
-                </div>}
+                </div>} */}
 
                 <NotificationsToasts />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
@@ -315,9 +326,11 @@ function _mapStateToProps(state) {
 
     return {
         ...abstractMapStateToProps(state),
-        _screensharing: localVideo && localVideo.videoType === 'desktop',
+        _iAmSharingScreen: localVideo && localVideo.videoType === 'desktop',
         _sharer: localParticipant.id === screenSharerId ? null : sharer,
-        _otherSharers: tracks.filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId),
+        _otherSharers: tracks
+            .filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId)
+            .map(t => participants.find(p => p.id === t.participantId) || {}),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
