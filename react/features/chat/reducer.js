@@ -66,7 +66,7 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
             const localSent = msg.displayName === localParticipant.name && msg.recipient === remoteParticipant.name;
             const localReceived = msg.recipient === localParticipant.name && msg.displayName === remoteParticipant.name;
 
-            if (localSent || localReceived) {
+            if ((localSent || localReceived) && msg.privateMessage) {
                 return {
                     ...msg,
                     hasRead: true
