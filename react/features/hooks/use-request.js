@@ -7,7 +7,7 @@ import { config } from '../../config'
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
 
-  const doRequest = async (tokenRequired = false) => {
+  const doRequest = async (tokenRequired = false, skipRelogin = false) => {
     try {
       setErrors(null);
       let validToken = !tokenRequired || validateToken();
@@ -31,14 +31,14 @@ export default ({ url, method, body, onSuccess }) => {
             console.log("refresh Token error", e)
             if(e && e.response && e.response.status == 401) {
               // only in case of invalid grant
-              invalidateAndGoHome();
+              invalidateAndGoHome(skipRelogin);
               return;
             }
           }
         }
         else {
           // if it fails, Clear features/app-auth and move to home page
-          invalidateAndGoHome();
+          invalidateAndGoHome(skipRelogin);
           return;
         }
       }

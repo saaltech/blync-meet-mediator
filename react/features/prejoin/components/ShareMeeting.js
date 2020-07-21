@@ -79,7 +79,7 @@ const mapStateToProps = state => {
     return {
         _conferenceName: getRoomName(state),
         _dialIn: state['features/invite'],
-        _inviteUrl: getInviteURL(state) + '#config.disableDeepLinking=true',
+        _inviteUrl: getInviteURL(state) + '?join=true', //+ '#config.disableDeepLinking=true',
         _localParticipantName: localParticipant?.name,
         _locationUrl: state['features/base/connection'].locationURL
     };

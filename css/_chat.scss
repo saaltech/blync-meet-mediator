@@ -118,10 +118,14 @@
         align-items: center;
 
         color: #393939;
-        cursor: pointer;
+        
         display: flex;
         font-size: 21px;
         font-weight: bold;
+
+        &--btn {
+            cursor: pointer;
+        }
     }
 
     .chat-close {

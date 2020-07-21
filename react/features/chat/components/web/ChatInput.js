@@ -34,7 +34,9 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
+
+    onChange?: Function,
 };
 
 /**
@@ -184,6 +186,8 @@ class ChatInput extends Component<Props, State> {
      */
     _onMessageChange(event) {
         this.setState({ message: event.target.value });
+
+        this.props.onChange && this.props.onChange();
     }
 
     _onSmileySelect: (string) => void;
