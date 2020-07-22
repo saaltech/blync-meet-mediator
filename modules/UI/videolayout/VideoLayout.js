@@ -148,6 +148,7 @@ const VideoLayout = {
         // only contains a ReactElement. Then remove this call once the
         // Filmstrip is fully in React.
         localVideoThumbnail.updateIndicators();
+        localVideoThumbnail.initializeHost();
     },
 
     /**
@@ -270,6 +271,10 @@ const VideoLayout = {
 
         getAllThumbnails().forEach(thumbnail =>
             thumbnail.focus(pinnedParticipantID === thumbnail.getId()));
+    },
+
+    onHostChange() {
+        getAllThumbnails().forEach(thumbnail => thumbnail.initializeHost());
     },
 
     /**
