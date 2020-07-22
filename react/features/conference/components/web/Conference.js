@@ -239,7 +239,7 @@ class Conference extends AbstractConference<Props, *> {
                     className = 'conference__screen-shared'
                     title = { (_otherSharers || []).reduce((agg, t) => `${t.name} \n${agg}`, '') }>
                     <Icon src = { IconShareDesktop } />
-                    {_iAmSharingScreen && 'Your are sharing screen'}
+                    {_iAmSharingScreen && 'You are sharing screen'}
                     {!_iAmSharingScreen && _sharer && `${_sharer.name} is sharing screen`}
                     {(_otherSharers || []).length > 0 && ` +${(_otherSharers || []).length} other(s)` }
                 </div>}
