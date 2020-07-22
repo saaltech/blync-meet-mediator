@@ -38,7 +38,7 @@ MiddlewareRegistry.register(store => next => action => {
 
         // window.VideoLayout = VideoLayout;
 
-        setTimeout(() => VideoLayout.onHostChange(), 100);
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
         break;
 
     case CONFERENCE_WILL_LEAVE:
