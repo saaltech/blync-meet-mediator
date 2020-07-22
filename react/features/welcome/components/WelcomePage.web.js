@@ -131,6 +131,7 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     componentDidMount() {
+        this.props.dispatch(setPostWelcomePageScreen(null, {}));
         if (getQueryVariable('sessionExpired')) {
             this.setState({
                 hideLogin: false,
@@ -191,10 +192,6 @@ class WelcomePage extends AbstractWelcomePage {
         this.setState({
             hideLogin: true
         });
-    }
-
-    componentDidMount() {
-        this.props.dispatch(setPostWelcomePageScreen(null, {}));
     }
 
     /**
