@@ -162,7 +162,18 @@ class Chat extends AbstractChat<Props, State> {
      */
     _onToggleChat() {
         this.props._onToggleChat();
-        this._markMessagesAsRead();
+
+        if (!this.props._privateMessageRecipient && this.state.activeSwitcher === SwitcherViews.EVERYONE) {
+            this.props._markPublicAsRead();
+        }
+
+
+        if (this.props._privateMessageRecipient) {
+            this.props._markAsRead(
+                this.props._localParticipant,
+                this.state.activeParticipant
+            );
+        }
     }
 
     /**
