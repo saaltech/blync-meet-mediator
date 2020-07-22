@@ -44,7 +44,10 @@ ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
             return assign(state, {
                 expires: 0,
                 isUserSignedOut: true,
-                refreshToken: null
+                refreshToken: null,
+                meetingAccessToken: null,
+                accessToken: null,
+                user: null
             })
         }
 
