@@ -352,9 +352,18 @@ class WelcomePage extends AbstractWelcomePage {
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this.setState({
                 goClicked: true
-            });
+            })
             this.props.dispatch(setPostWelcomePageScreen(this.state.room));
-            this._onJoin();
+
+
+            const intervalId = setInterval(() => {
+                const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
+
+                if ((appAuth.meetingDetails || {}).meetingName) {
+                    clearInterval(intervalId);
+                    this._onJoin();
+                }
+            }, 100);
         }
     }
 
