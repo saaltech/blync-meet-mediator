@@ -38,7 +38,7 @@ MiddlewareRegistry.register(store => next => action => {
 
         // window.VideoLayout = VideoLayout;
 
-        setTimeout(() => VideoLayout.onHostChange(), 2000);
+        setTimeout(() => VideoLayout.onHostChange(), 1000);
         break;
 
     case CONFERENCE_WILL_LEAVE:
@@ -46,11 +46,10 @@ MiddlewareRegistry.register(store => next => action => {
         break;
 
     case PARTICIPANT_JOINED:
+        setTimeout(() => VideoLayout.onHostChange(), 1000);
         if (!action.participant.local) {
             VideoLayout.addRemoteParticipantContainer(
                 getParticipantById(store.getState(), action.participant.id));
-
-            VideoLayout.onHostChange();
         }
 
         break;
@@ -66,11 +65,12 @@ MiddlewareRegistry.register(store => next => action => {
         // done instead of changing the connection status change action to be
         // explicit in order to minimize changes to other code.
         if (typeof action.participant.connectionStatus !== 'undefined') {
-            VideoLayout.onHostChange();
             VideoLayout.onParticipantConnectionStatusChanged(
                 action.participant.id,
                 action.participant.connectionStatus);
         }
+
+        setTimeout(() => VideoLayout.onHostChange(), 1000);
 
         break;
     }
