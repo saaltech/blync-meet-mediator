@@ -366,7 +366,7 @@ class WelcomePage extends AbstractWelcomePage {
                     clearInterval(intervalId);
                     this._onJoin();
                 }
-            }, 100);
+            }, 30);
         }
     }
 
