@@ -242,13 +242,17 @@ class Chat extends AbstractChat<Props, State> {
                     ref = { this._messageContainerRef } /> }
                 {showMessageContainer && <ChatInput
                     onChange = { () => {
-                        this._markMessagesAsRead();
+                        if (this.state.activeSwitcher === SwitcherViews.EVERYONE && !this.props._privateMessageRecipient) {
+                            this.props._markPublicAsRead();
+                        }
 
-                        const privaMessages = this.props._messagesSinceLastRead
-                        .filter(m => m.privateMessage && m.senderId === (this.state.activeParticipant || {}).id);
+                        const privaMessages = this.props._messages
+                        .filter(m => m.privateMessage && m.senderId === (this.props._privateMessageRecipient || {}).id);
 
-                        if (this.state.activeParticipant && privaMessages.length > 0) {
-                            this._onClearPrivateMessages(this.state.activeParticipant);
+
+                        if (this.props._privateMessageRecipient && privaMessages.length > 0) {
+
+                            this._onClearPrivateMessages(this.props._privateMessageRecipient);
                         }
                     } }
                     onResize = { this._onChatInputResize }
@@ -335,7 +339,10 @@ class Chat extends AbstractChat<Props, State> {
             </button>
             <button
                 className = { `${this.state.activeSwitcher === SwitcherViews.PRIVATE ? 'chat__switcher-btn--active' : ''}` }
-                onClick = { () => this.setState({ activeSwitcher: SwitcherViews.PRIVATE }) }
+                onClick = { () => {
+                    this.setState({ activeSwitcher: SwitcherViews.PRIVATE });
+                    this.props._markPublicAsRead();
+                } }
                 type = 'button'>
                 {this.props.t('chat.private')}
                 {unReadPrivateMessages > 0 && <span className = 'chat__unread-count'>({unReadPrivateMessages})</span>}
