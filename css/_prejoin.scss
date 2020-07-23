@@ -37,6 +37,11 @@
     text-align: center;
     color: #393939;
 
+    .error-block {
+        color: #FF0000;
+        margin: 0px auto 30px;
+    }
+
     .invalid-meeting-code {
         padding: 100px 0px;
         font-size: 25px;
