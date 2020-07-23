@@ -335,7 +335,10 @@ class Chat extends AbstractChat<Props, State> {
             </button>
             <button
                 className = { `${this.state.activeSwitcher === SwitcherViews.PRIVATE ? 'chat__switcher-btn--active' : ''}` }
-                onClick = { () => this.setState({ activeSwitcher: SwitcherViews.PRIVATE }) }
+                onClick = { () => {
+                    this.setState({ activeSwitcher: SwitcherViews.PRIVATE });
+                    this.props._markPublicAsRead();
+                } }
                 type = 'button'>
                 {this.props.t('chat.private')}
                 {unReadPrivateMessages > 0 && <span className = 'chat__unread-count'>({unReadPrivateMessages})</span>}
