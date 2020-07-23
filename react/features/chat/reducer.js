@@ -142,6 +142,7 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
  * @returns {Object}
  */
 function updateChatState(state) {
+
     return {
         ...state,
         isOpen: !state.isOpen,

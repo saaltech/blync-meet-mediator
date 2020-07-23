@@ -32,7 +32,7 @@ import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
-import { ChatCounter, toggleChat, hideChat } from '../../../chat';
+import { ChatCounter, toggleChat, hideChat, markAsRead, markPublicAsRead } from '../../../chat';
 import { E2EEButton } from '../../../e2ee';
 import { SharedDocumentButton } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
@@ -188,7 +188,10 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
+
+    _localParticipant: Object,
+    _privateMessageRecipient: Object,
 };
 
 /**
@@ -414,8 +417,20 @@ class Toolbox extends Component<Props, State> {
      * @returns {void}
      */
     _doToggleChat() {
+        const { _localParticipant, _privateMessageRecipient } = this.props;
+
         this.props.dispatch(toggleChat());
         this.props.dispatch(setOverflowMenuVisible(false));
+        if (_privateMessageRecipient) {
+            APP.store.dispatch(markAsRead(
+                _localParticipant,
+                _privateMessageRecipient,
+            ));
+        } else {
+            APP.store.dispatch(markPublicAsRead(
+
+            ));
+        }
     }
 
     /**
@@ -1365,6 +1380,9 @@ function _mapStateToProps(state) {
     } = state['features/base/config'];
     const sharedVideoStatus = state['features/shared-video'].status;
 
+
+    const { privateMessageRecipient } = state['features/chat'];
+
     const {
         fullScreen,
         overflowMenuVisible
@@ -1407,6 +1425,8 @@ function _mapStateToProps(state) {
         _fullScreen: fullScreen,
         _tileViewEnabled: state['features/video-layout'].tileViewEnabled,
         _localParticipantID: localParticipant.id,
+        _privateMessageRecipient: privateMessageRecipient,
+        _localParticipant: localParticipant,
         _localRecState: localRecordingStates,
         _locked: locked,
         _overflowMenuVisible: overflowMenuVisible,
