@@ -2,6 +2,7 @@
 import uuidv4 from 'uuid/v4';
 
 import { SET_ACTIVE_MODAL_ID } from '../base/modal';
+import { getLocalParticipant } from '../base/participants';
 import { ReducerRegistry } from '../base/redux';
 
 import {
@@ -13,6 +14,7 @@ import {
     MARK_PUBLIC_AS_READ,
     HIDE_CHAT
 } from './actionTypes';
+import { markPublicAsRead, markAsRead } from './actions';
 import { CHAT_VIEW_MODAL_ID } from './constants';
 
 const DEFAULT_STATE = {
@@ -142,6 +144,7 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
  * @returns {Object}
  */
 function updateChatState(state) {
+
     return {
         ...state,
         isOpen: !state.isOpen,
