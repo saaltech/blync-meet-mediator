@@ -15,7 +15,7 @@
         "inviteMoreHeader": "You are the only one in the meeting",
         "inviteMoreMailSubject": "Join {{appName}} meeting",
         "inviteMorePrompt": "Invite more people",
-        "linkCopied": "Link copied to clipboard",
+        "linkCopied": "Details copied to clipboard",
         "loading": "Searching for people and phone numbers",
         "loadingNumber": "Validating phone number",
         "loadingPeople": "Searching for people to invite",
@@ -355,7 +355,7 @@
         "invitePhone": "To join by phone instead, tap this: {{number}},,{{conferenceID}}#\n",
         "invitePhoneAlternatives": "Looking for a different dial-in number?\nSee meeting dial-in numbers: {{url}}\n\n\nIf also dialing-in through a room phone, join without connecting to audio: {{silentUrl}}",
         "inviteURLFirstPartGeneral": "You are invited to join a meeting.",
-        "inviteURLFirstPartPersonal": "{{name}} is inviting you to a meeting.\n",
+        "inviteURLFirstPartPersonal": "{{name}} is inviting you to a {{ app }} meeting.\n",
         "inviteURLSecondPart": "\nJoin the meeting:\n{{url}}\n",
         "liveStreamURL": "Live stream:",
         "moreNumbers": "More numbers",
@@ -562,7 +562,8 @@
         "setDisplayNameLabel": "Set your display name",
         "setEmailInput": "Enter e-mail",
         "setEmailLabel": "Set your gravatar email",
-        "title": "Profile"
+        "title": "Profile",
+        "logout": "Logout"
     },
     "raisedHand": "Would like to speak",
     "recording": {
@@ -831,7 +832,7 @@
         "domute": "Mute",
         "domuteOthers": "Mute everyone else",
         "flip": "Flip",
-        "kick": "Kick out",
+        "kick": "Remove",
         "moderator": "Moderator",
         "mute": "Participant is muted",
         "muted": "Muted",
@@ -844,7 +845,7 @@
             "join": "Tap to join",
             "roomname": "Enter room name"
         },
-        "appDescription": "vMeet is a robust video conferencing platform. It is highly scalable to support large orgnization needs to host single conference with hundreds of participants as well running multiple conferences in parallel. It also allows youtube streaming of your conference to allow the number of participating viewers tp any number that you need. Its fully encrypted, so your discussion and information shared in a conference are secured. It is a low footprint solution and can be installed on commodity hardware infrastucture on premise, allowing you to have complete control of the system. It provides secure access to the system with inbuilt authentication and authorization. It is a fully featured system including conference recording, document sharing, screen/application sharing, private/public chat, conference stats auditing and many more features.",
+        "appDescription": "Jifmeet is a robust video conferencing platform. It is highly scalable to support large orgnization needs to host single conference with hundreds of participants as well running multiple conferences in parallel. It also allows youtube streaming of your conference to allow the number of participating viewers tp any number that you need. Its fully encrypted, so your discussion and information shared in a conference are secured. It is a low footprint solution and can be installed on commodity hardware infrastucture on premise, allowing you to have complete control of the system. It provides secure access to the system with inbuilt authentication and authorization. It is a fully featured system including conference recording, document sharing, screen/application sharing, private/public chat, conference stats auditing and many more features.",
         "audioVideoSwitch": {
             "audio": "Voice",
             "video": "Video"
@@ -852,7 +853,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "Connect your calendar to view all your meetings in {{app}}. Plus, add {{provider}} meetings to your calendar and start them with one click.",
-        "enterRoomTitle": "Start or join a meeting",
+        "enterRoomTitle": "Create a new meeting",
         "getHelp": "Get help",
         "roomNameAllowedChars": "Meeting name should not contain any of these characters: ?, &, :, ', \", %, #.",
         "go": "GO",
@@ -868,10 +869,19 @@
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
         "terms": "Terms",
-        "title": "vMeet",
+        "title": "Jifmeet",
         "subTitle": "Collaborate Anytime Anywhere",
         "placeholderEnterRoomName": "Enter the room name",
-        "startSession": "Go ahead, enter the meeting name and start or join the session."
+        "startSession": "Go ahead, enter the meeting name and start the session.",
+        "signinLabel": "Sign in"
+    },
+    "loginPage": {
+        "loginLabel": "Login",
+        "placeholderUsername": "Enter your username",
+        "placeholderPassword": "Enter your password",
+        "fieldPassword": "Password",
+        "fieldUsername": "Username",
+        "signinLabel": "Sign in"
     },
     "lonelyMeetingExperience": {
         "button": "Invite others",

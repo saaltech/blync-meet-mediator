@@ -302,7 +302,7 @@ var config = {
     // disable1On1Mode: false,
 
     // Default language for the user interface.
-    // defaultLanguage: 'en',
+    defaultLanguage: 'enGB',
 
     // If true all users without a token will be considered guests and all users
     // with token will be considered non-guests. Only guests will be allowed to
@@ -587,10 +587,12 @@ var config = {
      startBitrate
      */
 
+    disableAEC: true,
+
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
-    makeJsonParserHappy: 'even if last key had a trailing comma'
+    makeJsonParserHappy: 'even if last key had a trailing comma',
 
     // no configuration value should follow this line.
 };

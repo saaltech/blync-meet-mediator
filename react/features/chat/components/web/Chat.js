@@ -24,6 +24,7 @@ const SwitcherViews = {
 
 type State = {
     activeSwitcher: string,
+    activeParticipant?: Object,
 }
 
 /**
@@ -33,7 +34,8 @@ type State = {
 class Chat extends AbstractChat<Props, State> {
 
     state = {
-        activeSwitcher: SwitcherViews.EVERYONE
+        activeSwitcher: SwitcherViews.EVERYONE,
+        activeParticipant: null
     };
 
     /**
@@ -47,6 +49,13 @@ class Chat extends AbstractChat<Props, State> {
      * scrolling to the end of the chat messages.
      */
     _messageContainerRef: Object;
+
+
+    _onToggleChat: Function;
+
+    _markMessagesAsRead: Function;
+
+    _onClearPrivateMessages: Function;
 
     /**
      * Initializes a new {@code Chat} instance.
@@ -65,6 +74,12 @@ class Chat extends AbstractChat<Props, State> {
 
         // Bind event handlers so they are only bound once for every instance.
         this._onChatInputResize = this._onChatInputResize.bind(this);
+
+        this._onToggleChat = this._onToggleChat.bind(this);
+
+        this._markMessagesAsRead = this._markMessagesAsRead.bind(this);
+
+        this._onClearPrivateMessages = this._onClearPrivateMessages.bind(this);
     }
 
     /**
@@ -117,11 +132,13 @@ class Chat extends AbstractChat<Props, State> {
      * @param {string} participant - The participant.
      * @returns {void}
      */
-    _onSelectPrivateUser(participant) {
+    _onClearPrivateMessages(participant) {
         const { _localParticipant } = this.props;
 
         this.props._setPrivateMessageRecipient(participant);
         this.props._markAsRead(_localParticipant, participant);
+
+        this.setState({ activeParticipant: participant });
     }
 
     _onChatInputResize: () => void;
@@ -135,6 +152,50 @@ class Chat extends AbstractChat<Props, State> {
      */
     _onChatInputResize() {
         this._messageContainerRef.current.maybeUpdateBottomScroll();
+    }
+
+    /**
+     * Toggles chat view.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onToggleChat() {
+        this.props._onToggleChat();
+
+        if (!this.props._privateMessageRecipient && this.state.activeSwitcher === SwitcherViews.EVERYONE) {
+            this.props._markPublicAsRead();
+        }
+
+
+        if (this.props._privateMessageRecipient) {
+            this.props._markAsRead(
+                this.props._localParticipant,
+                this.state.activeParticipant
+            );
+        }
+    }
+
+    /**
+     * Marks messages as read.
+     *
+     * @private
+     * @returns {void}
+     */
+    _markMessagesAsRead() {
+        const privaMessages = this.props._messagesSinceLastRead.filter(m => m.privateMessage);
+        const publicMessages = this.props._messagesSinceLastRead.filter(m => !m.privateMessage);
+
+        if (!this.props._privateMessageRecipient && publicMessages.length > 0) {
+            this.props._markPublicAsRead();
+        }
+
+        if (this.props._privateMessageRecipient && privaMessages.length > 0) {
+            this.props._markAsRead(
+                this.props._localParticipant,
+                this.state.activeParticipant
+            );
+        }
     }
 
     /**
@@ -176,10 +237,24 @@ class Chat extends AbstractChat<Props, State> {
                     localParticipant = { _localParticipant }
                     messages = { this.props._messages.filter(msg => msg.privateMessage) }
                     messagesSinceLastRead = { _messagesSinceLastRead }
-                    onSelect = { this._onSelectPrivateUser.bind(this) }
+                    onSelect = { this._onClearPrivateMessages.bind(this) }
                     participants = { _participants }
                     ref = { this._messageContainerRef } /> }
                 {showMessageContainer && <ChatInput
+                    onChange = { () => {
+                        if (this.state.activeSwitcher === SwitcherViews.EVERYONE && !this.props._privateMessageRecipient) {
+                            this.props._markPublicAsRead();
+                        }
+
+                        const privaMessages = this.props._messages
+                        .filter(m => m.privateMessage && m.senderId === (this.props._privateMessageRecipient || {}).id);
+
+
+                        if (this.props._privateMessageRecipient && privaMessages.length > 0) {
+
+                            this._onClearPrivateMessages(this.props._privateMessageRecipient);
+                        }
+                    } }
                     onResize = { this._onChatInputResize }
                     onSend = { this.props._onSendMessage } />}
             </>
@@ -197,14 +272,16 @@ class Chat extends AbstractChat<Props, State> {
         return (
             <div className = 'chat-header'>
                 <div
-                    className = 'chat-label'
+                    className = { `chat-label ${this.props._privateMessageRecipient ? 'chat-label--btn' : ''}` }
                     onClick = { e => {
                         e.preventDefault();
                         if (this.props._privateMessageRecipient) {
+                            this._onClearPrivateMessages(this.state.activeParticipant);
                             this.setState({
                                 activeSwitcher: SwitcherViews.PRIVATE
-                            });
 
+                                // activeParticipant: null
+                            });
                             this.props._setPrivateMessageRecipient(null);
                         }
                     } }>
@@ -215,7 +292,7 @@ class Chat extends AbstractChat<Props, State> {
                 </div>
                 <div
                     className = 'chat-close'
-                    onClick = { this.props._onToggleChat }>
+                    onClick = { this._onToggleChat }>
                     <Icon src = { IconClose } />
                 </div>
             </div>
@@ -262,7 +339,10 @@ class Chat extends AbstractChat<Props, State> {
             </button>
             <button
                 className = { `${this.state.activeSwitcher === SwitcherViews.PRIVATE ? 'chat__switcher-btn--active' : ''}` }
-                onClick = { () => this.setState({ activeSwitcher: SwitcherViews.PRIVATE }) }
+                onClick = { () => {
+                    this.setState({ activeSwitcher: SwitcherViews.PRIVATE });
+                    this.props._markPublicAsRead();
+                } }
                 type = 'button'>
                 {this.props.t('chat.private')}
                 {unReadPrivateMessages > 0 && <span className = 'chat__unread-count'>({unReadPrivateMessages})</span>}

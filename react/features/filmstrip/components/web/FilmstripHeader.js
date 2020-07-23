@@ -1,16 +1,23 @@
 /* @flow */
+/* global APP */
 
 import React, { Component } from 'react';
-import Popup from 'reactjs-popup';
+import type { Dispatch } from 'redux';
 
-import { getConferenceName } from '../../../base/conference/functions';
-import { Icon, IconArrowDownSmall } from '../../../base/icons';
-import { getParticipantCount, getParticipants } from '../../../base/participants/functions';
+import { setShowSpeakersList } from '../..';
+import { Icon, IconFilm } from '../../../base/icons';
+import { PARTICIPANT_ROLE } from '../../../base/participants';
+import { getParticipantCount, getParticipants, getLocalParticipant } from '../../../base/participants/functions';
 import { connect } from '../../../base/redux';
 import ConferenceTimer from '../../../conference/components/ConferenceTimer';
 import { isToolboxVisible } from '../../../toolbox';
+import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
+import { setFilmStripCollapsed } from '../../actions';
 
 import ParticipantsStats from './ParticipantsStats';
+
+// import { getConferenceName } from '../../../base/conference/functions';
+// import { Icon, IconArrowDownSmall } from '../../../base/icons';
 
 /**
  * The type of the React {@code Component} props of {@link Subject}.
@@ -36,6 +43,16 @@ type Props = {
     _participantCount: number,
 
     _participants: Array<Object>,
+
+    _setShowSpeakersList: Function,
+
+    _showSpeakersList: boolean,
+
+    _isModerator: boolean,
+
+    _filmStripCollapsed: boolean,
+
+    _showFilmstripSwitcher: boolean,
 };
 
 /**
@@ -44,6 +61,19 @@ type Props = {
  * @class FilmstripHeader
  */
 class FilmstripHeader extends Component<Props> {
+
+    _onToggleCollapseFilmstrip: Function;
+
+    /**
+     * Initializes a new {@code Filmstrip} instance.
+     *
+     * @param {Object} props - The read-only properties with which the new
+     * instance is to be initialized.
+     */
+    constructor(props: Props) {
+        super(props);
+        this._onToggleCollapseFilmstrip = this._onToggleCollapseFilmstrip.bind(this);
+    }
 
     /**
      * Render participants list.
@@ -61,21 +91,51 @@ class FilmstripHeader extends Component<Props> {
     }
 
     /**
+     * Dispatches an action to change the collapse state of the filmstrip.
+     *
+     * @param {Object} e - The event object.
+     *
+     * @returns {void}
+     */
+    _onToggleCollapseFilmstrip(e) {
+        e.preventDefault();
+        APP.store.dispatch(setFilmStripCollapsed(!this.props._filmStripCollapsed));
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
      * @returns {ReactElement}
      */
     render() {
-        const { _subject, _visible, _show } = this.props;
+        const {
+            _subject,
+            _visible,
+            _show,
+            _filmStripCollapsed,
+            _showFilmstripSwitcher
+
+            // _showSpeakersList
+        } = this.props;
 
         if (!_show) {
             return null;
         }
 
         return (
-            <div className = { `film-strip-header ${_visible ? 'visible' : ''}` }>
+            <div className = { `film-strip-header ${_visible ? 'film-strip-header--visible' : ''}` }>
                 <div className = 'film-strip-header__container'>
+                    <div>
+                        {_showFilmstripSwitcher && <button
+                            className = { `film-strip-header__control-btn 
+                                ${_filmStripCollapsed ? 'film-strip-header__control-btn--selected' : ''}
+                            ` }
+                            onClick = { this._onToggleCollapseFilmstrip }>
+                            <Icon src = { IconFilm } />
+                            {_filmStripCollapsed ? 'Show' : 'Hide'}
+                        </button>}
+                    </div>
                     <div className = 'film-strip-header__title'>
                         <span className = 'film-strip-header__title-text'>{ _subject }</span>
                         <ConferenceTimer />
@@ -85,38 +145,38 @@ class FilmstripHeader extends Component<Props> {
                             Online users ({this.props._participantCount})
                         </div>
 
-                        <Popup
-                            closeOnDocumentClick = { true }
-                            contentStyle = {{
-                                width: '392px',
-                                minHeight: '482px',
-                                top: '40px !important',
-                                left: '-287.828px',
-                                boxShadow: '0px 8px 15px rgba(0, 0, 0,  0.3)',
-                                borderRadius: '6px',
-                                border: 'none',
-                                zIndex: '999',
-                                overflowY: 'scroll',
-                                overflowX: 'hidden',
-                                height: '482px'
-                            }}
-                            on = 'hover'
-                            position = 'left top'
-                            trigger = { <button
-                                className = 'film-strip-header__action-button'
-                                type = 'button'>
-                                <Icon
-                                    size = { 16 }
-                                    src = { IconArrowDownSmall } />
-                            </button> }>
-                            {this._renderParticipantsList()}
-                        </Popup>
+                        {/* {this.props._isModerator && <button
+                            className = 'film-strip-header__action-button'
+                            onClick = { () => this.props._setShowSpeakersList(!_showSpeakersList) }
+                            type = 'button'>
+                            <Icon
+                                size = { 16 }
+                                src = { IconArrowDownSmall } />
+                        </button>} */}
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+/**
+ * Maps dispatching of some action to React component props.
+ *
+ * @param {Function} dispatch - Redux action dispatcher.
+ * @private
+ * @returns {{
+    *     _onUnmount: Function
+    * }}
+    */
+function _mapDispatchToProps(dispatch: Dispatch<any>) {
+    return {
+        _setShowSpeakersList(visible) {
+            dispatch(setShowSpeakersList(visible));
+        }
+    };
+}
+
 
 /**
  * Maps (parts of) the Redux state to the associated
@@ -131,14 +191,22 @@ class FilmstripHeader extends Component<Props> {
  */
 function _mapStateToProps(state) {
     const participantCount = getParticipantCount(state);
+    const { showSpeakersList, collapsed } = state['features/filmstrip'];
+    const isModerator = getLocalParticipant(state).role === PARTICIPANT_ROLE.MODERATOR;
+    const currLayout = getCurrentLayout(state);
 
     return {
-        _show: participantCount > 1,
-        _subject: getConferenceName(state),
+        // _show: participantCount > 1,
+        _show: true,
+        _subject: state['features/app-auth'].meetingDetails?.meetingName,
         _participantCount: participantCount,
         _visible: isToolboxVisible(state) && participantCount > 1,
-        _participants: getParticipants(state)
+        _participants: getParticipants(state),
+        _showSpeakersList: showSpeakersList,
+        _isModerator: isModerator,
+        _filmStripCollapsed: collapsed,
+        _showFilmstripSwitcher: currLayout === LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW
     };
 }
 
-export default connect(_mapStateToProps)(FilmstripHeader);
+export default connect(_mapStateToProps, _mapDispatchToProps)(FilmstripHeader);

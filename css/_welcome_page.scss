@@ -60,6 +60,7 @@ body.welcome-page {
   top: 15px;
   right: 15px;
   z-index: 1000;
+  cursor: pointer;
 }
 
 
@@ -104,6 +105,10 @@ body.welcome-page {
             line-height: $welcomePageHeaderTextTitleLineHeight;
             margin-bottom: $welcomePageHeaderTextTitleMarginBottom;
             opacity: $welcomePageHeaderTextTitleOpacity;
+
+            > span:last-child {
+                color: #00C062;
+            }
         }
 
         .header-text-sub-title {
@@ -240,18 +245,41 @@ body.welcome-page {
 
     .welcome-page-button {
 
-        &.disabled {
-            background: rgb(172, 220, 197);
-            cursor: not-allowed;
+        &.signin {
+            background: #005C85;
+            width: 100px;
+            right: 30;
+            top: 25px;
+            border-radius: $welcomePageButtonBorderRadius;
         }
 
-        width: $welcomePageButtonWidth;
+        &.profile {
+            background: transparent;
+            right: 30;
+            top: 25px;
+            padding: 0px;
+        }
+
+        &.go {
+
+            &.disabled {
+                background: url('../images/go_disabled.png') no-repeat;
+                background-size: cover;
+                cursor: not-allowed;
+            }
+
+            background: url('../images/go.png') no-repeat;
+            background-size: cover;
+            height: 40px;
+            margin-top: 4px;
+            width: $welcomePageButtonWidth;
+            left: $welcomePageEnterRoomWidth;
+        }
+        
         min-width: $welcomePageButtonMinWidth;
         height: $welcomePageButtonHeight;
         font-size: $welcomePageButtonFontSize;
         font-weight: $welcomePageButtonFontWeight;
-        background: #00C062;
-        border-radius: $welcomePageButtonBorderRadius;
         color: #FFFFFF;
         text-align: center;
         vertical-align: middle;
@@ -259,7 +287,7 @@ body.welcome-page {
         cursor: pointer;
 
         position: absolute;
-        left: $welcomePageEnterRoomWidth;
+        
         padding: 5px;
     }
 

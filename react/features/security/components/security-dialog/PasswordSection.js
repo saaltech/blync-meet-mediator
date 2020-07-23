@@ -148,7 +148,6 @@ function PasswordSection({
             );
         }
 
-        console.log("locked --> ", locked)
         if (locked) {
             return (
                 <>

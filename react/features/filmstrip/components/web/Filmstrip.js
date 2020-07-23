@@ -10,11 +10,17 @@ import {
     sendAnalytics
 } from '../../../analytics';
 import { translate } from '../../../base/i18n';
-import { Icon, IconMenuDown, IconMenuUp } from '../../../base/icons';
+import {
+    Icon,
+    IconMenuDown,
+    IconMenuUp
+
+    // IconArrowLeft
+} from '../../../base/icons';
 import { connect } from '../../../base/redux';
 import { dockToolbox } from '../../../toolbox';
 import { getCurrentLayout, LAYOUTS } from '../../../video-layout';
-import { setFilmstripHovered, setFilmstripVisible } from '../../actions';
+import { setFilmstripHovered, setFilmstripVisible, setFilmStripCollapsed } from '../../actions';
 import { shouldRemoteVideosBeVisible } from '../../functions';
 
 import FilmstripHeader from './FilmstripHeader';
@@ -84,6 +90,8 @@ type Props = {
      */
     _visible: boolean,
 
+    _collapsed: Boolean,
+
     /**
      * The redux {@code dispatch} function.
      */
@@ -92,7 +100,9 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
+
+    _onToggleCollapseFilmstrip: Function,
 };
 
 /**
@@ -109,6 +119,8 @@ class Filmstrip extends Component <Props> {
     _onMouseOut: Function;
 
     _onMouseOver: Function;
+
+    _onToggleCollapseFilmstrip: Function;
 
     /**
      * Initializes a new {@code Filmstrip} instance.
@@ -135,6 +147,7 @@ class Filmstrip extends Component <Props> {
         this._onMouseOver = this._onMouseOver.bind(this);
         this._onShortcutToggleFilmstrip = this._onShortcutToggleFilmstrip.bind(this);
         this._onToolbarToggleFilmstrip = this._onToolbarToggleFilmstrip.bind(this);
+        this._onToggleCollapseFilmstrip = this._onToggleCollapseFilmstrip.bind(this);
     }
 
     /**
@@ -221,30 +234,46 @@ class Filmstrip extends Component <Props> {
                 <div
                     className = { this.props._videosClassName }
                     id = 'remoteVideos'>
-                    <div
-                        className = 'filmstrip__videos'
-                        id = 'filmstripLocalVideo'
-                        onMouseOut = { this._onMouseOut }
-                        onMouseOver = { this._onMouseOver }>
-                        <div id = 'filmstripLocalVideoThumbnail' />
-                    </div>
-                    <div
-                        className = { remoteVideosWrapperClassName }
-                        id = 'filmstripRemoteVideos'>
-                        {/*
+
+                    <div className = { `filmstrip__videos-container ${this.props._collapsed ? 'filmstrip__videos-container--collapsed' : ''}` }>
+                        {/* <div className = 'filmstrip__actions'>
+                            <button
+                                className = 'filmstrip__collapse-btn'
+                                onClick = { this._onToggleCollapseFilmstrip }
+                                type = 'button'>
+                                <Icon src = { IconArrowLeft } />
+                            </button>
+                        </div> */}
+
+                        <div className = { 'filmstrip__strip-holder' }>
+                            <div
+                                className = 'filmstrip__videos'
+                                id = 'filmstripLocalVideo'
+                                onMouseOut = { this._onMouseOut }
+                                onMouseOver = { this._onMouseOver }>
+                                <div id = 'filmstripLocalVideoThumbnail' />
+                            </div>
+                            <div
+                                className = { remoteVideosWrapperClassName }
+                                id = 'filmstripRemoteVideos'>
+                                {/*
                           * XXX This extra video container is needed for
                           * scrolling thumbnails in Firefox; otherwise, the flex
                           * thumbnails resize instead of causing overflow.
                           */}
-                        <div
-                            className = { remoteVideoContainerClassName }
-                            id = 'filmstripRemoteVideosContainer'
-                            onMouseOut = { this._onMouseOut }
-                            onMouseOver = { this._onMouseOver }
-                            style = { filmstripRemoteVideosContainerStyle }>
-                            <div id = 'localVideoTileViewContainer' />
+                                <div
+                                    className = { remoteVideoContainerClassName }
+                                    id = 'filmstripRemoteVideosContainer'
+                                    onMouseOut = { this._onMouseOut }
+                                    onMouseOver = { this._onMouseOver }
+                                    style = { filmstripRemoteVideosContainerStyle }>
+                                    <div id = 'localVideoTileViewContainer' />
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         );
@@ -258,6 +287,19 @@ class Filmstrip extends Component <Props> {
      */
     _doToggleFilmstrip() {
         this.props.dispatch(setFilmstripVisible(!this.props._visible));
+    }
+
+
+    /**
+     * Dispatches an action to change the collapse state of the filmstrip.
+     *
+     * @param {Object} e - The event object.
+     *
+     * @returns {void}
+     */
+    _onToggleCollapseFilmstrip(e) {
+        e.preventDefault();
+        this.props.dispatch(setFilmStripCollapsed(!this.props._collapsed));
     }
 
     /**
@@ -369,7 +411,7 @@ class Filmstrip extends Component <Props> {
  */
 function _mapStateToProps(state) {
     const { iAmSipGateway } = state['features/base/config'];
-    const { hovered, visible } = state['features/filmstrip'];
+    const { hovered, visible, collapsed } = state['features/filmstrip'];
     const isFilmstripOnly = Boolean(interfaceConfig.filmStripOnly);
     const reduceHeight
         = !isFilmstripOnly && state['features/toolbox'].visible && interfaceConfig.TOOLBAR_BUTTONS.length;
@@ -392,7 +434,8 @@ function _mapStateToProps(state) {
         _hovered: hovered,
         _rows: gridDimensions.rows,
         _videosClassName: videosClassName,
-        _visible: visible
+        _visible: visible,
+        _collapsed: collapsed
     };
 }
 

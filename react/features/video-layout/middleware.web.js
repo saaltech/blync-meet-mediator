@@ -35,6 +35,10 @@ MiddlewareRegistry.register(store => next => action => {
     switch (action.type) {
     case CONFERENCE_JOINED:
         VideoLayout.mucJoined();
+
+        // window.VideoLayout = VideoLayout;
+
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
         break;
 
     case CONFERENCE_WILL_LEAVE:
@@ -42,17 +46,21 @@ MiddlewareRegistry.register(store => next => action => {
         break;
 
     case PARTICIPANT_JOINED:
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
         if (!action.participant.local) {
             VideoLayout.addRemoteParticipantContainer(
                 getParticipantById(store.getState(), action.participant.id));
         }
+
         break;
 
     case PARTICIPANT_LEFT:
         VideoLayout.removeParticipantContainer(action.participant.id);
+
         break;
 
     case PARTICIPANT_UPDATED: {
+
         // Look for actions that triggered a change to connectionStatus. This is
         // done instead of changing the connection status change action to be
         // explicit in order to minimize changes to other code.
@@ -61,6 +69,9 @@ MiddlewareRegistry.register(store => next => action => {
                 action.participant.id,
                 action.participant.connectionStatus);
         }
+
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
+
         break;
     }
 
@@ -80,6 +91,7 @@ MiddlewareRegistry.register(store => next => action => {
         if (!action.track.local) {
             VideoLayout.onRemoteStreamAdded(action.track.jitsiTrack);
         }
+
 
         break;
     case TRACK_REMOVED:

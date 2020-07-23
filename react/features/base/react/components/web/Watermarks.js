@@ -139,8 +139,9 @@ class Watermarks extends Component<Props, State> {
                 {
                     this._renderJitsiWatermark()
                 }
-                {
+                {/*
                     this._renderBrandWatermark()
+                    */
                 }
                 {
                     this._renderPoweredBy()
@@ -218,7 +219,7 @@ class Watermarks extends Component<Props, State> {
             const link = _customLogoLink || this.state.jitsiWatermarkLink;
             const style = {
                 backgroundImage: `url(${_customLogoUrl || interfaceConfig.DEFAULT_LOGO_URL})`,
-                maxWidth: 140,
+                maxWidth: 180,
                 maxHeight: 70
             };
 
@@ -228,12 +229,17 @@ class Watermarks extends Component<Props, State> {
 
             if (link) {
                 reactElement = (
+                    <>
+                        { reactElement }
+                    </>
+                );
+                /*reactElement = (
                     <a
                         href = { link }
                         target = '_new'>
                         { reactElement }
                     </a>
-                );
+                );*/
             }
         }
 

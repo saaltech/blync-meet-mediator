@@ -3,6 +3,7 @@
 import EventEmitter from 'events';
 import Logger from 'jitsi-meet-logger';
 
+
 import * as JitsiMeetConferenceEvents from './ConferenceEvents';
 import { openConnection } from './connection';
 import { ENDPOINT_TEXT_MESSAGE_NAME } from './modules/API/constants';
@@ -43,7 +44,8 @@ import {
     onStartMutedPolicyChanged,
     p2pStatusChanged,
     sendLocalParticipant,
-    setDesktopSharingEnabled
+    setDesktopSharingEnabled,
+    setPassword
 } from './react/features/base/conference';
 import {
     checkAndNotifyForNewDevice,
@@ -113,6 +115,7 @@ import {
     maybeOpenFeedbackDialog,
     submitFeedback
 } from './react/features/feedback';
+import { setFilmStripCollapsed } from './react/features/filmstrip';
 import { showNotification } from './react/features/notifications';
 import { mediaPermissionPromptVisibilityChanged } from './react/features/overlay';
 import { suspendDetected } from './react/features/power-monitor';
@@ -309,22 +312,23 @@ class ConferenceConnector {
 
 
             function isHostPrejoinError() {
-                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin']
-                pageErrorMessageKey = "submitting" === pageErrorMessageKey ? null : pageErrorMessageKey;
-                if(pageErrorMessageKey ) {
+                let { pageErrorMessageKey } = APP.store.getState()['features/prejoin'];
+
+                pageErrorMessageKey = pageErrorMessageKey === 'submitting' ? null : pageErrorMessageKey;
+                if (pageErrorMessageKey) {
                     return true;
                 }
-                else {
-                    return false
-                }
+
+                return false;
+
             }
 
-            if(isHostPrejoinError()) {
+            if (isHostPrejoinError()) {
                 return;
             }
 
             this.reconnectTimeout = setTimeout(() => {
-                if(isHostPrejoinError()) {
+                if (isHostPrejoinError()) {
                     return;
                 }
                 APP.store.dispatch(conferenceWillJoin(room));
@@ -774,7 +778,8 @@ export default {
             startWithVideoMuted: config.startWithVideoMuted
                 || isUserInteractionRequiredForUnmute(APP.store.getState())
         };
-        if(refreshTracksOnly) {
+
+        if (refreshTracksOnly) {
             try {
                 // Initialize the device list first. This way, when creating tracks
                 // based on preferred devices, loose label matching can be done in
@@ -1949,12 +1954,18 @@ export default {
 
         this.videoSwitchInProgress = true;
 
+        const isVideoTrackMutedBeforeSharing = this.isLocalVideoMuted();
+
         return this._createDesktopTrack(options)
             .then(async streams => {
                 const desktopVideoStream = streams.find(stream => stream.getType() === MEDIA_TYPE.VIDEO);
 
                 if (desktopVideoStream) {
                     await this.useVideoStream(desktopVideoStream);
+                }
+                
+                if(!isVideoTrackMutedBeforeSharing && this.isLocalVideoMuted()) {
+                    this.muteVideo(false)
                 }
 
                 this._desktopAudioStream = streams.find(stream => stream.getType() === MEDIA_TYPE.AUDIO);
@@ -1979,6 +1990,7 @@ export default {
                     APP.store.dispatch(toggleScreenshotCaptureEffect(true));
                 }
                 sendAnalytics(createScreenSharingEvent('started'));
+                APP.store.dispatch(setFilmStripCollapsed(true));
                 logger.log('Screen sharing started');
             })
             .catch(error => {
@@ -2146,6 +2158,21 @@ export default {
                 APP.API.notifyUserRoleChanged(id, role);
             } else {
                 APP.store.dispatch(participantRoleChanged(id, role));
+            }
+
+            
+
+            if(role !== "moderator") {
+                return;
+            }
+            let state = APP.store.getState();
+            let meeting = state['features/app-auth'].meetingDetails;
+            let conference = state['features/base/conference'].conference;
+            if(conference.options.name === meeting.meetingId) {
+                // Set Meeting password to the room if set by host
+                if(meeting.meetingPassword) {
+                    APP.store.dispatch(setPassword(conference, conference.lock, meeting.meetingPassword))
+                }
             }
         });
 
@@ -2649,7 +2676,8 @@ export default {
     _onConferenceJoined() {
         APP.UI.initConference();
 
-        APP.keyboardshortcut.init();
+        // Disabling keyboard shortcuts
+        // APP.keyboardshortcut.init();
 
         APP.store.dispatch(conferenceJoined(room));
 

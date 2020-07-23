@@ -74,3 +74,6 @@ export const MARK_AS_READ = 'MARK_AS_READ';
  * }
  */
 export const MARK_PUBLIC_AS_READ = 'MARK_PUBLIC_AS_READ';
+
+
+export const HIDE_CHAT = 'HIDE_CHAT';

@@ -10,7 +10,8 @@ import {
     SET_PRIVATE_MESSAGE_RECIPIENT,
     TOGGLE_CHAT,
     MARK_AS_READ,
-    MARK_PUBLIC_AS_READ
+    MARK_PUBLIC_AS_READ,
+    HIDE_CHAT
 } from './actionTypes';
 import { CHAT_VIEW_MODAL_ID } from './constants';
 
@@ -65,7 +66,7 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
             const localSent = msg.displayName === localParticipant.name && msg.recipient === remoteParticipant.name;
             const localReceived = msg.recipient === localParticipant.name && msg.displayName === remoteParticipant.name;
 
-            if (localSent || localReceived) {
+            if ((localSent || localReceived) && msg.privateMessage) {
                 return {
                     ...msg,
                     hasRead: true
@@ -122,7 +123,14 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
 
     case TOGGLE_CHAT:
         return updateChatState(state);
+
+    case HIDE_CHAT:
+        return {
+            ...state,
+            isOpen: false
+        };
     }
+
 
     return state;
 });
@@ -134,6 +142,7 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
  * @returns {Object}
  */
 function updateChatState(state) {
+
     return {
         ...state,
         isOpen: !state.isOpen,

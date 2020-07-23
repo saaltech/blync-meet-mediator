@@ -3,7 +3,8 @@ import React from 'react';
 
 type Props = {
     children: Object,
-    timer: number
+    timer: number,
+    hideNotification: Function,
 }
 
 type State = {
@@ -27,8 +28,12 @@ export default class Expire extends React.Component<Props, State> {
      * @returns {undefined}
      */
     componentDidMount() {
+        const { hideNotification } = this.props;
+
         this.timer = setTimeout(() => {
             this.setState({ visible: false });
+
+            setTimeout(() => hideNotification(), 1000);
         }, this.props.timer);
     }
 

@@ -9,32 +9,28 @@ import AbstractChatPreview, {
     _mapStateToProps
 } from '../AbstractChatPreview';
 
-import ChatPreviewContainer from './ChatPreviewContainer';
-
-
-type State = {
-
-}
+import ToastsContainer from './ToastsContainer';
 
 /**
  * Implements a React native component that renders the chat preview
  */
-class ChatPreview extends AbstractChatPreview<Props, State> {
+class NotificationsToasts extends AbstractChatPreview<Props, *> {
     /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
      */
     render() {
+
         return (
-            <div className = 'chat-preview'>
-                <ChatPreviewContainer
+            <div className = { `chat-preview ${this.props._isOpen ? 'chat-preview--visible' : ''}` }>
+                <ToastsContainer
                     localParticipant = { this.props._localParticipant }
-                    messages = { this.props._messages } />
+                    notifications = { this.props._notifications } />
             </div>
         );
     }
 }
 
 
-export default translate(connect(_mapStateToProps, _mapDispatchToProps)(ChatPreview));
+export default translate(connect(_mapStateToProps, _mapDispatchToProps)(NotificationsToasts));

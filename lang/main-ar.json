@@ -433,6 +433,7 @@
         "connectedThreePlusMembers": "انضم {{name}} و {{count}} آخرون إلى الاجتماع",
         "connectedTwoMembers": "انضم {{first}} و {{second}} إلى الاجتماع",
         "disconnected": "",
+        "sombody-disconnected": "{{name}} disconnected",
         "focus": "",
         "focusFail": "",
         "grantedTo": "تم منح صلاحيات المشرف إلى {{to}}!",

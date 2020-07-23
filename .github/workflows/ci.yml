@@ -1,16 +1,16 @@
-name: Simple CI
+#name: Simple CI
 
-on: [pull_request]
+#on: [pull_request]
 
-jobs:
-  run-ci:
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-    - run: npm install --registry https://npr.saal.ai
+#jobs:
+  #run-ci:
+    #name: Build Frontend
+    #runs-on: ubuntu-latest
+    #steps:
+    #- uses: actions/checkout@v2
+    #- uses: actions/setup-node@v1
+      #with:
+        #node-version: '12.x'
+    #- run: npm install #--registry https://npr.saal.ai
     #- run: npm run lint
-    - run: make
+    #- run: make

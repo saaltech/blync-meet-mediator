@@ -93,15 +93,18 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
  */
 export function _mapStateToProps(state: Object) {
     const {
-        isOpen,
         messages
     } = state['features/chat'];
+
+    const {
+        notificationVisible
+    } = state['features/toolbox-more'];
 
     const _localParticipant = getLocalParticipant(state);
 
 
     return {
-        _isOpen: isOpen,
+        _isOpen: notificationVisible,
         _messages: messages,
         _localParticipant
     };

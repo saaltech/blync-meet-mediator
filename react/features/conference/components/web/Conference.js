@@ -4,15 +4,20 @@ import _ from 'lodash';
 import React from 'react';
 
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
+import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
+import { Icon, IconShareDesktop } from '../../../base/icons';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
-import { ChatPreview, Chat } from '../../../chat';
-import { Filmstrip } from '../../../filmstrip';
+import { getLocalVideoTrack } from '../../../base/tracks';
+import { Chat } from '../../../chat';
+import { Filmstrip, SpeakersList } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
+import { NotificationsToasts } from '../../../notifications-toasts';
 import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
     Toolbox,
@@ -20,6 +25,10 @@ import {
     setToolboxAlwaysVisible,
     showToolbox
 } from '../../../toolbox';
+import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-more-items';
+import {
+    leavingMeeting
+} from '../../../toolbox/actions';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification } from '../../functions';
 import {
@@ -30,6 +39,7 @@ import type { AbstractProps } from '../AbstractConference';
 
 import Labels from './Labels';
 import { default as Notice } from './Notice';
+
 
 declare var APP: Object;
 declare var config: Object;
@@ -88,7 +98,11 @@ type Props = AbstractProps & {
     _showPrejoin: boolean,
 
     dispatch: Function,
-    t: Function
+    t: Function,
+    _iAmSharingScreen: boolean,
+    _isModerator: boolean,
+    _sharer: Object,
+    _otherSharers: Array<Object>
 }
 
 /**
@@ -130,6 +144,7 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentDidMount() {
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
+        APP.store.dispatch(leavingMeeting(false));
         this._start();
     }
 
@@ -182,7 +197,11 @@ class Conference extends AbstractConference<Props, *> {
         const {
             _iAmRecorder,
             _layoutClassName,
-            _showPrejoin
+            _showPrejoin,
+            _leavingMeeting,
+            _otherSharers,
+            _iAmSharingScreen,
+            _sharer
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -191,6 +210,11 @@ class Conference extends AbstractConference<Props, *> {
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
+
+                {
+                    _leavingMeeting
+                    && <Loading />
+                }
 
                 <Notice />
                 <div id = 'videospace'>
@@ -203,11 +227,33 @@ class Conference extends AbstractConference<Props, *> {
                 { filmstripOnly || _showPrejoin || <Toolbox /> }
                 { filmstripOnly || <Chat /> }
 
+                <ToolboxMoreItems />
+                <ToastNotificationSettings />
+                {this.props._isModerator && <SpeakersList />}
+
                 { this.renderNotificationsContainer() }
 
                 <CalleeInfoContainer />
 
-                <ChatPreview />
+                {(_sharer || _iAmSharingScreen) && <div
+                    className = 'conference__screen-shared'
+                    title = { (_otherSharers || []).reduce((agg, t) => `${t.name} \n${agg}`, '') }>
+                    <Icon src = { IconShareDesktop } />
+                    {_iAmSharingScreen && 'You are sharing screen'}
+                    {!_iAmSharingScreen && _sharer && `${_sharer.name} is sharing screen`}
+                    {(_otherSharers || []).length > 0 && ` +${(_otherSharers || []).length} other(s)` }
+                </div>}
+
+                {/* {(this.props._screensharing && !this.props._sharer) && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />Your screen is being shared
+                </div>}
+
+                {this.props._sharer && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />
+                    {this.props._sharer.name} {_otherSharers.length > 0 ? `+${_otherSharers.length} other(s) are` : 'is'} sharing screen
+                </div>} */}
+
+                <NotificationsToasts />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );
@@ -270,13 +316,28 @@ class Conference extends AbstractConference<Props, *> {
  * @returns {Props}
  */
 function _mapStateToProps(state) {
+    const tracks = state['features/base/tracks'];
+    const participants = state['features/base/participants'];
+    const localVideo = getLocalVideoTrack(tracks);
+    const { participantId: screenSharerId } = tracks.find(t => t.videoType === 'desktop') || {};
+    const sharer = participants.find(p => p.id === screenSharerId);
+    const localParticipant = getLocalParticipant(state);
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
+
     return {
         ...abstractMapStateToProps(state),
+        _iAmSharingScreen: localVideo && localVideo.videoType === 'desktop',
+        _sharer: localParticipant.id === screenSharerId ? null : sharer,
+        _otherSharers: tracks
+            .filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId)
+            .map(t => participants.find(p => p.id === t.participantId) || {}),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
         _showPrejoin: isPrejoinPageVisible(state),
-        _interimPrejoin: isInterimPrejoinPageVisible(state)
+        _interimPrejoin: isInterimPrejoinPageVisible(state),
+        _isModerator: isModerator,
+        _leavingMeeting: state['features/toolbox'].leaving
     };
 }
 

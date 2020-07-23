@@ -1,0 +1,67 @@
+.userProfile {
+    width: 200px;
+    height: 50px;
+    background: #E7EFF4 0% 0% no-repeat padding-box;
+    border-radius: 30px;
+    opacity: 1;
+    position: relative;
+    line-height: 35px;
+    font-size: 14px;
+
+    .avatarProfile {
+        background: rgb(103, 174, 63);
+        border-radius: 30px;
+        border: 3px solid #E7EFF4;
+        position: absolute;
+        left: -2px;
+        top: -4px;
+    }
+
+    .userName {
+        text-align: left;
+        float: left;
+        margin-left: 65px;
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 5px 0 0;
+        color: #005C85;
+    }
+
+    .menuIcon {
+        padding: 10px 0 5px;
+        float: left;
+
+        .jitsi-icon svg {
+            fill: #005C85;
+        }
+
+        .profileMenu {
+            position: absolute;
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0 2px 15px #aeaeae;
+            color: #393939;
+            list-style: none;
+            right: 5px;
+            padding: 5px 20px;
+            width: 100px;
+            text-align: left;
+
+            li {
+                height: 30px;
+                padding: 2px 0px 0px;
+            }
+
+            .jitsi-icon {
+                float: left;
+            }
+
+            .menuLabel {
+                position: relative;
+                top: -5px;
+                left: 15px;
+            }
+        }
+    }
+}

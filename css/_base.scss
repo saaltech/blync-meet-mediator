@@ -8,6 +8,22 @@
     user-select: none;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-size: 13px;
+    color: #969696;
+    opacity: 1; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    font-size: 13px;
+    color: #969696;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    font-size: 13px;
+    color: #969696;
+  }
+
 input,
 textarea {
     -webkit-user-select: text;
@@ -126,6 +142,54 @@ form {
     background-position: center right;
 }
 
+.waiting-display-overlay {
+    z-index: 1010;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0%;
+    left: 0%;
+    height: 100%;
+    width: 100%;
+    // transform: translate(-50%,-50%);
+    max-width: 100%;
+    max-height: 100%;
+
+    /*img, .jitsi-icon svg {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }*/
+
+
+    .jitsi-icon svg{
+        position: fixed;
+        top: 40%;
+        left: 45%;
+        animation-name: ckw;
+        animation-duration: 15.5s;
+        /* Things added */
+        animation-iteration-count: infinite;
+        transform-origin: 50% 50%;
+        display: inline-block;
+        /* <--- */
+    }
+    @keyframes ckw {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+.videoMuted, .audioMuted {
+    .jitsi-icon svg path {
+        fill: #fff
+    }
+}
+
 .poweredby {
     position: absolute;
     left: 25;
@@ -185,4 +249,29 @@ form {
 ::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, .5);
     border-radius: 4px;
+}
+
+
+
+.form-field {
+    font-size: 14px;
+    margin: 10px 0 15px;
+
+    .form-label {
+        color: #393939;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    input.field {
+        color: #393939;
+        outline-width: 0;
+        background: no-repeat padding-box #FFF;
+        border: 1px solid;
+        border-radius: 30px;
+        opacity: 1;
+        height: 35px;
+        padding: 0 10px;
+        width: 100%;
+    }
 }

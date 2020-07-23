@@ -57,8 +57,14 @@
     }
 
     .filmstrip .participants-count, .filmstrip .film-strip-header {
-        top: 30px;
-        padding: 10px 20px;
+        top: 0;
+        position: absolute;
+        left: 0;
+        width: 100%;
+    }
+
+    .filmstrip__actions {
+        display: none;
     }
 
     /**

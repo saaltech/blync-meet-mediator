@@ -24,7 +24,7 @@ $flagsImagePath: "../images/";
 /* Flags END */
 
 /* Modules BEGIN */
-
+@import 'options-panel';
 @import 'aui_reset';
 @import 'atlaskit_overrides';
 @import 'base';
@@ -90,15 +90,20 @@ $flagsImagePath: "../images/";
 @import 'promotional-footer';
 @import 'chrome-extension-banner';
 @import 'settings-button';
+@import 'toolbox-more-items';
 @import 'icons';
-// @import 'meter';
-// @import 'audio-preview';
-// @import 'video-preview';
+@import 'login-component';
+@import 'user-profile';
+@import 'meter';
+@import 'audio-preview';
+@import 'video-preview';
 @import 'prejoin';
 @import 'prejoin-dialog';
 @import 'country-picker';
 @import 'modals/invite/invite_more';
 @import 'modals/security/security';
 @import 'premeeting-screens';
-@import 'chat-preview'
+@import 'chat-preview';
+@import 'speakers-list';
+@import 'meeting-info';
 /* Modules END */

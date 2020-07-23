@@ -2,7 +2,9 @@
 
 import React, { PureComponent } from 'react';
 
+
 import { getFieldValue } from '../../../react';
+
 
 type Props = {
 
@@ -34,7 +36,12 @@ type Props = {
     /**
      * Externally provided value.
      */
-    value?: string
+    value?: string,
+
+    id?: string,
+
+    disabled?: boolean,
+    focused?: boolean,
 };
 
 type State = {
@@ -54,6 +61,8 @@ type State = {
  * Implements a pre-styled input field to be used on pre-meeting screens.
  */
 export default class InputField extends PureComponent<Props, State> {
+
+    nameInput: Object;
     static defaultProps: {
         className: '',
         type: 'text'
@@ -68,7 +77,7 @@ export default class InputField extends PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            focused: false,
+            focused: props.focused || false,
             value: props.value || ''
         };
 
@@ -76,6 +85,18 @@ export default class InputField extends PureComponent<Props, State> {
         this._onChange = this._onChange.bind(this);
         this._onFocus = this._onFocus.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this);
+    }
+
+
+    /**
+     * ComponentDidMount.
+     *
+     * @inheritdoc
+     */
+    componentDidMount() {
+        if (this.props.focused) {
+            this.nameInput.focus();
+        }
     }
 
     /**
@@ -103,11 +124,16 @@ export default class InputField extends PureComponent<Props, State> {
         return (
             <input
                 className = { `field ${this.state.focused ? 'focused' : ''} ${this.props.className || ''}` }
+                disabled = { this.props.disabled }
+                id = { this.props.id }
                 onBlur = { this._onBlur }
                 onChange = { this._onChange }
                 onFocus = { this._onFocus }
                 onKeyDown = { this._onKeyDown }
                 placeholder = { this.props.placeHolder }
+                ref = { input => {
+                    this.nameInput = input;
+                } }
                 type = { this.props.type }
                 value = { this.state.value } />
         );

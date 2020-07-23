@@ -4,7 +4,8 @@ import type { Dispatch } from 'redux';
 
 import {
     FULL_SCREEN_CHANGED,
-    SET_FULL_SCREEN
+    SET_FULL_SCREEN,
+    LEAVING_MEETING
 } from './actionTypes';
 import {
     clearToolboxTimeout,
@@ -77,7 +78,8 @@ export function hideToolbox(force: boolean = false): Function {
         const {
             alwaysVisible,
             hovered,
-            timeoutMS
+            timeoutMS,
+            overflowMenuVisible
         } = state['features/toolbox'];
 
         if (alwaysVisible) {
@@ -88,8 +90,11 @@ export function hideToolbox(force: boolean = false): Function {
 
         if (!force
                 && (hovered
+                    || overflowMenuVisible
                     || state['features/invite'].calleeInfoVisible
-                    || state['features/chat'].isOpen)) {
+                    || state['features/chat'].isOpen
+                    || state['features/toolbox-more'].toastNotificationVisible
+                )) {
             dispatch(
                 setToolboxTimeout(
                     () => dispatch(hideToolbox()),
@@ -145,5 +150,12 @@ export function showToolbox(timeout: number = 0): Object {
                 dispatch(setToolboxTimeoutMS(interfaceConfig.TOOLBAR_TIMEOUT));
             }
         }
+    };
+}
+
+export function leavingMeeting(leaving: boolean) {
+    return {
+        type: LEAVING_MEETING,
+        leaving
     };
 }
