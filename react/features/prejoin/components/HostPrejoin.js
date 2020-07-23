@@ -38,6 +38,7 @@ function HostPrejoin(props) {
     const [ shareable, setShareable ] = useState(false);
     const { joinConference } = props;
     const [exiting, setExiting] = useState(false);
+    const [clearErrors, setClearErrors] = useState(true);
 
     const [ getConference, fetchErrors ] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
@@ -95,6 +96,7 @@ function HostPrejoin(props) {
     };
 
     const setMeetNowAndUpdatePage = value => {
+        setClearErrors(true)
         setMeetNow(value);
         isMeetNow(value);
     };
@@ -126,8 +128,12 @@ function HostPrejoin(props) {
             setMeetingPassword('');
         }
 
+        setClearErrors(false)
         // Make DB save call
-        await saveConference(true);
+        let res = await saveConference(true);
+        if (!res) {
+            return;
+        }
 
         APP.store.dispatch(setPostWelcomePageScreen(null,
         {
@@ -271,6 +277,11 @@ function HostPrejoin(props) {
                 && <div
                     className = 'cancel'
                     onClick = { goToHome }>Cancel</div>
+                }
+
+                {
+                    saveErrors && !clearErrors &&
+                    <div className={`error-block`}> { 'Unable to process your new meeting request right now. Please try again after some time.' }</div>
                 }
 
 
