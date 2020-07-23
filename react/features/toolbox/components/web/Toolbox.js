@@ -421,14 +421,14 @@ class Toolbox extends Component<Props, State> {
 
         this.props.dispatch(toggleChat());
         this.props.dispatch(setOverflowMenuVisible(false));
-        console.log(_localParticipant, _privateMessageRecipient, '_privateMessageRecipient');
         if (_privateMessageRecipient) {
-
-            APP.store.dispatch(markAsRead());
-        } else {
-            APP.store.dispatch(markPublicAsRead(
+            APP.store.dispatch(markAsRead(
                 _localParticipant,
                 _privateMessageRecipient,
+            ));
+        } else {
+            APP.store.dispatch(markPublicAsRead(
+
             ));
         }
     }
