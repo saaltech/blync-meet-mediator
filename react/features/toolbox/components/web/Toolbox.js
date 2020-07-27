@@ -1280,8 +1280,10 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-right'>
                     <HangupButton
-                        visible = { this._shouldShowButton('hangup') }
-                        afterClick = { () => APP.store.dispatch(leavingMeeting(true)) } />
+                        afterClick = { () => {
+                            APP.store.dispatch(leavingMeeting(true));
+                        } }
+                        visible = { this._shouldShowButton('hangup') } />
                     <div className = 'enclosed-group'>
                         { buttonsRight.indexOf('localrecording') !== -1
                             && <LocalRecordingButton
