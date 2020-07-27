@@ -15,6 +15,7 @@ import {
 } from '../../../base/icons';
 import { MEDIA_TYPE } from '../../../base/media';
 import { OptionsPanel } from '../../../base/options-panel';
+import { getLocalParticipant } from '../../../base/participants';
 import { connect } from '../../../base/redux';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { showParticipantsList, showInvitePeople } from '../../../toolbox/actions.web';
@@ -23,7 +24,8 @@ import { showParticipantsList, showInvitePeople } from '../../../toolbox/actions
 type Props = {
     participantsListOpen: boolean,
     participants: Array<Object>,
-    _tracks: Array<Object>
+    _tracks: Array<Object>,
+    _localParticipant: Object,
 }
 
 /**
@@ -50,13 +52,13 @@ class ParticipantsList extends Component<Props> {
                 onClose = { () => APP.store.dispatch(showParticipantsList(false)) }
                 title = { <div>
                     Participants ({this.props.participants.length})
-                    <button
+                    {this.props._localParticipant.role === 'moderator' && <button
                         className = 'participants-list__add'
                         onClick = { () => APP.store.dispatch(showInvitePeople(true)) }>
                         <Icon
                             size = { 12 }
                             src = { IconAdd } /> Add
-                    </button>
+                    </button>}
                 </div> }>
                 <div className = 'participants-list'>
 
@@ -116,11 +118,13 @@ function mapStateToProps(state) {
     const { participantsListOpen } = state['features/toolbox'];
     const participants = state['features/base/participants'];
     const tracks = state['features/base/tracks'];
+    const localParticipant = getLocalParticipant(APP.store.getState());
 
     return {
         participantsListOpen,
         participants,
-        _tracks: tracks
+        _tracks: tracks,
+        _localParticipant: localParticipant
     };
 }
 
