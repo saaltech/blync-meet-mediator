@@ -11,6 +11,8 @@ import { InputField } from '../../base/premeeting';
 import { getDisplayName, updateSettings } from '../../base/settings';
 import { connect } from '../../base/redux';
 import { setPrejoinPageErrorMessageKey } from '../';
+import { setLocationURL } from '../../base/connection/actions.web';
+import { openConnection } from '../../../../connection';
 
 import { config } from '../../../config'
 
@@ -138,9 +140,6 @@ function GuestPrejoin(props) {
         setMeetingFrom(data.scheduledFrom)
         setMeetingTo(data.scheduledTo)
 
-        //TODO: comment the section below after completing the non-host flow
-        // data.isHost = false
-
         setIsMeetingHost(data.isHost)
         if(data.isHost && data.conferenceStatus === "STARTED") {
             window.sessionStorage.setItem('roomPassword', data.conferenceSecret);
@@ -163,6 +162,23 @@ function GuestPrejoin(props) {
         );
     }
 
+    const refreshJidAndReinitializeApp = () => {
+        const { locationURL } = APP.store.getState()['features/base/connection'];
+        APP.store.dispatch(setLocationURL(locationURL))
+        openConnection({
+            retry: true,
+            roomName: meetingId
+        })
+        .then(connection => {
+            APP.conference.init({
+                roomName: APP.conference.roomName
+            })
+        })
+        .catch(err => {
+            console.log("Unable to open new connection", err)
+        });
+    }
+
     const setMeetNowAndUpdatePage = (value) => {
         setMeetNow(value)
         isMeetNow(value)
@@ -172,7 +188,8 @@ function GuestPrejoin(props) {
         window.location.href = window.location.origin
     }
 
-    const refreshTokenAndFetchConference = async () => {
+    const refreshTokenAndFetchConference = async (reinitializeApp = false) => {
+        reinitializeApp && refreshJidAndReinitializeApp();
         // Do not navigate to session expiry page if the session has expired.
         // If session has expired, continue the guest/login flow in joining flow of the meeting.
         let res = await getConference(true, joinMeeting)
@@ -311,8 +328,8 @@ function GuestPrejoin(props) {
                             <LoginComponent
                                 closeAction={ () => {
                                     //Fetch the conference details for the logged in user
-                                    setDisableJoin(true)
-                                    refreshTokenAndFetchConference();
+                                    setDisableJoin(true);
+                                    refreshTokenAndFetchConference(true);
 
                                 }}
                             />
