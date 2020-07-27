@@ -10,5 +10,11 @@
 export function openURLInBrowser(url: string, openInNewTab?: boolean) {
     const target = openInNewTab ? '_blank' : '';
 
+    if(url.startsWith("mailto")) {
+        window.location.href = url
+        return;
+    }
+
     window.open(url, target, 'noopener');
+
 }
