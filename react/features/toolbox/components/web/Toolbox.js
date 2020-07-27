@@ -241,7 +241,7 @@ class Toolbox extends Component<Props, State> {
         this._onShortcutToggleScreenshare = this._onShortcutToggleScreenshare.bind(this);
         this._onShortcutToggleVideoQuality = this._onShortcutToggleVideoQuality.bind(this);
         this._onToolbarOpenFeedback = this._onToolbarOpenFeedback.bind(this);
-        this._onToolbarOpenInvite = this._onToolbarOpenInvite.bind(this);
+        this._onToolbarOpenParticipantsList = this._onToolbarOpenParticipantsList.bind(this);
         this._onToolbarOpenKeyboardShortcuts = this._onToolbarOpenKeyboardShortcuts.bind(this);
         this._onToolbarOpenSpeakerStats = this._onToolbarOpenSpeakerStats.bind(this);
         this._onToolbarOpenVideoQuality = this._onToolbarOpenVideoQuality.bind(this);
@@ -705,7 +705,7 @@ class Toolbox extends Component<Props, State> {
         this._doOpenFeedback();
     }
 
-    _onToolbarOpenInvite: () => void;
+    _onToolbarOpenParticipantsList: () => void;
 
     /**
      * Creates an analytics toolbar event and dispatches an action for opening
@@ -714,13 +714,15 @@ class Toolbox extends Component<Props, State> {
      * @private
      * @returns {void}
      */
-    _onToolbarOpenInvite() {
+    _onToolbarOpenParticipantsList() {
         sendAnalytics(createToolbarEvent('invite'));
+
+        this.props.dispatch(toggleParticipantsList());
 
         // this.props.dispatch(beginAddPeople());
         this.props.dispatch(hideChat());
-        this._onSetOverflowVisible(false);
-        this.props.dispatch(toggleParticipantsList());
+
+        this.props.dispatch(setOverflowMenuVisible(false));
     }
 
     _onToolbarOpenKeyboardShortcuts: () => void;
@@ -1136,7 +1138,7 @@ class Toolbox extends Component<Props, State> {
             //             accessibilityLabel = { t('toolbar.accessibilityLabel.invite') }
             //             icon = { IconInviteMore }
             //             key = 'invite'
-            //             onClick = { this._onToolbarOpenInvite }
+            //             onClick = { this._onToolbarOpenParticipantsList }
             //             text = { t('toolbar.invite') } />
             //     );
             case 'tileview':
@@ -1330,7 +1332,7 @@ class Toolbox extends Component<Props, State> {
                                     accessibilityLabel =
                                         { t('toolbar.accessibilityLabel.invite') }
                                     icon = { IconInviteMore }
-                                    onClick = { this._onToolbarOpenInvite }
+                                    onClick = { this._onToolbarOpenParticipantsList }
                                     showArrow = { true }
                                     toggled = { this.props._participantsListOpen || this.props._invitePeopleVisible }
                                     tooltip = { t('toolbar.invite') } />
@@ -1433,8 +1435,6 @@ function _mapStateToProps(state) {
     // NB: We compute the buttons again here because if URL parameters were used to
     // override them we'd miss it.
     const buttons = new Set(interfaceConfig.TOOLBAR_BUTTONS);
-
-    console.log(enabled, participantsListOpen, invitePeopleVisible, isToolboxVisible(state), 'invitePeopleVisibleinvitePeopleVisible');
 
     return {
         _participantsListOpen: participantsListOpen,
