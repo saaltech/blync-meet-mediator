@@ -274,7 +274,7 @@ const VideoLayout = {
     },
 
     onHostChange() {
-        getAllThumbnails().forEach(thumbnail => thumbnail.initializeHost());
+        getAllThumbnails().forEach(thumbnail => thumbnail && thumbnail.initializeHost());
     },
 
     /**
