@@ -37,8 +37,10 @@ import {
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
+import InviteParticipants from './InviteParticipants';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
+import ParticipantsList from './ParticipantsList';
 
 
 declare var APP: Object;
@@ -254,6 +256,8 @@ class Conference extends AbstractConference<Props, *> {
                 </div>} */}
 
                 <NotificationsToasts />
+                <ParticipantsList />
+                <InviteParticipants />
                 { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );

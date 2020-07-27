@@ -45,12 +45,14 @@ export function isToolboxVisible(state: Object) {
     const {
         alwaysVisible,
         timeoutID,
-        visible
+        visible,
+        participantsListOpen,
+        invitePeopleVisible
     } = state['features/toolbox'];
     const { audioSettingsVisible, videoSettingsVisible } = state['features/settings'];
 
     return Boolean(!iAmSipGateway && (timeoutID || visible || alwaysVisible
-                                      || audioSettingsVisible || videoSettingsVisible));
+                                      || audioSettingsVisible || videoSettingsVisible || participantsListOpen || invitePeopleVisible));
 }
 
 /**

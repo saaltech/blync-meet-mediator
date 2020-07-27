@@ -108,3 +108,5 @@ export { default as IconMore } from './more.svg';
 export { default as IconCalendar } from './calendar.svg';
 export { default as IconFilm } from './film.svg';
 export { default as IconLogo } from './logo.svg';
+export { default as IconNoRaisedHand } from './no-raised-hand.svg';
+export { default as IconSpeaking } from './speaking.svg';
