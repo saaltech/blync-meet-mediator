@@ -721,7 +721,7 @@ class Toolbox extends Component<Props, State> {
 
         // this.props.dispatch(beginAddPeople());
         this.props.dispatch(hideChat());
-
+        this.props.dispatch(showInvitePeople(false));
         this.props.dispatch(setOverflowMenuVisible(false));
     }
 

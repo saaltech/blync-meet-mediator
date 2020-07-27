@@ -26,6 +26,7 @@ type Props = {
     participants: Array<Object>,
     _tracks: Array<Object>,
     _localParticipant: Object,
+    _meetingDetails: Object,
 }
 
 /**
@@ -34,6 +35,7 @@ type Props = {
  * @class ParticipantsCount
  */
 class ParticipantsList extends Component<Props> {
+
     /**
      * Implements React's {@link PureComponent#render()}.
      *
@@ -41,7 +43,6 @@ class ParticipantsList extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-
         if (!this.props.participantsListOpen) {
             return null;
         }
