@@ -230,7 +230,7 @@ export default class LargeVideoManager {
             }
 
             // show the avatar on large if needed
-            container.showAvatar(showAvatar);
+            container.showAvatar(true);
 
             // Clean up audio level after previous speaker.
             if (showAvatar) {
