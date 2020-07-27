@@ -70,8 +70,6 @@ class ParticipantsList extends Component<Props> {
 
                                 const videoTrack = getTrackByMediaTypeAndParticipant(this.props._tracks, MEDIA_TYPE.VIDEO, participant.id);
 
-                                console.log(audioTrack, videoTrack, 'videoTrackvideoTrackvideoTrack');
-
                                 return (<li key = { participant.id }>
                                     <div className = 'participants-list__label'>
                                         <Avatar
