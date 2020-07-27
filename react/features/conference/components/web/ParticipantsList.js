@@ -2,15 +2,28 @@
 import React, { Component } from 'react';
 
 import { Avatar } from '../../../base/avatar';
-import { Icon, IconRaisedHand, IconMicrophone, IconCamera, IconAdd } from '../../../base/icons';
+import {
+    Icon,
+    IconRaisedHand,
+    IconMicrophone,
+    IconCamera,
+    IconAdd,
+    IconNoRaisedHand,
+    IconCameraDisabled,
+    IconMicrophoneEmpty,
+    IconSpeaking
+} from '../../../base/icons';
+import { MEDIA_TYPE } from '../../../base/media';
 import { OptionsPanel } from '../../../base/options-panel';
 import { connect } from '../../../base/redux';
+import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { showParticipantsList, showInvitePeople } from '../../../toolbox/actions.web';
 
 
 type Props = {
     participantsListOpen: boolean,
-    participants: Array<Object>
+    participants: Array<Object>,
+    _tracks: Array<Object>
 }
 
 /**
@@ -26,6 +39,10 @@ class ParticipantsList extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
+
+        if (!this.props.participantsListOpen) {
+            return null;
+        }
 
         return (
             <OptionsPanel
@@ -47,25 +64,40 @@ class ParticipantsList extends Component<Props> {
                         {
 
                             (this.props.participants || [])
-                            .map(participant => (<li key = { participant.id }>
-                                <div className = 'participants-list__label'>
-                                    <Avatar
-                                        participantId = { participant.id }
-                                        size = { 32 } />
-                                    <div className = 'participants-list__participant-name'>{participant.name}</div>
-                                </div>
-                                <div className = 'participants-list__controls'>
-                                    <button><Icon
-                                        size = { 18 }
-                                        src = { IconRaisedHand } /></button>
-                                    <button><Icon
-                                        size = { 18 }
-                                        src = { IconMicrophone } /></button>
-                                    <button><Icon
-                                        size = { 18 }
-                                        src = { IconCamera } /></button>
-                                </div>
-                            </li>))
+                            .map(participant => {
+
+                                const audioTrack = getTrackByMediaTypeAndParticipant(this.props._tracks, MEDIA_TYPE.AUDIO, participant.id);
+
+                                const videoTrack = getTrackByMediaTypeAndParticipant(this.props._tracks, MEDIA_TYPE.VIDEO, participant.id);
+
+                                console.log(audioTrack, videoTrack, 'videoTrackvideoTrackvideoTrack');
+
+                                return (<li key = { participant.id }>
+                                    <div className = 'participants-list__label'>
+                                        <Avatar
+                                            participantId = { participant.id }
+                                            size = { 32 } />
+                                        <div className = 'participants-list__participant-name'>{participant.name}</div>
+                                    </div>
+                                    <div className = 'participants-list__controls'>
+                                        <button><Icon
+                                            size = { 18 }
+                                            src = { participant.raisedHand ? IconRaisedHand : IconNoRaisedHand } /></button>
+                                        <button>
+                                            {participant.dominantSpeaker && <Icon
+                                                size = { 18 }
+                                                src = { IconSpeaking } />}
+                                            {!participant.dominantSpeaker && <Icon
+                                                size = { 18 }
+                                                src = { !audioTrack || (audioTrack || {}).muted ? IconMicrophoneEmpty : IconMicrophone } />}</button>
+                                        <button>
+                                            <Icon
+                                                size = { 18 }
+                                                src = { !videoTrack || (videoTrack || {}).muted ? IconCameraDisabled : IconCamera } /></button>
+                                    </div>
+                                </li>);
+                            }
+                            )
                         }
                     </ul>
                 </div>
@@ -85,10 +117,12 @@ class ParticipantsList extends Component<Props> {
 function mapStateToProps(state) {
     const { participantsListOpen } = state['features/toolbox'];
     const participants = state['features/base/participants'];
+    const tracks = state['features/base/tracks'];
 
     return {
         participantsListOpen,
-        participants
+        participants,
+        _tracks: tracks
     };
 }
 
