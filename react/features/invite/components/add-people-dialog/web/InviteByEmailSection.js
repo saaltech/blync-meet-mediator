@@ -149,7 +149,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
             content = { 'Whatsapp message' }
             position = 'top'>
             <WhatsappShareButton
-                round = { true }
+                round = { "true" }
                 url = { url }>
                 <Icon src = { IconWhatsapp }  size = { 30 } />
             </WhatsappShareButton>
