@@ -1,0 +1,59 @@
+.participants-list {
+    &__list {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+
+    &__list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid #EAEAEA;
+
+        &:first-child {
+            border-top: 1px solid #EAEAEA;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        align-items: center;
+    }
+
+    &__label {
+        display: flex;
+        align-items: center;
+    }
+
+    &__participant-name {
+        padding: 0 10px;
+        max-width: 145px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__controls button {
+        background: none;
+        border: none;
+        outline: none;
+    }
+
+    &__add {
+        border: none;
+        background: #EBEBEB;
+        color: #444;
+        display: inline-flex;
+        align-items: center;
+        font-size: 12px;
+        border-radius: 20px;
+        padding: 4px 14px 4px 10px;
+        margin: 0 10px; 
+
+        svg {
+            fill: #444;
+        }
+    }
+}
