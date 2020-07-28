@@ -126,6 +126,7 @@
         display: flex;
         font-size: 21px;
         font-weight: bold;
+        position: relative;
 
         &--btn {
             cursor: pointer;
@@ -165,6 +166,17 @@
 
 .usrmsg-form {
     flex: 1;
+    display: flex;
+    align-items: center;
+
+    button {
+        border: none;
+        outline: none;
+    }
+
+    svg {
+        fill: #005C85;
+    }
 }
 
 #usermsg {
@@ -366,6 +378,7 @@
     .timestamp {
         font-size: 12px;
         opacity: 0.8;
+        padding: 0 40px;
     }
 
     &.local {
@@ -493,6 +506,9 @@
 
     &__back-icon {
         fill: #000;
+        position: absolute;
+        left: -12px;
+        transform: translateY(5%);
     }
 
     &__private-user-name {
