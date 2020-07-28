@@ -3,7 +3,7 @@
 import React from 'react';
 import { toArray } from 'react-emoji-render';
 
-
+import { Avatar } from '../../../base/avatar';
 import { translate } from '../../../base/i18n';
 import { Linkify } from '../../../base/react';
 import AbstractChatMessage, {
@@ -37,17 +37,23 @@ class ChatMessage extends AbstractChatMessage<Props> {
             }
         });
 
+        console.log(this.props.message, 'messagemessagemessage');
+
         return (
             <div className = 'chatmessage-wrapper'>
-                <div className = { 'chatmessage ' }>
-                    <div className = 'replywrapper'>
-                        <div className = 'messagecontent'>
-                            { this.props.showDisplayName && this._renderDisplayName() }
-                            <div className = 'usermessage'>
-                                { processedMessage }
+                <div className = 'chatmessage-wrapper__container'>
+                    <Avatar
+                        participantId = { this.props.message.id }
+                        size = { 30 } />
+                    <div className = { 'chatmessage ' }>
+                        <div className = 'replywrapper'>
+                            <div className = 'messagecontent'>
+                                { this.props.showDisplayName && this._renderDisplayName() }
+                                <div className = 'usermessage'>
+                                    { processedMessage }
+                                </div>
                             </div>
-                        </div>
-                        {/* { message.privateMessage && message.messageType !== MESSAGE_TYPE_LOCAL
+                            {/* { message.privateMessage && message.messageType !== MESSAGE_TYPE_LOCAL
                             && (
                                 <div className = 'messageactions'>
                                     <PrivateMessageButton
@@ -56,8 +62,10 @@ class ChatMessage extends AbstractChatMessage<Props> {
                                         showLabel = { false } />
                                 </div>
                             ) } */}
+                        </div>
                     </div>
                 </div>
+
                 { this.props.showTimestamp && this._renderTimestamp() }
             </div>
         );

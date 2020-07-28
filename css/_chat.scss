@@ -335,6 +335,34 @@
     display: flex;
     flex-direction: column;
 
+    .chatmessage-wrapper__container {
+        display: flex;
+        align-items: flex-end;
+
+        .avatar {
+            flex-shrink: 0;
+        }
+
+        .avatar-space {
+            width: 40px;
+            height: 40px;
+        }
+    } 
+
+    &.local .chatmessage-wrapper__container {
+        flex-direction: row-reverse !important;
+    }
+
+    &.local .chatmessage-wrapper__container .avatar {
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    &.remote .chatmessage-wrapper__container .avatar {
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
     .timestamp {
         font-size: 12px;
         opacity: 0.8;
@@ -386,7 +414,7 @@
         .display-name {
             display: none;
         }
-    }
+    }  
 
     .chatmessage-wrapper {
         max-width: 100%;
@@ -410,6 +438,8 @@
             }
         }
     }
+
+    
 
     .chatmessage {
         background-color: $chatRemoteMessageBackgroundColor;
