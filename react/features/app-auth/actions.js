@@ -114,10 +114,13 @@ async function validationFromNonComponents(tokenRequired) {
             console.log("refresh Token error", e)
             if(e && e.response && e.response.status == 401) {
               // only in case of invalid grant
-              invalidateAndGoHome();
+              invalidateAndGoHome(true);
               return false;
             }
           }
+        }
+        else {
+            return false
         }
       }
 
@@ -128,7 +131,7 @@ export async function saveHostJidToUserMapping(connection) {
 
     if(connection.xmpp && connection.xmpp.connection &&
         connection.xmpp.connection._stropheConn.jid &&
-        validationFromNonComponents(true)) {
+        await validationFromNonComponents(true)) {
         try {
             await axios.post(
                 config.conferenceManager + config.jidEP, 
