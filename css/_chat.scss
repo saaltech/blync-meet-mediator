@@ -126,6 +126,7 @@
         display: flex;
         font-size: 21px;
         font-weight: bold;
+        position: relative;
 
         &--btn {
             cursor: pointer;
@@ -165,6 +166,17 @@
 
 .usrmsg-form {
     flex: 1;
+    display: flex;
+    align-items: center;
+
+    button {
+        border: none;
+        outline: none;
+    }
+
+    svg {
+        fill: #005C85;
+    }
 }
 
 #usermsg {
@@ -335,9 +347,38 @@
     display: flex;
     flex-direction: column;
 
+    .chatmessage-wrapper__container {
+        display: flex;
+        align-items: flex-end;
+
+        .avatar {
+            flex-shrink: 0;
+        }
+
+        .avatar-space {
+            width: 40px;
+            height: 40px;
+        }
+    } 
+
+    &.local .chatmessage-wrapper__container {
+        flex-direction: row-reverse !important;
+    }
+
+    &.local .chatmessage-wrapper__container .avatar {
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    &.remote .chatmessage-wrapper__container .avatar {
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
     .timestamp {
         font-size: 12px;
         opacity: 0.8;
+        padding: 0 40px;
     }
 
     &.local {
@@ -386,7 +427,7 @@
         .display-name {
             display: none;
         }
-    }
+    }  
 
     .chatmessage-wrapper {
         max-width: 100%;
@@ -410,6 +451,8 @@
             }
         }
     }
+
+    
 
     .chatmessage {
         background-color: $chatRemoteMessageBackgroundColor;
@@ -463,6 +506,9 @@
 
     &__back-icon {
         fill: #000;
+        position: absolute;
+        left: -12px;
+        transform: translateY(5%);
     }
 
     &__private-user-name {

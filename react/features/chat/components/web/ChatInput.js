@@ -6,6 +6,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import type { Dispatch } from 'redux';
 
 import { translate } from '../../../base/i18n';
+import { IconChatSend, Icon } from '../../../base/icons';
 import { connect } from '../../../base/redux';
 
 import SmileysPanel from './SmileysPanel';
@@ -135,6 +136,12 @@ class ChatInput extends Component<Props, State> {
                         onKeyDown = { this._onDetectSubmit }
                         placeholder = { this.props.t('chat.messagebox') }
                         value = { this.state.message } />
+                    <button
+                        onClick = { () => {
+                            const trimmed = this.state.message.trim();
+
+                            this.props.onSend(trimmed);
+                        } }><Icon src = { IconChatSend } /></button>
                 </div>
             </div>
         );
