@@ -76,13 +76,14 @@ function GuestPrejoin(props) {
     useEffect(() => {
         continueAsGuest && guestName.trim() !== "" &&
             props.updateSettings({
-                displayName: guestName
+                displayName: guestName,
+                email: guestEmail // Done to reset the avatar that might have been set in the previous session 
             })
     }, [guestName])
 
     const [guestEmail, setGuestEmail] = useState('')
     useEffect(() => {
-        continueAsGuest && guestEmail.trim() !== "" &&
+        continueAsGuest &&
             props.updateSettings({
                 email: guestEmail
             })
