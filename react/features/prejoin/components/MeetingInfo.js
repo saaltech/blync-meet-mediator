@@ -21,6 +21,7 @@ function MeetingInfo(props) {
     const { meetingName, setMeetingName } = props.meetingName;
     const { meetingPassword, setMeetingPassword } = props.meetingPassword;
     const { isPrivate, setIsPrivate } = props.isPrivate || false;
+    const { enableWaitingRoom, setEnableWaitingRoom } = props.enableWaitingRoom || false;
     const { meetingFrom, setMeetingFrom } = props.meetingFrom;
     const { meetingTo, setMeetingTo } = props.meetingTo;
     const isPureJoinFlow = props.isPureJoinFlow;
@@ -137,6 +138,25 @@ function MeetingInfo(props) {
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMM d, yyyy h:mm aa' />
             </div>
+            }
+
+            {
+                !isPureJoinFlow && (!shareable || enableWaitingRoom) &&
+                <div className = 'form-field make-private'>
+                    <InputField
+                        type = 'checkbox'
+                        onChange = { () => {
+                            setEnableWaitingRoom(!enableWaitingRoom);
+                        } }
+                        value = { enableWaitingRoom }
+                        id = 'enableWaitingRoom'
+                        disabled = { shareable } />
+                    <label
+                        className = 'form-label'
+                        htmlFor = 'enableWaitingRoom'>
+                        {'Enable waiting room'}
+                    </label>
+                </div>
             }
             
             {
