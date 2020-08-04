@@ -35,7 +35,7 @@ class WaitingParticipantNotifier extends Component<Props> {
         return (
             <span className = 'badge-round'>
                 <span>
-                    { this.props._count || null }
+                    { !this.props._participantsListOpen && (this.props._count || null) }
                 </span>
             </span>
         );
@@ -53,7 +53,9 @@ class WaitingParticipantNotifier extends Component<Props> {
  * }}
  */
 function _mapStateToProps(state) {
+    const { participantsListOpen } = state['features/toolbox'];
     return {
+        _participantsListOpen: participantsListOpen,
         _count: getWaitingParticipantCount(state)
     };
 }
