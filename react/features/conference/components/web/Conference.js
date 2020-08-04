@@ -168,10 +168,8 @@ class Conference extends AbstractConference<Props, *> {
      * returns {void}
      */
     componentDidUpdate(prevProps) {
-        if(this.props._isModerator && (!wsClient || wsClient.readyState == WebSocket.CLOSED)) {
-            // Open websocket connection to get waiting participants list
-            this.openSocketConnection();
-        }
+        // Open websocket connection to get waiting participants list
+        this.openSocketConnection();
 
         if (this.props._shouldDisplayTileView
             === prevProps._shouldDisplayTileView) {
@@ -282,7 +280,7 @@ class Conference extends AbstractConference<Props, *> {
      *
      */
     closeSocketConnection() {
-        if(wsClient) {
+        if(wsClient && wsClient.readyState != W3CWebSocket.CLOSED) {
             wsClient.close()
         }
     }
