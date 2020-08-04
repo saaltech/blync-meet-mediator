@@ -51,6 +51,8 @@ class ParticipantsList extends Component<Props> {
             APP.store.dispatch(clearWaitingNotification())
         }
 
+        const activeParticipants = (this.props.participants || []).length
+
         return (
             <OptionsPanel
                 isOpen = { this.props.participantsListOpen }
@@ -58,7 +60,7 @@ class ParticipantsList extends Component<Props> {
                 bodyClass = 'flex-column'
                 onClose = { () => APP.store.dispatch(showParticipantsList(false)) }
                 title = { <div>
-                    Participants
+                    Participants ({this.props._waitingParticipantsLength + activeParticipants})
                     {this.props._localParticipant.role === 'moderator' && <button
                         className = 'participants-list__add'
                         onClick = { () => APP.store.dispatch(showInvitePeople(true)) }>
@@ -71,11 +73,15 @@ class ParticipantsList extends Component<Props> {
                 <WaitingParticipantView />
                 
                 <div className = 'participants-list'>
-                    <div className = 'participants-list__header'>
-                        <div>
-                            { `Active (${(this.props.participants || []).length})` } 
+                    {
+                        this.props._waitingParticipantsLength > 0 &&
+                        <div className = 'participants-list__header'>
+                            <div>
+                                { `Active (${(this.props.participants || []).length})` } 
+                            </div>
                         </div>
-                    </div>
+                    }
+                    
                     <ul className = 'participants-list__list'>
                         {
 
@@ -140,7 +146,8 @@ function mapStateToProps(state) {
         participants,
         _tracks: tracks,
         _localParticipant: localParticipant,
-        _isModerator: isModerator
+        _isModerator: isModerator,
+        _waitingParticipantsLength: state['features/base/waiting-participants'].participants?.length || 0
     };
 }
 
