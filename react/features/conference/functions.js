@@ -49,3 +49,7 @@ export function shouldDisplayNotifications(stateful) {
             && !isAnyOverlayVisible
             && !calleeInfoVisible;
 }
+
+export function getSocketLink(state) {
+    return `wss://${APP.connection?.options?.hosts?.domain}/${state['features/app-auth'].meetingDetails?.meetingId}`
+}

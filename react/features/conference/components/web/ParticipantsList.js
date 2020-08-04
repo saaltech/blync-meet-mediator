@@ -15,11 +15,12 @@ import {
 } from '../../../base/icons';
 import { MEDIA_TYPE } from '../../../base/media';
 import { OptionsPanel } from '../../../base/options-panel';
-import { getLocalParticipant } from '../../../base/participants';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
+import { WaitingParticipantView } from '../../../base/waiting-participants/components';
 import { connect } from '../../../base/redux';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { showParticipantsList, showInvitePeople } from '../../../toolbox/actions.web';
-
+import { clearWaitingNotification } from '../../../base/waiting-participants'
 
 type Props = {
     participantsListOpen: boolean,
@@ -46,13 +47,18 @@ class ParticipantsList extends Component<Props> {
         if (!this.props.participantsListOpen) {
             return null;
         }
+        else {
+            APP.store.dispatch(clearWaitingNotification())
+        }
 
         return (
             <OptionsPanel
                 isOpen = { this.props.participantsListOpen }
+                noBodyPadding = {true}
+                bodyClass = 'flex-column'
                 onClose = { () => APP.store.dispatch(showParticipantsList(false)) }
                 title = { <div>
-                    Participants ({this.props.participants.length})
+                    Participants
                     {this.props._localParticipant.role === 'moderator' && <button
                         className = 'participants-list__add'
                         onClick = { () => APP.store.dispatch(showInvitePeople(true)) }>
@@ -61,8 +67,15 @@ class ParticipantsList extends Component<Props> {
                             src = { IconAdd } /> Add
                     </button>}
                 </div> }>
+                
+                <WaitingParticipantView />
+                
                 <div className = 'participants-list'>
-
+                    <div className = 'participants-list__header'>
+                        <div>
+                            { `Active (${(this.props.participants || []).length})` } 
+                        </div>
+                    </div>
                     <ul className = 'participants-list__list'>
                         {
 
@@ -78,7 +91,7 @@ class ParticipantsList extends Component<Props> {
                                         <Avatar
                                             participantId = { participant.id }
                                             size = { 32 } />
-                                        <div className = 'participants-list__participant-name'>{participant.name}</div>
+                                        <div title = {participant.name} className = 'participants-list__participant-name'>{participant.name}</div>
                                     </div>
                                     <div className = 'participants-list__controls'>
                                         <button><Icon
@@ -120,12 +133,14 @@ function mapStateToProps(state) {
     const participants = state['features/base/participants'];
     const tracks = state['features/base/tracks'];
     const localParticipant = getLocalParticipant(APP.store.getState());
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
 
     return {
         participantsListOpen,
         participants,
         _tracks: tracks,
-        _localParticipant: localParticipant
+        _localParticipant: localParticipant,
+        _isModerator: isModerator
     };
 }
 
