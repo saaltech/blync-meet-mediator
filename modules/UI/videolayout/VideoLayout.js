@@ -67,6 +67,15 @@ function getLocalParticipant() {
     return getLocalParticipantFromStore(APP.store.getState());
 }
 
+const getIntersectionObserverOptions = () => {
+    return {
+        root: document.getElementById('remoteVideos'),
+        rootMargin: '0px',
+        threshold: 0.4
+    };
+};
+
+
 const VideoLayout = {
     init(emitter) {
         eventEmitter = emitter;
@@ -77,6 +86,10 @@ const VideoLayout = {
             this._updateLargeVideoIfDisplayed.bind(this));
 
         this.registerListeners();
+
+        const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
+
+        observer.observe(document.getElementById('localVideoTileViewContainer'));
     },
 
     /**
@@ -125,6 +138,53 @@ const VideoLayout = {
         if (largeVideo && id === largeVideo.id) {
             largeVideo.updateLargeVideoAudioLevel(lvl);
         }
+    },
+    handleIntersection(entries) {
+        const tracks = APP.store.getState()['features/base/tracks'] || [];
+
+
+        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
+
+        if (!tileViewEnabled) {
+            return;
+        }
+
+        entries.forEach(entry => {
+            const containerId = entry.target.id;
+
+            let participantId = null;
+
+            if (containerId === 'localVideoTileViewContainer') {
+                participantId = getLocalParticipant().id;
+            } else {
+                const participantParts = entry.target.id.split('participant_');
+
+                if (participantParts.length < 2) {
+                    return;
+                }
+
+                participantId = participantParts[1];
+            }
+
+            const track = tracks.find(t => t.participantId === participantId);
+
+            if (!track) {
+                return;
+            }
+
+            // const participant = APP.conference.getParticipantById(participantId);
+
+
+            if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
+                APP.UI.setVideoMuted(participantId, false);
+
+                return;
+            }
+
+            APP.UI.setVideoMuted(participantId, true);
+
+            // track.jitsiTrack.setMute(true);
+        });
     },
 
     changeLocalVideo(stream) {
@@ -307,6 +367,10 @@ const VideoLayout = {
 
         this.updateMutedForNoTracks(id, 'audio');
         this.updateMutedForNoTracks(id, 'video');
+
+        const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
+
+        observer.observe(document.getElementById(`participant_${id}`));
     },
 
     /**
