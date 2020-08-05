@@ -172,8 +172,6 @@ const VideoLayout = {
                 return;
             }
 
-            // const participant = APP.conference.getParticipantById(participantId);
-
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
                 APP.UI.setVideoMuted(participantId, false);
@@ -182,8 +180,6 @@ const VideoLayout = {
             }
 
             APP.UI.setVideoMuted(participantId, true);
-
-            // track.jitsiTrack.setMute(true);
         });
     },
 
