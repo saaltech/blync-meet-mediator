@@ -1,8 +1,29 @@
 .participants-list {
+
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &__header {
+        font-size: 14px;
+        padding: 0 35px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        background-color: #E7EFF4;
+        cursor: pointer;
+
+        :first-child {
+            flex: 1;
+        }
+    }
+
     &__list {
-        padding: 0;
+        padding: 0 35px;
         margin: 0;
         list-style-type: none;
+        flex: 1;
+        overflow: scroll;
     }
 
     &__list li {
@@ -12,8 +33,11 @@
         padding: 14px 0;
         border-bottom: 1px solid #EAEAEA;
 
-        &:first-child {
+        /*&:first-child {
             border-top: 1px solid #EAEAEA;
+        }*/
+        &:last-child {
+            border-bottom-width: 0px;
         }
     }
 
@@ -54,6 +78,105 @@
 
         svg {
             fill: #444;
+        }
+    }
+}
+
+.waiting-list {
+
+    &__header {
+        font-size: 14px;
+        padding: 0 35px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        background-color: #E7EFF4;
+        cursor: pointer;
+        border-bottom: 1px solid #ffffff;
+
+        :first-child {
+            flex: 1;
+        }
+
+        .jitsi-icon svg {
+            fill: #3a3a3a
+        }
+    }
+
+    .waiting-actions__all {
+        padding: 0 35px;
+        display: flex;
+        height: 50px;
+        //background-color: #F4F4F4;
+
+        .waiting-actions__all__btn {
+            outline: 0;
+            background-color: #D1D1D1;
+            color: #393939;
+            margin-right: 5px;
+            height: 30px;
+            border: 0px solid;
+            border-radius: 17px;
+            margin: 10px 5px;
+            width: 75px;
+        }
+    }
+    
+    .waiting-list__content {
+
+        display: flex;
+        flex-direction: column;
+
+        .participants-list__list {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        //background-color: #F4F4F4;
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        &.collapsed {
+            height: 0px;
+        }
+    }
+
+    /*.participants-list__list {
+        padding: 0 35px;
+        background-color: #F4F4F4;
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        &.collapsed {
+            height: 0px;
+        }
+    }*/
+
+    .avatarProfile {
+        border-radius: 30px;
+        font-weight: 100;
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .waiting-actions {
+        border-radius: 10px;
+        height: 25px;
+        
+        &.reject {
+            background-color: rgba(241, 90, 70, 0.21);
+            color: rgb(241, 90, 70);
+            margin-right: 5px;
+        }
+
+        &.admit {
+            background-color: rgba(0, 192, 99, 0.21);
+            color:rgb(0, 192, 99)
         }
     }
 }

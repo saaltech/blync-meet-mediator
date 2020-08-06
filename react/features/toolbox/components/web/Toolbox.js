@@ -26,13 +26,15 @@ import {
 import {
     getLocalParticipant,
     getParticipants,
-    participantUpdated
+    participantUpdated,
+    PARTICIPANT_ROLE
 } from '../../../base/participants';
 import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
 import { ChatCounter, toggleChat, hideChat, markAsRead, markPublicAsRead } from '../../../chat';
+import { WaitingParticipantNotifier } from '../../../base/waiting-participants/components'
 import { E2EEButton } from '../../../e2ee';
 import { SharedDocumentButton } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
@@ -1194,7 +1196,8 @@ class Toolbox extends Component<Props, State> {
             _chatOpen,
             _overflowMenuVisible,
             _raisedHand,
-            t
+            t,
+            _isModerator
         } = this.props;
         const overflowMenuContent = this._renderOverflowMenuContent();
         const overflowHasItems = Boolean(overflowMenuContent.filter(child => child).length);
@@ -1336,7 +1339,9 @@ class Toolbox extends Component<Props, State> {
                                     showArrow = { true }
                                     toggled = { this.props._participantsListOpen || this.props._invitePeopleVisible }
                                     tooltip = { t('toolbar.invite') } />
-
+                                {
+                                    _isModerator && <WaitingParticipantNotifier />
+                                }
                             </div>}
                         {/* { buttonsRight.indexOf('security') !== -1
                             && <SecurityDialogButton customClass = 'security-toolbar-button' /> } */}
@@ -1436,6 +1441,8 @@ function _mapStateToProps(state) {
     // override them we'd miss it.
     const buttons = new Set(interfaceConfig.TOOLBAR_BUTTONS);
 
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
+
     return {
         _participantsListOpen: participantsListOpen,
         _invitePeopleVisible: invitePeopleVisible,
@@ -1460,7 +1467,8 @@ function _mapStateToProps(state) {
             || sharedVideoStatus === 'start'
             || sharedVideoStatus === 'pause',
         _visible: isToolboxVisible(state),
-        _visibleButtons: equals(visibleButtons, buttons) ? visibleButtons : buttons
+        _visibleButtons: equals(visibleButtons, buttons) ? visibleButtons : buttons,
+        _isModerator: isModerator
     };
 }
 
