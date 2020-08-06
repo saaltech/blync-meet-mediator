@@ -30,7 +30,10 @@ import {
     leavingMeeting
 } from '../../../toolbox/actions';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
-import { maybeShowSuboptimalExperienceNotification, getSocketLink } from '../../functions';
+import { maybeShowSuboptimalExperienceNotification, 
+    getConferenceSocketBaseLink,
+    getWaitingParticipantsSocketTopic,
+    getAppSocketEndPoint } from '../../functions';
 import {
     AbstractConference,
     abstractMapStateToProps
@@ -45,7 +48,7 @@ import {
     updateWaitingParticipantsList,
     flushOutWaitingList
 } from '../../../base/waiting-participants';
-import { w3cwebsocket as W3CWebSocket } from "websocket";
+import SockJsClient from 'react-stomp';
 
 declare var APP: Object;
 declare var config: Object;
@@ -76,9 +79,6 @@ const LAYOUT_CLASSNAMES = {
     [LAYOUTS.TILE_VIEW]: 'tile-view',
     [LAYOUTS.VERTICAL_FILMSTRIP_VIEW]: 'vertical-filmstrip'
 };
-
-// WebSocket client
-let wsClient;
 
 /**
  * The type of the React {@code Component} props of {@link Conference}.
@@ -142,6 +142,10 @@ class Conference extends AbstractConference<Props, *> {
                 trailing: false
             });
 
+        this.state = {
+            waitingParticipantsFetchDone: false
+        }
+
         // Bind event handler so it is only bound once for every instance.
         this._onFullScreenChange = this._onFullScreenChange.bind(this);
     }
@@ -168,9 +172,7 @@ class Conference extends AbstractConference<Props, *> {
      * returns {void}
      */
     componentDidUpdate(prevProps) {
-        // Open websocket connection to get waiting participants list
-        this.openSocketConnection();
-
+        this.sendMessageWaitingParticipants()
         if (this.props._shouldDisplayTileView
             === prevProps._shouldDisplayTileView) {
             return;
@@ -192,6 +194,8 @@ class Conference extends AbstractConference<Props, *> {
     componentWillUnmount() {
         this.closeSocketConnection();
 
+        this.setState({ waitingParticipantsFetchDone: false })
+
         APP.UI.unbindEvents();
 
         FULL_SCREEN_EVENTS.forEach(name =>
@@ -203,76 +207,19 @@ class Conference extends AbstractConference<Props, *> {
     }
 
     /**
-     * Open the socket connection to receive the waiting participants list
+     * send message over socket to fetch the waiting participants list
      *
      */
-    openSocketConnection() {
-        if(this.props._isModerator && (!wsClient || wsClient.readyState == W3CWebSocket.CLOSED)) {
-            wsClient = new W3CWebSocket(this.props._socketLink /*'wss://echo.websocket.org'*/);
-            
-            wsClient.onopen = () => {
-                console.log('WebSocket Client Connected');
-            };
-
-            wsClient.onmessage = (message) => {
-                let participants = JSON.parse(message.data)
-                console.log("Websocket message received", participants);
-                this.props.dispatch(updateWaitingParticipantsList(participants))
-            };
-            
-            wsClient.onclose = () => {
-                    console.log('WebSocket client disconnected');
-            };
-
-            // TODO: remove this once socket is implemented and the list is populated from the onmessage event
-            let participants = [{
-                    "avatarUrl": "string",
-                    "createdDateTime": "2020-08-03T12:53:06.618Z",
-                    "email": "string",
-                    "jid": "string1",
-                    "status": "PENDING",
-                    "updatedBy": "string",
-                    "updatedDateTime": "2020-08-03T12:53:06.618Z",
-                    "username": "Participant A "
-                }, {
-                    "avatarUrl": "string",
-                    "createdDateTime": "2020-08-03T12:54:06.618Z",
-                    "email": "string",
-                    "jid": "string2",
-                    "status": "PENDING",
-                    "updatedBy": "string",
-                    "updatedDateTime": "2020-08-03T12:54:06.618Z",
-                    "username": "Participant B "
-                }, {
-                    "avatarUrl": "string",
-                    "createdDateTime": "2020-08-03T12:55:06.618Z",
-                    "email": "string",
-                    "jid": "string3",
-                    "status": "PENDING",
-                    "updatedBy": "string",
-                    "updatedDateTime": "2020-08-03T12:55:06.618Z",
-                    "username": "Participant C "
-                }, {
-                    "avatarUrl": "string",
-                    "createdDateTime": "2020-08-03T12:56:06.618Z",
-                    "email": "string",
-                    "jid": "string4",
-                    "status": "PENDING",
-                    "updatedBy": "string",
-                    "updatedDateTime": "2020-08-03T12:56:06.618Z",
-                    "username": "Participant D "
-                }, {
-                    "avatarUrl": "string",
-                    "createdDateTime": "2020-08-03T12:57:06.618Z",
-                    "email": "string",
-                    "jid": "string5",
-                    "status": "PENDING",
-                    "updatedBy": "string",
-                    "updatedDateTime": "2020-08-03T12:57:06.618Z",
-                    "username": "Participant E "
-                }]
-            this.props.dispatch(updateWaitingParticipantsList(participants))
+    sendMessageWaitingParticipants() {
+        
+        if(this.props._isModerator && 
+            !this.state.waitingParticipantsFetchDone &&
+            this.clientRef && this.clientRef.client.connected) {
+                this.setState({ waitingParticipantsFetchDone: true })
+                this.clientRef.sendMessage(`${getAppSocketEndPoint() + this.props._participantsSocketTopic}`, 
+                    JSON.stringify({ "status": "PENDING"}));
         }
+            
     }
 
     /**
@@ -280,8 +227,8 @@ class Conference extends AbstractConference<Props, *> {
      *
      */
     closeSocketConnection() {
-        if(wsClient && wsClient.readyState != W3CWebSocket.CLOSED) {
-            wsClient.close()
+        if(this.clientRef && this.clientRef.client.connected) {
+            this.clientRef.disconnect()
         }
     }
 
@@ -304,7 +251,9 @@ class Conference extends AbstractConference<Props, *> {
             _leavingMeeting,
             _otherSharers,
             _iAmSharingScreen,
-            _sharer
+            _sharer,
+            _socketLink,
+            _participantsSocketTopic
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -313,6 +262,15 @@ class Conference extends AbstractConference<Props, *> {
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
+                {
+                    this.props._isModerator &&
+                    <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
+                        onMessage={(participants) => {
+                            this.props.dispatch(updateWaitingParticipantsList(participants))
+                        }}
+                        ref={ (client) => { this.clientRef = client }} />
+                }
+                
 
                 {
                     _leavingMeeting
@@ -443,7 +401,8 @@ function _mapStateToProps(state) {
         _interimPrejoin: isInterimPrejoinPageVisible(state),
         _isModerator: isModerator,
         _leavingMeeting: state['features/toolbox'].leaving,
-        _socketLink: getSocketLink(state)
+        _socketLink: getConferenceSocketBaseLink(),
+        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)
     };
 }
 

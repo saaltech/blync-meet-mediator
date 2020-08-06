@@ -6,6 +6,7 @@ import {
     showWarningNotification
 } from '../notifications';
 import { getOverlayToRender } from '../overlay';
+import { config } from '../../config'
 
 /**
  * Shows the suboptimal experience notification if needed.
@@ -50,6 +51,15 @@ export function shouldDisplayNotifications(stateful) {
             && !calleeInfoVisible;
 }
 
-export function getSocketLink(state) {
-    return `wss://${APP.connection?.options?.hosts?.domain}/${state['features/app-auth'].meetingDetails?.meetingId}`
+export function getAppSocketEndPoint() {
+    return `/app`
+}
+
+export function getConferenceSocketBaseLink() {
+    return `https://${APP.connection?.options?.hosts?.domain}/`+
+        `${config.conferenceManager}/wss`
+}
+
+export function getWaitingParticipantsSocketTopic(state = {}) {
+    return `/conference/${state['features/app-auth']?.meetingDetails?.meetingId}/participants`
 }

@@ -76,6 +76,7 @@ function GuestPrejoin(props) {
     const [conferenceStatus, setConferenceStatus] = useState('')
     const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
     const [ participantRejected, setParticipantRejected ] = useState(false);
+    const [ meetingEnded, setMeetingEnded ] = useState(false);
 
     const [guestName, setGuestName] = useState('')
     useEffect(() => {
@@ -269,7 +270,11 @@ function GuestPrejoin(props) {
                     setParticipantRejected(true);
                     return true;
                 }
-                
+            }
+            else {
+                intervalTimer && clearInterval(intervalTimer);
+                setMeetingEnded(true);
+                return true;
             }
         }
 
@@ -390,7 +395,7 @@ function GuestPrejoin(props) {
                 meetingStarted !== null && meetingStarted == false ?
                 <div className="waiting-display"> 
                     {
-                        !participantRejected ?
+                        ( !participantRejected && !meetingEnded ) ?
                         <>
                             <h2> 
                             {
@@ -405,6 +410,9 @@ function GuestPrejoin(props) {
                         <>
                             <h2> 
                             {
+                                meetingEnded ?
+                                "The meeting has ended"
+                                :
                                 "The host apparently hasn't approved your request to join in. Please contact the meeting host."
                             }
                             </h2>

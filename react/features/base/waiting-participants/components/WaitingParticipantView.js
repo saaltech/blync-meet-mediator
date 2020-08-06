@@ -29,7 +29,15 @@ function WaitingParticipantView(props) {
         } = props;
 
     // Holds the jid of the waiting participant on whom the action is to be taken.
-    const [ jid, setJid ] = useState('')
+    // setJids should be set only when trying to update waiting participant. 
+    // So because, _updateWaitingParticipant call is made from useEffect.
+    const [ jids, setJids ] = useState([])
+    useEffect(() => {
+        async function call() {
+            await _updateWaitingParticipant(true)
+        }
+        jids.length > 0 && call();
+    }, [jids]);
 
     // Holds the host's decision to admit/reject the waiting participant.
     const [ status, setStatus ] = useState(false);
@@ -39,25 +47,33 @@ function WaitingParticipantView(props) {
 
 
     const formWaitingParticipantRequestBody = () => {
+        let participants = []
+        typeof jids === "object" && jids.forEach((jid) => {
+            participants.push({
+                jid,
+                status
+            })
+        })
+
         return {
             'conferenceId': _conferenceId,
-            'jid': jid,
-            'status': status
-        };
+            participants
+        }
     };
 
     const [ _updateWaitingParticipant ] = useRequest({
-        url: `${config.conferenceManager + config.unauthParticipantsEP}`,
+        url: `${config.conferenceManager + config.authParticipantsEP}`,
         method: 'put',
         body: formWaitingParticipantRequestBody
     });
 
 
-    const updateWaitingParticipant = async (jid, admit) => {
-        setJid(jid);
-        setStatus(admit);
-        console.log(jid, admit);
-        await _updateWaitingParticipant();
+    const updateWaitingParticipant = async (_jid, admit) => {
+        if(typeof _jid === "string" && _jid === "all") {
+            _jid = _waitingList.map((p) => p.jid)
+        }
+        setStatus(admit ? 'APPROVED' : 'REJECTED');
+        setJids(_jid);
     }
 
     // Toggle waiting participants collapse view
@@ -129,7 +145,7 @@ function WaitingParticipantView(props) {
                                             <button 
                                                 className='waiting-actions reject'
                                                 onClick = {() => {
-                                                    updateWaitingParticipant(participant.jid, false)
+                                                    updateWaitingParticipant([participant.jid], false)
                                                 }}
                                             >
                                                 {'Reject'}
@@ -138,7 +154,7 @@ function WaitingParticipantView(props) {
                                             <button 
                                                 className='waiting-actions admit'
                                                 onClick = {() => {
-                                                    updateWaitingParticipant(participant.jid, true)
+                                                    updateWaitingParticipant([participant.jid], true)
                                                 }}
                                             >
                                                 {'Admit'}

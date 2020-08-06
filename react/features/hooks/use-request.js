@@ -43,12 +43,14 @@ export default ({ url, method, body, onSuccess }) => {
         }
       }
 
+      const isGetMethod = method.toLowerCase() === 'post' || method.toLowerCase() === 'put'
+
       const response = await axios[method](url, 
-        method.toLowerCase() === 'post' ? 
+        isGetMethod ? 
         (typeof body === "function" ? body() : body) :
         setToken(tokenRequired)
         , 
-        method.toLowerCase() === 'post' ? setToken(tokenRequired) : false);
+        isGetMethod ? setToken(tokenRequired) : false);
 
       if (onSuccess) {
         onSuccess(response.data);
