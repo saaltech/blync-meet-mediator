@@ -140,9 +140,14 @@ function GuestPrejoin(props) {
                 await addWaitingParticipant(!_isUserSignedOut)
             }
 
-            // Check if meeting has started,
+            // Check if meeting has started, if not go to checkMeetingStatus(), else checkWaitingStatus()
             // and if waiting room was enabled, check if the current user is allowed to join
-            checkMeetingStatus();
+            if (conferenceStatus !== "STARTED" || enableWaitingRoom) {
+                setMeetingConnected(false); //useEffect would trigger post actions
+            }
+            else {
+                _joinConference();
+            }
         }
         else {
             setShowPasswordError("Incorrect room password")
@@ -157,7 +162,18 @@ function GuestPrejoin(props) {
     });
 
 
-    const [meetingStarted, setMeetingStarted] = useState(null)
+    const [meetingConnected, setMeetingConnected] = useState(null)
+    useEffect(() => {
+        if(meetingConnected === false) {
+            if (conferenceStatus !== "STARTED") {
+                checkMeetingStatus();
+            }
+            else if(enableWaitingRoom) {
+                checkWaitingStatus();
+            }
+        }
+    }, [meetingConnected])
+
     const [meetingWaiting, setMeetingWaiting] = useState(false)
 
     const [meetingStatusCheck, meetingStatusErrors] = useRequest({
@@ -261,7 +277,7 @@ function GuestPrejoin(props) {
             if (response) {
                 if(response.status === "APPROVED") {
                     intervalTimer && clearInterval(intervalTimer);
-                    setMeetingStarted(true)
+                    setMeetingConnected(true)
                     _joinConference()
                     return true;
                 }
@@ -283,7 +299,6 @@ function GuestPrejoin(props) {
     }
 
     const checkMeetingStatus = async () => {
-        setMeetingStarted(false);
         const decideToJoin = (response, intervalTimer) => {
             if (response && response.conferenceStatus === "STARTED") {
                 intervalTimer && clearInterval(intervalTimer);
@@ -291,7 +306,7 @@ function GuestPrejoin(props) {
                     setTimeout(() => checkWaitingStatus(), 5000);
                     return false;
                 }
-                setMeetingStarted(true)
+                setMeetingConnected(true)
                 _joinConference()
                 return true;
             }
@@ -392,7 +407,7 @@ function GuestPrejoin(props) {
             />
 
             {
-                meetingStarted !== null && meetingStarted == false ?
+                meetingConnected !== null && meetingConnected == false ?
                 <div className="waiting-display"> 
                     {
                         ( !participantRejected && !meetingEnded ) ?
