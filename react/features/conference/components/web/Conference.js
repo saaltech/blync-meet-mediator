@@ -45,7 +45,7 @@ import Labels from './Labels';
 import { default as Notice } from './Notice';
 import ParticipantsList from './ParticipantsList';
 import {
-    updateWaitingParticipantsList,
+    addWaitingParticipant,
     flushOutWaitingList
 } from '../../../base/waiting-participants';
 import SockJsClient from 'react-stomp';
@@ -266,7 +266,7 @@ class Conference extends AbstractConference<Props, *> {
                     this.props._isModerator &&
                     <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
                         onMessage={(participants) => {
-                            this.props.dispatch(updateWaitingParticipantsList(participants))
+                            this.props.dispatch(addWaitingParticipant(participants))
                         }}
                         ref={ (client) => { this.clientRef = client }} />
                 }

@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import { Avatar } from '../../../base/avatar';
+import { removeWaitingParticipants } from '../../../base/waiting-participants'
 import { translate } from '../../i18n';
 import { Container, TintedView } from '../../react';
 import { connect } from '../../redux';
@@ -23,7 +24,7 @@ import {
  */
 function WaitingParticipantView(props) {
 
-    const {
+    let {
             _waitingList = [],
             _conferenceId
         } = props;
@@ -34,7 +35,10 @@ function WaitingParticipantView(props) {
     const [ jids, setJids ] = useState([])
     useEffect(() => {
         async function call() {
-            await _updateWaitingParticipant(true)
+            let res = await _updateWaitingParticipant(true)
+
+            // update the waiting list in the store if update call succeeds
+            res && APP.store.dispatch(removeWaitingParticipants(jids))
         }
         jids.length > 0 && call();
     }, [jids]);
