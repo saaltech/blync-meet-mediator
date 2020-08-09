@@ -254,7 +254,9 @@ class Conference extends AbstractConference<Props, *> {
             _iAmSharingScreen,
             _sharer,
             _socketLink,
-            _participantsSocketTopic
+            _participantsSocketTopic,
+            _isModerator,
+            _isWaitingEnabled
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -264,7 +266,7 @@ class Conference extends AbstractConference<Props, *> {
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
                 {
-                    this.props._isModerator &&
+                    _isModerator && _isWaitingEnabled &&
                     <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
                         onMessage={(res) => {
                             if(res.action === 'REMOVE') {
@@ -297,7 +299,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 <ToolboxMoreItems />
                 <ToastNotificationSettings />
-                {this.props._isModerator && <SpeakersList />}
+                {_isModerator && <SpeakersList />}
 
                 { this.renderNotificationsContainer() }
 
@@ -409,7 +411,8 @@ function _mapStateToProps(state) {
         _isModerator: isModerator,
         _leavingMeeting: state['features/toolbox'].leaving,
         _socketLink: getConferenceSocketBaseLink(),
-        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)
+        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state),
+        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled
     };
 }
 

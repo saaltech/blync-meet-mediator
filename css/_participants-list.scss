@@ -11,7 +11,7 @@
         display: flex;
         align-items: center;
         background-color: #E7EFF4;
-        cursor: pointer;
+        //cursor: pointer;
 
         :first-child {
             flex: 1;
@@ -93,6 +93,10 @@
         background-color: #E7EFF4;
         cursor: pointer;
         border-bottom: 1px solid #ffffff;
+
+        &.no-action {
+            cursor: default;
+        }
 
         :first-child {
             flex: 1;
