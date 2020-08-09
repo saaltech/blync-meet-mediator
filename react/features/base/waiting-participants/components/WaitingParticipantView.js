@@ -26,6 +26,7 @@ function WaitingParticipantView(props) {
 
     let {
             _waitingList = [],
+            _isWaitingEnabled = false,
             _conferenceId
         } = props;
 
@@ -95,81 +96,88 @@ function WaitingParticipantView(props) {
     return (
         <>
             {
-                _waitingList.length > 0 &&
+                //_waitingList.length > 0 &&
+                _isWaitingEnabled &&
                 <div className = 'waiting-list'>
-                    <div className = 'waiting-list__header'
+                    <div className = {`waiting-list__header ${_waitingList.length == 0 ? 'no-action' : ''}`}
                         onClick = { toggleContainer }>
                         <div>
                             { `Waiting to join (${_waitingList.length}) ...` } 
                         </div>
-                        <div>
-                            <Icon
-                                size = { 24 }
-                                color = { '#3a3a3a' }
-                                src = { collapsed ? IconMenuDown : IconMenuUp } 
-                            />
-                        </div>
+                        {
+                            _waitingList.length > 0 &&
+                            <div>
+                                <Icon
+                                    size = { 24 }
+                                    color = { '#3a3a3a' }
+                                    src = { collapsed ? IconMenuDown : IconMenuUp } 
+                                />
+                            </div>
+                        }
                     </div>
-                    <div className = {`waiting-list__content ${collapsed ? 'collapsed' : ''}`}>
-                        <div className="waiting-actions__all">
-                            <button 
-                                className='waiting-actions__all__btn'
-                                onClick = {() => {
-                                    updateWaitingParticipant('all', true)
-                                }}
-                            >
-                                {'Admit All'}
-                            </button>
+                    {
+                        _waitingList.length > 0 &&
+                        <div className = {`waiting-list__content ${collapsed ? 'collapsed' : ''}`}>
+                            <div className="waiting-actions__all">
+                                <button 
+                                    className='waiting-actions__all__btn'
+                                    onClick = {() => {
+                                        updateWaitingParticipant('all', true)
+                                    }}
+                                >
+                                    {'Admit All'}
+                                </button>
 
-                            <button 
-                                className='waiting-actions__all__btn'
-                                onClick = {() => {
-                                    updateWaitingParticipant('all', false)
-                                }}
-                            >
-                                {'Reject All'}
-                            </button>
-                        </div>
-                        <ul className = {`participants-list__list`}>
-                            {
-                                _waitingList
-                                .map(participant => {
-                                    return (<li key = { participant.jid }>
-                                        <div className = 'participants-list__label'>
-                                            <Avatar size={ 32 } 
-                                                displayName={ participant.username } 
-                                                url={ participant.avatarUrl }/>
-                                            <div 
-                                                title = {participant.username}
-                                                className = 'participants-list__participant-name'>
-                                                {participant.username}
+                                <button 
+                                    className='waiting-actions__all__btn'
+                                    onClick = {() => {
+                                        updateWaitingParticipant('all', false)
+                                    }}
+                                >
+                                    {'Reject All'}
+                                </button>
+                            </div>
+                            <ul className = {`participants-list__list`}>
+                                {
+                                    _waitingList
+                                    .map(participant => {
+                                        return (<li key = { participant.jid }>
+                                            <div className = 'participants-list__label'>
+                                                <Avatar size={ 32 } 
+                                                    displayName={ participant.username } 
+                                                    url={ participant.avatarUrl }/>
+                                                <div 
+                                                    title = {participant.username}
+                                                    className = 'participants-list__participant-name'>
+                                                    {participant.username}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className = 'participants-list__controls'>
-                                            <button 
-                                                className='waiting-actions reject'
-                                                onClick = {() => {
-                                                    updateWaitingParticipant([participant.jid], false)
-                                                }}
-                                            >
-                                                {'Reject'}
-                                            </button>
+                                            <div className = 'participants-list__controls'>
+                                                <button 
+                                                    className='waiting-actions reject'
+                                                    onClick = {() => {
+                                                        updateWaitingParticipant([participant.jid], false)
+                                                    }}
+                                                >
+                                                    {'Reject'}
+                                                </button>
 
-                                            <button 
-                                                className='waiting-actions admit'
-                                                onClick = {() => {
-                                                    updateWaitingParticipant([participant.jid], true)
-                                                }}
-                                            >
-                                                {'Admit'}
-                                            </button>
-                                        </div>
-                                    </li>);
+                                                <button 
+                                                    className='waiting-actions admit'
+                                                    onClick = {() => {
+                                                        updateWaitingParticipant([participant.jid], true)
+                                                    }}
+                                                >
+                                                    {'Admit'}
+                                                </button>
+                                            </div>
+                                        </li>);
+                                    }
+                                    )
                                 }
-                                )
-                            }
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    }
                     
                 </div>
             }
@@ -180,6 +188,7 @@ function WaitingParticipantView(props) {
 function _mapStateToProps(state, ownProps) {
     return {
         _waitingList: state['features/base/waiting-participants'].participants,
+        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled,
         _conferenceId: state['features/app-auth'].meetingDetails?.meetingId
     };
 }

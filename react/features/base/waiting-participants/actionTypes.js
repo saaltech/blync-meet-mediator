@@ -15,11 +15,11 @@ export const SET_WAITING_PARTICIPANTS = 'SET_WAITING_PARTICIPANTS';
  * Create an action for when there is a new waiting participant.
  *
  * {
- *     type: ADD_WAITING_PARTICIPANT,
+ *     type: ADD_WAITING_PARTICIPANTS,
  *     participants: []
  * }
  */
-export const ADD_WAITING_PARTICIPANT = 'ADD_WAITING_PARTICIPANT'
+export const ADD_WAITING_PARTICIPANTS = 'ADD_WAITING_PARTICIPANTS'
 
 export const REMOVE_WAITING_PARTICIPANTS = 'REMOVE_WAITING_PARTICIPANTS'
 

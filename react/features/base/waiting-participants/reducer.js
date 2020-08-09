@@ -4,7 +4,7 @@ import { ReducerRegistry, set } from '../redux';
 
 import {
     SET_WAITING_PARTICIPANTS,
-    ADD_WAITING_PARTICIPANT,
+    ADD_WAITING_PARTICIPANTS,
     REMOVE_WAITING_PARTICIPANTS,
     CLEAR_WAITING_PARTICIPANTS_NOTIFICATION,
     FLUSH_OUT_WAITING_LIST
@@ -29,7 +29,7 @@ ReducerRegistry.register('features/base/waiting-participants', (state = DEFAULT_
                 participants: action.participants
             }
 
-        case ADD_WAITING_PARTICIPANT:
+        case ADD_WAITING_PARTICIPANTS:
             let returnState = {
                 ...state,
                 participants: [...state.participants]

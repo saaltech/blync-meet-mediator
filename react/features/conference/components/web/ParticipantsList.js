@@ -74,7 +74,8 @@ class ParticipantsList extends Component<Props> {
                 
                 <div className = 'participants-list'>
                     {
-                        this.props._waitingParticipantsLength > 0 &&
+                        //this.props._waitingParticipantsLength > 0 &&
+                        this.props._isWaitingEnabled && 
                         <div className = 'participants-list__header'>
                             <div>
                                 { `Active (${(this.props.participants || []).length})` } 
@@ -147,6 +148,7 @@ function mapStateToProps(state) {
         _tracks: tracks,
         _localParticipant: localParticipant,
         _isModerator: isModerator,
+        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled,
         _waitingParticipantsLength: state['features/base/waiting-participants'].participants?.length || 0
     };
 }

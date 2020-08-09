@@ -219,7 +219,8 @@ function GuestPrejoin(props) {
                 meetingId : data.conferenceId,
                 meetingName : data.conferenceName,
                 meetingFrom : data.scheduledFrom,
-                meetingTo : data.scheduledTo
+                meetingTo : data.scheduledTo,
+                isWaitingEnabled: data.isWaitingEnabled
             })
         );
     }

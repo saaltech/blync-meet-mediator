@@ -148,7 +148,7 @@ function HostPrejoin(props) {
             meetingFrom: meetNow ? '' : meetingFrom,
             meetingTo: meetNow ? '' : meetingTo,
             meetNow,
-            enableWaitingRoom
+            isWaitingEnabled: enableWaitingRoom
         }
         ));
 
