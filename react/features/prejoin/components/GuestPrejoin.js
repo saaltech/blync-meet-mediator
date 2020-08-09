@@ -29,6 +29,11 @@ import {
     setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
 } from '../actions';
 
+import { 
+    getConferenceSocketBaseLink,
+    getWaitingParticipantsSocketTopic,
+    getAppSocketEndPoint } from '../../conference/functions';
+
 
 import { useState, useEffect } from 'react';
 import JoinMeetingForm from './JoinMeetingForm';
@@ -39,8 +44,10 @@ import {
 } from '../functions';
 
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
+import SockJsClient from 'react-stomp';
 
 function GuestPrejoin(props) {
+    let clientRef;
     const [ exiting, setExiting ] = useState(false);
     const [disableJoin, setDisableJoin] = useState(true);
     const [meetingId, setMeetingId] = useState(props.meetingId);
@@ -271,31 +278,28 @@ function GuestPrejoin(props) {
         }
     }
 
-    const checkWaitingStatus = async () => {
-        setMeetingWaiting(true);
-        const decideToJoin = (response, intervalTimer) => {
-            if (response) {
-                if(response.status === "APPROVED") {
-                    intervalTimer && clearInterval(intervalTimer);
-                    setMeetingConnected(true)
-                    _joinConference()
-                    return true;
-                }
-                else if(response.status === "REJECTED") {
-                    intervalTimer && clearInterval(intervalTimer);
-                    setParticipantRejected(true);
-                    return true;
-                }
+    const updateWaitingStatus = (participant) => {
+        if (participant) {
+            if(participant.status === "APPROVED") {
+                setMeetingConnected(true)
+                _joinConference()
+                return true;
             }
-            else {
-                intervalTimer && clearInterval(intervalTimer);
+            else if(participant.status === "REJECTED") {
+                setParticipantRejected(true);
+                return true;
+            }
+            else if(participant.status === "UNRESOLVED"){
                 setMeetingEnded(true);
                 return true;
             }
         }
+    }
 
-        startPoll(decideToJoin, waitingStatusCheck)
+    const checkWaitingStatus = async () => {
+        setMeetingWaiting(true);
         
+        // Once the above state meetingWaiting is set the socket is connected for this user
     }
 
     const checkMeetingStatus = async () => {
@@ -336,6 +340,7 @@ function GuestPrejoin(props) {
     }
 
     const _joinConference = () => {
+        closeSocketConnection();
         APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
         joinConference();
     }
@@ -353,6 +358,12 @@ function GuestPrejoin(props) {
             props.showTrackPreviews(false)
         }
     })
+
+    const closeSocketConnection = () => {
+        if(clientRef && clientRef.client.connected) {
+            clientRef.disconnect()
+        }
+    }
 
     return ( (fetchUnauthErrors || fetchErrors) ?  
         <div className={`hostPrejoin`}> <div className="invalid-meeting-code">{'Invalid meeting code'} </div></div> :
@@ -415,7 +426,17 @@ function GuestPrejoin(props) {
                             <h2> 
                             {
                                 meetingWaiting ? 
-                                'Please wait, the meeting host will let you in soon.' :
+                                <>
+                                    {
+                                        <SockJsClient url={props._socketLink} topics={[props._participantsSocketTopic + '/' + _jid.split("/")[0] ]}
+                                            onMessage={(participant) => {
+                                                updateWaitingStatus(participant)
+                                            }}
+                                            ref={ (client) => { clientRef = client }} />
+                                    }
+                                    {'Please wait, the meeting host will let you in soon.'} 
+                                </>
+                                :
                                 'Please wait for the host to join the meeting...'
                             }
                             </h2>
@@ -508,7 +529,9 @@ function mapStateToProps(state): Object {
         _isUserSignedOut: state['features/app-auth'].isUserSignedOut,
         _user: state['features/app-auth'].user,
         _displayName: getDisplayName(state),
-        _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid
+        _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
+        _socketLink: getConferenceSocketBaseLink(),
+        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)
     };
 }
 

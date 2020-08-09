@@ -56,7 +56,7 @@ export function getAppSocketEndPoint() {
 }
 
 export function getConferenceSocketBaseLink() {
-    return `https://${APP.connection?.options?.hosts?.domain}/`+
+    return `${window.location.origin}/`+ //  `https://dev-blync.saal.ai/`+
         `${config.conferenceManager}/wss`
 }
 

@@ -1,5 +1,7 @@
 import {
-    WAITING_PARTICIPANTS,
+    SET_WAITING_PARTICIPANTS,
+    ADD_WAITING_PARTICIPANT,
+    REMOVE_WAITING_PARTICIPANTS,
     CLEAR_WAITING_PARTICIPANTS_NOTIFICATION,
     FLUSH_OUT_WAITING_LIST
 } from './actionTypes';
@@ -9,16 +11,39 @@ import {
  *
  * @param {string} participants - Waiting participants array.
  * @returns {{
- *     type: WAITING_PARTICIPANTS,
+ *     type: SET_WAITING_PARTICIPANTS,
  *     participants: [{
  *     }]
  * }}
  */
-export function updateWaitingParticipantsList(participants = []) {
+/*export function updateWaitingParticipantsList(participants = []) {
     return {
-        type: WAITING_PARTICIPANTS,
+        type: SET_WAITING_PARTICIPANTS,
         participants
     };
+}*/
+
+/**
+ * Create an action to add a participant to waiting participants list.
+ *
+ * @param {string} participant - Waiting participant.
+ * @returns {{
+ *     type: ADD_WAITING_PARTICIPANT,
+ *     participant: {}
+ * }}
+ */
+export function addWaitingParticipant(participants = []) {
+    return {
+        type: ADD_WAITING_PARTICIPANT,
+        participants
+    };
+}
+
+export function removeWaitingParticipants(jids = []) {
+    return {
+        type: REMOVE_WAITING_PARTICIPANTS,
+        jids
+    }
 }
 
 export function clearWaitingNotification() {
