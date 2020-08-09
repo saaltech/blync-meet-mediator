@@ -12,7 +12,6 @@
     z-index: $sideToolbarContainerZ;
     display: none;
 
-
     &--visible {
         display: flex;
     }
@@ -46,9 +45,15 @@
     &__body {
         flex: 1;
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
         padding: 35px 38px;
+        
+        &.flex-column {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
     }
 
     &__body--no-padding {

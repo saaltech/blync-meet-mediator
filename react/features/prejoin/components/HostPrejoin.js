@@ -34,6 +34,7 @@ function HostPrejoin(props) {
     const [ meetingPassword, setMeetingPassword ] = useState('');
     const [ meetingFrom, setMeetingFrom ] = useState('');
     const [ meetingTo, setMeetingTo ] = useState(null);
+    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
     const { isMeetNow } = props;
     const [ shareable, setShareable ] = useState(false);
     const { joinConference } = props;
@@ -52,7 +53,8 @@ function HostPrejoin(props) {
             'conferenceName': meetingName,
             'conferenceSecret': meetingPassword,
             'scheduledFrom': meetNow ? '' : meetingFrom, // "2020-07-08T09:34:00.567Z",
-            'scheduledTo': meetNow ? '' : meetingTo // "2020-07-08T09:34:00.567Z"
+            'scheduledTo': meetNow ? '' : meetingTo, // "2020-07-08T09:34:00.567Z"
+            'isWaitingEnabled' : enableWaitingRoom
         };
     };
 
@@ -93,6 +95,7 @@ function HostPrejoin(props) {
         setMeetingPassword(data.conferenceSecret);
         setMeetingFrom(data.scheduledFrom);
         setMeetingTo(data.scheduledTo);
+        setEnableWaitingRoom(data.isWaitingEnabled);
     };
 
     const setMeetNowAndUpdatePage = value => {
@@ -144,7 +147,8 @@ function HostPrejoin(props) {
             meetingPassword,
             meetingFrom: meetNow ? '' : meetingFrom,
             meetingTo: meetNow ? '' : meetingTo,
-            meetNow
+            meetNow,
+            enableWaitingRoom
         }
         ));
 
@@ -226,6 +230,10 @@ function HostPrejoin(props) {
                     meetingName = {{
                         meetingName,
                         setMeetingName
+                    }}
+                    enableWaitingRoom = {{
+                        enableWaitingRoom,
+                        setEnableWaitingRoom
                     }}
                     isPrivate = {{
                         isPrivate,

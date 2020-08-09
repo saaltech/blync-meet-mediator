@@ -6,6 +6,7 @@ import {
     showWarningNotification
 } from '../notifications';
 import { getOverlayToRender } from '../overlay';
+import { config } from '../../config'
 
 /**
  * Shows the suboptimal experience notification if needed.
@@ -48,4 +49,17 @@ export function shouldDisplayNotifications(stateful) {
     return areThereNotifications(state)
             && !isAnyOverlayVisible
             && !calleeInfoVisible;
+}
+
+export function getAppSocketEndPoint() {
+    return `/app`
+}
+
+export function getConferenceSocketBaseLink() {
+    return `${window.location.origin}/`+ //  `https://dev-blync.saal.ai/`+
+        `${config.conferenceManager}/wss`
+}
+
+export function getWaitingParticipantsSocketTopic(state = {}) {
+    return `/conference/${state['features/app-auth']?.meetingDetails?.meetingId}/participants`
 }

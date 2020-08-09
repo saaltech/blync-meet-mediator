@@ -15,6 +15,8 @@ config.conferenceEP = "/auth/api/v1/conferences"
 config.unauthConferenceEP = "/unauth/api/v1/conferences"
 config.verifySecretEP = "/unauth/api/v1/conferences/validatesecret"
 config.jidEP = "/auth/api/v1/jid"
+config.unauthParticipantsEP = "/unauth/api/v1/participants"
+config.authParticipantsEP = "/auth/api/v1/participants"
 
 // IRP Endpoints
 config.signInEP = '/api/users/sign-in'

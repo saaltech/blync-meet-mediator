@@ -30,7 +30,10 @@ import {
     leavingMeeting
 } from '../../../toolbox/actions';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
-import { maybeShowSuboptimalExperienceNotification } from '../../functions';
+import { maybeShowSuboptimalExperienceNotification, 
+    getConferenceSocketBaseLink,
+    getWaitingParticipantsSocketTopic,
+    getAppSocketEndPoint } from '../../functions';
 import {
     AbstractConference,
     abstractMapStateToProps
@@ -41,7 +44,11 @@ import InviteParticipants from './InviteParticipants';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 import ParticipantsList from './ParticipantsList';
-
+import {
+    addWaitingParticipant,
+    flushOutWaitingList
+} from '../../../base/waiting-participants';
+import SockJsClient from 'react-stomp';
 
 declare var APP: Object;
 declare var config: Object;
@@ -135,6 +142,10 @@ class Conference extends AbstractConference<Props, *> {
                 trailing: false
             });
 
+        this.state = {
+            waitingParticipantsFetchDone: false
+        }
+
         // Bind event handler so it is only bound once for every instance.
         this._onFullScreenChange = this._onFullScreenChange.bind(this);
     }
@@ -145,8 +156,12 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentDidMount() {
+        this.closeSocketConnection();
+        this.props._isModerator && this.props.dispatch(flushOutWaitingList());
+
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
         APP.store.dispatch(leavingMeeting(false));
+
         this._start();
     }
 
@@ -157,6 +172,7 @@ class Conference extends AbstractConference<Props, *> {
      * returns {void}
      */
     componentDidUpdate(prevProps) {
+        this.sendMessageWaitingParticipants()
         if (this.props._shouldDisplayTileView
             === prevProps._shouldDisplayTileView) {
             return;
@@ -176,12 +192,44 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentWillUnmount() {
+        this.closeSocketConnection();
+
+        this.setState({ waitingParticipantsFetchDone: false })
+
         APP.UI.unbindEvents();
 
         FULL_SCREEN_EVENTS.forEach(name =>
             document.removeEventListener(name, this._onFullScreenChange));
 
         APP.conference.isJoined() && this.props.dispatch(disconnect());
+
+        
+    }
+
+    /**
+     * send message over socket to fetch the waiting participants list
+     *
+     */
+    sendMessageWaitingParticipants() {
+        
+        if(this.props._isModerator && 
+            !this.state.waitingParticipantsFetchDone &&
+            this.clientRef && this.clientRef.client.connected) {
+                this.setState({ waitingParticipantsFetchDone: true })
+                this.clientRef.sendMessage(`${getAppSocketEndPoint() + this.props._participantsSocketTopic}`, 
+                    JSON.stringify({ "status": "PENDING"}));
+        }
+            
+    }
+
+    /**
+     * Close the existing socket connection
+     *
+     */
+    closeSocketConnection() {
+        if(this.clientRef && this.clientRef.client.connected) {
+            this.clientRef.disconnect()
+        }
     }
 
     /**
@@ -203,7 +251,9 @@ class Conference extends AbstractConference<Props, *> {
             _leavingMeeting,
             _otherSharers,
             _iAmSharingScreen,
-            _sharer
+            _sharer,
+            _socketLink,
+            _participantsSocketTopic
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -212,6 +262,15 @@ class Conference extends AbstractConference<Props, *> {
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
+                {
+                    this.props._isModerator &&
+                    <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
+                        onMessage={(participants) => {
+                            this.props.dispatch(addWaitingParticipant(participants))
+                        }}
+                        ref={ (client) => { this.clientRef = client }} />
+                }
+                
 
                 {
                     _leavingMeeting
@@ -341,7 +400,9 @@ function _mapStateToProps(state) {
         _showPrejoin: isPrejoinPageVisible(state),
         _interimPrejoin: isInterimPrejoinPageVisible(state),
         _isModerator: isModerator,
-        _leavingMeeting: state['features/toolbox'].leaving
+        _leavingMeeting: state['features/toolbox'].leaving,
+        _socketLink: getConferenceSocketBaseLink(),
+        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)
     };
 }
 
