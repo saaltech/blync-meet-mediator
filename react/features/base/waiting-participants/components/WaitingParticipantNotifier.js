@@ -31,13 +31,12 @@ class WaitingParticipantNotifier extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        console.log("this.props._count: ", this.props._count)
         return (
             <span className = 'badge-round'>
                 { /* Setting the text color to be  the same as the background. 
                     This might be temporary. We might opt to show the count again.*/}
                 <span style={{ color : '#F15946'}}>
-                    { !this.props._participantsListOpen && (this.props._count || null) }
+                    { this.props._count || null }
                 </span>
             </span>
         );
