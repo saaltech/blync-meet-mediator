@@ -47,9 +47,9 @@ class ParticipantsList extends Component<Props> {
         if (!this.props.participantsListOpen) {
             return null;
         }
-        else {
-            APP.store.dispatch(clearWaitingNotification())
-        }
+        // else {
+        //     APP.store.dispatch(clearWaitingNotification())
+        // }
 
         const activeParticipants = (this.props.participants || []).length
 
