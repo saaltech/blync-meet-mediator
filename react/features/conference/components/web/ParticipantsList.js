@@ -70,11 +70,16 @@ class ParticipantsList extends Component<Props> {
                     </button>}
                 </div> }>
                 
-                <WaitingParticipantView />
+                { 
+                    this.props._isModerator &&
+                    <WaitingParticipantView />
+                }
+                
                 
                 <div className = 'participants-list'>
                     {
                         //this.props._waitingParticipantsLength > 0 &&
+                        this.props._isModerator && 
                         this.props._isWaitingEnabled && 
                         <div className = 'participants-list__header'>
                             <div>
