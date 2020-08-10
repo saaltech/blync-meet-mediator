@@ -26,6 +26,18 @@
         overflow: scroll;
     }
 
+    &__mask {
+        position: absolute;
+        height: 60px;
+        width: 100%;
+        left: 0;
+        background-color: rgba(255,255,255,.5);
+
+        &__hidden {
+            display: none;
+        }
+    }
+
     &__list li {
         display: flex;
         align-items: center;
@@ -176,6 +188,7 @@
             background-color: rgba(241, 90, 70, 0.21);
             color: rgb(241, 90, 70);
             margin-right: 5px;
+            margin-left: 0px;
         }
 
         &.admit {

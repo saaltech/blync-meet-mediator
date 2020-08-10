@@ -39,7 +39,8 @@ function WaitingParticipantView(props) {
             let res = await _updateWaitingParticipant(true)
 
             // update the waiting list in the store if update call succeeds
-            res && APP.store.dispatch(removeWaitingParticipants(jids))
+            res && APP.store.dispatch(removeWaitingParticipants(jids)) && setJids([])
+             
         }
         jids.length > 0 && call();
     }, [jids]);
@@ -118,30 +119,36 @@ function WaitingParticipantView(props) {
                     {
                         _waitingList.length > 0 &&
                         <div className = {`waiting-list__content ${collapsed ? 'collapsed' : ''}`}>
-                            <div className="waiting-actions__all">
-                                <button 
-                                    className='waiting-actions__all__btn'
-                                    onClick = {() => {
-                                        updateWaitingParticipant('all', true)
-                                    }}
-                                >
-                                    {'Admit All'}
-                                </button>
+                            {
+                                _waitingList.length > 1 &&
+                                <div className="waiting-actions__all">
+                                    <div className={`participants-list__mask${jids.length == 0 ? '__hidden': ''}`}></div>
 
-                                <button 
-                                    className='waiting-actions__all__btn'
-                                    onClick = {() => {
-                                        updateWaitingParticipant('all', false)
-                                    }}
-                                >
-                                    {'Reject All'}
-                                </button>
-                            </div>
+                                    <button 
+                                        className='waiting-actions__all__btn waiting-actions reject'
+                                        onClick = {() => {
+                                            updateWaitingParticipant('all', false)
+                                        }}
+                                    >
+                                        {'Reject All'}
+                                    </button>
+
+                                    <button 
+                                        className='waiting-actions__all__btn waiting-actions admit'
+                                        onClick = {() => {
+                                            updateWaitingParticipant('all', true)
+                                        }}
+                                    >
+                                        {'Admit All'}
+                                    </button>
+                                </div>
+                            }
                             <ul className = {`participants-list__list`}>
                                 {
                                     _waitingList
                                     .map(participant => {
                                         return (<li key = { participant.jid }>
+                                            <div className={`participants-list__mask${!jids.includes(participant.jid) ? '__hidden': ''}`}></div>
                                             <div className = 'participants-list__label'>
                                                 <Avatar size={ 32 } 
                                                     displayName={ participant.username } 
