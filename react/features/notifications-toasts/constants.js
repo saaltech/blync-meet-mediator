@@ -24,3 +24,5 @@ export const MESSAGE_TYPE_LOCAL = 'local';
  * The {@code messageType} of remote messages.
  */
 export const MESSAGE_TYPE_REMOTE = 'remote';
+
+export const WAITING_TO_JOIN = 'WAITING_TO_JOIN'
