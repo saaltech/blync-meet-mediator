@@ -50,6 +50,7 @@ import {
     removeWaitingParticipants
 } from '../../../base/waiting-participants';
 import SockJsClient from 'react-stomp';
+import { showNotification } from '../../../notifications-toasts';
 
 declare var APP: Object;
 declare var config: Object;
@@ -270,10 +271,17 @@ class Conference extends AbstractConference<Props, *> {
                     <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
                         onMessage={(res) => {
                             if(res.action === 'REMOVE') {
-                                this.props.dispatch(removeWaitingParticipants(res.participants.map(p => p.jid)))
+                                APP.store.dispatch(removeWaitingParticipants(res.participants.map(p => p.jid)))
                             }
                             else {
-                                this.props.dispatch(addWaitingParticipants(res.participants))
+                                APP.store.dispatch(addWaitingParticipants(res.participants))
+                                res.participants && res.participants.forEach(p => {
+                                    APP.store.dispatch(showNotification({
+                                        userName: p.username,
+                                        type: 'WAITING_TO_JOIN'
+                                    }));
+                                })
+                                
                             }
                             
                         }}

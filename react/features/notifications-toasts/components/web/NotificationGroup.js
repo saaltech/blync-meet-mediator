@@ -11,6 +11,7 @@ import { hideNotification } from '../../actions';
 
 import ChatMessage from './ChatMessage';
 import Expire from './Expire';
+import { WAITING_TO_JOIN } from '../../constants'
 
 type Props = {
 
@@ -63,6 +64,9 @@ class ToastGroup extends Component<Props> {
         case 'RAISED_HAND':
             return `${userName} is raising hand`;
 
+        case WAITING_TO_JOIN:
+            return `${userName} is waiting to join`;
+
         default:
             return truncate(text, {
                 length: 60
@@ -82,7 +86,7 @@ class ToastGroup extends Component<Props> {
             return null;
         }
         const message = this._getMessage(notification);
-        const { userId, type } = notification;
+        const { userId = "", type, userName = "" } = notification;
 
 
         return (
@@ -90,7 +94,7 @@ class ToastGroup extends Component<Props> {
                 hideNotification = { () => this.props._hideNotification(notification.id) }
                 timer = { 6000 }>
                 <div className = { `chat-preview-group ${className} chat-preview-group--${String(type).toLowerCase()}` }>
-                    <Avatar participantId = { userId } />
+                    <Avatar participantId = { userId } displayName = { userName }/>
                     <div className = 'chat-preview-group__container'>
                         <ChatMessage
                             key = { notification.id }

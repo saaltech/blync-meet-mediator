@@ -11,6 +11,8 @@ import AbstractChatMessage, {
     type Props
 } from '../AbstractChatMessage';
 
+import { WAITING_TO_JOIN } from '../../constants'
+
 // import { MESSAGE_TYPE_LOCAL } from '../../constants';
 // import PrivateMessageButton from '../PrivateMessageButton';
 
@@ -47,7 +49,8 @@ class ChatMessage extends AbstractChatMessage<Props> {
                             <div className = 'usermessage'>
                                 { processedMessage }
                                 {
-                                    this.props.message.type !== 'default'
+                                    (this.props.message.type !== 'default' && 
+                                    this.props.message.type !== WAITING_TO_JOIN)
                                  && <Icon src = { this._getMessageIcon(this.props.message) } />
                                 }
                             </div>
@@ -75,17 +78,15 @@ class ChatMessage extends AbstractChatMessage<Props> {
     _getMessageIcon(message: Object) {
 
         switch (message.type) {
-        case 'PARTICIPANT_JOINED':
-            return IconUserCheck;
+            case 'PARTICIPANT_JOINED':
+                return IconUserCheck;
 
+            case 'PARTICIPANT_LEFT':
+                return IconUserCancel;
 
-        case 'PARTICIPANT_LEFT':
-            return IconUserCancel;
-
-        case 'RAISED_HAND':
-            return IconRaisedHand;
+            case 'RAISED_HAND':
+                return IconRaisedHand;
         }
-
     }
 
     /**
