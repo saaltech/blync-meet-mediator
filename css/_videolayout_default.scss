@@ -380,10 +380,15 @@
 }
 
 .raisehandindicator {
-  background: $raiseHandBg;
+  background: $raiseHandBg !important;
 
   .jitsi-icon svg, .jitsi-icon svg path {
     fill: #fff;
+  }
+
+  .jitsi-icon svg {
+      height: 10px !important;
+      width: 10px !important;
   }
 }
 
