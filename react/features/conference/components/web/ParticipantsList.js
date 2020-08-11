@@ -10,7 +10,7 @@ import {
     IconAdd,
     IconNoRaisedHand,
     IconCameraDisabled,
-    IconMicrophoneEmpty,
+    IconMicDisabled,
     IconSpeaking
 } from '../../../base/icons';
 import { MEDIA_TYPE } from '../../../base/media';
@@ -107,6 +107,7 @@ class ParticipantsList extends Component<Props> {
                                     </div>
                                     <div className = 'participants-list__controls'>
                                         <button><Icon
+                                            className = { participant.raisedHand ? 'hand-raised' : '' }
                                             size = { 18 }
                                             src = { participant.raisedHand ? IconRaisedHand : IconNoRaisedHand } /></button>
                                         <button>
@@ -115,7 +116,7 @@ class ParticipantsList extends Component<Props> {
                                                 src = { IconSpeaking } />}
                                             {!participant.dominantSpeaker && <Icon
                                                 size = { 18 }
-                                                src = { !audioTrack || (audioTrack || {}).muted ? IconMicrophoneEmpty : IconMicrophone } />}</button>
+                                                src = { !audioTrack || (audioTrack || {}).muted ? IconMicDisabled : IconMicrophone } />}</button>
                                         <button>
                                             <Icon
                                                 size = { 18 }

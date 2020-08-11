@@ -92,6 +92,12 @@
             fill: #444;
         }
     }
+
+    .hand-raised {
+        svg, svg path {
+            fill: #00C062;
+        }
+    }
 }
 
 .waiting-list {
@@ -104,7 +110,7 @@
         align-items: center;
         background-color: #E7EFF4;
         cursor: pointer;
-        border-bottom: 1px solid #ffffff;
+        border-bottom: 5px solid #ffffff;
 
         &.no-action {
             cursor: default;
