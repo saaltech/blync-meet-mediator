@@ -1,6 +1,7 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
+import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
@@ -168,6 +169,7 @@ const VideoLayout = {
 
             const track = tracks.find(t => t.participantId === participantId);
 
+
             if (!track) {
                 return;
             }
@@ -176,12 +178,24 @@ const VideoLayout = {
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
                 APP.UI.setVideoMuted(participantId, false);
 
+
+                const clonedTrack = this.stoppedStreams.find(t => t.participantId !== track.participantId);
+
+                track.jitsiTrack.stream.addTrack(clonedTrack);
+
+
+                this.stoppedStreams = this.stoppedStreams.filter(t => t.participantId !== track.participantId);
+
                 return;
             }
 
             APP.UI.setVideoMuted(participantId, true);
+            track.jitsiTrack.track.stop();
+            this.stoppedStreams.push(cloneDeep(track));
         });
     },
+
+    stoppedStreams: [],
 
     changeLocalVideo(stream) {
         const localId = getLocalParticipant().id;
