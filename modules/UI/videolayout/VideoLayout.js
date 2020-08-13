@@ -181,6 +181,10 @@ const VideoLayout = {
 
                 const clonedTrack = this.stoppedStreams.find(t => t.participantId !== track.participantId);
 
+                if(!clonedTrack) {
+                    return;
+                }
+                
                 track.jitsiTrack.stream.addTrack(clonedTrack.jitsiTrack.track);
 
 
@@ -190,8 +194,9 @@ const VideoLayout = {
             }
 
             APP.UI.setVideoMuted(participantId, true);
-            track.jitsiTrack.track.stop();
             this.stoppedStreams.push(cloneDeep(track));
+            track.jitsiTrack.track.stop();
+            track.jitsiTrack.stream.removeTrack(track.jitsiTrack.track);
         });
     },
 
