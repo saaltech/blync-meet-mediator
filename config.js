@@ -359,7 +359,7 @@ var config = {
     // If third party requests are disabled, no other server will be contacted.
     // This means avatars will be locally generated and callstats integration
     // will not function.
-    disableThirdPartyRequests: true,
+    disableThirdPartyRequests: false,
 
 
     // Peer-To-Peer mode: used (if enabled) when there are just 2 participants.
@@ -407,7 +407,7 @@ var config = {
 
     analytics: {
         // The Google Analytics Tracking ID:
-        // googleAnalyticsTrackingId: 'your-tracking-id-UA-123456-1'
+        googleAnalyticsTrackingId: 'UA-155257911-1',
 
         // Matomo configuration:
         // matomoEndpoint: 'https://your-matomo-endpoint/',
@@ -417,10 +417,10 @@ var config = {
         // amplitudeAPPKey: '<APP_KEY>'
 
         // Array of script URLs to load as lib-jitsi-meet "analytics handlers".
-        // scriptURLs: [
-        //      "libs/analytics-ga.min.js", // google-analytics
+         scriptURLs: [
+              "libs/analytics-ga.min.js", // google-analytics
         //      "https://example.com/my-custom-analytics.js"
-        // ],
+         ],
     },
 
     // Information about the jitsi-meet instance we are connecting to, including
