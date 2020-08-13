@@ -10,7 +10,7 @@ import {
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
-import { getTrackByMediaTypeAndParticipant } from '../../../react/features/base/tracks';
+import { getTrackByMediaTypeAndParticipant, trackAdded, trackRemoved } from '../../../react/features/base/tracks';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -150,6 +150,7 @@ const VideoLayout = {
             return;
         }
 
+
         entries.forEach(entry => {
             const containerId = entry.target.id;
 
@@ -167,40 +168,39 @@ const VideoLayout = {
                 participantId = participantParts[1];
             }
 
-            const track = tracks.find(t => t.participantId === participantId);
+            const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
 
 
             if (!track) {
                 return;
             }
 
+            const recoveredTrack = this.clonedTracks[track.participantId];
+
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                APP.UI.setVideoMuted(participantId, false);
-
-
-                const clonedTrack = this.stoppedStreams.find(t => t.participantId !== track.participantId);
-
-                if(!clonedTrack) {
+                if (!recoveredTrack) {
                     return;
                 }
-                
-                track.jitsiTrack.stream.addTrack(clonedTrack.jitsiTrack.track);
-
-
-                this.stoppedStreams = this.stoppedStreams.filter(t => t.participantId !== track.participantId);
+                APP.UI.setVideoMuted(participantId, false);
+                track.jitsiTrack.stream.addTrack(recoveredTrack);
 
                 return;
             }
 
+            const streamTrack = track.jitsiTrack.stream.getTracks()[0];
+            const cacheTrack = streamTrack.clone();
+
             APP.UI.setVideoMuted(participantId, true);
-            this.stoppedStreams.push(cloneDeep(track));
-            track.jitsiTrack.track.stop();
-            track.jitsiTrack.stream.removeTrack(track.jitsiTrack.track);
+            streamTrack.stop();
+            track.jitsiTrack.stream.removeTrack(streamTrack);
+            this.clonedTracks[participantId] = cacheTrack;
+
         });
     },
 
     stoppedStreams: [],
+    clonedTracks: {},
 
     changeLocalVideo(stream) {
         const localId = getLocalParticipant().id;
