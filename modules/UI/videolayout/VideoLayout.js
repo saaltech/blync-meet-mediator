@@ -181,7 +181,7 @@ const VideoLayout = {
 
                 const clonedTrack = this.stoppedStreams.find(t => t.participantId !== track.participantId);
 
-                track.jitsiTrack.stream.addTrack(clonedTrack);
+                track.jitsiTrack.stream.addTrack(clonedTrack.jitsiTrack.track);
 
 
                 this.stoppedStreams = this.stoppedStreams.filter(t => t.participantId !== track.participantId);
