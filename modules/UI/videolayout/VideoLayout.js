@@ -1,7 +1,6 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
-import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
@@ -10,7 +9,7 @@ import {
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
-import { getTrackByMediaTypeAndParticipant, trackAdded, trackRemoved } from '../../../react/features/base/tracks';
+import { getTrackByMediaTypeAndParticipant } from '../../../react/features/base/tracks';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
