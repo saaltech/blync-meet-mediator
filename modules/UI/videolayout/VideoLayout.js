@@ -1,6 +1,7 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
+import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
@@ -156,32 +157,26 @@ const VideoLayout = {
             let participantId = null;
 
             if (containerId === 'localVideoTileViewContainer') {
-                participantId = getLocalParticipant().id;
-            } else {
-                const participantParts = entry.target.id.split('participant_');
-
-                if (participantParts.length < 2) {
-                    return;
-                }
-
-                participantId = participantParts[1];
+                return;
             }
+            const participantParts = entry.target.id.split('participant_');
+
+            if (participantParts.length < 2) {
+                return;
+            }
+
+            participantId = participantParts[1];
+
 
             const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
 
 
-            if (!track) {
+            if (!track || track.muted) {
                 return;
             }
 
-            // const recoveredTrack = this.clonedTracks[track.participantId];
-
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                // if (!recoveredTrack) {
-                //     return;
-                // }
-
                 APP.UI.setVideoMuted(participantId, false);
                 track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
 
@@ -195,7 +190,6 @@ const VideoLayout = {
             streamTrack.stop();
             track.jitsiTrack.stream.removeTrack(streamTrack);
 
-            // this.clonedTracks[participantId] = cacheTrack;
             track.jitsiTrack.track = cacheTrack;
             APP.store.dispatch(addClonedTrack(track));
 
