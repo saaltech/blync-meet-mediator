@@ -502,6 +502,24 @@ export function trackVideoTypeChanged(track, videoType) {
 }
 
 /**
+ * Create an action for when track is cloned.
+ *
+ * @param {(JitsiLocalTrack|JitsiRemoteTrack)} track - JitsiTrack instance.
+ * @returns {{
+    *     type: TRACK_UPDATED,
+    *     track: Track
+    * }}
+*/
+export function addClonedTrack(track) {
+    return {
+        type: TRACK_UPDATED,
+        track: {
+            jitsiTrack: track
+        }
+    };
+}
+
+/**
  * Signals passed tracks to be added.
  *
  * @param {(JitsiLocalTrack|JitsiRemoteTrack)[]} tracks - List of tracks.
