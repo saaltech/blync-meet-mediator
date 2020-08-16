@@ -72,7 +72,7 @@ const getIntersectionObserverOptions = () => {
     return {
         root: document.getElementById('remoteVideos'),
         rootMargin: '0px',
-        threshold: 0.4
+        threshold: 0.15
     };
 };
 
@@ -184,6 +184,9 @@ const VideoLayout = {
             }
 
             const streamTrack = track.jitsiTrack.stream.getTracks()[0];
+            if(!streamTrack) {
+                return;
+            }
             const cacheTrack = streamTrack.clone();
 
             APP.UI.setVideoMuted(participantId, true);
@@ -191,7 +194,6 @@ const VideoLayout = {
             track.jitsiTrack.stream.removeTrack(streamTrack);
 
             track.jitsiTrack.track = cacheTrack;
-
             APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
         });
