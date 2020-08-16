@@ -191,7 +191,8 @@ const VideoLayout = {
             track.jitsiTrack.stream.removeTrack(streamTrack);
 
             track.jitsiTrack.track = cacheTrack;
-            APP.store.dispatch(addClonedTrack(track));
+
+            APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
         });
     },
