@@ -9,7 +9,7 @@ import {
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
-import { getTrackByMediaTypeAndParticipant } from '../../../react/features/base/tracks';
+import { getTrackByMediaTypeAndParticipant, addClonedTrack } from '../../../react/features/base/tracks';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -174,15 +174,16 @@ const VideoLayout = {
                 return;
             }
 
-            const recoveredTrack = this.clonedTracks[track.participantId];
+            // const recoveredTrack = this.clonedTracks[track.participantId];
 
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                if (!recoveredTrack) {
-                    return;
-                }
+                // if (!recoveredTrack) {
+                //     return;
+                // }
+
                 APP.UI.setVideoMuted(participantId, false);
-                track.jitsiTrack.stream.addTrack(recoveredTrack);
+                track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
 
                 return;
             }
@@ -193,7 +194,10 @@ const VideoLayout = {
             APP.UI.setVideoMuted(participantId, true);
             streamTrack.stop();
             track.jitsiTrack.stream.removeTrack(streamTrack);
-            this.clonedTracks[participantId] = cacheTrack;
+
+            // this.clonedTracks[participantId] = cacheTrack;
+            track.jitsiTrack.track = cacheTrack;
+            APP.store.dispatch(addClonedTrack(track));
 
         });
     },
