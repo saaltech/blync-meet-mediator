@@ -587,6 +587,7 @@ var config = {
      startBitrate
      */
 
+    // This property should be always set to false, to avoid echo from speakers of other participants
     disableAEC: false,
 
 
