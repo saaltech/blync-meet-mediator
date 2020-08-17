@@ -16,11 +16,11 @@ import {
 import { MEDIA_TYPE } from '../../../base/media';
 import { OptionsPanel } from '../../../base/options-panel';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
-import { WaitingParticipantView } from '../../../base/waiting-participants/components';
 import { connect } from '../../../base/redux';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
+import { clearWaitingNotification } from '../../../base/waiting-participants';
+import { WaitingParticipantView } from '../../../base/waiting-participants/components';
 import { showParticipantsList, showInvitePeople } from '../../../toolbox/actions.web';
-import { clearWaitingNotification } from '../../../base/waiting-participants'
 
 type Props = {
     participantsListOpen: boolean,
@@ -47,16 +47,18 @@ class ParticipantsList extends Component<Props> {
         if (!this.props.participantsListOpen) {
             return null;
         }
+
         // else {
         //     APP.store.dispatch(clearWaitingNotification())
         // }
 
-        const activeParticipants = (this.props.participants || []).length
+        const activeParticipants = (this.props.participants || []).length;
+
 
         return (
             <OptionsPanel
                 isOpen = { this.props.participantsListOpen }
-                noBodyPadding = {true}
+                noBodyPadding = { true }
                 bodyClass = 'flex-column'
                 onClose = { () => APP.store.dispatch(showParticipantsList(false)) }
                 title = { <div>
@@ -69,25 +71,26 @@ class ParticipantsList extends Component<Props> {
                             src = { IconAdd } /> Add
                     </button>}
                 </div> }>
-                
-                { 
-                    this.props._isModerator &&
-                    <WaitingParticipantView />
+
+                {
+                    this.props._isModerator
+                    && <WaitingParticipantView />
                 }
-                
-                
+
+
                 <div className = 'participants-list'>
                     {
-                        //this.props._waitingParticipantsLength > 0 &&
-                        this.props._isModerator && 
-                        this.props._isWaitingEnabled && 
-                        <div className = 'participants-list__header'>
+
+                        // this.props._waitingParticipantsLength > 0 &&
+                        this.props._isModerator
+                        && this.props._isWaitingEnabled
+                        && <div className = 'participants-list__header'>
                             <div>
-                                { `Active (${(this.props.participants || []).length})` } 
+                                { `Active (${(this.props.participants || []).length})` }
                             </div>
                         </div>
                     }
-                    
+
                     <ul className = 'participants-list__list'>
                         {
 
@@ -98,12 +101,26 @@ class ParticipantsList extends Component<Props> {
 
                                 const videoTrack = getTrackByMediaTypeAndParticipant(this.props._tracks, MEDIA_TYPE.VIDEO, participant.id);
 
+                                let micIcon = IconMicrophone;
+
+                                if (participant.dominantSpeaker) {
+                                    micIcon = IconSpeaking;
+                                }
+
+                                if ((audioTrack || {}).muted) {
+                                    micIcon = IconMicDisabled;
+                                }
+
                                 return (<li key = { participant.id }>
                                     <div className = 'participants-list__label'>
                                         <Avatar
                                             participantId = { participant.id }
                                             size = { 32 } />
-                                        <div title = {participant.name} className = 'participants-list__participant-name'>{participant.name}</div>
+                                        <div
+                                            className = 'participants-list__participant-name'
+                                            title = { participant.name }>
+                                            {participant.name}
+                                        </div>
                                     </div>
                                     <div className = 'participants-list__controls'>
                                         <button><Icon
@@ -111,12 +128,9 @@ class ParticipantsList extends Component<Props> {
                                             size = { 18 }
                                             src = { participant.raisedHand ? IconRaisedHand : IconNoRaisedHand } /></button>
                                         <button>
-                                            {participant.dominantSpeaker && <Icon
+                                            <Icon
                                                 size = { 18 }
-                                                src = { IconSpeaking } />}
-                                            {!participant.dominantSpeaker && <Icon
-                                                size = { 18 }
-                                                src = { !audioTrack || (audioTrack || {}).muted ? IconMicDisabled : IconMicrophone } />}</button>
+                                                src = { micIcon } /></button>
                                         <button>
                                             <Icon
                                                 size = { 18 }
