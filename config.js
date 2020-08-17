@@ -587,7 +587,8 @@ var config = {
      startBitrate
      */
 
-    disableAEC: true,
+    // This property should be always set to false, to avoid echo from speakers of other participants
+    disableAEC: false,
 
 
     // Allow all above example options to include a trailing comma and
