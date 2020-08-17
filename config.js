@@ -587,7 +587,7 @@ var config = {
      startBitrate
      */
 
-    disableAEC: true,
+    disableAEC: false,
 
 
     // Allow all above example options to include a trailing comma and
