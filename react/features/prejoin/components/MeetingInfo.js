@@ -43,19 +43,12 @@ function MeetingInfo(props) {
             {
                 (isPureJoinFlow || shareable) && meetingFrom &&
                 <div className={'date-info'}>
-                    <Icon src={IconCalendar} size={25} />
-                    <div>
-                        <label>From:</label> {moment(meetingFrom).locale('en').format('MMM DD, YYYY hh:mm A')}
-                    </div>
-                </div>
-            }
-            {
-                (isPureJoinFlow || shareable) && meetingTo &&
-                <div className={'date-info'}>
-                    {/*<Icon src={IconCalendar} size={30} />*/}
-                    <div className='to-field'>
-                        <label>To:</label> {moment(meetingTo).locale('en').format('MMM DD, YYYY hh:mm A')}
-                    </div>
+                    {
+                        moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                    }
+                    {
+                        meetingTo && (` - ${moment(meetingTo).locale('en').format('hh:mm a')}`)
+                    }
                 </div>
             }
             {

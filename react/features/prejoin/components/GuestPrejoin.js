@@ -467,7 +467,16 @@ function GuestPrejoin(props) {
                     {
                         (_isUserSignedOut && !continueAsGuest) &&
                         <>
+                            <div className="no-account">
+                                <div
+                                    className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`} 
+                                    onClick={() => !disableJoin && setContinueAsGuest(true)}>
+                                    Continue as a Guest
+                                </div>
+                            </div>
+                            <div className="option-text-or">Or</div>
                             <LoginComponent
+                                noSignInIcon={true}
                                 closeAction={ () => {
                                     //Fetch the conference details for the logged in user
                                     setDisableJoin(true);
@@ -475,13 +484,6 @@ function GuestPrejoin(props) {
 
                                 }}
                             />
-
-                            <div className="no-account">
-                                <div>Don't have an account?</div>
-                                <div 
-                                    className={`${disableJoin ? 'disabled' : ''} `}
-                                    onClick={() => !disableJoin && setContinueAsGuest(true)}> Continue as a Guest </div>
-                            </div>
                         </>
                     }
 

@@ -10,6 +10,20 @@
         background: #5497b4;
         cursor: not-allowed;
     }
+
+    &.guest {
+        &.disabled {
+            color: #5497b4;
+            cursor: not-allowed;
+            border: 1px solid #5497b4;
+        }
+        font-weight: 600;
+        background: #FFFFFF;
+        color: #005C85;
+        width: 170px;
+        border: 1px solid #005C85;
+        border-radius: $welcomePageButtonBorderRadius;
+    }
     
     min-width: $welcomePageButtonMinWidth;
     height: $welcomePageButtonHeight;
@@ -124,17 +138,9 @@
         }
     }
     
-    .no-account {
-        > :last-child {
-            &.disabled {
-                color: #868686 !important;
-                cursor: default;
-            }
-            color: #00C062;
-            font-weight: bold;
-            padding: 5px;
-            cursor: pointer;
-        }
+    .option-text-or {
+        color: #707070;
+        font-size: 15px;
     }
 
     .waiting-display {
