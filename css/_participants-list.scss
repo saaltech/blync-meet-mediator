@@ -153,6 +153,10 @@
         //display: flex;
         //flex-direction: column;
 
+        button {
+            cursor: pointer;
+        }
+
         .participants-list__list {
             padding-top: 0px;
             padding-bottom: 0px;
