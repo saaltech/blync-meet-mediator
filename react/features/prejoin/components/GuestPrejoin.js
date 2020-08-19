@@ -426,17 +426,17 @@ function GuestPrejoin(props) {
                         <>
                             <h2> 
                             {
+                                enableWaitingRoom  &&
+                                <SockJsClient url={props._socketLink} topics={[props._participantsSocketTopic + '/' + _jid.split("/")[0] ]}
+                                onMessage={(participant) => {
+                                    updateWaitingStatus(participant)
+                                }}
+                                ref={ (client) => { clientRef = client }} />
+                            }
+                                    
+                            {
                                 meetingWaiting ? 
-                                <>
-                                    {
-                                        <SockJsClient url={props._socketLink} topics={[props._participantsSocketTopic + '/' + _jid.split("/")[0] ]}
-                                            onMessage={(participant) => {
-                                                updateWaitingStatus(participant)
-                                            }}
-                                            ref={ (client) => { clientRef = client }} />
-                                    }
-                                    {'Please wait, the meeting host will let you in soon.'} 
-                                </>
+                                'Please wait, the meeting host will let you in soon.' 
                                 :
                                 'Please wait for the host to join the meeting...'
                             }
