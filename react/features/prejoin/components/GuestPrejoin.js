@@ -425,12 +425,14 @@ function GuestPrejoin(props) {
                         ( !participantRejected && !meetingEnded ) ?
                         <>
                             <h2> 
-                            
-                            <SockJsClient url={props._socketLink} topics={[props._participantsSocketTopic + '/' + _jid.split("/")[0] ]}
+                            {
+                                enableWaitingRoom  &&
+                                <SockJsClient url={props._socketLink} topics={[props._participantsSocketTopic + '/' + _jid.split("/")[0] ]}
                                 onMessage={(participant) => {
                                     updateWaitingStatus(participant)
                                 }}
                                 ref={ (client) => { clientRef = client }} />
+                            }
                                     
                             {
                                 meetingWaiting ? 
