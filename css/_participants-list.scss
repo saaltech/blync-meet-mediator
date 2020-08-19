@@ -65,6 +65,10 @@
     &__label {
         display: flex;
         align-items: center;
+
+        .avatar .jitsi-icon {
+            transform: translateY(50%) translateX(25%);
+        }
     }
 
     &__participant-name {
