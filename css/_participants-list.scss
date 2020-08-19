@@ -148,7 +148,13 @@
             border: 0px solid;
             border-radius: 17px;
             margin: 10px 5px;
-            width: 75px;
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            padding-top: 5px;
+            :first-child {
+                padding-right: 2px;
+            }
         }
     }
     
