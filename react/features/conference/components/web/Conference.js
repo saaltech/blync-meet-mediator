@@ -257,7 +257,8 @@ class Conference extends AbstractConference<Props, *> {
             _socketLink,
             _participantsSocketTopic,
             _isModerator,
-            _isWaitingEnabled
+            _isWaitingEnabled,
+            _toastNotificationSettings
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
@@ -275,12 +276,14 @@ class Conference extends AbstractConference<Props, *> {
                             }
                             else {
                                 APP.store.dispatch(addWaitingParticipants(res.participants))
-                                res.participants && res.participants.forEach(p => {
-                                    APP.store.dispatch(showNotification({
-                                        userName: p.username,
-                                        type: 'WAITING_TO_JOIN'
-                                    }));
-                                })
+                                if (_toastNotificationSettings.showParticipantWaiting) {
+                                    res.participants && res.participants.forEach(p => {
+                                            APP.store.dispatch(showNotification({
+                                                userName: p.username,
+                                                type: 'WAITING_TO_JOIN'
+                                            }));
+                                    })
+                                }
                                 
                             }
                             
@@ -420,7 +423,9 @@ function _mapStateToProps(state) {
         _leavingMeeting: state['features/toolbox'].leaving,
         _socketLink: getConferenceSocketBaseLink(),
         _participantsSocketTopic: getWaitingParticipantsSocketTopic(state),
-        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled
+        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled,
+        _toastNotificationSettings: state['features/toolbox-more'].toastNotificationSettings
+
     };
 }
 
