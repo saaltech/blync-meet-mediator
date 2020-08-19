@@ -10,6 +10,11 @@ import {
     updateToastNotificationOptions
 } from '../actions';
 
+import {
+    getLocalParticipant,
+    PARTICIPANT_ROLE
+} from '../../base/participants';
+
 /**
  * The type of the React {@code Component} props of {@code AbstractToolboxMoreItems}.
  */
@@ -124,6 +129,8 @@ export function _mapDispatchToProps(dispatch: Dispatch<any>) {
 export function _mapStateToProps(state: Object) {
     const { notificationVisible, toastNotificationVisible, toastNotificationSettings } = state['features/toolbox-more'];
     const { overflowMenuVisible, fullScreen } = state['features/toolbox'];
+    const { meetingDetails } = state['features/app-auth']
+    const isModerator = (getLocalParticipant(state) || {}).role === PARTICIPANT_ROLE.MODERATOR;
 
 
     return {
@@ -131,6 +138,7 @@ export function _mapStateToProps(state: Object) {
         _overflowMenuVisible: overflowMenuVisible,
         _notificationVisible: notificationVisible,
         _toastNotificationSettings: toastNotificationSettings,
-        _toastNotificationVisible: toastNotificationVisible
+        _toastNotificationVisible: toastNotificationVisible,
+        _showWaitingMenuOption: isModerator && meetingDetails?.isWaitingEnabled
     };
 }
