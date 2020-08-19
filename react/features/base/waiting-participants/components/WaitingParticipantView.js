@@ -14,7 +14,9 @@ import { config } from '../../../../config';
 import {
     Icon,
     IconMenuUp,
-    IconMenuDown
+    IconMenuDown,
+    IconAdmitAll,
+    IconRejectAll
 } from '../../../base/icons';
 
 /**
@@ -130,6 +132,11 @@ function WaitingParticipantView(props) {
                                             updateWaitingParticipant('all', false)
                                         }}
                                     >
+                                        
+                                        <Icon
+                                            size = { 16 }
+                                            src = { IconRejectAll } 
+                                        />
                                         {'Reject All'}
                                     </button>
 
@@ -139,6 +146,10 @@ function WaitingParticipantView(props) {
                                             updateWaitingParticipant('all', true)
                                         }}
                                     >
+                                        <Icon
+                                            size = { 16 }
+                                            src = { IconAdmitAll } 
+                                        />
                                         {'Admit All'}
                                     </button>
                                 </div>
