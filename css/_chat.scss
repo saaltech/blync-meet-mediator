@@ -82,6 +82,10 @@
     .remote a {
         color: #005C85;
     }
+
+    .avatar .jitsi-icon {
+        transform: translateY(50%) translateX(25%);
+    }
 }
 
 #chat-recipient {
