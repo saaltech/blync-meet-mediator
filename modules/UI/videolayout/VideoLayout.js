@@ -175,6 +175,10 @@ const VideoLayout = {
 
 
             if (!track || track.muted) {
+                if (participantIds.length < window.config.channelLastN) {
+                    participantIds.push(participantId);
+                }
+
                 return;
             }
 
@@ -203,9 +207,6 @@ const VideoLayout = {
 
             // APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
-            if (participantIds.length < window.config.channelLastN) {
-                participantIds.push(participantId);
-            }
 
         });
 
