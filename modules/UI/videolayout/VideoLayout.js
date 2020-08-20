@@ -72,7 +72,7 @@ const getIntersectionObserverOptions = () => {
     return {
         root: document.getElementById('remoteVideos'),
         rootMargin: '0px',
-        threshold: 0.15
+        threshold: 0.4
     };
 };
 
@@ -140,63 +140,45 @@ const VideoLayout = {
             largeVideo.updateLargeVideoAudioLevel(lvl);
         }
     },
+    participantIds: [],
+    selectParticipantsTimerId: null,
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
-
-        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
-
-        if (!tileViewEnabled) {
-            return;
+        if (this.selectParticipantsTimerId) {
+            clearTimeout(this.selectParticipantsTimerId);
+            this.selectParticipantsTimerId = null;
         }
 
-
         entries.forEach(entry => {
-            const containerId = entry.target.id;
-
-            let participantId = null;
-
-            if (containerId === 'localVideoTileViewContainer') {
+            if (entry.target.id === 'localVideoTileViewContainer') {
                 return;
             }
+
             const participantParts = entry.target.id.split('participant_');
 
             if (participantParts.length < 2) {
                 return;
             }
-
-            participantId = participantParts[1];
-
-
-            const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
-
-
-            if (!track || track.muted) {
-                return;
-            }
-
+            const participantId = participantParts[1];
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                APP.UI.setVideoMuted(participantId, false);
-                track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
-
-                return;
+                if (this.participantIds.length < window.config.channelLastN) {
+                    !this.participantIds.includes(participantId)
+                        && this.participantIds.push(participantId);
+                }
+            } else {
+                this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
-
-            const streamTrack = track.jitsiTrack.stream.getTracks()[0];
-            if(!streamTrack) {
-                return;
-            }
-            const cacheTrack = streamTrack.clone();
-
-            APP.UI.setVideoMuted(participantId, true);
-            streamTrack.stop();
-            track.jitsiTrack.stream.removeTrack(streamTrack);
-
-            track.jitsiTrack.track = cacheTrack;
-            APP.store.dispatch(addClonedTrack(track.jitsiTrack));
-
         });
+
+        console.log('participantIds ->', this.participantIds);
+        const conference = APP.store.getState()['features/base/conference'].conference;
+
+        if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
+            this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
+        }
+
     },
 
     stoppedStreams: [],
