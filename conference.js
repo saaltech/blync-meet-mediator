@@ -454,6 +454,7 @@ function disconnect() {
     return connection.disconnect().then(onDisconnected, onDisconnected);
 }
 
+
 /**
  * Handles CONNECTION_FAILED events from lib-jitsi-meet.
  *
@@ -698,6 +699,13 @@ export default {
 
                 return [ tracks, con ];
             });
+    },
+
+    /**
+     * Pin participants.
+     */
+    pinParticipant(participantId) {
+        room.pinParticipant(participantId);
     },
 
     startConference(con, tracks) {
@@ -1963,9 +1971,9 @@ export default {
                 if (desktopVideoStream) {
                     await this.useVideoStream(desktopVideoStream);
                 }
-                
-                if(!isVideoTrackMutedBeforeSharing && this.isLocalVideoMuted()) {
-                    this.muteVideo(false)
+
+                if (!isVideoTrackMutedBeforeSharing && this.isLocalVideoMuted()) {
+                    this.muteVideo(false);
                 }
 
                 this._desktopAudioStream = streams.find(stream => stream.getType() === MEDIA_TYPE.AUDIO);
@@ -2160,18 +2168,18 @@ export default {
                 APP.store.dispatch(participantRoleChanged(id, role));
             }
 
-            
 
-            if(role !== "moderator") {
+            if (role !== 'moderator') {
                 return;
             }
-            let state = APP.store.getState();
-            let meeting = state['features/app-auth'].meetingDetails;
-            let conference = state['features/base/conference'].conference;
-            if(conference.options.name === meeting.meetingId) {
+            const state = APP.store.getState();
+            const meeting = state['features/app-auth'].meetingDetails;
+            const conference = state['features/base/conference'].conference;
+
+            if (conference.options.name === meeting.meetingId) {
                 // Set Meeting password to the room if set by host
-                if(meeting.meetingPassword) {
-                    APP.store.dispatch(setPassword(conference, conference.lock, meeting.meetingPassword))
+                if (meeting.meetingPassword) {
+                    APP.store.dispatch(setPassword(conference, conference.lock, meeting.meetingPassword));
                 }
             }
         });
