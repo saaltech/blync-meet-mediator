@@ -181,9 +181,7 @@ const VideoLayout = {
             if (entry.intersectionRatio === 1) {
                 this.participantIds.push(participantId);
             } else if (
-                entry.intersectionRatio !== 0
-                && entry.intersectionRatio !== 1
-                && entry.intersectionRatio > getIntersectionObserverOptions().threshold
+                entry.intersectionRatio > getIntersectionObserverOptions().threshold
             ) {
                 // APP.UI.setVideoMuted(participantId, false);
                 // track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
@@ -191,7 +189,7 @@ const VideoLayout = {
                     this.participantIds.push(participantId);
                 }
             } else {
-                this.participantIds = this.participantIds.filter(id => id === participantId);
+                this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
 
             // const streamTrack = track.jitsiTrack.stream.getTracks()[0];
