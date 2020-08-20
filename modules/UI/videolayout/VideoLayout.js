@@ -172,7 +172,7 @@ const VideoLayout = {
             }
         });
 
-        console.log('participantIds ->', this.participantIds);
+        // console.log('participantIds ->', this.participantIds);
         const conference = APP.store.getState()['features/base/conference'].conference;
 
         if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
