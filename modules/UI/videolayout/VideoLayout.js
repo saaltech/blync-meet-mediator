@@ -72,7 +72,7 @@ const getIntersectionObserverOptions = () => {
     return {
         root: document.getElementById('remoteVideos'),
         rootMargin: '0px',
-        threshold: 0.15
+        threshold: 0.4
     };
 };
 
@@ -146,13 +146,17 @@ const VideoLayout = {
 
         const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
 
-        if (!tileViewEnabled) {
-            return;
-        }
+        
 
         entries.forEach(entry => {
-
             if (entry.target.id === 'localVideoTileViewContainer') {
+                return;
+            }
+            this.participantIds = [...new Set(this.participantIds)];
+            if (!tileViewEnabled) {
+                if (this.participantIds.length < window.config.channelLastN) {
+                    this.participantIds.push(participantId);
+                }
                 return;
             }
             const participantParts = entry.target.id.split('participant_');
@@ -170,8 +174,6 @@ const VideoLayout = {
                 this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
         });
-
-        this.participantIds = [...new Set(this.participantIds)];
 
         console.log("participantIds ->", this.participantIds)
         let conference = APP.store.getState()['features/base/conference'].conference;
