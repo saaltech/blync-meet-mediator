@@ -170,12 +170,13 @@ const VideoLayout = {
 
             participantId = participantParts[1];
 
-            participantIds.push(participantId);
+            if (participantIds.length < window.config.channelLastN) {
+                participantIds.push(participantId);
+            }
 
             const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
 
 
-            APP.store.getState()['features/base/conference'].conference.selectParticipants([ participantId ]);
             if (!track || track.muted) {
                 return;
             }
@@ -203,6 +204,9 @@ const VideoLayout = {
             APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
         });
+
+
+        APP.store.getState()['features/base/conference'].conference.selectParticipants(participantIds);
 
 
     },
