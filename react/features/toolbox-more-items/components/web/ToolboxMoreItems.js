@@ -161,7 +161,7 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                                     <OptionItemCheck
                                         checked = { _toastNotificationSettings.showParticipantWaiting }
                                         disabled = { !_notificationVisible }
-                                        label = 'Participant waiting'
+                                        label = 'Participant Waiting'
                                         onCheck = { () => {
                                             _updateToastNotificationOptions({
                                                 showParticipantWaiting: !_toastNotificationSettings.showParticipantWaiting
