@@ -151,7 +151,10 @@ const VideoLayout = {
         }
 
 
+        const participantIds = [];
+
         entries.forEach(entry => {
+
             const containerId = entry.target.id;
 
             let participantId = null;
@@ -167,10 +170,12 @@ const VideoLayout = {
 
             participantId = participantParts[1];
 
+            participantIds.push(participantId);
 
             const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
 
 
+            APP.store.getState()['features/base/conference'].conference.selectParticipants([ participantId ]);
             if (!track || track.muted) {
                 return;
             }
@@ -184,7 +189,8 @@ const VideoLayout = {
             }
 
             const streamTrack = track.jitsiTrack.stream.getTracks()[0];
-            if(!streamTrack) {
+
+            if (!streamTrack) {
                 return;
             }
             const cacheTrack = streamTrack.clone();
@@ -197,6 +203,8 @@ const VideoLayout = {
             APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
         });
+
+
     },
 
     stoppedStreams: [],
