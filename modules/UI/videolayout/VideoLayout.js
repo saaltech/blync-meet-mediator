@@ -175,7 +175,7 @@ const VideoLayout = {
         console.log('participantIds ->', this.participantIds);
         const conference = APP.store.getState()['features/base/conference'].conference;
 
-        if (conference && window.config.channelLastN > 0) {
+        if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
             this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
 
