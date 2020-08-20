@@ -206,8 +206,9 @@ const VideoLayout = {
         });
 
 
-        APP.store.getState()['features/base/conference'].conference.selectParticipants(participantIds);
-
+        if (window.config.channelLastN > 0) {
+            APP.store.getState()['features/base/conference'].conference.selectParticipants(participantIds);
+        }
 
     },
 
