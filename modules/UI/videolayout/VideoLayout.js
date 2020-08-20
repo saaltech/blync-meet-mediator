@@ -170,9 +170,6 @@ const VideoLayout = {
 
             participantId = participantParts[1];
 
-            if (participantIds.length < window.config.channelLastN) {
-                participantIds.push(participantId);
-            }
 
             const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
 
@@ -183,8 +180,8 @@ const VideoLayout = {
 
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                APP.UI.setVideoMuted(participantId, false);
-                track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
+                // APP.UI.setVideoMuted(participantId, false);
+                // track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
 
                 return;
             }
@@ -194,14 +191,21 @@ const VideoLayout = {
             if (!streamTrack) {
                 return;
             }
-            const cacheTrack = streamTrack.clone();
 
-            APP.UI.setVideoMuted(participantId, true);
-            streamTrack.stop();
-            track.jitsiTrack.stream.removeTrack(streamTrack);
+            // const cacheTrack = streamTrack.clone();
 
-            track.jitsiTrack.track = cacheTrack;
-            APP.store.dispatch(addClonedTrack(track.jitsiTrack));
+            // APP.UI.setVideoMuted(participantId, true);
+
+            // streamTrack.stop();
+            // track.jitsiTrack.stream.removeTrack(streamTrack);
+
+            // track.jitsiTrack.track = cacheTrack;
+
+            // APP.store.dispatch(addClonedTrack(track.jitsiTrack));
+
+            if (participantIds.length < window.config.channelLastN) {
+                participantIds.push(participantId);
+            }
 
         });
 
