@@ -141,35 +141,42 @@ const VideoLayout = {
         }
     },
     participantIds: [],
+    selectParticipantsTimerId: null,
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
+
+        if (this.selectParticipantsTimerId) {
+            clearTimeout(this.selectParticipantsTimerId);
+            this.selectParticipantsTimerId = null;
+        }
 
         entries.forEach(entry => {
             if (entry.target.id === 'localVideoTileViewContainer') {
                 return;
             }
-            
+
             const participantParts = entry.target.id.split('participant_');
 
             if (participantParts.length < 2) {
                 return;
             }
-            let participantId = participantParts[1];
+            const participantId = participantParts[1];
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
                 if (this.participantIds.length < window.config.channelLastN) {
-                    !this.participantIds.includes(participantId) &&
-                        this.participantIds.push(participantId);
+                    !this.participantIds.includes(participantId)
+                        && this.participantIds.push(participantId);
                 }
             } else {
                 this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
         });
 
-        console.log("participantIds ->", this.participantIds)
-        let conference = APP.store.getState()['features/base/conference'].conference;
+        console.log('participantIds ->', this.participantIds);
+        const conference = APP.store.getState()['features/base/conference'].conference;
+
         if (conference && window.config.channelLastN > 0) {
-            conference.selectParticipants(this.participantIds);
+            this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
 
     },
