@@ -152,10 +152,11 @@ const VideoLayout = {
             if (entry.target.id === 'localVideoTileViewContainer') {
                 return;
             }
-            this.participantIds = [...new Set(this.participantIds)];
+            
             if (!tileViewEnabled) {
                 if (this.participantIds.length < window.config.channelLastN) {
-                    this.participantIds.push(participantId);
+                    !this.participantIds.includes(participantId) && 
+                        this.participantIds.push(participantId);
                 }
                 return;
             }
@@ -168,7 +169,8 @@ const VideoLayout = {
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
                 if (this.participantIds.length < window.config.channelLastN) {
-                    this.participantIds.push(participantId);
+                    !this.participantIds.includes(participantId) &&
+                        this.participantIds.push(participantId);
                 }
             } else {
                 this.participantIds = this.participantIds.filter(id => id !== participantId);
