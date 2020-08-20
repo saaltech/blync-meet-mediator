@@ -144,22 +144,11 @@ const VideoLayout = {
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
-        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
-
-        
-
         entries.forEach(entry => {
             if (entry.target.id === 'localVideoTileViewContainer') {
                 return;
             }
             
-            if (!tileViewEnabled) {
-                if (this.participantIds.length < window.config.channelLastN) {
-                    !this.participantIds.includes(participantId) && 
-                        this.participantIds.push(participantId);
-                }
-                return;
-            }
             const participantParts = entry.target.id.split('participant_');
 
             if (participantParts.length < 2) {
