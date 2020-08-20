@@ -182,6 +182,9 @@ const VideoLayout = {
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
                 // APP.UI.setVideoMuted(participantId, false);
                 // track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
+                if (participantIds.length < window.config.channelLastN) {
+                    participantIds.push(participantId);
+                }
 
                 return;
             }
@@ -203,9 +206,6 @@ const VideoLayout = {
 
             // APP.store.dispatch(addClonedTrack(track.jitsiTrack));
 
-            if (participantIds.length < window.config.channelLastN) {
-                participantIds.push(participantId);
-            }
 
         });
 
