@@ -140,6 +140,7 @@ const VideoLayout = {
             largeVideo.updateLargeVideoAudioLevel(lvl);
         }
     },
+    participantIds: [],
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
@@ -151,7 +152,7 @@ const VideoLayout = {
         }
 
 
-        const participantIds = [];
+        // const participantIds = [];
 
         entries.forEach(entry => {
 
@@ -170,30 +171,32 @@ const VideoLayout = {
 
             participantId = participantParts[1];
 
-
             const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
-
 
             if (!track || track.muted) {
                 return;
             }
 
 
-            if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
+            if (entry.intersectionRatio === 1) {
+                this.participantIds.push(participantId);
+            } else if (
+                entry.intersectionRatio > getIntersectionObserverOptions().threshold
+            ) {
                 // APP.UI.setVideoMuted(participantId, false);
                 // track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
-                if (participantIds.length < window.config.channelLastN) {
-                    participantIds.push(participantId);
+                if (this.participantIds.length < window.config.channelLastN) {
+                    this.participantIds.push(participantId);
                 }
-
-                return;
+            } else {
+                this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
 
-            const streamTrack = track.jitsiTrack.stream.getTracks()[0];
+            // const streamTrack = track.jitsiTrack.stream.getTracks()[0];
 
-            if (!streamTrack) {
-                return;
-            }
+            // if (!streamTrack) {
+            //     return;
+            // }
 
             // const cacheTrack = streamTrack.clone();
 
@@ -209,9 +212,10 @@ const VideoLayout = {
 
         });
 
+        this.participantIds = this.participantIds.reduce((acc, item) => acc.find(id => id === item), []);
 
         if (window.config.channelLastN > 0) {
-            APP.store.getState()['features/base/conference'].conference.selectParticipants(participantIds);
+            APP.store.getState()['features/base/conference'].conference.selectParticipants(this.participantIds);
         }
 
     },
