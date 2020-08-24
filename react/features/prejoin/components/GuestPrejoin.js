@@ -384,10 +384,11 @@ function GuestPrejoin(props) {
                         {
                             !continueAsGuest &&
                             <div className="login-message" 
-                                style={{
+                                /*style={{
                                     visibility: (conferenceStatus === '' || conferenceStatus === "STARTED")
                                          ? 'hidden': 'visible'
-                                }}>
+                                }}*/
+                            >
                                 <span>Please</span>
                                 <span className="sign-in-link"> sign in </span>
                                 <span>if you are the host.</span>
