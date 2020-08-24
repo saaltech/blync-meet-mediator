@@ -146,8 +146,8 @@ const VideoLayout = {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
         if (this.selectParticipantsTimerId) {
-            clearTimeout(this.selectParticipantsTimerId);
-            this.selectParticipantsTimerId = null;
+            //clearTimeout(this.selectParticipantsTimerId);
+            //this.selectParticipantsTimerId = null;
         }
 
         entries.forEach(entry => {
@@ -176,7 +176,8 @@ const VideoLayout = {
         const conference = APP.store.getState()['features/base/conference'].conference;
 
         if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
-            this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
+            conference.selectParticipants(this.participantIds)
+            //this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
 
     },
