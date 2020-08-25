@@ -129,4 +129,16 @@
     .has-overflow #localVideoContainer {
         margin-bottom: 100px !important;
     }
+
+    .conference__pagination {
+        position: absolute;
+        z-index: 10000;
+        top: 50%;
+        left: 0;
+        button {
+            background: #EBEBEB;
+            padding: 1rem;
+            border: none;
+        }
+    }
 }

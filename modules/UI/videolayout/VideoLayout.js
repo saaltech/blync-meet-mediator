@@ -1,7 +1,6 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
-import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
@@ -11,6 +10,7 @@ import {
     pinParticipant
 } from '../../../react/features/base/participants';
 import { getTrackByMediaTypeAndParticipant, addClonedTrack } from '../../../react/features/base/tracks';
+import { shouldDisplayTileView } from '../../../react/features/video-layout';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -146,8 +146,13 @@ const VideoLayout = {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
         if (this.selectParticipantsTimerId) {
-            //clearTimeout(this.selectParticipantsTimerId);
-            //this.selectParticipantsTimerId = null;
+            // clearTimeout(this.selectParticipantsTimerId);
+            // this.selectParticipantsTimerId = null;
+        }
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        if (tileViewEnabled) {
+            return;
         }
 
         entries.forEach(entry => {
@@ -175,9 +180,26 @@ const VideoLayout = {
         // console.log('participantIds ->', this.participantIds);
         const conference = APP.store.getState()['features/base/conference'].conference;
 
+
         if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
-            conference.selectParticipants(this.participantIds)
-            //this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
+
+
+            const pinnedId = this.getPinnedId();
+
+            let pidsToSelect = [ ...new Set(this.participantIds) ];
+
+            if (pinnedId) {
+                pidsToSelect.push(pinnedId);
+                pidsToSelect = [ ...new Set(pidsToSelect) ];
+            }
+
+            if (pidsToSelect.length > window.config.channelLastN) {
+                pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
+            }
+
+            conference.selectParticipants(pidsToSelect);
+
+            // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
 
     },
@@ -237,6 +259,75 @@ const VideoLayout = {
         } else {
             this.onVideoMute(id, stream.isMuted());
         }
+
+        this.refreshPagination();
+
+
+        // }
+    },
+
+    refreshPagination() {
+        const { page } = APP.store.getState()['features/filmstrip'];
+
+        this.updateVideoPage(page);
+    },
+
+    updateVideoPage(currentPage) {
+
+        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const remoteVideosKeys = Object.keys(remoteVideos);
+        const upperLimit = maxGridSize * currentPage;
+        const lowerLimit = upperLimit - maxGridSize;
+        const localContainer = 'localVideoTileViewContainer';
+
+        const videosInView = [];
+        const localParticipant = getLocalParticipant(APP.store.getState());
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        [ ...remoteVideosKeys, localContainer ].forEach((key, index) => {
+
+            let elementId = `#${key}`;
+
+            if (tileViewEnabled === false) {
+                $(elementId).css({ display: 'block' });
+
+                return;
+            }
+
+            if (key !== localContainer) {
+                elementId = `#participant_${key}`;
+            }
+
+            if (index >= lowerLimit && index < upperLimit) {
+                $(elementId).css({ display: 'block' });
+                if (key !== localContainer) {
+                    videosInView.push(key);
+                }
+            } else {
+                $(elementId).css({ display: 'none' });
+            }
+
+        });
+
+        if (!tileViewEnabled || currentPage === null) {
+            return;
+        }
+
+
+        const { conference } = APP.store.getState()['features/base/conference'];
+        const pinnedId = this.getPinnedId();
+
+        let pidsToSelect = [ ...new Set(videosInView) ];
+
+        if (pinnedId) {
+            pidsToSelect = [ ...new Set(pidsToSelect.push(pinnedId)) ];
+        }
+
+        if (pidsToSelect.length > window.config.channelLastN) {
+            pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
+        }
+
+        conference.selectParticipants(pidsToSelect);
     },
 
     onRemoteStreamRemoved(stream) {
@@ -250,6 +341,9 @@ const VideoLayout = {
         }
 
         this.updateMutedForNoTracks(id, stream.getType());
+
+
+        this.refreshPagination();
     },
 
     /**
@@ -546,6 +640,9 @@ const VideoLayout = {
             logger.info(`Removing remote video: ${id}`);
             delete remoteVideos[id];
             remoteVideo.remove();
+            const { page } = APP.store.getState()['features/filmstrip'];
+
+            VideoLayout.updateVideoPage(page);
         } else {
             logger.warn(`No remote video for ${id}`);
         }
