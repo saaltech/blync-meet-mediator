@@ -1962,18 +1962,12 @@ export default {
 
         this.videoSwitchInProgress = true;
 
-        const isVideoTrackMutedBeforeSharing = this.isLocalVideoMuted();
-
         return this._createDesktopTrack(options)
             .then(async streams => {
                 const desktopVideoStream = streams.find(stream => stream.getType() === MEDIA_TYPE.VIDEO);
 
                 if (desktopVideoStream) {
                     await this.useVideoStream(desktopVideoStream);
-                }
-
-                if (!isVideoTrackMutedBeforeSharing && this.isLocalVideoMuted()) {
-                    this.muteVideo(false);
                 }
 
                 this._desktopAudioStream = streams.find(stream => stream.getType() === MEDIA_TYPE.AUDIO);

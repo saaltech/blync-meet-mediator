@@ -5,7 +5,8 @@ import { toArray } from 'react-emoji-render';
 
 
 import { translate } from '../../../base/i18n';
-import { IconUserCheck, IconUserCancel, IconRaisedHand, Icon } from '../../../base/icons';
+import { IconUserCheck, IconUserCancel, IconRaisedHand, Icon,
+    IconWaiting } from '../../../base/icons';
 import { Linkify } from '../../../base/react';
 import AbstractChatMessage, {
     type Props
@@ -49,9 +50,8 @@ class ChatMessage extends AbstractChatMessage<Props> {
                             <div className = 'usermessage'>
                                 { processedMessage }
                                 {
-                                    (this.props.message.type !== 'default' && 
-                                    this.props.message.type !== WAITING_TO_JOIN)
-                                 && <Icon src = { this._getMessageIcon(this.props.message) } />
+                                    this.props.message.type !== 'default' && 
+                                    <Icon src = { this._getMessageIcon(this.props.message) } />
                                 }
                             </div>
                         </div>
@@ -86,6 +86,9 @@ class ChatMessage extends AbstractChatMessage<Props> {
 
             case 'RAISED_HAND':
                 return IconRaisedHand;
+            
+            case WAITING_TO_JOIN:
+                return IconWaiting;
         }
     }
 
