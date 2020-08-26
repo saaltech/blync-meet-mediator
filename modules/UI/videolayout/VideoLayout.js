@@ -197,7 +197,8 @@ const VideoLayout = {
                 pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
             }
 
-            conference.selectParticipants(pidsToSelect);
+            pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+            //conference.selectParticipants(pidsToSelect);
 
             // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
@@ -272,6 +273,24 @@ const VideoLayout = {
         this.updateVideoPage(page);
     },
 
+    videoIsInView(videoId, page) {
+        const localContainer = 'localVideoTileViewContainer';
+        const remoteVideosKeys = Object.keys(remoteVideos);
+        const videoIds = [ ...remoteVideosKeys, videoId, localContainer ];
+        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const upperLimit = maxGridSize * page;
+        const lowerLimit = upperLimit - maxGridSize;
+
+
+        const index = videoIds.findIndex(v => v === videoId);
+
+        if (index < 0) {
+            return false;
+        }
+
+        return index >= lowerLimit && index < upperLimit;
+    },
+
     updateVideoPage(currentPage) {
 
         const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
@@ -327,7 +346,8 @@ const VideoLayout = {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
-        conference.selectParticipants(pidsToSelect);
+        pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+        // conference.selectParticipants(pidsToSelect);
     },
 
     onRemoteStreamRemoved(stream) {
