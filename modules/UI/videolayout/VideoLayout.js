@@ -197,7 +197,8 @@ const VideoLayout = {
                 pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
             }
 
-            conference.selectParticipants(pidsToSelect);
+            pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+            //conference.selectParticipants(pidsToSelect);
 
             // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
@@ -345,7 +346,8 @@ const VideoLayout = {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
-        conference.selectParticipants(pidsToSelect);
+        pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+        // conference.selectParticipants(pidsToSelect);
     },
 
     onRemoteStreamRemoved(stream) {
