@@ -197,8 +197,16 @@ const VideoLayout = {
                 pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
             }
 
-            pidsToSelect.forEach(pid => conference.selectParticipant(pid))
-            //conference.selectParticipants(pidsToSelect);
+            // Check lastNEndpoints (redux) if pid is present
+            // conference.selectParticipant(pid[0])
+            // put other pid's in the expectedList
+            // clear this expectedList when navigating and repopulate
+            // also clear this list when switching between views.
+
+            // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+            
+            conference.selectParticipants(pidsToSelect);
+            
 
             // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
@@ -334,19 +342,23 @@ const VideoLayout = {
 
 
         const { conference } = APP.store.getState()['features/base/conference'];
-        const pinnedId = this.getPinnedId();
+        //const pinnedId = this.getPinnedId();
 
         let pidsToSelect = [ ...new Set(videosInView) ];
 
-        if (pinnedId) {
-            pidsToSelect = [ ...new Set(pidsToSelect.push(pinnedId)) ];
-        }
+        // if (pinnedId) {
+        //     pidsToSelect = [ ...new Set(pidsToSelect.push(pinnedId)) ];
+        // }
 
         if (pidsToSelect.length > window.config.channelLastN) {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
-        pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+        if(pidsToSelect.length > 0) {
+            conference.setLastN(pidsToSelect.length)
+            conference.selectParticipants(pidsToSelect);
+        }
+        //pidsToSelect.forEach(pid => conference.selectParticipant(pid))
         // conference.selectParticipants(pidsToSelect);
     },
 
