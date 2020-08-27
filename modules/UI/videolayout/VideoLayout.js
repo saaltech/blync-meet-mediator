@@ -319,21 +319,20 @@ const VideoLayout = {
         const localContainer = 'localVideoTileViewContainer';
 
         const videosInView = [];
-        const localParticipant = getLocalParticipant(APP.store.getState());
         const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
 
         [ ...remoteVideosKeys, localContainer ].forEach((key, index) => {
 
             let elementId = `#${key}`;
 
+            if (key !== localContainer) {
+                elementId = `#participant_${key}`;
+            }
+
             if (tileViewEnabled === false) {
                 $(elementId).css({ display: 'block' });
 
                 return;
-            }
-
-            if (key !== localContainer) {
-                elementId = `#participant_${key}`;
             }
 
             if (index >= lowerLimit && index < upperLimit) {
