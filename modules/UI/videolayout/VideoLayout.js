@@ -204,9 +204,9 @@ const VideoLayout = {
             // also clear this list when switching between views.
 
             // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
-            
+
             conference.selectParticipants(pidsToSelect);
-            
+
 
             // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
@@ -299,6 +299,17 @@ const VideoLayout = {
         return index >= lowerLimit && index < upperLimit;
     },
 
+    calculateNumberOfPages(participants = []) {
+        const perPage = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const pages = Math.floor(participants / perPage);
+
+        if ((participants % perPage) > 0) {
+            return pages + 1;
+        }
+
+        return pages;
+    },
+
     updateVideoPage(currentPage) {
 
         const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
@@ -342,7 +353,8 @@ const VideoLayout = {
 
 
         const { conference } = APP.store.getState()['features/base/conference'];
-        //const pinnedId = this.getPinnedId();
+
+        // const pinnedId = this.getPinnedId();
 
         let pidsToSelect = [ ...new Set(videosInView) ];
 
@@ -354,11 +366,12 @@ const VideoLayout = {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
-        if(pidsToSelect.length > 0) {
-            conference.setLastN(pidsToSelect.length)
+        if (pidsToSelect.length > 0) {
+            conference.setLastN(pidsToSelect.length);
             conference.selectParticipants(pidsToSelect);
         }
-        //pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+
+        // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
         // conference.selectParticipants(pidsToSelect);
     },
 

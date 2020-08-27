@@ -15,8 +15,8 @@ import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
 import { SET_FILMSTRIP_VISIBLE } from '../filmstrip';
 
 import { SET_TILE_VIEW } from './actionTypes';
-
 import './middleware.any';
+import { updatePage } from './functions.js';
 
 declare var APP: Object;
 
@@ -58,6 +58,10 @@ MiddlewareRegistry.register(store => next => action => {
 
     case PARTICIPANT_LEFT: {
         VideoLayout.removeParticipantContainer(action.participant.id);
+
+        const participants = store.getState()['features/base/participants'];
+
+        updatePage(participants.length - 1);
 
         break;
     }
