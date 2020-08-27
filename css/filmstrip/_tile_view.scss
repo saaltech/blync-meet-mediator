@@ -141,11 +141,14 @@
         top: 50%;
         left: 0;
         box-sizing: border-box;
+        pointer-events: none;
         button {
             background: #00C062;
             padding: 1rem;
             border: none;
             border-radius: 100px;
+            pointer-events: all;
+            outline: none;
 
             svg, path {
                 fill: #FFF !important;
@@ -156,7 +159,7 @@
 
         button:disabled {
             opacity: .4;
-            cursor: none;
+            cursor: not-allowed;
         }
     }
 }

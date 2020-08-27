@@ -36,7 +36,7 @@ import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-mo
 import {
     leavingMeeting
 } from '../../../toolbox/actions';
-import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
+import { LAYOUTS, getCurrentLayout, calculateNumberOfPages } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
@@ -265,9 +265,10 @@ class Conference extends AbstractConference<Props, *> {
 
         const { page } = APP.store.getState()['features/filmstrip'];
         const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
-        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+
+        // const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
         const participants = APP.store.getState()['features/base/participants'];
-        const maxPages = Math.ceil((participants || []).length / maxGridSize);
+        const totalPages = calculateNumberOfPages(participants.length);
 
 
         return (
@@ -314,7 +315,7 @@ class Conference extends AbstractConference<Props, *> {
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
                     <Filmstrip filmstripOnly = { filmstripOnly } />
-                    {tileViewEnabled && page > 1 && <div className = 'conference__pagination'>
+                    {tileViewEnabled && totalPages > 1 && <div className = 'conference__pagination'>
                         <button
                             disabled = { page <= 1 }
                             onClick = { () => {
@@ -327,10 +328,10 @@ class Conference extends AbstractConference<Props, *> {
                             <Icon src = { IconArrowLeft } />
                         </button>
                         <button
-                            disabled = { page >= maxPages }
+                            disabled = { page >= totalPages }
                             onClick = { () => {
 
-                                if (page >= maxPages) {
+                                if (page >= totalPages) {
 
                                     return;
                                 }
