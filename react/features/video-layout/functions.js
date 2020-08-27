@@ -96,11 +96,13 @@ export function shouldDisplayTileView(state: Object = {}) {
  */
 export function updatePage(participantsCount: number) {
     const expectedPage = calculateNumberOfPages(participantsCount);
+
     const { page } = APP.store.getState()['features/filmstrip'];
 
     if (page <= expectedPage) {
         return;
     }
+
 
     APP.store.dispatch(setPage(expectedPage));
 }
@@ -117,6 +119,10 @@ export function calculateNumberOfPages(participantsCount: number) {
 
     if ((participantsCount % perPage) > 0) {
         return pages + 1;
+    }
+
+    if (pages <= 0) {
+        return 1;
     }
 
     return pages;

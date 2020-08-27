@@ -496,6 +496,13 @@ const VideoLayout = {
 
         const id = participant.id;
         const jitsiParticipant = APP.conference.getParticipantById(id);
+
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        if (tileViewEnabled) {
+            $('#localVideoTileViewContainer').css({ display: 'none' });
+        }
+
         const remoteVideo = new RemoteVideo(jitsiParticipant, VideoLayout);
 
         this._setRemoteControlProperties(jitsiParticipant, remoteVideo);
@@ -503,6 +510,8 @@ const VideoLayout = {
 
         this.updateMutedForNoTracks(id, 'audio');
         this.updateMutedForNoTracks(id, 'video');
+
+        this.refreshPagination();
 
         const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
 
@@ -572,7 +581,7 @@ const VideoLayout = {
      * Display name changed.
      */
     onDisplayNameChanged(id) {
-        if (id === 'localVideoContainer'
+        if (id === 'localVideoTileViewContainer'
             || APP.conference.isLocalId(id)) {
             localVideoThumbnail.updateDisplayName();
         } else {

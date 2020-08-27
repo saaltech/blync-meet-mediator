@@ -132,8 +132,6 @@ export default class RemoteVideo extends SmallVideo {
         const { page } = APP.store.getState()['features/filmstrip'];
         const isInView = this.VideoLayout.videoIsInView(this.videoSpanId, page);
 
-        console.log(isInView, 'isInViewisInViewisInView');
-
         this.container = createContainer(this.videoSpanId, isInView);
         this.$container = $(this.container);
         this.initializeAvatar();
