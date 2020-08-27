@@ -219,6 +219,8 @@ var interfaceConfig = {
      */
     TILE_VIEW_MAX_COLUMNS: 3,
 
+    SHOW_VIDEO_PAGINATION: false,
+
     /**
      * Specify custom URL for downloading android mobile app.
      */

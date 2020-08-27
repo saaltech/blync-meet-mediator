@@ -29,6 +29,8 @@ let eventEmitter = null;
 
 let largeVideo;
 
+const showVideoPaging = window.interfaceConfig.SHOW_VIDEO_PAGINATION;
+
 /**
  * flipX state of the localVideo
  */
@@ -311,6 +313,10 @@ const VideoLayout = {
     },
 
     updateVideoPage(currentPage) {
+        if (!showVideoPaging) {
+            return;
+        }
+
 
         const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
         const remoteVideosKeys = Object.keys(remoteVideos);
@@ -499,7 +505,7 @@ const VideoLayout = {
 
         const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
 
-        if (tileViewEnabled) {
+        if (tileViewEnabled && showVideoPaging) {
             $('#localVideoTileViewContainer').css({ display: 'none' });
         }
 

@@ -36,7 +36,7 @@ import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-mo
 import {
     leavingMeeting
 } from '../../../toolbox/actions';
-import { LAYOUTS, getCurrentLayout, calculateNumberOfPages } from '../../../video-layout';
+import { LAYOUTS, getCurrentLayout, calculateNumberOfPages, showPagination } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
@@ -269,6 +269,7 @@ class Conference extends AbstractConference<Props, *> {
         // const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
         const participants = APP.store.getState()['features/base/participants'];
         const totalPages = calculateNumberOfPages(participants.length);
+        const showPaging = showPagination();
 
 
         return (
@@ -315,7 +316,8 @@ class Conference extends AbstractConference<Props, *> {
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
                     <Filmstrip filmstripOnly = { filmstripOnly } />
-                    {tileViewEnabled && totalPages > 1 && <div className = 'conference__pagination'>
+                    {(tileViewEnabled && totalPages > 1 && showPaging)
+                    && <div className = 'conference__pagination'>
                         <button
                             disabled = { page <= 1 }
                             onClick = { () => {

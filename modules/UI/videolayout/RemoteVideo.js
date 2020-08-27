@@ -36,9 +36,11 @@ const logger = Logger.getLogger(__filename);
 function createContainer(spanId, isInView) {
     const container = document.createElement('span');
 
-    if (!isInView) {
-        container.style.display = 'none';
-    }
+    // const showVideoPaging = window.interfaceConfig.SHOW_VIDEO_PAGINATION;
+
+    // // if (!isInView && showVideoPaging) {
+    // //     container.style.display = 'none';
+    // // }
 
     container.id = spanId;
     container.className = 'videocontainer';

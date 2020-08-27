@@ -127,3 +127,13 @@ export function calculateNumberOfPages(participantsCount: number) {
 
     return pages;
 }
+
+
+/**
+ * ShowPagination.
+ *
+ * @returns {boolean} True if to show pagination.
+ */
+export function showPagination() {
+    return interfaceConfig.SHOW_VIDEO_PAGINATION;
+}
