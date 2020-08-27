@@ -357,9 +357,10 @@ const VideoLayout = {
         if(pidsToSelect.length > 0) {
 
             // check for muted video
-            pidsToSelect = pidsToSelect.filter(pid => 
-                APP.conference.getParticipantById(pid) && !APP.conference.getParticipantById(pid).isVideoMuted()
-            )
+            pidsToSelect = pidsToSelect.filter(pid => {
+                let participant = APP.conference.getParticipantById(pid);
+                return participant && !participant.isVideoMuted();
+            })
             
             conference.setLastN(pidsToSelect.length);
             conference.selectParticipants(pidsToSelect);
