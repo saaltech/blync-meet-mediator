@@ -9,7 +9,7 @@ import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
-import { Icon, IconShareDesktop } from '../../../base/icons';
+import { Icon, IconArrowRight, IconShareDesktop, IconArrowLeft } from '../../../base/icons';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
@@ -314,7 +314,7 @@ class Conference extends AbstractConference<Props, *> {
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
                     <Filmstrip filmstripOnly = { filmstripOnly } />
-                    {tileViewEnabled && participants.length > 1 && <div className = 'conference__pagination'>
+                    {tileViewEnabled && page > 1 && <div className = 'conference__pagination'>
                         <button
                             disabled = { page <= 1 }
                             onClick = { () => {
@@ -323,7 +323,9 @@ class Conference extends AbstractConference<Props, *> {
                                     return;
                                 }
                                 APP.store.dispatch(setPage(page - 1));
-                            } }>Previous</button>
+                            } }>
+                            <Icon src = { IconArrowLeft } />
+                        </button>
                         <button
                             disabled = { page >= maxPages }
                             onClick = { () => {
@@ -333,7 +335,7 @@ class Conference extends AbstractConference<Props, *> {
                                     return;
                                 }
                                 APP.store.dispatch(setPage(page + 1));
-                            } }>Next</button>
+                            } }><Icon src = { IconArrowRight } /></button>
                     </div>}
                 </div>
 
