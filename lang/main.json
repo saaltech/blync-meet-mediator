@@ -873,7 +873,9 @@
         "subTitle": "Collaborate Anytime Anywhere",
         "placeholderEnterRoomName": "Enter the room name",
         "startSession": "Go ahead, enter the meeting name and start the session.",
-        "signinLabel": "Sign in"
+        "signinLabel": "Sign in",
+        "mobileMessageTitle": "Jifmeet Mobile App",
+        "mobileMessage": "Download Jifmeet mobile app and attend your meetings anytime, anywhere"
     },
     "loginPage": {
         "loginLabel": "Login",
