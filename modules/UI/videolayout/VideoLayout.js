@@ -29,6 +29,8 @@ let eventEmitter = null;
 
 let largeVideo;
 
+const showVideoPaging = window.interfaceConfig.SHOW_VIDEO_PAGINATION;
+
 /**
  * flipX state of the localVideo
  */
@@ -204,9 +206,9 @@ const VideoLayout = {
             // also clear this list when switching between views.
 
             // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
-            
+
             conference.selectParticipants(pidsToSelect);
-            
+
 
             // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
@@ -299,7 +301,22 @@ const VideoLayout = {
         return index >= lowerLimit && index < upperLimit;
     },
 
+    calculateNumberOfPages(participants = []) {
+        const perPage = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const pages = Math.floor(participants / perPage);
+
+        if ((participants % perPage) > 0) {
+            return pages + 1;
+        }
+
+        return pages;
+    },
+
     updateVideoPage(currentPage) {
+        if (!showVideoPaging) {
+            return;
+        }
+
 
         const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
         const remoteVideosKeys = Object.keys(remoteVideos);
@@ -308,21 +325,20 @@ const VideoLayout = {
         const localContainer = 'localVideoTileViewContainer';
 
         const videosInView = [];
-        const localParticipant = getLocalParticipant(APP.store.getState());
         const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
 
         [ ...remoteVideosKeys, localContainer ].forEach((key, index) => {
 
             let elementId = `#${key}`;
 
+            if (key !== localContainer) {
+                elementId = `#participant_${key}`;
+            }
+
             if (tileViewEnabled === false) {
                 $(elementId).css({ display: 'block' });
 
                 return;
-            }
-
-            if (key !== localContainer) {
-                elementId = `#participant_${key}`;
             }
 
             if (index >= lowerLimit && index < upperLimit) {
@@ -342,7 +358,8 @@ const VideoLayout = {
 
 
         const { conference } = APP.store.getState()['features/base/conference'];
-        //const pinnedId = this.getPinnedId();
+
+        // const pinnedId = this.getPinnedId();
 
         let pidsToSelect = [ ...new Set(videosInView) ];
 
@@ -354,18 +371,20 @@ const VideoLayout = {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
-        if(pidsToSelect.length > 0) {
+        if (pidsToSelect.length > 0) {
 
             // check for muted video
             pidsToSelect = pidsToSelect.filter(pid => {
-                let participant = APP.conference.getParticipantById(pid);
+                const participant = APP.conference.getParticipantById(pid);
+
                 return participant && !participant.isVideoMuted();
-            })
-            
+            });
+
             conference.setLastN(pidsToSelect.length);
             conference.selectParticipants(pidsToSelect);
         }
-        //pidsToSelect.forEach(pid => conference.selectParticipant(pid))
+
+        // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
         // conference.selectParticipants(pidsToSelect);
     },
 
@@ -491,6 +510,13 @@ const VideoLayout = {
 
         const id = participant.id;
         const jitsiParticipant = APP.conference.getParticipantById(id);
+
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        if (tileViewEnabled && showVideoPaging) {
+            $('#localVideoTileViewContainer').css({ display: 'none' });
+        }
+
         const remoteVideo = new RemoteVideo(jitsiParticipant, VideoLayout);
 
         this._setRemoteControlProperties(jitsiParticipant, remoteVideo);
@@ -498,6 +524,8 @@ const VideoLayout = {
 
         this.updateMutedForNoTracks(id, 'audio');
         this.updateMutedForNoTracks(id, 'video');
+
+        this.refreshPagination();
 
         const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
 
@@ -567,7 +595,7 @@ const VideoLayout = {
      * Display name changed.
      */
     onDisplayNameChanged(id) {
-        if (id === 'localVideoContainer'
+        if (id === 'localVideoTileViewContainer'
             || APP.conference.isLocalId(id)) {
             localVideoThumbnail.updateDisplayName();
         } else {

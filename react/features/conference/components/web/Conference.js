@@ -9,7 +9,7 @@ import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
-import { Icon, IconShareDesktop } from '../../../base/icons';
+import { Icon, IconArrowRight, IconShareDesktop, IconArrowLeft } from '../../../base/icons';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
@@ -36,7 +36,7 @@ import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-mo
 import {
     leavingMeeting
 } from '../../../toolbox/actions';
-import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
+import { LAYOUTS, getCurrentLayout, calculateNumberOfPages, showPagination } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
@@ -265,9 +265,11 @@ class Conference extends AbstractConference<Props, *> {
 
         const { page } = APP.store.getState()['features/filmstrip'];
         const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
-        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+
+        // const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
         const participants = APP.store.getState()['features/base/participants'];
-        const maxPages = Math.ceil((participants || []).length / maxGridSize);
+        const totalPages = calculateNumberOfPages(participants.length);
+        const showPaging = showPagination();
 
 
         return (
@@ -314,7 +316,8 @@ class Conference extends AbstractConference<Props, *> {
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
                     <Filmstrip filmstripOnly = { filmstripOnly } />
-                    {tileViewEnabled && participants.length > 1 && <div className = 'conference__pagination'>
+                    {(tileViewEnabled && totalPages > 1 && showPaging)
+                    && <div className = 'conference__pagination'>
                         <button
                             disabled = { page <= 1 }
                             onClick = { () => {
@@ -323,17 +326,19 @@ class Conference extends AbstractConference<Props, *> {
                                     return;
                                 }
                                 APP.store.dispatch(setPage(page - 1));
-                            } }>Previous</button>
+                            } }>
+                            <Icon src = { IconArrowLeft } />
+                        </button>
                         <button
-                            disabled = { page >= maxPages }
+                            disabled = { page >= totalPages }
                             onClick = { () => {
 
-                                if (page >= maxPages) {
+                                if (page >= totalPages) {
 
                                     return;
                                 }
                                 APP.store.dispatch(setPage(page + 1));
-                            } }>Next</button>
+                            } }><Icon src = { IconArrowRight } /></button>
                     </div>}
                 </div>
 

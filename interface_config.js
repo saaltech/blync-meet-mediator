@@ -220,6 +220,29 @@ var interfaceConfig = {
     TILE_VIEW_MAX_COLUMNS: 3,
 
     /**
+     * Enable pagination. This will also enabled fitting lastN video streams
+     * to one's seen on the respective grid page
+     */
+    SHOW_VIDEO_PAGINATION: false,
+
+    /**
+     * Enables redirecting the welcome page(on iOS/Android mobile devices) to the installed Jifmeet app 
+     * or to its page on platform store if the app isn't installed.
+     * Ensure the links point to Jifmeet app.
+     * Set to 'null' if redirection isn't needed.
+     */
+    MOBILE_APP_LINKS: {
+        ios: {
+            deepLink: "itms-apps://itunes.apple.com/ae/app/id1528158889",
+            storeLink: "https://apps.apple.com/ae/app/jifmeet/id1528158889"
+        },
+        android: {
+            deepLink: "market://details?id=com.google.android.youtube",
+            storeLink: "https://play.google.com/store/apps/details?id=com.google.android.youtube&hl=en"
+        }
+    },
+
+    /**
      * Specify custom URL for downloading android mobile app.
      */
     // MOBILE_DOWNLOAD_LINK_ANDROID: 'https://play.google.com/store/apps/details?id=org.jitsi.meet',

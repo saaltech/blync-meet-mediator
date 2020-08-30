@@ -133,12 +133,33 @@
     .conference__pagination {
         position: absolute;
         z-index: 10000;
+        width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
         top: 50%;
         left: 0;
+        box-sizing: border-box;
+        pointer-events: none;
         button {
-            background: #EBEBEB;
+            background: #00C062;
             padding: 1rem;
             border: none;
+            border-radius: 100px;
+            pointer-events: all;
+            outline: none;
+
+            svg, path {
+                fill: #FFF !important;
+            }
+        }
+
+       
+
+        button:disabled {
+            opacity: .4;
+            cursor: not-allowed;
         }
     }
 }
