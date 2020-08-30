@@ -61,7 +61,7 @@ MiddlewareRegistry.register(store => next => action => {
 
         const participants = store.getState()['features/base/participants'];
 
-        updatePage(participants.length - 1);
+        updatePage(participants.length);
 
         break;
     }
