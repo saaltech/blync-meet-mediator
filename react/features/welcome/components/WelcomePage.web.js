@@ -248,7 +248,7 @@ class WelcomePage extends AbstractWelcomePage {
                                     <p className="more-section-title">{t('welcomepage.mobileMessageTitle')}</p>
                                     <p className="more-section-text">{t('welcomepage.mobileMessage')}</p>
                                     <div className="app-link">
-                                        <a href={this.links[Platform.OS].storeLink} rel="noopener" target="_blank">
+                                        <a href={this.links[Platform.OS].storeLink} target="_top">
                                             {
                                                 Platform.OS === 'ios' ?
                                                 <img src="images/appstore.svg"/>
