@@ -380,6 +380,8 @@ const VideoLayout = {
                 return participant && !participant.isVideoMuted();
             });
 
+            conference.setReceiverVideoConstraint(240);
+            conference.setSenderVideoConstraint(240);
             conference.setLastN(pidsToSelect.length);
             conference.selectParticipants(pidsToSelect);
         }
