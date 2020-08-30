@@ -128,7 +128,8 @@ class WelcomePage extends AbstractWelcomePage {
 
     launchApp() {
         window.location.replace(this.links[Platform.OS].deepLink);
-        this.timer = setTimeout(() => this.openAppPage(), 1000);
+        // TODO: Comment the below line until redirection to installed app is implemented
+        // this.timer = setTimeout(() => this.openAppPage(), 1000);
     }
 
     openAppPage() {
