@@ -2,6 +2,7 @@
 
 import _ from 'lodash';
 import React from 'react';
+import SockJsClient from 'react-stomp';
 
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
 import Loading from '../../../always-on-top/Loading';
@@ -12,12 +13,17 @@ import { Icon, IconShareDesktop } from '../../../base/icons';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
+import {
+    addWaitingParticipants,
+    flushOutWaitingList,
+    removeWaitingParticipants
+} from '../../../base/waiting-participants';
 import { Chat } from '../../../chat';
 import { Filmstrip, SpeakersList } from '../../../filmstrip';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
-import { NotificationsToasts } from '../../../notifications-toasts';
+import { NotificationsToasts, showNotification } from '../../../notifications-toasts';
 import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
     Toolbox,
@@ -30,7 +36,7 @@ import {
     leavingMeeting
 } from '../../../toolbox/actions';
 import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
-import { maybeShowSuboptimalExperienceNotification, 
+import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
     getAppSocketEndPoint } from '../../functions';
@@ -44,13 +50,9 @@ import InviteParticipants from './InviteParticipants';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 import ParticipantsList from './ParticipantsList';
-import {
-    addWaitingParticipants,
-    flushOutWaitingList,
-    removeWaitingParticipants
-} from '../../../base/waiting-participants';
-import SockJsClient from 'react-stomp';
-import { showNotification } from '../../../notifications-toasts';
+import PrivacyPage from './privacy/privacy';
+import TermsPage from './terms/terms';
+
 
 declare var APP: Object;
 declare var config: Object;
@@ -113,7 +115,7 @@ type Props = AbstractProps & {
     _iAmSharingScreen: boolean,
     _isModerator: boolean,
     _sharer: Object,
-    _otherSharers: Array<Object>
+    _otherSharers: Array<Object>,
 }
 
 /**
@@ -123,6 +125,7 @@ class Conference extends AbstractConference<Props, *> {
     _onFullScreenChange: Function;
     _onShowToolbar: Function;
     _originalOnShowToolbar: Function;
+    isLegalPage: boolean;
 
     /**
      * Initializes a new Conference instance.
@@ -132,11 +135,13 @@ class Conference extends AbstractConference<Props, *> {
      */
     constructor(props) {
         super(props);
+        this.isLegalPage = (window.location.pathname === '/privacy-policy') || (window.location.pathname === '/TnC');
 
-        // Throttle and bind this component's mousemove handler to prevent it
+        if (!this.isLegalPage) {
+            // Throttle and bind this component's mousemove handler to prevent it
         // from firing too often.
-        this._originalOnShowToolbar = this._onShowToolbar;
-        this._onShowToolbar = _.throttle(
+            this._originalOnShowToolbar = this._onShowToolbar;
+            this._onShowToolbar = _.throttle(
             () => this._originalOnShowToolbar(),
             100,
             {
@@ -144,12 +149,13 @@ class Conference extends AbstractConference<Props, *> {
                 trailing: false
             });
 
-        this.state = {
-            waitingParticipantsFetchDone: false
-        }
+            this.state = {
+                waitingParticipantsFetchDone: false
+            };
 
-        // Bind event handler so it is only bound once for every instance.
-        this._onFullScreenChange = this._onFullScreenChange.bind(this);
+            // Bind event handler so it is only bound once for every instance.
+            this._onFullScreenChange = this._onFullScreenChange.bind(this);
+        }
     }
 
     /**
@@ -158,6 +164,13 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentDidMount() {
+        if (this.isLegalPage) {
+            document.querySelector('body').classList.add('legal-page-body');
+
+            return;
+        }
+        document.querySelector('body').classList.remove('legal-page-body');
+
         this.closeSocketConnection();
         this.props._isModerator && this.props.dispatch(flushOutWaitingList());
 
@@ -174,7 +187,13 @@ class Conference extends AbstractConference<Props, *> {
      * returns {void}
      */
     componentDidUpdate(prevProps) {
-        this.sendMessageWaitingParticipants()
+        if (this.isLegalPage) {
+            document.querySelector('body').classList.add('legal-page-body');
+
+            return;
+        }
+        document.querySelector('body').classList.remove('legal-page-body');
+        this.sendMessageWaitingParticipants();
         if (this.props._shouldDisplayTileView
             === prevProps._shouldDisplayTileView) {
             return;
@@ -194,9 +213,12 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentWillUnmount() {
+        if (this.isLegalPage) {
+            return;
+        }
         this.closeSocketConnection();
 
-        this.setState({ waitingParticipantsFetchDone: false })
+        this.setState({ waitingParticipantsFetchDone: false });
 
         APP.UI.unbindEvents();
 
@@ -205,34 +227,41 @@ class Conference extends AbstractConference<Props, *> {
 
         APP.conference.isJoined() && this.props.dispatch(disconnect());
 
-        
+
     }
 
     /**
-     * send message over socket to fetch the waiting participants list
+     * Send message over socket to fetch the waiting participants list.
      *
      */
     sendMessageWaitingParticipants() {
-        
-        if(this.props._isModerator && 
-            !this.state.waitingParticipantsFetchDone &&
-            this.clientRef && this.clientRef.client.connected) {
-                this.setState({ waitingParticipantsFetchDone: true })
-                this.clientRef.sendMessage(`${getAppSocketEndPoint() + this.props._participantsSocketTopic}`, 
-                    JSON.stringify({ "status": "PENDING"}));
+        if (this.isLegalPage) {
+            return;
         }
-            
+
+        if (this.props._isModerator
+            && !this.state.waitingParticipantsFetchDone
+            && this.clientRef && this.clientRef.client.connected) {
+            this.setState({ waitingParticipantsFetchDone: true });
+            this.clientRef.sendMessage(`${getAppSocketEndPoint() + this.props._participantsSocketTopic}`,
+                    JSON.stringify({ 'status': 'PENDING' }));
+        }
+
     }
 
     /**
-     * Close the existing socket connection
+     * Close the existing socket connection.
      *
      */
     closeSocketConnection() {
-        if(this.clientRef && this.clientRef.client.connected) {
-            this.clientRef.disconnect()
+        if (this.isLegalPage) {
+            return;
+        }
+        if (this.clientRef && this.clientRef.client.connected) {
+            this.clientRef.disconnect();
         }
     }
+
 
     /**
      * Implements React's {@link Component#render()}.
@@ -262,35 +291,49 @@ class Conference extends AbstractConference<Props, *> {
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
+        if (window.location.pathname === '/privacy-policy') {
+            return <PrivacyPage />;
+        }
+
+        if (window.location.pathname === '/TnC') {
+            return <TermsPage />;
+        }
+
+
+
         return (
             <div
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
+
                 {
-                    _isModerator && _isWaitingEnabled &&
-                    <SockJsClient url={_socketLink} topics={[_participantsSocketTopic]}
-                        onMessage={(res) => {
-                            if(res.action === 'REMOVE') {
-                                APP.store.dispatch(removeWaitingParticipants(res.participants.map(p => p.jid)))
-                            }
-                            else {
-                                APP.store.dispatch(addWaitingParticipants(res.participants))
+                    _isModerator && _isWaitingEnabled
+                    && <SockJsClient
+                        url = { _socketLink }
+                        topics = { [ _participantsSocketTopic ] }
+                        onMessage = { res => {
+                            if (res.action === 'REMOVE') {
+                                APP.store.dispatch(removeWaitingParticipants(res.participants.map(p => p.jid)));
+                            } else {
+                                APP.store.dispatch(addWaitingParticipants(res.participants));
                                 if (_toastNotificationSettings.showParticipantWaiting) {
                                     res.participants && res.participants.forEach(p => {
-                                            APP.store.dispatch(showNotification({
-                                                userName: p.username,
-                                                type: 'WAITING_TO_JOIN'
-                                            }));
-                                    })
+                                        APP.store.dispatch(showNotification({
+                                            userName: p.username,
+                                            type: 'WAITING_TO_JOIN'
+                                        }));
+                                    });
                                 }
-                                
+
                             }
-                            
-                        }}
-                        ref={ (client) => { this.clientRef = client }} />
+
+                        } }
+                        ref = { client => {
+                            this.clientRef = client;
+                        } } />
                 }
-                
+
 
                 {
                     _leavingMeeting
