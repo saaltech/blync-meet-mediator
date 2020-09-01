@@ -4,6 +4,7 @@ import React from 'react';
 
 import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth';
 import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen';
+import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
@@ -18,7 +19,6 @@ import { RecentList } from '../../recent-list';
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
-import { Platform } from '../../../features/base/react';
 
 
 /**
@@ -128,6 +128,7 @@ class WelcomePage extends AbstractWelcomePage {
 
     launchApp() {
         window.location.replace(this.links[Platform.OS].deepLink);
+
         // TODO: Comment the below line until redirection to installed app is implemented
         // this.timer = setTimeout(() => this.openAppPage(), 1000);
     }
@@ -146,7 +147,7 @@ class WelcomePage extends AbstractWelcomePage {
      */
     componentDidMount() {
 
-        if(isMobileBrowser() && this.links) {
+        if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
 
@@ -228,10 +229,9 @@ class WelcomePage extends AbstractWelcomePage {
         const showResponsiveText = this._shouldShowResponsiveText();
         const titleArr = t('welcomepage.enterRoomTitle').split(' ');
         const separatedTitle = titleArr.pop();
-        
-        
 
-        return ( 
+
+        return (
             <div>
                 {
                     <div
@@ -242,115 +242,123 @@ class WelcomePage extends AbstractWelcomePage {
                         <Background />
 
                         {
-                            isMobileBrowser() && this.links ?
-                            <div className = 'mobile-message'>
-                                <div className="more-section-content">
-                                    <p className="more-section-title">{t('welcomepage.mobileMessageTitle')}</p>
-                                    <p className="more-section-text">{t('welcomepage.mobileMessage')}</p>
-                                    <div className="app-link">
-                                        <a href={this.links[Platform.OS].storeLink} target="_top">
-                                            {
-                                                Platform.OS === 'ios' ?
-                                                <img src="images/appstore.svg"/>
-                                                :
-                                                <img src="images/googleplay.png"/>
-                                            }
-                                        </a>
+                            isMobileBrowser() && this.links
+                                ? <div className = 'mobile-message'>
+                                    <div className = 'more-section-content'>
+                                        <p className = 'more-section-title'>{t('welcomepage.mobileMessageTitle')}</p>
+                                        <p className = 'more-section-text'>{t('welcomepage.mobileMessage')}</p>
+                                        <div className = 'app-link'>
+                                            <a
+                                                href = { this.links[Platform.OS].storeLink }
+                                                target = '_top'>
+                                                {
+                                                    Platform.OS === 'ios'
+                                                        ? <img src = 'images/appstore.svg' />
+                                                        : <img src = 'images/googleplay.png' />
+                                                }
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            :
-                            <>
-                                {
-                                    _isUserSignedOut && !hideLogin
+                                : <>
+                                    {
+                                        _isUserSignedOut && !hideLogin
                                     && <LoginComponent
                                         closeAction = { this._closeLogin }
                                         isOverlay = { true }
                                         t = { t }
                                         errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' } />
-                                }
-
-                                <div className = 'header'>
-                                    {
-                                        _isUserSignedOut
-                                            ? <div
-                                                className = { 'welcome-page-button signin' }
-                                                id = 'enter_room_button'
-                                                onClick = { () => this.setState({
-                                                    hideLogin: false
-                                                }) }>
-                                                {
-                                                    t('welcomepage.signinLabel')
-                                                }
-                                            </div>
-                                            : <div
-                                                className = { 'welcome-page-button profile' }
-                                                onClick = { () => this.setState({
-                                                    hideLogin: true
-                                                }) }>
-                                                <Profile
-                                                    showMenu = { true } />
-                                            </div>
-
                                     }
-                                    <div className = 'header-image' />
-                                    <div className = 'header-text'>
-                                        <h1 className = 'header-text-title'>
-                                            <span>{ titleArr.join(' ') } </span>
-                                            <span>{ separatedTitle }</span>
-                                        </h1>
-                                        {/* <h3 className = 'header-text-sub-title'>
+
+                                    <div className = 'header'>
+                                        {
+                                            _isUserSignedOut
+                                                ? <div
+                                                    className = { 'welcome-page-button signin' }
+                                                    id = 'enter_room_button'
+                                                    onClick = { () => this.setState({
+                                                        hideLogin: false
+                                                    }) }>
+                                                    {
+                                                        t('welcomepage.signinLabel')
+                                                    }
+                                                </div>
+                                                : <div
+                                                    className = { 'welcome-page-button profile' }
+                                                    onClick = { () => this.setState({
+                                                        hideLogin: true
+                                                    }) }>
+                                                    <Profile
+                                                        showMenu = { true } />
+                                                </div>
+
+                                        }
+                                        <div className = 'header-image' />
+                                        <div className = 'header-text'>
+                                            <h1 className = 'header-text-title'>
+                                                <span>{ titleArr.join(' ') } </span>
+                                                <span>{ separatedTitle }</span>
+                                            </h1>
+                                            {/* <h3 className = 'header-text-sub-title'>
                                             { t('welcomepage.subTitle') }
                                         </h3>
                                         <p className = 'header-text-description'>
                                             { t('welcomepage.appDescription',
                                                 { app: APP_NAME }) }
                                     </p>*/}
-                                    </div>
-                                    <div id = 'enter_room'>
-                                        <div className = 'enter-room-input-container'>
-                                            <form onSubmit = { this._onFormSubmit }>
-                                                <input
-                                                    autoFocus = { true }
-                                                    className = 'enter-room-input'
-                                                    id = 'enter_room_field'
-                                                    onChange = { this._onRoomNameChanged }
-
-                                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                                    placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
-                                                    ref = { this._setRoomInputRef }
-                                                    title = { t('welcomepage.roomNameAllowedChars') }
-                                                    type = 'text' />
-                                                { this._renderInsecureRoomNameWarning() }
-                                            </form>
                                         </div>
-                                        <div
-                                            className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
-                                            id = 'enter_room_button'
+                                        <div id = 'enter_room'>
+                                            <div className = 'enter-room-input-container'>
+                                                <form onSubmit = { this._onFormSubmit }>
+                                                    <input
+                                                        autoFocus = { true }
+                                                        className = 'enter-room-input'
+                                                        id = 'enter_room_field'
+                                                        onChange = { this._onRoomNameChanged }
 
-                                            onClick = { this._onFormSubmit }>
-                                            {/* onClick = {this._showPostWelcomePageScreen}>*/}
-                                            {
-                                                showResponsiveText
-                                                    ? t('welcomepage.goSmall')
-                                                    : t('welcomepage.go')
-                                            }
+                                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                                        placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
+                                                        ref = { this._setRoomInputRef }
+                                                        title = { t('welcomepage.roomNameAllowedChars') }
+                                                        type = 'text' />
+                                                    { this._renderInsecureRoomNameWarning() }
+                                                </form>
+                                            </div>
+                                            <div
+                                                className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
+                                                id = 'enter_room_button'
+
+                                                onClick = { this._onFormSubmit }>
+                                                {/* onClick = {this._showPostWelcomePageScreen}>*/}
+                                                {
+                                                    showResponsiveText
+                                                        ? t('welcomepage.goSmall')
+                                                        : t('welcomepage.go')
+                                                }
+                                            </div>
                                         </div>
+                                        <div className = 'note'> { t('welcomepage.startSession') } </div>
+                                        {/* this._renderTabs() */}
                                     </div>
-                                    <div className = 'note'> { t('welcomepage.startSession') } </div>
-                                    {/* this._renderTabs() */}
-                                </div>
-                                { showAdditionalContent
-                                    ? <div
-                                        className = 'welcome-page-content'
-                                        ref = { this._setAdditionalContentRef } />
-                                    : null }
+                                    { showAdditionalContent
+                                        ? <div
+                                            className = 'welcome-page-content'
+                                            ref = { this._setAdditionalContentRef } />
+                                        : null }
                             </>
                         }
 
-                        
+
                     </div>
                 }
+
+                <div className = 'legal-footer'>
+                    <p>Copyright © 2020 jifmeet. All rights reserved.</p>
+
+                    <div>
+                        <a href = '/TnC'>Terms, and Conditions</a> | <a href = '/privacy-policy'>Privacy Policy</a>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -396,7 +404,7 @@ class WelcomePage extends AbstractWelcomePage {
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this.setState({
                 goClicked: true
-            })
+            });
             this.props.dispatch(setPostWelcomePageScreen(this.state.room));
 
 
