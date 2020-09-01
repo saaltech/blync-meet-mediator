@@ -352,13 +352,17 @@ class WelcomePage extends AbstractWelcomePage {
                     </div>
                 }
 
-                <div className = 'legal-footer'>
-                    <p>Copyright © 2020 Jifmeet. All rights reserved.</p>
+                {
+                    !isMobileBrowser() &&
+                    <div className = 'legal-footer'>
+                        <p>Copyright © 2020 Jifmeet. All rights reserved.</p>
 
-                    <div>
-                        <a href = '/TnC'>Terms and Conditions</a> | <a href = '/privacy-policy'>Privacy Policy</a>
+                        <div>
+                            <a href = '/TnC'>Terms and Conditions</a> | <a href = '/privacy-policy'>Privacy Policy</a>
+                        </div>
                     </div>
-                </div>
+                }
+                
             </div>
         );
     }
