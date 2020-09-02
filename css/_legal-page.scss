@@ -55,6 +55,13 @@
     &__title {
       display: flex;
       align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    &__title h1 {
+      color: #000 !important;
+      font-size: 50px;
+      text-transform: uppercase;
     }
   
     &__title span {
@@ -64,6 +71,7 @@
       font-size-adjust: 25px;
       font-weight: bold;
       line-height: 34px;
+      margin-top: .5rem;
     }
   
     &__section {
@@ -110,7 +118,7 @@
       counter-increment: article-item-sub-title-counter;
       &.bold {
         line-height: 2.5;
-        font-weight: bold;
+        // font-weight: bold;
       }
   
       &::before {
