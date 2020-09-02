@@ -49,12 +49,23 @@
   .legal-document {
     counter-reset: section-counter;
     font-size: 20px;
-      line-height: 34px;
-      color: #4D4D4D;
+    line-height: 34px;
+    color: #4D4D4D;
+
+    p {
+      padding-bottom: .5rem;
+    }
     
     &__title {
       display: flex;
       align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    &__title h1 {
+      color: #000 !important;
+      font-size: 50px;
+      text-transform: uppercase;
     }
   
     &__title span {
@@ -64,6 +75,7 @@
       font-size-adjust: 25px;
       font-weight: bold;
       line-height: 34px;
+      margin-top: .5rem;
     }
   
     &__section {
@@ -93,6 +105,7 @@
       counter-increment: article-counter;
       counter-reset: article-item-sub-title-counter;
       display: table;
+      margin-bottom: 1rem;
       &::before {
         padding-right: 2rem;
         display: table-cell;
@@ -108,9 +121,10 @@
     &__article-item-title {
       display: table;
       counter-increment: article-item-sub-title-counter;
+      margin: .25rem 0;
       &.bold {
-        line-height: 2.5;
-        font-weight: bold;
+        // line-height: 2.5;
+        // font-weight: bold;
       }
   
       &::before {

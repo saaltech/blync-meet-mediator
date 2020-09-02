@@ -23,13 +23,13 @@
                 "content": "We may collect and process the following personal information:",
                 "items": [
                     {
-                        "title": "Information you give us:",
+                        "title": "<b>Information you give us:</b>",
                         "items": [
                             "You may give us information about you when by registering on our Services or by corresponding with us by phone, e-mail or other electronic means, or in writing, as well as other information you provide directly to us, including in conversation with our employees and staff."
                         ]
                     },
                     {
-                        "title": "Information we collect about you:",
+                        "title": "<b>Information we collect about you:</b>",
                         "content": "With regard to each of your visits to our Services, we may automatically collect the following information:",
                         "items": [
                             "technical information, including the Internet protocol (IP) address used to connect your computerto the Internet, browser type and version, time zone setting, browser plug-in types and versions, operating system; and",
@@ -37,7 +37,7 @@
                         ]
                     },
                     {
-                        "title": "Information we receive from other sources:",
+                        "title": "<b>Information we receive from other sources:</b>",
                         "content": "We may also receive information about you from other sources such as our local authorized business partners and service providers."
                     }
                 ]
@@ -51,7 +51,7 @@
                 "content": "We use your personal information for the following purposes where permitted by applicable law as follows:",
                 "items": [
                     {
-                        "title": "Where this is necessary for purposes which are in our, or third parties, legitimate interests. These interests are:",
+                        "title": "<b>Where this is necessary for purposes which are in our, or third parties, legitimate interests. These interests are:</b>",
                         "items": [
                             "auditing usage of our Services;",
                             "to process and respond to inquiries, and provide our services;",
@@ -60,14 +60,14 @@
                         ]
                     },
                     {
-                        "title": "Where you give us consent:",
+                        "title": "<b>Where you give us consent:</b>",
                         "items": [
                             "sending you newsletters related to our Services and for other marketing purposes;",
                             "carrying out business development including sending information about promotions and details of events."
                         ]
                     },
                     {
-                        "title": "For purposes which are required by law:",
+                        "title": "<b>For purposes which are required by law:</b>",
                         "items": [
                             "responding to requests by government or law enforcement authorities conducting an investigation;",
                             "complying with any applicable legislation."

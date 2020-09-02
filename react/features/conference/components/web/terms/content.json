@@ -56,16 +56,16 @@
                 "content": "From time to time we may automatically update the App and change the Service to improve performance, enhance functionality, reflect changes to the operating system or address security issues."
             },
             {
-                "content": "If you choose not to install such updates or if you opt out of automatic updates you may not be able to continue using the App and the Services. <p><b>If someone else owns the phone or device you are using</b></p>"
+                "content": "If you choose not to install such updates or if you opt out of automatic updates you may not be able to continue using the App and the Services. "
             },
             {
-                "content": "If you download or stream the App onto any phone or other device not owned by you, you must have the owner's permission to do so. You will be responsible for complying with these Terms for using the App or the Service, whether or not you own the phone or other device. <p><b>We may collect technical data about your device</b></p>"
+                "content": "<p><b>If someone else owns the phone or device you are using</b></p> If you download or stream the App onto any phone or other device not owned by you, you must have the owner's permission to do so. You will be responsible for complying with these Terms for using the App or the Service, whether or not you own the phone or other device. "
             },
             {
-                "content": "By using the App or any of the Services, you agree to us collecting and using technical information about the devices you use the App on and related software, hardware and peripherals to improve our products and to provide any Services to you. <p><b>We may collect location data (but you can turn location services off)</b></p>"
+                "content": "<p><b>We may collect technical data about your device</b></p> By using the App or any of the Services, you agree to us collecting and using technical information about the devices you use the App on and related software, hardware and peripherals to improve our products and to provide any Services to you."
             },
             {
-                "content": "Certain Services will make use of location data sent from your devices. You can turn off this functionality at  any  time  by  turning  off  the  location  services  settings  for  the  App  on  the  device.  If  you  use  these Services,  you  consent  to  us  and  our  affiliates'  and  licensees'  transmission,  collection,  retention, maintenance, processing and use of your location data and queries to provide and improve location-based and road traffic-based products and services. "
+                "content": "<p><b>We may collect location data (but you can turn location services off)</b></p> Certain Services will make use of location data sent from your devices. You can turn off this functionality at  any  time  by  turning  off  the  location  services  settings  for  the  App  on  the  device.  If  you  use  these Services,  you  consent  to  us  and  our  affiliates'  and  licensees'  transmission,  collection,  retention, maintenance, processing and use of your location data and queries to provide and improve location-based and road traffic-based products and services. "
             },
             {
                 "content": "You may stop us collecting such data at any time by turning off the location services settings on your device.  Location data is not used to track you"
@@ -288,7 +288,7 @@
         "title": "GENERAL TERMS ",
         "article": [
             {
-                "content": "<b>Relationship</b> None of the provisions of these Terms will be deemed to constitute a partnership or agency between you and SAAL and you will have no authority to bind SAAL in any manner whatsoever."
+                "content": "<b>Relationship:</b> None of the provisions of these Terms will be deemed to constitute a partnership or agency between you and SAAL and you will have no authority to bind SAAL in any manner whatsoever."
             },
             {
                 "content": "<b>Severability:</b> If any provision of these Terms is held by a court of competent jurisdiction to be invalid, illegal or unenforceable and can be deleted without altering the essence of these Terms, the invalid, illegal or  unenforceable  provision  will  be  severed  and  the  remaining  provisions  will  remain  in  full  force  or effect."
@@ -297,7 +297,7 @@
                 "content": "<b>No Waiver:</b>  Any failure by SAAL to enforce any terms set out in these Terms or other policies with you is not a waiver of SAAL’s rights to enforce those terms."
             },
             {
-                "content": "<b>Entire  Agreement.</b>  These  Terms  (including  the  Privacy  Policy)  constitute  the  entire  understanding between you and us concerning the subject matter herein and supersede all prior discussions, contracts and representations, whether oral or written."
+                "content": "<b>Entire  Agreement:</b>  These  Terms  (including  the  Privacy  Policy)  constitute  the  entire  understanding between you and us concerning the subject matter herein and supersede all prior discussions, contracts and representations, whether oral or written."
             }
         ]
     },

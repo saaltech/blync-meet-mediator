@@ -19,7 +19,7 @@ const LegalContent = props =>
                                     {(article.items || []).map(item => (
                                         <div className = 'legal-document__article-item'>
                                             <div className = { `${(item.items || []).length > 0 ? 'bold' : ''} legal-document__article-item-title` }>
-                                                <div>{item.title}</div>
+                                                <div dangerouslySetInnerHTML = {{ __html: item.title }} />
                                             </div>
                                             <div dangerouslySetInnerHTML = {{ __html: item.content }} />
                                             <ol className = 'legal-document__sub-item'>
