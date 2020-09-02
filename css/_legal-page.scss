@@ -49,8 +49,12 @@
   .legal-document {
     counter-reset: section-counter;
     font-size: 20px;
-      line-height: 34px;
-      color: #4D4D4D;
+    line-height: 34px;
+    color: #4D4D4D;
+
+    p {
+      padding-bottom: .5rem;
+    }
     
     &__title {
       display: flex;
@@ -101,6 +105,7 @@
       counter-increment: article-counter;
       counter-reset: article-item-sub-title-counter;
       display: table;
+      margin-bottom: 1rem;
       &::before {
         padding-right: 2rem;
         display: table-cell;
