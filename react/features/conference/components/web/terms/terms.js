@@ -75,7 +75,7 @@ const TermsOfUse = () => (
                         <tbody>
                             <tr>
                                 <td>Jitsi</td>
-                                <td>https://github.com/jitsi/jitsi-meet/blob/master/LICENSE</td>
+                                <td><a href="https://github.com/jitsi/jitsi-meet/blob/master/LICENSE" target="_blank">https://github.com/jitsi/jitsi-meet/blob/master/LICENSE</a></td>
                             </tr>
                         </tbody>
                     </table>
