@@ -121,8 +121,9 @@
     &__article-item-title {
       display: table;
       counter-increment: article-item-sub-title-counter;
+      margin: .25rem 0;
       &.bold {
-        line-height: 2.5;
+        // line-height: 2.5;
         // font-weight: bold;
       }
   
