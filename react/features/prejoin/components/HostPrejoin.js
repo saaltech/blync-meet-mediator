@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 
 import { config } from '../../../config';
+import Loading from '../../always-on-top/Loading';
 import { Profile } from '../../app-auth';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { translate } from '../../base/i18n';
@@ -23,7 +24,6 @@ import {
 } from '../actions';
 
 import MeetingInfo from './MeetingInfo';
-import Loading from '../../always-on-top/Loading'
 
 
 function HostPrejoin(props) {
@@ -34,11 +34,12 @@ function HostPrejoin(props) {
     const [ meetingPassword, setMeetingPassword ] = useState('');
     const [ meetingFrom, setMeetingFrom ] = useState('');
     const [ meetingTo, setMeetingTo ] = useState(null);
+    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
     const { isMeetNow } = props;
     const [ shareable, setShareable ] = useState(false);
     const { joinConference } = props;
-    const [exiting, setExiting] = useState(false);
-    const [clearErrors, setClearErrors] = useState(true);
+    const [ exiting, setExiting ] = useState(false);
+    const [ clearErrors, setClearErrors ] = useState(true);
 
     const [ getConference, fetchErrors ] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
@@ -52,7 +53,8 @@ function HostPrejoin(props) {
             'conferenceName': meetingName,
             'conferenceSecret': meetingPassword,
             'scheduledFrom': meetNow ? '' : meetingFrom, // "2020-07-08T09:34:00.567Z",
-            'scheduledTo': meetNow ? '' : meetingTo // "2020-07-08T09:34:00.567Z"
+            'scheduledTo': meetNow ? '' : meetingTo, // "2020-07-08T09:34:00.567Z"
+            'isWaitingEnabled' : enableWaitingRoom
         };
     };
 
@@ -93,16 +95,17 @@ function HostPrejoin(props) {
         setMeetingPassword(data.conferenceSecret);
         setMeetingFrom(data.scheduledFrom);
         setMeetingTo(data.scheduledTo);
+        setEnableWaitingRoom(data.isWaitingEnabled);
     };
 
     const setMeetNowAndUpdatePage = value => {
-        setClearErrors(true)
+        setClearErrors(true);
         setMeetNow(value);
         isMeetNow(value);
     };
 
     const goToHome = () => {
-        setExiting(true)
+        setExiting(true);
         window.location.href = window.location.origin;
     };
 
@@ -128,9 +131,11 @@ function HostPrejoin(props) {
             setMeetingPassword('');
         }
 
-        setClearErrors(false)
+        setClearErrors(false);
+
         // Make DB save call
-        let res = await saveConference(true);
+        const res = await saveConference(true);
+
         if (!res) {
             return;
         }
@@ -142,7 +147,8 @@ function HostPrejoin(props) {
             meetingPassword,
             meetingFrom: meetNow ? '' : meetingFrom,
             meetingTo: meetNow ? '' : meetingTo,
-            meetNow
+            meetNow,
+            isWaitingEnabled: enableWaitingRoom
         }
         ));
 
@@ -225,6 +231,10 @@ function HostPrejoin(props) {
                         meetingName,
                         setMeetingName
                     }}
+                    enableWaitingRoom = {{
+                        enableWaitingRoom,
+                        setEnableWaitingRoom
+                    }}
                     isPrivate = {{
                         isPrivate,
                         setIsPrivate
@@ -280,8 +290,8 @@ function HostPrejoin(props) {
                 }
 
                 {
-                    saveErrors && !clearErrors &&
-                    <div className={`error-block`}> { 'Unable to process your new meeting request right now. Please try again after some time.' }</div>
+                    saveErrors && !clearErrors
+                    && <div className = { 'error-block' }> { 'Unable to process your new meeting request right now. Please try again after some time.' }</div>
                 }
 
 

@@ -21,6 +21,7 @@ function MeetingInfo(props) {
     const { meetingName, setMeetingName } = props.meetingName;
     const { meetingPassword, setMeetingPassword } = props.meetingPassword;
     const { isPrivate, setIsPrivate } = props.isPrivate || false;
+    const { enableWaitingRoom, setEnableWaitingRoom } = props.enableWaitingRoom || false;
     const { meetingFrom, setMeetingFrom } = props.meetingFrom;
     const { meetingTo, setMeetingTo } = props.meetingTo;
     const isPureJoinFlow = props.isPureJoinFlow;
@@ -42,19 +43,12 @@ function MeetingInfo(props) {
             {
                 (isPureJoinFlow || shareable) && meetingFrom &&
                 <div className={'date-info'}>
-                    <Icon src={IconCalendar} size={25} />
-                    <div>
-                        <label>From:</label> {moment(meetingFrom).locale('en').format('MMM DD, YYYY hh:mm A')}
-                    </div>
-                </div>
-            }
-            {
-                (isPureJoinFlow || shareable) && meetingTo &&
-                <div className={'date-info'}>
-                    {/*<Icon src={IconCalendar} size={30} />*/}
-                    <div className='to-field'>
-                        <label>To:</label> {moment(meetingTo).locale('en').format('MMM DD, YYYY hh:mm A')}
-                    </div>
+                    {
+                        moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                    }
+                    {
+                        meetingTo && (` - ${moment(meetingTo).locale('en').format('hh:mm a')}`)
+                    }
                 </div>
             }
             {
@@ -137,6 +131,25 @@ function MeetingInfo(props) {
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMM d, yyyy h:mm aa' />
             </div>
+            }
+
+            {
+                !isPureJoinFlow && (!shareable || enableWaitingRoom) &&
+                <div className = 'form-field make-private'>
+                    <InputField
+                        type = 'checkbox'
+                        onChange = { () => {
+                            setEnableWaitingRoom(!enableWaitingRoom);
+                        } }
+                        value = { enableWaitingRoom }
+                        id = 'enableWaitingRoom'
+                        disabled = { shareable } />
+                    <label
+                        className = 'form-label'
+                        htmlFor = 'enableWaitingRoom'>
+                        {'Enable waiting room'}
+                    </label>
+                </div>
             }
             
             {

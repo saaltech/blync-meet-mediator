@@ -1,6 +1,7 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
+import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
@@ -9,7 +10,7 @@ import {
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
-import { getTrackByMediaTypeAndParticipant } from '../../../react/features/base/tracks';
+import { getTrackByMediaTypeAndParticipant, addClonedTrack } from '../../../react/features/base/tracks';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -67,6 +68,15 @@ function getLocalParticipant() {
     return getLocalParticipantFromStore(APP.store.getState());
 }
 
+const getIntersectionObserverOptions = () => {
+    return {
+        root: document.getElementById('remoteVideos'),
+        rootMargin: '0px',
+        threshold: 0.15
+    };
+};
+
+
 const VideoLayout = {
     init(emitter) {
         eventEmitter = emitter;
@@ -77,6 +87,10 @@ const VideoLayout = {
             this._updateLargeVideoIfDisplayed.bind(this));
 
         this.registerListeners();
+
+        const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
+
+        observer.observe(document.getElementById('localVideoTileViewContainer'));
     },
 
     /**
@@ -126,6 +140,67 @@ const VideoLayout = {
             largeVideo.updateLargeVideoAudioLevel(lvl);
         }
     },
+    handleIntersection(entries) {
+        const tracks = APP.store.getState()['features/base/tracks'] || [];
+
+
+        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
+
+        if (!tileViewEnabled) {
+            return;
+        }
+
+
+        entries.forEach(entry => {
+            const containerId = entry.target.id;
+
+            let participantId = null;
+
+            if (containerId === 'localVideoTileViewContainer') {
+                return;
+            }
+            const participantParts = entry.target.id.split('participant_');
+
+            if (participantParts.length < 2) {
+                return;
+            }
+
+            participantId = participantParts[1];
+
+
+            const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
+
+
+            if (!track || track.muted) {
+                return;
+            }
+
+
+            if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
+                APP.UI.setVideoMuted(participantId, false);
+                track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
+
+                return;
+            }
+
+            const streamTrack = track.jitsiTrack.stream.getTracks()[0];
+            if(!streamTrack) {
+                return;
+            }
+            const cacheTrack = streamTrack.clone();
+
+            APP.UI.setVideoMuted(participantId, true);
+            streamTrack.stop();
+            track.jitsiTrack.stream.removeTrack(streamTrack);
+
+            track.jitsiTrack.track = cacheTrack;
+            APP.store.dispatch(addClonedTrack(track.jitsiTrack));
+
+        });
+    },
+
+    stoppedStreams: [],
+    clonedTracks: {},
 
     changeLocalVideo(stream) {
         const localId = getLocalParticipant().id;
@@ -274,7 +349,7 @@ const VideoLayout = {
     },
 
     onHostChange() {
-        getAllThumbnails().forEach(thumbnail => thumbnail.initializeHost());
+        getAllThumbnails().forEach(thumbnail => thumbnail && thumbnail.initializeHost());
     },
 
     /**
@@ -307,6 +382,10 @@ const VideoLayout = {
 
         this.updateMutedForNoTracks(id, 'audio');
         this.updateMutedForNoTracks(id, 'video');
+
+        const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
+
+        observer.observe(document.getElementById(`participant_${id}`));
     },
 
     /**

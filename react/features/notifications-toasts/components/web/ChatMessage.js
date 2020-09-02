@@ -5,11 +5,14 @@ import { toArray } from 'react-emoji-render';
 
 
 import { translate } from '../../../base/i18n';
-import { IconUserCheck, IconUserCancel, IconRaisedHand, Icon } from '../../../base/icons';
+import { IconUserCheck, IconUserCancel, IconRaisedHand, Icon,
+    IconWaiting } from '../../../base/icons';
 import { Linkify } from '../../../base/react';
 import AbstractChatMessage, {
     type Props
 } from '../AbstractChatMessage';
+
+import { WAITING_TO_JOIN } from '../../constants'
 
 // import { MESSAGE_TYPE_LOCAL } from '../../constants';
 // import PrivateMessageButton from '../PrivateMessageButton';
@@ -47,8 +50,8 @@ class ChatMessage extends AbstractChatMessage<Props> {
                             <div className = 'usermessage'>
                                 { processedMessage }
                                 {
-                                    this.props.message.type !== 'default'
-                                 && <Icon src = { this._getMessageIcon(this.props.message) } />
+                                    this.props.message.type !== 'default' && 
+                                    <Icon src = { this._getMessageIcon(this.props.message) } />
                                 }
                             </div>
                         </div>
@@ -75,17 +78,18 @@ class ChatMessage extends AbstractChatMessage<Props> {
     _getMessageIcon(message: Object) {
 
         switch (message.type) {
-        case 'PARTICIPANT_JOINED':
-            return IconUserCheck;
+            case 'PARTICIPANT_JOINED':
+                return IconUserCheck;
 
+            case 'PARTICIPANT_LEFT':
+                return IconUserCancel;
 
-        case 'PARTICIPANT_LEFT':
-            return IconUserCancel;
-
-        case 'RAISED_HAND':
-            return IconRaisedHand;
+            case 'RAISED_HAND':
+                return IconRaisedHand;
+            
+            case WAITING_TO_JOIN:
+                return IconWaiting;
         }
-
     }
 
     /**

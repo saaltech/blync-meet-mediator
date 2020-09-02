@@ -26,17 +26,18 @@ import {
 import {
     getLocalParticipant,
     getParticipants,
-    participantUpdated
+    participantUpdated,
+    PARTICIPANT_ROLE
 } from '../../../base/participants';
 import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
 import { VideoBlurButton } from '../../../blur';
 import { ChatCounter, toggleChat, hideChat, markAsRead, markPublicAsRead } from '../../../chat';
+import { WaitingParticipantNotifier } from '../../../base/waiting-participants/components'
 import { E2EEButton } from '../../../e2ee';
 import { SharedDocumentButton } from '../../../etherpad';
 import { openFeedbackDialog } from '../../../feedback';
-import { beginAddPeople } from '../../../invite';
 import { openKeyboardShortcutsDialog } from '../../../keyboard-shortcuts';
 import {
     LocalRecordingButton,
@@ -70,6 +71,7 @@ import {
     setToolbarHovered,
     leavingMeeting
 } from '../../actions';
+import { toggleParticipantsList, showParticipantsList, showInvitePeople } from '../../actions.web';
 import { isToolboxVisible } from '../../functions';
 import DownloadButton from '../DownloadButton';
 import HangupButton from '../HangupButton';
@@ -192,6 +194,8 @@ type Props = {
 
     _localParticipant: Object,
     _privateMessageRecipient: Object,
+    _participantsListOpen: boolean,
+    _invitePeopleVisible: boolean
 };
 
 /**
@@ -239,7 +243,7 @@ class Toolbox extends Component<Props, State> {
         this._onShortcutToggleScreenshare = this._onShortcutToggleScreenshare.bind(this);
         this._onShortcutToggleVideoQuality = this._onShortcutToggleVideoQuality.bind(this);
         this._onToolbarOpenFeedback = this._onToolbarOpenFeedback.bind(this);
-        this._onToolbarOpenInvite = this._onToolbarOpenInvite.bind(this);
+        this._onToolbarOpenParticipantsList = this._onToolbarOpenParticipantsList.bind(this);
         this._onToolbarOpenKeyboardShortcuts = this._onToolbarOpenKeyboardShortcuts.bind(this);
         this._onToolbarOpenSpeakerStats = this._onToolbarOpenSpeakerStats.bind(this);
         this._onToolbarOpenVideoQuality = this._onToolbarOpenVideoQuality.bind(this);
@@ -420,7 +424,9 @@ class Toolbox extends Component<Props, State> {
         const { _localParticipant, _privateMessageRecipient } = this.props;
 
         this.props.dispatch(toggleChat());
+        this.props.dispatch(showParticipantsList(false));
         this.props.dispatch(setOverflowMenuVisible(false));
+        this.props.dispatch(showInvitePeople(false));
         if (_privateMessageRecipient) {
             APP.store.dispatch(markAsRead(
                 _localParticipant,
@@ -573,8 +579,9 @@ class Toolbox extends Component<Props, State> {
      */
     _onSetOverflowVisible(visible) {
         this.props.dispatch(setOverflowMenuVisible(visible));
-
+        this.props.dispatch(showParticipantsList(false));
         this.props.dispatch(hideChat());
+        this.props.dispatch(showInvitePeople(false));
     }
 
     _onShortcutToggleChat: () => void;
@@ -700,7 +707,7 @@ class Toolbox extends Component<Props, State> {
         this._doOpenFeedback();
     }
 
-    _onToolbarOpenInvite: () => void;
+    _onToolbarOpenParticipantsList: () => void;
 
     /**
      * Creates an analytics toolbar event and dispatches an action for opening
@@ -709,9 +716,15 @@ class Toolbox extends Component<Props, State> {
      * @private
      * @returns {void}
      */
-    _onToolbarOpenInvite() {
+    _onToolbarOpenParticipantsList() {
         sendAnalytics(createToolbarEvent('invite'));
-        this.props.dispatch(beginAddPeople());
+
+        this.props.dispatch(toggleParticipantsList());
+
+        // this.props.dispatch(beginAddPeople());
+        this.props.dispatch(hideChat());
+        this.props.dispatch(showInvitePeople(false));
+        this.props.dispatch(setOverflowMenuVisible(false));
     }
 
     _onToolbarOpenKeyboardShortcuts: () => void;
@@ -1127,7 +1140,7 @@ class Toolbox extends Component<Props, State> {
             //             accessibilityLabel = { t('toolbar.accessibilityLabel.invite') }
             //             icon = { IconInviteMore }
             //             key = 'invite'
-            //             onClick = { this._onToolbarOpenInvite }
+            //             onClick = { this._onToolbarOpenParticipantsList }
             //             text = { t('toolbar.invite') } />
             //     );
             case 'tileview':
@@ -1183,7 +1196,8 @@ class Toolbox extends Component<Props, State> {
             _chatOpen,
             _overflowMenuVisible,
             _raisedHand,
-            t
+            t,
+            _isModerator
         } = this.props;
         const overflowMenuContent = this._renderOverflowMenuContent();
         const overflowHasItems = Boolean(overflowMenuContent.filter(child => child).length);
@@ -1218,9 +1232,10 @@ class Toolbox extends Component<Props, State> {
             buttonsRight.push('overflowmenu');
         }
 
-        // if (this._shouldShowButton('invite')) {
-        //     buttonsRight.push('invite');
-        // }
+        if (this._shouldShowButton('invite')) {
+            buttonsRight.push('invite');
+        }
+
         // if (this._shouldShowButton('security') || this._shouldShowButton('info')) {
         //     buttonsRight.push('security');
         // }
@@ -1280,8 +1295,10 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-right'>
                     <HangupButton
-                        visible = { this._shouldShowButton('hangup') }
-                        afterClick = { () => APP.store.dispatch(leavingMeeting(true)) } />
+                        afterClick = { () => {
+                            APP.store.dispatch(leavingMeeting(true));
+                        } }
+                        visible = { this._shouldShowButton('hangup') } />
                     <div className = 'enclosed-group'>
                         { buttonsRight.indexOf('localrecording') !== -1
                             && <LocalRecordingButton
@@ -1312,13 +1329,20 @@ class Toolbox extends Component<Props, State> {
                                 <ChatCounter />
                             </div> }
 
-                        {/* { buttonsRight.indexOf('invite') !== -1
-                            && <ToolbarButton
-                                accessibilityLabel =
-                                    { t('toolbar.accessibilityLabel.invite') }
-                                icon = { IconInviteMore }
-                                onClick = { this._onToolbarOpenInvite }
-                                tooltip = { t('toolbar.invite') } /> } */}
+                        { buttonsRight.indexOf('invite') !== -1
+                            && <div className = 'toolbar-button-with-badge'>
+                                <ToolbarButton
+                                    accessibilityLabel =
+                                        { t('toolbar.accessibilityLabel.invite') }
+                                    icon = { IconInviteMore }
+                                    onClick = { this._onToolbarOpenParticipantsList }
+                                    showArrow = { true }
+                                    toggled = { this.props._participantsListOpen || this.props._invitePeopleVisible }
+                                    tooltip = { t('toolbar.invite') } />
+                                {
+                                    _isModerator && <WaitingParticipantNotifier />
+                                }
+                            </div>}
                         {/* { buttonsRight.indexOf('security') !== -1
                             && <SecurityDialogButton customClass = 'security-toolbar-button' /> } */}
                         {/* { buttonsRight.indexOf('overflowmenu') !== -1
@@ -1385,7 +1409,10 @@ function _mapStateToProps(state) {
 
     const {
         fullScreen,
-        overflowMenuVisible
+        overflowMenuVisible,
+        invitePeopleVisible,
+        participantsListOpen,
+        enabled
     } = state['features/toolbox'];
     const localParticipant = getLocalParticipant(state);
     const localRecordingStates = state['features/local-recording'];
@@ -1414,7 +1441,11 @@ function _mapStateToProps(state) {
     // override them we'd miss it.
     const buttons = new Set(interfaceConfig.TOOLBAR_BUTTONS);
 
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
+
     return {
+        _participantsListOpen: participantsListOpen,
+        _invitePeopleVisible: invitePeopleVisible,
         _chatOpen: state['features/chat'].isOpen,
         _conference: conference,
         _desktopSharingEnabled: desktopSharingEnabled,
@@ -1436,7 +1467,8 @@ function _mapStateToProps(state) {
             || sharedVideoStatus === 'start'
             || sharedVideoStatus === 'pause',
         _visible: isToolboxVisible(state),
-        _visibleButtons: equals(visibleButtons, buttons) ? visibleButtons : buttons
+        _visibleButtons: equals(visibleButtons, buttons) ? visibleButtons : buttons,
+        _isModerator: isModerator
     };
 }
 

@@ -43,7 +43,8 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
             _showNotification,
             _hideNotification,
             _toastNotificationSettings,
-            _updateToastNotificationOptions
+            _updateToastNotificationOptions,
+            _showWaitingMenuOption
         } = this.props;
         const { name: participantName } = getLocalParticipant(APP.store.getState());
 
@@ -152,6 +153,23 @@ class ToolboxMoreItems extends AbstractToolboxMoreItems<Props, *> {
                                         });
                                     } } />
                             </div>
+                            {
+                                _showWaitingMenuOption &&
+                                <>
+                                    <OptionDivider />
+                                    <div>
+                                    <OptionItemCheck
+                                        checked = { _toastNotificationSettings.showParticipantWaiting }
+                                        disabled = { !_notificationVisible }
+                                        label = 'Participant Waiting'
+                                        onCheck = { () => {
+                                            _updateToastNotificationOptions({
+                                                showParticipantWaiting: !_toastNotificationSettings.showParticipantWaiting
+                                            });
+                                        } } />
+                                    </div>
+                                </>
+                            }
                         </OptionItemCheck>
                     </div>
 

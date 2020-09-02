@@ -32,7 +32,8 @@ function _getInitialState() {
             showRaisedHand: true,
             showJoinedMeeting: true,
             showLeftMeeting: true,
-            showChat: true
+            showChat: true,
+            showParticipantWaiting: true
         }
     };
 }

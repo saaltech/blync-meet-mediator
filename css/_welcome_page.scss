@@ -48,6 +48,26 @@ body.welcome-page {
     }
 }
 
+.mobile-message {
+    margin: 50% 5%;
+    text-align: center;
+    font-size: 20px;
+    color: #393939;
+    z-index: 1000;
+
+    .more-section-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .app-link {
+        img {
+            width: 40%;
+            margin-top: 5%;
+        }
+    }
+}    
+
 .close-icon
 {
   display: block;

@@ -30,6 +30,11 @@ export type Props = {
     className?: string,
 
     /**
+     * The on-hover title (tooltip) to show. (for web)
+     */
+     title?: string,
+
+    /**
      * The event handler/listener to be invoked when this
      * {@code AbstractContainer} is clicked on Web or pressed on React
      * Native. If {@code onClick} is defined and {@link touchFeedback} is

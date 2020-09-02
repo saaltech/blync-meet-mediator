@@ -101,6 +101,10 @@
 
     .inline-content {
         padding: 10px 40px 0px;
+        h2:first-child {
+            color: #00C062 !important;
+            padding: 10px;
+        }
     }
 
     .login-page-button {

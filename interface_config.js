@@ -114,7 +114,7 @@ var interfaceConfig = {
      *
      * @type {boolean}
      */
-    MOBILE_APP_PROMO: false,
+    MOBILE_APP_PROMO: true,
 
     /**
      * Maximum coeficient of the ratio of the large video to the visible area
@@ -217,7 +217,24 @@ var interfaceConfig = {
      * How many columns the tile view can expand to. The respected range is
      * between 1 and 5.
      */
-    // TILE_VIEW_MAX_COLUMNS: 5,
+    TILE_VIEW_MAX_COLUMNS: 3,
+
+    /**
+     * Enables redirecting the welcome page(on iOS/Android mobile devices) to the installed Jifmeet app 
+     * or to its page on platform store if the app isn't installed.
+     * Ensure the links point to Jifmeet app.
+     * Set to 'null' if redirection isn't needed.
+     */
+    MOBILE_APP_LINKS: {
+        ios: {
+            deepLink: "itms-apps://itunes.apple.com/ae/app/id1528158889",
+            storeLink: "https://apps.apple.com/ae/app/jifmeet/id1528158889"
+        },
+        android: {
+            deepLink: "market://details?id=com.google.android.youtube",
+            storeLink: "https://play.google.com/store/apps/details?id=com.google.android.youtube&hl=en"
+        }
+    },
 
     /**
      * Specify custom URL for downloading android mobile app.

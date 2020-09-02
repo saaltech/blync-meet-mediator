@@ -870,17 +870,19 @@
         "sendFeedback": "Send feedback",
         "terms": "Terms",
         "title": "Jifmeet",
-        "subTitle": "Collaborate Anytime Anywhere",
+        "subTitle": "Meet and collaborate in a jiffy",
         "placeholderEnterRoomName": "Enter the room name",
         "startSession": "Go ahead, enter the meeting name and start the session.",
-        "signinLabel": "Sign in"
+        "signinLabel": "Sign in",
+        "mobileMessageTitle": "Jifmeet Mobile App",
+        "mobileMessage": "Download Jifmeet mobile app and attend your meetings anytime, anywhere"
     },
     "loginPage": {
         "loginLabel": "Login",
         "placeholderUsername": "Enter your username",
         "placeholderPassword": "Enter your password",
         "fieldPassword": "Password",
-        "fieldUsername": "Username",
+        "fieldUsername": "User Name",
         "signinLabel": "Sign in"
     },
     "lonelyMeetingExperience": {

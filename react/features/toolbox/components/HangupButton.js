@@ -9,6 +9,7 @@ import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
 import { AbstractHangupButton } from '../../base/toolbox';
 import type { AbstractButtonProps } from '../../base/toolbox';
+import { enableNotification } from '../../toolbox-more-items';
 
 /**
  * The type of the React {@code Component} props of {@link HangupButton}.
@@ -43,6 +44,7 @@ class HangupButton extends AbstractHangupButton<Props, *> {
         super(props);
 
         this._hangup = _.once(() => {
+            APP.store.dispatch(enableNotification(false));
             sendAnalytics(createToolbarEvent('hangup'));
 
             // FIXME: these should be unified.
