@@ -33,6 +33,53 @@ const TermsOfUse = () => (
                 If you cannot find an answer to your query, then please feel free to contact us at the email address specified in the Contact section below.
                 </p>
                 <LegalContent content = { TermsContent } />
+
+                <div className = 'legal-document__annex'>
+                    <h2>ANNEX 1 - OPEN SOURCE SOFTWARES</h2>
+
+                    <p>
+                    You  acknowledge  that  the  Services  contain  third-party  components,  which  are  works  or  materials protected  by
+                    third  party  rights.  These  works  or  materials  are,  in  particular,  computer  programs  and graphic  works  in
+                    electronic  form,  as  referenced  below.  You  acknowledge  that  the  use  of  third-party components is governed by
+                    license arrangements with third parties having rights to  these  third-party components. You hereby acknowledges and
+                    confirms that SAAL provided you with license conditions of open-source software used within the Services, and
+                    that the you have reviewed and understands those license conditions and agrees that your use of the Services
+                    is subject to such content. You acknowledge and agree the third-party components are provided on a "AS IS" BASIS,
+                    WITHOUT WARRANTIES OR  CONDITIONS  OF  ANY  KIND,  either  express  or  implied,  including,  without  limitation,  any
+                    warranties  or  conditions  of  TITLE,  NON-INFRINGEMENT,  MERCHANTABILITY,  or  FITNESS FOR A PARTICULAR PURPOSE.
+                    </p>
+
+                    <p>
+                    The following copyright statements and licenses apply to various components that are distributed with the  Services.
+                    Services  that  includes  this  file  does  not  necessarily  use  all  of  the  third  party  software components referred to below.
+                    </p>
+
+                    <p>
+                    You fully agree and comply with these license terms or must not use these components. The third-party license  terms  apply
+                    only  to  the  respective  software  to  which  the  license  pertains,  and  the  third  party license terms
+                    do not apply to the Services.
+                    </p>
+
+                    <p>
+                    Insofar as the applicable license terms specify an obligation to publish, the copyright notices and license texts
+                    referring to the open source software components used are shown below:
+                    </p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Components(s)</th>
+                                <th>Licensing Information</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jitsi</td>
+                                <td>https://github.com/jitsi/jitsi-meet/blob/master/LICENSE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
