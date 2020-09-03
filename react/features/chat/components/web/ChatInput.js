@@ -141,6 +141,7 @@ class ChatInput extends Component<Props, State> {
                             const trimmed = this.state.message.trim();
 
                             this.props.onSend(trimmed);
+                            this.setState({ message: '' });
                         } }><Icon src = { IconChatSend } /></button>
                 </div>
             </div>
