@@ -10,7 +10,7 @@ import {
     pinParticipant
 } from '../../../react/features/base/participants';
 import { getTrackByMediaTypeAndParticipant, addClonedTrack } from '../../../react/features/base/tracks';
-import { shouldDisplayTileView } from '../../../react/features/video-layout';
+import { shouldDisplayTileView, showPagination } from '../../../react/features/video-layout';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -29,7 +29,8 @@ let eventEmitter = null;
 
 let largeVideo;
 
-const showVideoPaging = window.interfaceConfig.SHOW_VIDEO_PAGINATION;
+const showVideoPaging = showPagination();
+const tileViewMaxColumns = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS || 5;
 
 /**
  * flipX state of the localVideo
@@ -287,7 +288,7 @@ const VideoLayout = {
         const localContainer = 'localVideoTileViewContainer';
         const remoteVideosKeys = Object.keys(remoteVideos);
         const videoIds = [ ...remoteVideosKeys, videoId, localContainer ];
-        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
         const upperLimit = maxGridSize * page;
         const lowerLimit = upperLimit - maxGridSize;
 
@@ -302,7 +303,7 @@ const VideoLayout = {
     },
 
     calculateNumberOfPages(participants = []) {
-        const perPage = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const perPage = tileViewMaxColumns * tileViewMaxColumns;
         const pages = Math.floor(participants / perPage);
 
         if ((participants % perPage) > 0) {
@@ -318,7 +319,7 @@ const VideoLayout = {
         }
 
 
-        const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
         const remoteVideosKeys = Object.keys(remoteVideos);
         const upperLimit = maxGridSize * currentPage;
         const lowerLimit = upperLimit - maxGridSize;
@@ -380,10 +381,22 @@ const VideoLayout = {
                 return participant && !participant.isVideoMuted();
             });
 
-            conference.setReceiverVideoConstraint(240);
-            conference.setSenderVideoConstraint(240);
-            conference.setLastN(pidsToSelect.length);
-            conference.selectParticipants(pidsToSelect);
+            let res = window.resolution || 720;
+            let preferredHeight = Math.floor(res/pidsToSelect.length);
+            // minus one so that we can cover up for the issue with ranking at JVB
+            preferredHeight = Math.max(180, preferredHeight - 1); 
+            conference.setReceiverVideoConstraint(preferredHeight);
+
+            setTimeout(() => {
+                conference.selectParticipants(pidsToSelect);
+                setTimeout(() => {
+                    // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
+                    conference.setReceiverVideoConstraint(preferredHeight < res ? preferredHeight + 1: res)
+                }, 300);
+            }, 300);
+
+            
+            
         }
 
         // pidsToSelect.forEach(pid => conference.selectParticipant(pid))

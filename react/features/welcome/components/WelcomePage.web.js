@@ -4,7 +4,6 @@ import React from 'react';
 
 import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth';
 import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen';
-import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
