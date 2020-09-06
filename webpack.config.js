@@ -39,28 +39,33 @@ const config = {
         inline: true,
         proxy: {
             
-            '/auth/api/users/sign-in': {
-                target: 'http://localhost:8010/',
+            '/api/users/sign-in': {
+                target: 'http://dev-blync.saal.ai:8100/auth/',
+                secure: false
+            },
+
+            '/api/users/accesstoken/refresh': {
+                target: 'http://dev-blync.saal.ai:8100/auth/',
                 secure: false
             },
 
             '/unauth/api/v1/conferences': {
-                target: 'http://localhost:8011/',
+                target: 'http://localhost:8082/',
                 secure: false
             },
 
             '/auth/api/v1/conferences': {
-                target: 'http://localhost:8011/',
+                target: 'http://localhost:8082/',
                 secure: false
             },
 
             '/unauth/api/v1/conferences/validatesecret': {
-                target: 'http://localhost:8011/',
+                target: 'http://localhost:8082/',
                 secure: false
             },
 
             '/auth/api/v1/jid': {
-                target: 'http://localhost:8011/',
+                target: 'http://localhost:8082/',
                 secure: false
             },
 
