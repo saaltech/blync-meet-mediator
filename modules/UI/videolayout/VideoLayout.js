@@ -385,18 +385,15 @@ const VideoLayout = {
             let preferredHeight = Math.floor(res/pidsToSelect.length);
             // minus one so that we can cover up for the issue with ranking at JVB
             preferredHeight = Math.max(180, preferredHeight - 1); 
-            conference.setReceiverVideoConstraint(preferredHeight);
+            conference && conference.setReceiverVideoConstraint(preferredHeight);
 
             setTimeout(() => {
-                conference.selectParticipants(pidsToSelect);
+                conference && conference.selectParticipants(pidsToSelect);
                 setTimeout(() => {
                     // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
-                    conference.setReceiverVideoConstraint(preferredHeight < res ? preferredHeight + 1: res)
+                    conference && conference.setReceiverVideoConstraint(preferredHeight < res ? preferredHeight + 1: res)
                 }, 300);
             }, 300);
-
-            
-            
         }
 
         // pidsToSelect.forEach(pid => conference.selectParticipant(pid))

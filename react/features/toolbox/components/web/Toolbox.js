@@ -1289,7 +1289,7 @@ class Toolbox extends Component<Props, State> {
                 </div>
                 <div className = 'button-group-center'>
                     { buttonsRight.indexOf('tileview') !== -1
-                        && <></> /*<TileViewButton /> */}
+                        && <TileViewButton /> }
                     { this._renderAudioButton() }
                     { this._renderVideoButton() }
                 </div>

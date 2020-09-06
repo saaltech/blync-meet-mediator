@@ -39,7 +39,7 @@ ReducerRegistry.register(STORE_NAME, (state = DEFAULT_STATE, action) => {
     case SET_TILE_VIEW:
         return {
             ...state,
-            //tileViewEnabled: action.enabled
+            tileViewEnabled: action.enabled
         };
     }
 
