@@ -3,7 +3,7 @@ export const config = {};
 // TODO: change this value to dev or something  else for local development
 process.env.REACT_APP_ENV = "prod"
 config.unauthenticatedIRP =
-  process.env.REACT_APP_ENV === "prod" ? "/irp" : "https://dev-blync.saal.ai/irp";
+  process.env.REACT_APP_ENV === "prod" ? "/irp" : "";
 config.authenticatedIRP =
   process.env.REACT_APP_ENV === "prod" ? "/authenticate-irp" : "";
 config.conferenceManager =
