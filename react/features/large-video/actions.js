@@ -58,6 +58,11 @@ export function selectParticipant() {
 export function selectParticipantInLargeVideo() {
     return (dispatch: Dispatch<any>, getState: Function) => {
         const state = getState();
+        
+        if (shouldDisplayTileView(state)) {
+            return;
+        }
+        
         const participantId = _electParticipantInLargeVideo(state);
         const largeVideo = state['features/large-video'];
 
