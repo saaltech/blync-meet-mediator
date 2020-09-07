@@ -132,7 +132,7 @@
 
     .conference__pagination {
         position: absolute;
-        z-index: 10000;
+        z-index: 99;
         width: 100vw;
         display: flex;
         justify-content: space-between;
