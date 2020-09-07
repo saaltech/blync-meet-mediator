@@ -266,7 +266,7 @@ const VideoLayout = {
     },
 
     videoIsInView(videoId, page) {
-        const tileViewMaxColumns = getTileMaxColumns()
+        const tileViewMaxColumns = this.getTileMaxColumns()
         const localContainer = 'localVideoTileViewContainer';
         const remoteVideosKeys = Object.keys(remoteVideos);
         const videoIds = [ ...remoteVideosKeys, videoId, localContainer ];
@@ -285,7 +285,7 @@ const VideoLayout = {
     },
 
     calculateNumberOfPages(participants = []) {
-        const tileViewMaxColumns = getTileMaxColumns()
+        const tileViewMaxColumns = this.getTileMaxColumns()
         const perPage = tileViewMaxColumns * tileViewMaxColumns;
         const pages = Math.floor(participants / perPage);
 
@@ -305,7 +305,7 @@ const VideoLayout = {
             return;
         }
 
-        const tileViewMaxColumns = getTileMaxColumns()
+        const tileViewMaxColumns = this.getTileMaxColumns()
         const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
         const remoteVideosKeys = Object.keys(remoteVideos);
         const upperLimit = maxGridSize * currentPage;
