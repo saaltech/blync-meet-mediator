@@ -30,7 +30,6 @@ let eventEmitter = null;
 let largeVideo;
 
 const showVideoPaging = showPagination();
-const tileViewMaxColumns = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS || 5;
 
 /**
  * flipX state of the localVideo
@@ -144,14 +143,9 @@ const VideoLayout = {
         }
     },
     participantIds: [],
-    selectParticipantsTimerId: null,
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
-        if (this.selectParticipantsTimerId) {
-            // clearTimeout(this.selectParticipantsTimerId);
-            // this.selectParticipantsTimerId = null;
-        }
         const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
 
         if (tileViewEnabled) {
@@ -180,12 +174,9 @@ const VideoLayout = {
             }
         });
 
-        // console.log('participantIds ->', this.participantIds);
         const conference = APP.store.getState()['features/base/conference'].conference;
 
-
         if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
-
 
             const pinnedId = this.getPinnedId();
 
@@ -200,18 +191,8 @@ const VideoLayout = {
                 pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
             }
 
-            // Check lastNEndpoints (redux) if pid is present
-            // conference.selectParticipant(pid[0])
-            // put other pid's in the expectedList
-            // clear this expectedList when navigating and repopulate
-            // also clear this list when switching between views.
-
-            // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
-
             conference.selectParticipants(pidsToSelect);
 
-
-            // this.selectParticipantsTimerId = setTimeout(() => conference.selectParticipants(this.participantIds), 1000);
         }
 
     },
@@ -285,6 +266,7 @@ const VideoLayout = {
     },
 
     videoIsInView(videoId, page) {
+        const tileViewMaxColumns = getTileMaxColumns()
         const localContainer = 'localVideoTileViewContainer';
         const remoteVideosKeys = Object.keys(remoteVideos);
         const videoIds = [ ...remoteVideosKeys, videoId, localContainer ];
@@ -303,6 +285,7 @@ const VideoLayout = {
     },
 
     calculateNumberOfPages(participants = []) {
+        const tileViewMaxColumns = getTileMaxColumns()
         const perPage = tileViewMaxColumns * tileViewMaxColumns;
         const pages = Math.floor(participants / perPage);
 
@@ -313,12 +296,16 @@ const VideoLayout = {
         return pages;
     },
 
+    getTileMaxColumns() {
+        return (window.interfaceConfig.TILE_VIEW_MAX_COLUMNS || 5);
+    },
+
     updateVideoPage(currentPage) {
         if (!showVideoPaging) {
             return;
         }
 
-
+        const tileViewMaxColumns = getTileMaxColumns()
         const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
         const remoteVideosKeys = Object.keys(remoteVideos);
         const upperLimit = maxGridSize * currentPage;
@@ -357,27 +344,18 @@ const VideoLayout = {
             return;
         }
 
-
         const { conference } = APP.store.getState()['features/base/conference'];
 
-        // const pinnedId = this.getPinnedId();
-
         let pidsToSelect = [ ...new Set(videosInView) ];
-
-        // if (pinnedId) {
-        //     pidsToSelect = [ ...new Set(pidsToSelect.push(pinnedId)) ];
-        // }
 
         if (pidsToSelect.length > window.config.channelLastN) {
             pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
         }
 
         if (pidsToSelect.length > 0) {
-
             // check for muted video
             pidsToSelect = pidsToSelect.filter(pid => {
                 const participant = APP.conference.getParticipantById(pid);
-
                 return participant && !participant.isVideoMuted();
             });
 
@@ -395,9 +373,6 @@ const VideoLayout = {
                 }, 300);
             }, 300);
         }
-
-        // pidsToSelect.forEach(pid => conference.selectParticipant(pid))
-        // conference.selectParticipants(pidsToSelect);
     },
 
     onRemoteStreamRemoved(stream) {
@@ -608,6 +583,7 @@ const VideoLayout = {
      */
     onDisplayNameChanged(id) {
         if (id === 'localVideoTileViewContainer'
+            || id === 'localVideoContainer'
             || APP.conference.isLocalId(id)) {
             localVideoThumbnail.updateDisplayName();
         } else {
