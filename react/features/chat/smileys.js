@@ -17,5 +17,6 @@ export const smileys = {
     smiley16: ':angel:',
     smiley17: ';(',
     smiley18: ':clap:',
-    smiley19: ';)'
+    smiley19: ';)',
+    smiley20: ':beer:'
 };
