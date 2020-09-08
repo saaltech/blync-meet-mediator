@@ -136,6 +136,7 @@ const VideoLayout = {
 
         if (smallVideo) {
             smallVideo.updateAudioLevelIndicator(lvl);
+            smallVideo.updateDominantSpeakerNotifier(id, lvl);
         }
 
         if (largeVideo && id === largeVideo.id) {
