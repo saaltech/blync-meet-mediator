@@ -317,6 +317,37 @@ export default class SmallVideo {
         }
     }
 
+    updateDominantSpeakerNotifier(id, lvl) {
+        let dominantSpeakerNotifier = document.getElementById("dominantSpeakerNotifier");
+        let nameContainer = this.$displayName();
+        
+        if (this._showDominantSpeaker && lvl > 0.2 && !nameContainer.find("#localDisplayName").length > 0) {
+            dominantSpeakerNotifier.classList.add("fade-in");
+            let name = nameContainer[0].textContent;
+            dominantSpeakerNotifier.innerHTML = `<div title='${name}'>${name}</div>&nbsp;is speaking`;
+            this._setDominantSpeakerNotifierTimer(dominantSpeakerNotifier, (dominantSpeakerNotifier.innerHTML.trim() !== ""));
+        }
+    }
+
+    _clearDominantSpeakerNotifierTimer() {
+        clearTimeout(APP.conference.dominantSpeakerNotifierTimer);
+        APP.conference.dominantSpeakerNotifierTimer = null;
+    } 
+
+    _setDominantSpeakerNotifierTimer(dominantSpeakerNotifier, clearTimer = false) {
+        if(clearTimer) {
+            this._clearDominantSpeakerNotifierTimer();
+        }
+        
+        APP.conference.dominantSpeakerNotifierTimer = setTimeout(() => {
+            dominantSpeakerNotifier.classList.remove("fade-in");
+            setTimeout(() => {
+                dominantSpeakerNotifier.innerHTML = "";
+                this._clearDominantSpeakerNotifierTimer();
+            }, 1000);
+        }, 2000)
+    }
+
     /**
      * Queries the component's DOM for the element that should be the parent to the
      * AudioLevelIndicator.

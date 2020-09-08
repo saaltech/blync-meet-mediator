@@ -141,6 +141,8 @@ class FilmstripHeader extends Component<Props> {
                         <ConferenceTimer />
                     </div>
                     <div className = 'film-strip-header__actions'>
+                        <div id="dominantSpeakerNotifier"></div>
+
                         <div className = 'film-strip-header__online-users'>
                             Online users ({this.props._participantCount})
                         </div>
