@@ -318,6 +318,11 @@ export default class SmallVideo {
     }
 
     updateDominantSpeakerNotifier(id, lvl) {
+        // const displayModeInput = this.computeDisplayModeInput();
+        // if(!displayModeInput.tileViewEnabled) {
+        //     return;
+        // }
+
         let dominantSpeakerNotifier = document.getElementById("dominantSpeakerNotifier");
         let nameContainer = this.$displayName();
         
