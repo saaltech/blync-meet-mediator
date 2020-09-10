@@ -83,6 +83,7 @@ import MuteEveryoneButton from './MuteEveryoneButton';
 import OverflowMenuProfileItem from './OverflowMenuProfileItem';
 import ToolbarButton from './ToolbarButton';
 import VideoSettingsButton from './VideoSettingsButton';
+import { setFilmStripCollapsed } from '../../../filmstrip/actions';
 
 // import { SecurityDialogButton } from '../../../security';
 /**
@@ -852,6 +853,10 @@ class Toolbox extends Component<Props, State> {
      * @returns {void}
      */
     _onToolbarToggleScreenshare() {
+        
+        this.props.dispatch(setFilmStripCollapsed(true));
+        // this.props.dispatch(setToolbarHovered(false));
+
         if (!this.props._desktopSharingEnabled) {
             return;
         }
@@ -894,6 +899,8 @@ class Toolbox extends Component<Props, State> {
         sendAnalytics(createToolbarEvent('local.recording'));
 
         this.props.dispatch(openDialog(LocalRecordingInfoDialog));
+        
+        
     }
 
     /**

@@ -35,7 +35,7 @@ ReducerRegistry.register(STORE_NAME, (state = DEFAULT_STATE, action) => {
             screenShares: action.participantIds
         };
     }
-
+    
     case SET_TILE_VIEW:
         return {
             ...state,
