@@ -10,7 +10,7 @@ import {
     PIN_PARTICIPANT,
     getParticipantById
 } from '../base/participants';
-import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actions'
+import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actionTypes'
 import { MiddlewareRegistry } from '../base/redux';
 import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
 import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED } from '../filmstrip';
