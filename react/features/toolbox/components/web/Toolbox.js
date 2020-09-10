@@ -852,6 +852,7 @@ class Toolbox extends Component<Props, State> {
      * @returns {void}
      */
     _onToolbarToggleScreenshare() {
+    
         if (!this.props._desktopSharingEnabled) {
             return;
         }
@@ -894,6 +895,8 @@ class Toolbox extends Component<Props, State> {
         sendAnalytics(createToolbarEvent('local.recording'));
 
         this.props.dispatch(openDialog(LocalRecordingInfoDialog));
+        
+        
     }
 
     /**

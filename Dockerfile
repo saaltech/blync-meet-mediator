@@ -9,7 +9,7 @@ RUN find . -type f -name "*.*" -exec chmod 644 {} +
 # RUN npm cache clean -f
 RUN npm install --registry https://npr.saal.ai
 RUN make
-RUN apt install -y nodejs build-essential debhelper
+RUN apt-get update && apt install -y nodejs build-essential debhelper
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
 # Stage 2, "web stage"
