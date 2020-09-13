@@ -126,6 +126,11 @@ form {
     background-size: contain;
     background-repeat: no-repeat;
     z-index: $zindex2;
+    &.mobileView{
+        position: relative;
+        margin:0 auto;
+        left: 0;
+    }
 }
 
 .leftwatermark {
