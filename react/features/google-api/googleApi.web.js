@@ -6,7 +6,8 @@ import {
     GOOGLE_SCOPE_YOUTUBE
 } from './constants';
 
-const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
+// const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
+const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/platform.js';
 
 /**
  * A promise for dynamically loading the Google API Client Library.
@@ -115,6 +116,11 @@ const googleApi = {
         }
 
         googleClientLoadPromise = new Promise((resolve, reject) => {
+            const metaTag = document.createElement('meta');
+            metaTag.name = 'google-signin-client_id';
+            metaTag.content = window.config.googleApiApplicationClientID;
+            document.head.appendChild(metaTag);
+
             const scriptTag = document.createElement('script');
 
             scriptTag.async = true;
@@ -179,6 +185,22 @@ const googleApi = {
     },
 
     /**
+     * Prompts the participant to sign in (for offline access) to the Google API Client Library, even
+     * if already signed in.
+     *
+     * @returns {Promise}
+     */
+    grantOfflineAccess() {
+        return this.get()
+            .then(api => 
+                api.auth2.getAuthInstance().grantOfflineAccess({ scope: 'profile email' })
+            )
+            .then((resp) => {
+                return resp.code;
+            });
+    },
+
+    /**
      * Prompts the participant to sign in to the Google API Client Library, if
      * not already signed in.
      *
@@ -188,9 +210,10 @@ const googleApi = {
         return this.get()
             .then(() => this.isSignedIn())
             .then(isSignedIn => {
-                if (!isSignedIn) {
-                    return this.showAccountSelection();
-                }
+                //if (!isSignedIn) {
+                    // return this.showAccountSelection();
+                    return this.grantOfflineAccess();
+                //}
             });
     },
 

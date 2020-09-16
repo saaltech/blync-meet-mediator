@@ -8,7 +8,8 @@ import {
     SET_USER_SIGNED_OUT,
     APP_LOGIN,
     EXPIRE_TOKEN,
-    SET_POST_WELCOME_SCREEN_DETAILS
+    SET_POST_WELCOME_SCREEN_DETAILS,
+    SET_GOOGLE_OFFLINE_CODE
 } from './actionTypes';
 import { LoginComponent } from './components';
 import logger from './logger';
@@ -142,5 +143,12 @@ export async function saveHostJidToUserMapping(connection) {
         } catch (err) {
             console.log("Unable to save Jid to Host mapping",err)
         }
+    }
+}
+
+export function setGoogleOfflineCode(googleOfflineCode = null) {
+    return {
+        type: SET_GOOGLE_OFFLINE_CODE,
+        googleOfflineCode
     }
 }

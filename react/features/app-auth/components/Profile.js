@@ -14,6 +14,9 @@ import useRequest from '../../hooks/use-request';
 
 import Avatar from 'react-avatar';
 
+import googleApi from '../../google-api/googleApi';
+import { signOut } from '../../google-api'
+
 import {
     Icon,
     IconMenuDown,
@@ -39,6 +42,9 @@ function Profile(props) {
     }
 
     const logout = () => {
+        if(googleApi.isSignedIn()) {
+            APP.store.dispatch(signOut())
+        }
         APP.store.dispatch(resolveAppLogout())
     }
 

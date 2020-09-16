@@ -20,4 +20,5 @@ config.authParticipantsEP = "/auth/api/v1/participants"
 
 // IRP Endpoints
 config.signInEP = '/api/users/sign-in'
+config.socialSignInEP = '/api/users/social-sign-in'
 config.refreshToken = '/api/users/accesstoken/refresh'
