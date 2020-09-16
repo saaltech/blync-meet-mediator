@@ -10,9 +10,10 @@ import {
     PIN_PARTICIPANT,
     getParticipantById
 } from '../base/participants';
+import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actionTypes'
 import { MiddlewareRegistry } from '../base/redux';
 import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
-import { SET_FILMSTRIP_VISIBLE } from '../filmstrip';
+import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED } from '../filmstrip';
 
 import { SET_TILE_VIEW } from './actionTypes';
 import './middleware.any';
@@ -46,6 +47,11 @@ MiddlewareRegistry.register(store => next => action => {
     case CONFERENCE_WILL_LEAVE:
         VideoLayout.reset();
         break;
+
+    case SCREEN_SHARE_PARTICIPANTS_UPDATED: {
+        store.dispatch({type: SET_FILMSTRIP_COLLAPSED, collapsed: true})
+        break;
+    }    
 
     case PARTICIPANT_JOINED:
         setTimeout(() => VideoLayout.onHostChange(), 2000);

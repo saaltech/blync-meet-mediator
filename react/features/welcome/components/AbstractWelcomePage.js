@@ -285,7 +285,7 @@ export function _mapStateToProps(state: Object) {
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
         _settings: state['features/base/settings'],
-        _isUserSignedOut : state['features/app-auth'].isUserSignedOut,
+        _isUserSignedOut : !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         _postWelcomePageScreen: state['features/app-auth'].meetingDetails
 
     };
