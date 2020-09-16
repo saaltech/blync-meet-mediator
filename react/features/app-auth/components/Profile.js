@@ -81,7 +81,7 @@ function Profile(props) {
 
 function _mapStateToProps(state: Object) {
     return {
-        user : state['features/app-auth'].user
+        user : state['features/app-auth'].user || {}
     };
 }
 

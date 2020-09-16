@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import { translate } from '../../../i18n';
 import { connect } from '../../../redux';
+import { isMobileBrowser } from '../../../../base/environment/utils'
+
 
 declare var interfaceConfig: Object;
 
@@ -220,11 +222,10 @@ class Watermarks extends Component<Props, State> {
             const style = {
                 backgroundImage: `url(${_customLogoUrl || interfaceConfig.DEFAULT_LOGO_URL})`,
                 maxWidth: 180,
-                maxHeight: 70
             };
 
             reactElement = (<div
-                className = 'watermark leftwatermark'
+                className = {`watermark leftwatermark ${isMobileBrowser() ? 'mobileView': ''}`}
                 style = { style } />);
 
             if (link) {

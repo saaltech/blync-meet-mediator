@@ -231,8 +231,8 @@ var interfaceConfig = {
             storeLink: "https://apps.apple.com/ae/app/jifmeet/id1528158889"
         },
         android: {
-            deepLink: "market://details?id=com.google.android.youtube",
-            storeLink: "https://play.google.com/store/apps/details?id=com.google.android.youtube&hl=en"
+            deepLink: "market://details?id=ai.saal.jifmeet",
+            storeLink: "https://play.google.com/store/apps/details?id=ai.saal.jifmeet"
         }
     },
 
