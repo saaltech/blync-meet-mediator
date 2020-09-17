@@ -10,7 +10,7 @@ import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning } from '../../base/icons';
 import { connect } from '../../base/redux';
-import { CalendarList } from '../../calendar-sync';
+import { CalendarList, bootstrapCalendarIntegration } from '../../calendar-sync';
 import {
     getQueryVariable
 } from '../../prejoin/functions';
@@ -19,6 +19,8 @@ import { RecentList } from '../../recent-list';
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
+
+import logger from '../../settings/logger';
 
 
 /**
@@ -151,6 +153,10 @@ class WelcomePage extends AbstractWelcomePage {
             this.launchApp();
         }
 
+        this.props.dispatch(bootstrapCalendarIntegration())
+            .catch(err => logger.error('CalendarTab bootstrap failed', err))
+            //.then(() => this.setState({ loading: false }));
+
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
         if (getQueryVariable('sessionExpired')) {
             this.setState({
@@ -262,10 +268,11 @@ class WelcomePage extends AbstractWelcomePage {
                                 </div>
                                 : <>
                                     {
-                                        _isUserSignedOut && !hideLogin
+                                        _isUserSignedOut
                                     && <LoginComponent
                                         closeAction = { this._closeLogin }
                                         isOverlay = { true }
+                                        hideLogin = { hideLogin }
                                         t = { t }
                                         errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' } />
                                     }

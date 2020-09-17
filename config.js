@@ -325,7 +325,7 @@ var config = {
 
     // Enables calendar integration, depends on googleApiApplicationClientID
     // and microsoftApiApplicationClientID
-    // enableCalendarIntegration: false,
+    enableCalendarIntegration: true,
 
     // When 'true', it shows an intermediate page before joining, where the user can configure its devices.
     prejoinPageEnabled: true,
@@ -563,6 +563,7 @@ var config = {
      requireDisplayName
      tokenAuthUrl
      */
+    googleApiApplicationClientID: '143401360954-91aq4dbaj70tj4q6demjgsj5odk1bppt.apps.googleusercontent.com',
 
     // List of undocumented settings used in lib-jitsi-meet
     /**

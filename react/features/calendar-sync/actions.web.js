@@ -206,10 +206,18 @@ export function signIn(calendarType: string): Function {
 
         return dispatch(integration.load())
             .then(() => dispatch(integration.signIn()))
-            .then(() => dispatch(setIntegrationReady(calendarType)))
-            .then(() => dispatch(updateProfile(calendarType)))
-            .then(() => dispatch(refreshCalendar()))
-            .then(() => sendAnalytics(createCalendarConnectedEvent()))
+            // .then(() => 
+            //     dispatch(setIntegrationReady(calendarType))
+            // )
+            // .then(() => 
+            //     dispatch(updateProfile(calendarType))
+            // )
+            // .then(() => 
+            //     dispatch(refreshCalendar())
+            // )
+            // .then(() => 
+            //     sendAnalytics(createCalendarConnectedEvent())
+            // )
             .catch(error => {
                 logger.error(
                     'Error occurred while signing into calendar integration',
@@ -286,6 +294,9 @@ export function updateProfile(calendarType: string): Function {
         return dispatch(integration.getCurrentEmail())
             .then(email => {
                 dispatch(setCalendarProfileEmail(email));
+            })
+            .catch((e) => {
+                console.log(e)
             });
     };
 }
