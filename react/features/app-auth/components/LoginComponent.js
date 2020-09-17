@@ -24,6 +24,7 @@ import {
 // import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
 import { resolveAppLogin } from '../actions';
+import { showEnableCookieTip } from '../../google-api/functions';
 
 function LoginComponent(props) {
     const [ email, setEmail ] = useState('');
@@ -78,7 +79,7 @@ function LoginComponent(props) {
         if (formDisabled) {
             return;
         }
-
+        showEnableCookieTip(false);
         // TODO: uncomment this once the api is ready
         await doRequest(false);
 
@@ -132,6 +133,11 @@ function LoginComponent(props) {
      * @returns {void}
      */
     const _onClickGoogle = () => {
+        // Clear any existing errors shown
+        if(isOverlay && window.showEnableCookieTip) {
+            showEnableCookieTip(true)
+            return;
+        }
         clearForm()
         isOverlay && closeAction();
         setIsSocialLogin(true);
