@@ -4,7 +4,8 @@ import { generateRoomWithoutSeparator } from 'js-utils/random';
 import type { Dispatch } from 'redux';
 
 import { createCalendarConnectedEvent, sendAnalytics } from '../analytics';
-import { loadGoogleAPI } from '../google-api';
+import { loadGoogleAPI, FRAME_INITIALIZATION_FAILED } from '../google-api';
+import { showEnableCookieTip } from '../google-api/functions'
 
 import {
     CLEAR_CALENDAR_INTEGRATION,
@@ -219,8 +220,11 @@ export function signIn(calendarType: string): Function {
             //     sendAnalytics(createCalendarConnectedEvent())
             // )
             .catch(error => {
+                if(error.error === FRAME_INITIALIZATION_FAILED) {
+                    showEnableCookieTip(true);
+                }
                 logger.error(
-                    'Error occurred while signing into calendar integration',
+                    'Error occurred while signing in using Google oauth',
                     error);
 
                 return Promise.reject(error);

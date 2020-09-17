@@ -22,6 +22,8 @@ import Background from './background';
 
 import logger from '../../settings/logger';
 
+import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
+
 
 /**
  * The pattern used to validate room name.
@@ -152,10 +154,16 @@ class WelcomePage extends AbstractWelcomePage {
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
+        window.showEnableCookieTip = false
 
         this.props.dispatch(bootstrapCalendarIntegration())
-            .catch(err => logger.error('CalendarTab bootstrap failed', err))
-            //.then(() => this.setState({ loading: false }));
+            .catch(err => {
+                if(err.error === FRAME_INITIALIZATION_FAILED) {
+                    window.showEnableCookieTip = true;
+                }
+                logger.error('Google oauth bootstrapping failed', err)
+            });
+            
 
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
         if (getQueryVariable('sessionExpired')) {
