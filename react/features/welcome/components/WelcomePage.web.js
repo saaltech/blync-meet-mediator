@@ -10,7 +10,7 @@ import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning } from '../../base/icons';
 import { connect } from '../../base/redux';
-import { CalendarList, bootstrapCalendarIntegration } from '../../calendar-sync';
+import { CalendarList, bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
 import {
     getQueryVariable
 } from '../../prejoin/functions';
@@ -21,9 +21,6 @@ import Tabs from './Tabs';
 import Background from './background';
 
 import logger from '../../settings/logger';
-
-import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
-
 
 /**
  * The pattern used to validate room name.
@@ -158,7 +155,7 @@ class WelcomePage extends AbstractWelcomePage {
 
         this.props.dispatch(bootstrapCalendarIntegration())
             .catch(err => {
-                if(err.error === FRAME_INITIALIZATION_FAILED) {
+                if(err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
                     window.showEnableCookieTip = true;
                 }
                 logger.error('Google oauth bootstrapping failed', err)

@@ -142,9 +142,6 @@ function LoginComponent(props) {
         isOverlay && closeAction();
         setIsSocialLogin(true);
         APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
-        // setTimeout(() => {
-        //     APP.store.dispatch(updateProfile());
-        // }, 500);
     }
 
     return (

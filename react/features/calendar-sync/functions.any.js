@@ -154,7 +154,8 @@ function _parseCalendarEntry(event, knownDomains) {
                 id: event.id,
                 startDate,
                 title: event.title,
-                url
+                url,
+                description: event.description
             };
         }
     }

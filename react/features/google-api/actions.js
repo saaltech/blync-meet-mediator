@@ -214,7 +214,18 @@ export function updateProfile() {
                 })
             }
         })
-        .then(() => googleApi.getCurrentUserProfile())
+        .then(() => {
+
+            function delay(t, v) {
+                return new Promise(function(resolve) { 
+                    setTimeout(resolve.bind(null, v), t)
+                });
+            }
+
+            return delay(1000).then(function() {
+                return googleApi.getCurrentUserProfile();
+            });
+        })
         .then(profile => {
             dispatch({
                 type: SET_GOOGLE_API_PROFILE,

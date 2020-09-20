@@ -210,10 +210,10 @@ const googleApi = {
         return this.get()
             .then(() => this.isSignedIn())
             .then(isSignedIn => {
-                //if (!isSignedIn) {
+                if (!isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
                     // return this.showAccountSelection();
                     return this.grantOfflineAccess();
-                //}
+                }
             });
     },
 
