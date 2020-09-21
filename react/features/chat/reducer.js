@@ -51,12 +51,17 @@ ReducerRegistry.register('features/chat', (state = DEFAULT_STATE, action) => {
                 newMessage
             ];
 
-        return {
-            ...state,
-            lastReadMessage:
-                action.hasRead ? newMessage : state.lastReadMessage,
-            messages
-        };
+        if (navigator.product === 'ReactNative') {
+            return {}
+        }
+        else {
+            return {
+                ...state,
+                lastReadMessage:
+                    action.hasRead ? newMessage : state.lastReadMessage,
+                messages
+            };
+        }
     }
 
     case MARK_AS_READ: {
