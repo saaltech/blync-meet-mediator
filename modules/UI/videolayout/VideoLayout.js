@@ -6,6 +6,7 @@ import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
     getLocalParticipant as getLocalParticipantFromStore,
     getPinnedParticipant,
+    getDominantSpeaker,
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
@@ -144,6 +145,7 @@ const VideoLayout = {
         }
     },
     participantIds: [],
+    selectParticipantsTimerId: null,
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
@@ -151,6 +153,10 @@ const VideoLayout = {
 
         if (tileViewEnabled) {
             return;
+        }
+        if (this.selectParticipantsTimerId) {
+            clearTimeout(this.selectParticipantsTimerId);
+            this.selectParticipantsTimerId = null;
         }
 
         entries.forEach(entry => {
@@ -166,36 +172,57 @@ const VideoLayout = {
             const participantId = participantParts[1];
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                if (this.participantIds.length < window.config.channelLastN) {
-                    !this.participantIds.includes(participantId)
-                        && this.participantIds.push(participantId);
+                if(!this.participantIds.includes(participantId)) {
+                    this.participantIds.push(participantId)
                 }
             } else {
                 this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
         });
 
-        const conference = APP.store.getState()['features/base/conference'].conference;
+        this.selectParticipantsTimerId = setTimeout(() => {
+            const conference = APP.store.getState()['features/base/conference'].conference;
 
-        if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
+            if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
+            
+                // reversing an array is needed 
+                // so that the last duplicate participantID is retained when doing set operation
+                 
+                let copyParticipantIds = [...this.participantIds]
+                let pidsToSelect = [ ...new Set(copyParticipantIds.reverse()) ];
+                pidsToSelect.reverse()
 
-            const pinnedId = this.getPinnedId();
+                const pinnedId = this.getPinnedId();
+                const dominantSpeakerId = this.getDominantSpeakerId();
+                var mustHaveIds = []
+                pinnedId && mustHaveIds.push(pinnedId)
+                if(pinnedId !== dominantSpeakerId) {
+                    dominantSpeakerId && mustHaveIds.push(dominantSpeakerId)
+                }
+                if (mustHaveIds.length > 0) {
+                    pidsToSelect = [...pidsToSelect, ...mustHaveIds];
+                    let copyPidsToSelect = [...pidsToSelect]
+                    pidsToSelect = [ ...new Set(copyPidsToSelect.reverse()) ];
+                    pidsToSelect.reverse()
+                }
 
-            let pidsToSelect = [ ...new Set(this.participantIds) ];
+                if (pidsToSelect.length > window.config.channelLastN) {
+                    pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
+                }
 
-            if (pinnedId) {
-                pidsToSelect.push(pinnedId);
-                pidsToSelect = [ ...new Set(pidsToSelect) ];
+                conference.setReceiverVideoConstraint(180);
+
+                let t1 = setTimeout(() => {
+                    conference && conference.selectParticipants(pidsToSelect)
+                    let t2 = setTimeout(() => {
+                        // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
+                        conference && conference.setReceiverVideoConstraint(181);
+                        clearTimeout(t2);
+                    }, 300);
+                    clearTimeout(t1);
+                }, 300);
             }
-
-            if (pidsToSelect.length > window.config.channelLastN) {
-                pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
-            }
-
-            conference.selectParticipants(pidsToSelect);
-
-        }
-
+        }, 1000);
     },
 
     stoppedStreams: [],
@@ -441,6 +468,14 @@ const VideoLayout = {
 
         return id || null;
     },
+
+    getDominantSpeakerId() {
+        const { id } = getDominantSpeaker(APP.store.getState()) || {};
+
+        return id || null;
+    },
+
+    
 
     /**
      * Triggers a thumbnail to pin or unpin itself.
