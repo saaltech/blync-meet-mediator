@@ -735,7 +735,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "",
-        "enterRoomTitle": "Create a new meeting",
+        "enterRoomTitle": "Create or Join a meeting",
         "go": "GO",
         "join": "JOIN",
         "info": "Info",
@@ -750,7 +750,8 @@
         "terms": "Terms",
         "title": "Jifmeet",
         "subTitle": "Meet and collaborate in a jiffy",
-        "placeholderEnterRoomName": "Enter the room name",
+        "placeholderEnterRoomName": "Enter a meeting name",
+        "placeholderEnterRoomCode": "Enter the meeting code",
         "startSession": "Go ahead, enter the meeting name and start the session."
     },
     "documentSharing": {

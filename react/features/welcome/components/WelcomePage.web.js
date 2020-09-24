@@ -2,8 +2,9 @@
 
 import React from 'react';
 
+import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
 import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth';
-import PostWelcomePageScreen from '../../../features/base/premeeting/components/web/PostWelcomePageScreen';
+import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
@@ -19,6 +20,7 @@ import { RecentList } from '../../recent-list';
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
+
 
 import logger from '../../settings/logger';
 
@@ -70,7 +72,10 @@ class WelcomePage extends AbstractWelcomePage {
             formDisabled: true,
             hideLogin: true,
             sessionExpiredQuery: false,
-            goClicked: false
+            goClicked: false,
+            reasonForLogin: '',
+            showNoCreateMeetingPrivilegeTip: false,
+            switchActiveIndex: this._canCreateMeetings() ? 0 : 1
         };
 
         /**
@@ -125,8 +130,6 @@ class WelcomePage extends AbstractWelcomePage {
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
         this._closeLogin = this._closeLogin.bind(this);
-        this._showPostWelcomePageScreen = this._showPostWelcomePageScreen.bind(this);
-
         this.links = window.interfaceConfig.MOBILE_APP_LINKS;
     }
 
@@ -209,12 +212,13 @@ class WelcomePage extends AbstractWelcomePage {
         document.body.classList.remove('welcome-page');
     }
 
+    /**
+     * Room name edit 
+     */
     _onRoomNameChanged(e) {
         this._onRoomChange(e);
-        if (e.target.value.trim() != '') {
-            this.setState({
-                formDisabled: false
-            });
+        if (e.target.value.trim() !== '') {
+            this._decideFormDisability(e.target.value.trim());
         } else {
             this.setState({
                 formDisabled: true
@@ -222,10 +226,59 @@ class WelcomePage extends AbstractWelcomePage {
         }
     }
 
+    /**
+     * Set Switch Active index.
+     *
+     * @param {string} index - Index of toggle switch active index.
+     * @private
+     * @returns {void}
+     */
+    setSwitchActiveIndex(index = null) {
+        this.setState({
+            switchActiveIndex: index === null ? (this._canCreateMeetings() ? 0 : 1) : parseInt(index, 10)
+        }, () => {
+            this._decideFormDisability();
+        });
+    }
+
+    /**
+     *
+     */
+    _decideFormDisability(name = this.state.room) {
+        let disabled = false;
+
+        if (!name) {
+            disabled = true;
+        } else if (this.state.switchActiveIndex) {
+            const match = validateMeetingCode(name);
+
+            disabled = !match;
+        }
+
+        this.setState({
+            formDisabled: disabled
+        });
+    }
+
     _closeLogin() {
         this.setState({
             hideLogin: true
         });
+
+        if (this.state.switchActiveIndex == 0) {
+            this.setSwitchActiveIndex();
+            if(!this._canCreateMeetings()) {
+                this.setState({
+                    showNoCreateMeetingPrivilegeTip: true
+                });
+            }
+        }
+    }
+
+    _canCreateMeetings() {
+        const { _user } = this.props;
+
+        return !_user || _user.role == 'manager'
     }
 
     /**
@@ -235,14 +288,33 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     render() {
-        const { t, _isUserSignedOut, _postWelcomePageScreen } = this.props;
-        const { hideLogin, goClicked, sessionExpiredQuery } = this.state;
+        const { t, _isUserSignedOut, _meetingDetails } = this.props;
+        const { hideLogin, goClicked, sessionExpiredQuery, switchActiveIndex,
+            showNoCreateMeetingPrivilegeTip } = this.state;
         const { APP_NAME } = interfaceConfig;
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
         const showResponsiveText = this._shouldShowResponsiveText();
         const titleArr = t('welcomepage.enterRoomTitle').split(' ');
         const separatedTitle = titleArr.pop();
+        const toggleSwitchItems = {
+            0: {
+                name: 'Create',
+                disabled: !this._canCreateMeetings(),
+                noPrivilegeTip: showNoCreateMeetingPrivilegeTip && (<>
+                    <div className = 'tooltip show'>
+                        <div
+                            className = 'close-icon'
+                            onClick = { () => this.setState({ showNoCreateMeetingPrivilegeTip: false }) } />
+                        Your account does not have create meeting rights.
+                    </div>
+                </>)
+            },
+            1: {
+                name: 'Join',
+                disabled: false
+            }
+        };
 
 
         return (
@@ -279,10 +351,11 @@ class WelcomePage extends AbstractWelcomePage {
                                         _isUserSignedOut
                                     && <LoginComponent
                                         closeAction = { this._closeLogin }
-                                        isOverlay = { true }
+                                        errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' }
                                         hideLogin = { hideLogin }
-                                        t = { t }
-                                        errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' } />
+                                        isOverlay = { true }
+                                        reasonForLogin = { this.state.reasonForLogin }
+                                        t = { t } />
                                     }
 
                                     <div className = 'header'>
@@ -292,6 +365,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                     className = { 'welcome-page-button signin' }
                                                     id = 'enter_room_button'
                                                     onClick = { () => this.setState({
+                                                        reasonForLogin: '',
                                                         hideLogin: false
                                                     }) }>
                                                     {
@@ -322,39 +396,44 @@ class WelcomePage extends AbstractWelcomePage {
                                                 { app: APP_NAME }) }
                                     </p>*/}
                                         </div>
-                                        <div id = 'enter_room'>
-                                            <div className = 'enter-room-input-container'>
-                                                <form onSubmit = { this._onFormSubmit }>
-                                                    <input
-                                                        autoFocus = { true }
-                                                        className = 'enter-room-input'
-                                                        id = 'enter_room_field'
-                                                        onChange = { this._onRoomNameChanged }
-
-                                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                                        placeholder = { t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
-                                                        ref = { this._setRoomInputRef }
-                                                        title = { t('welcomepage.roomNameAllowedChars') }
-                                                        type = 'text' />
-                                                    { this._renderInsecureRoomNameWarning() }
-                                                </form>
-                                            </div>
-                                            <div
-                                                className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
-                                                id = 'enter_room_button'
-
-                                                onClick = { this._onFormSubmit }>
-                                                {/* onClick = {this._showPostWelcomePageScreen}>*/}
-                                                {
-                                                    showResponsiveText
-                                                        ? t('welcomepage.goSmall')
-                                                        : t('welcomepage.go')
-                                                }
-                                            </div>
-                                        </div>
-                                        <div className = 'note'> { t('welcomepage.startSession') } </div>
-                                        {/* this._renderTabs() */}
+                                        
                                     </div>
+                                    <div id = 'enter_room'>
+                                        <ToggleSwitch
+                                            activeIndex = { switchActiveIndex }
+                                            containerStyle = {{ margin: '5px 0px 5px -7px' }}
+                                            items = { toggleSwitchItems }
+                                            toggleAction = { index => this.setSwitchActiveIndex(index) } />
+                                        <div className = 'enter-room-input-container'>
+                                            <form onSubmit = { this._onFormSubmit }>
+                                                <input
+                                                    autoFocus = { true }
+                                                    className = 'enter-room-input'
+                                                    id = 'enter_room_field'
+                                                    onChange = { this._onRoomNameChanged }
+
+                                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                                    placeholder = { switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
+                                                        : t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
+                                                    ref = { this._setRoomInputRef }
+                                                    title = { t('welcomepage.roomNameAllowedChars') }
+                                                    type = 'text' />
+                                            </form>
+                                        </div>
+                                        <div
+                                            className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
+                                            id = 'enter_room_button'
+
+                                            onClick = { this._onFormSubmit }>
+                                            {
+                                                showResponsiveText
+                                                    ? t('welcomepage.goSmall')
+                                                    : t('welcomepage.go')
+                                            }
+                                        </div>
+                                    </div>
+                                    { this._renderInsecureRoomNameWarning(switchActiveIndex === 1) }
+                                    {/* this._renderTabs() */}
                                     { showAdditionalContent
                                         ? <div
                                             className = 'welcome-page-content'
@@ -403,6 +482,22 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     /**
+     * Renders the insecure room name warning.
+     *
+     * @inheritdoc
+     */
+    _doRenderInvalidCode() {
+        return ( <></>
+            /*<div className = 'insecure-room-name-warning'>
+                <Icon src = { IconWarning } />
+                <span>
+                    { this.props.t('security.insecureRoomCodeWarning') }
+                </span>
+            </div>*/
+        );
+    }
+
+    /**
      * Prevents submission of the form and delegates join logic.
      *
      * @param {Event} event - The HTML Event which details the form submission.
@@ -416,19 +511,25 @@ class WelcomePage extends AbstractWelcomePage {
             return;
         }
 
-        if (this.props._isUserSignedOut) {
+        if (this.props._isUserSignedOut
+            && this.state.switchActiveIndex === 0) {
             this.setState({
-                hideLogin: false
+                hideLogin: false,
+                reasonForLogin: this.props.t('welcomepage.signinToCreateMeeting')
             });
 
             return;
         }
+        this.setState({
+            reasonForLogin: ''
+        });
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
             this.setState({
                 goClicked: true
             });
-            this.props.dispatch(setPostWelcomePageScreen(this.state.room));
+            this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
+                this.state.switchActiveIndex === 1));
 
 
             const intervalId = setInterval(() => {
@@ -442,28 +543,6 @@ class WelcomePage extends AbstractWelcomePage {
                     this._onJoin();
                 }
             }, 30);
-        }
-    }
-
-    /**
-     *
-     */
-    _showPostWelcomePageScreen(event) {
-        if (event) {
-            event.preventDefault();
-        }
-        if (this.props._isUserSignedOut) {
-            this.setState({
-                hideLogin: false
-            });
-
-            return;
-        }
-        if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
-            this.setState({
-                goClicked: true
-            });
-            this.props.dispatch(setPostWelcomePageScreen(this.state.room));
         }
     }
 

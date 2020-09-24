@@ -600,7 +600,8 @@
     },
     "security": {
         "about": "You can add a passcode to your meeting. Participants will need to provide the passcode before they are allowed to join the meeting.",
-        "insecureRoomNameWarning": "The room name is insecure. Unwanted participants may join your conference.",
+        "insecureRoomNameWarning": "The meeting name is insecure. Unwanted participants may join your conference.",
+        "insecureRoomCodeWarning": "Please enter a valid meeting code.",
         "securityOptions": "Security options"
     },
     "settings": {
@@ -841,6 +842,7 @@
         "videomute": "Participant has stopped the camera"
     },
     "welcomepage": {
+        "signinToCreateMeeting": "Please sign-in to create a new meeting",
         "accessibilityLabel": {
             "join": "Tap to join",
             "roomname": "Enter room name"
@@ -853,7 +855,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "Connect your calendar to view all your meetings in {{app}}. Plus, add {{provider}} meetings to your calendar and start them with one click.",
-        "enterRoomTitle": "Create a new meeting",
+        "enterRoomTitle": "Create or Join a meeting",
         "getHelp": "Get help",
         "roomNameAllowedChars": "Meeting name should not contain any of these characters: ?, &, :, ', \", %, #.",
         "go": "GO",
@@ -871,7 +873,8 @@
         "terms": "Terms",
         "title": "Jifmeet",
         "subTitle": "Meet and collaborate in a jiffy",
-        "placeholderEnterRoomName": "Enter the room name",
+        "placeholderEnterRoomName": "Enter a meeting name",
+        "placeholderEnterRoomCode": "Enter the meeting code",
         "startSession": "Go ahead, enter the meeting name and start the session.",
         "signinLabel": "Sign in",
         "mobileMessageTitle": "Jifmeet Mobile App",

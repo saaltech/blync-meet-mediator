@@ -75,13 +75,14 @@ export function decideAppLogin() {
     }
 }
 
-export function setPostWelcomePageScreen(room: string, meetingObj) {
+export function setPostWelcomePageScreen(room: string, meetingObj, isCode = false) {
 
     if(!meetingObj) {
         meetingObj = {
             meetingName: room,
-            meetingId: getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
-                getRandomArbitrary(100,999)
+            meetingId: isCode ? room : getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
+                getRandomArbitrary(100,999),
+            isMeetingCode: isCode
         }
     }
     
