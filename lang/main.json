@@ -842,6 +842,7 @@
         "videomute": "Participant has stopped the camera"
     },
     "welcomepage": {
+        "noCreateMeetingRights": "Your account does not have create meeting rights.",
         "signinToCreateMeeting": "Please sign-in to create a new meeting",
         "accessibilityLabel": {
             "join": "Tap to join",

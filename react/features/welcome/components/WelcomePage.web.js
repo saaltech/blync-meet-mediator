@@ -306,7 +306,8 @@ class WelcomePage extends AbstractWelcomePage {
                         <div
                             className = 'close-icon'
                             onClick = { () => this.setState({ showNoCreateMeetingPrivilegeTip: false }) } />
-                        Your account does not have create meeting rights.
+                        <div />
+                        <div className = 'tooltip__message'>{t('welcomepage.noCreateMeetingRights')}</div>
                     </div>
                 </>)
             },
