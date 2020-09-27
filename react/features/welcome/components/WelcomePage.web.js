@@ -151,7 +151,7 @@ class WelcomePage extends AbstractWelcomePage {
      */
     async componentDidMount() {
 
-        await validationFromNonComponents(true);
+        await validationFromNonComponents(true, true);
 
         if (isMobileBrowser() && this.links) {
             this.launchApp();

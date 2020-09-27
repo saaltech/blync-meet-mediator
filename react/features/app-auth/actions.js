@@ -93,7 +93,7 @@ export function setPostWelcomePageScreen(room: string, meetingObj, isCode = fals
 }
 
 
-export async function validationFromNonComponents(tokenRequired) {
+export async function validationFromNonComponents(tokenRequired, isHomePage = false) {
     let validToken = !tokenRequired || validateToken();
 
       //TODO check for !validToken once testing is done
@@ -116,7 +116,7 @@ export async function validationFromNonComponents(tokenRequired) {
             console.log("refresh Token error", e)
             if(e && e.response && e.response.status == 401) {
               // only in case of invalid grant
-              invalidateAndGoHome(true);
+              !isHomePage && invalidateAndGoHome(true);
               return false;
             }
           }
