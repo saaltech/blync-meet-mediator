@@ -93,7 +93,7 @@ export function setPostWelcomePageScreen(room: string, meetingObj, isCode = fals
 }
 
 
-async function validationFromNonComponents(tokenRequired) {
+export async function validationFromNonComponents(tokenRequired) {
     let validToken = !tokenRequired || validateToken();
 
       //TODO check for !validToken once testing is done

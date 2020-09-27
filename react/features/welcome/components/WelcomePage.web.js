@@ -3,7 +3,7 @@
 import React from 'react';
 
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
-import { LoginComponent, decideAppLogin, Profile } from '../../../features/app-auth';
+import { LoginComponent, decideAppLogin, Profile, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
@@ -149,7 +149,9 @@ class WelcomePage extends AbstractWelcomePage {
      * @inheritdoc
      * @returns {void}
      */
-    componentDidMount() {
+    async componentDidMount() {
+
+        await validationFromNonComponents(true);
 
         if (isMobileBrowser() && this.links) {
             this.launchApp();
