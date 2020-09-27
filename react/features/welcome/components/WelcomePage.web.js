@@ -12,19 +12,16 @@ import { translate } from '../../base/i18n';
 import { Icon, IconWarning } from '../../base/icons';
 import { connect } from '../../base/redux';
 import { CalendarList, bootstrapCalendarIntegration } from '../../calendar-sync';
+import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
 import {
     getQueryVariable
 } from '../../prejoin/functions';
 import { RecentList } from '../../recent-list';
+import logger from '../../settings/logger';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
 import Background from './background';
-
-
-import logger from '../../settings/logger';
-
-import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
 
 
 /**
@@ -135,7 +132,6 @@ class WelcomePage extends AbstractWelcomePage {
 
     launchApp() {
         window.location.replace(this.links[Platform.OS].deepLink);
-
         // TODO: Comment the below line until redirection to installed app is implemented
         // this.timer = setTimeout(() => this.openAppPage(), 1000);
     }

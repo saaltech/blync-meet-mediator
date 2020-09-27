@@ -1,6 +1,6 @@
 // @flow
 
-import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_FILMSTRIP_COLLAPSED } from './actionTypes';
+import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_FILMSTRIP_COLLAPSED, SET_PAGE } from './actionTypes';
 import { calculateThumbnailSizeForHorizontalView, calculateThumbnailSizeForTileView } from './functions';
 
 /**
@@ -64,6 +64,22 @@ export function setFilmStripCollapsed(collapsed: boolean) {
     return {
         type: SET_FILMSTRIP_COLLAPSED,
         collapsed
+    };
+}
+
+/**
+ * Sets page.
+ *
+ * @param {int} page - Page.
+ * @returns {{
+    *     type: SET_PAGE,
+    *     dimensions: Object
+    * }}
+    */
+export function setPage(page: number = 1) {
+    return {
+        type: SET_PAGE,
+        page
     };
 }
 export * from './actions.native';

@@ -15,7 +15,9 @@ import { MiddlewareRegistry } from '../base/redux';
 import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
 import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED } from '../filmstrip';
 
+import { SET_TILE_VIEW } from './actionTypes';
 import './middleware.any';
+import { updatePage } from './functions.js';
 
 declare var APP: Object;
 
@@ -60,10 +62,15 @@ MiddlewareRegistry.register(store => next => action => {
 
         break;
 
-    case PARTICIPANT_LEFT:
+    case PARTICIPANT_LEFT: {
         VideoLayout.removeParticipantContainer(action.participant.id);
 
+        const participants = store.getState()['features/base/participants'];
+
+        updatePage(participants.length);
+
         break;
+    }
 
     case PARTICIPANT_UPDATED: {
 
@@ -97,7 +104,13 @@ MiddlewareRegistry.register(store => next => action => {
         if (!action.track.local) {
             VideoLayout.onRemoteStreamAdded(action.track.jitsiTrack);
         }
-
+        break;
+    case SET_TILE_VIEW:
+        if (action.enabled) {
+            VideoLayout.refreshPagination();
+        } else {
+            VideoLayout.updateVideoPage(null);
+        }
 
         break;
     case TRACK_REMOVED:
