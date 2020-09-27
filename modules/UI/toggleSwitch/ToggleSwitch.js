@@ -2,10 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { resolveAppLogin } from '../../../react/features/app-auth/actions';
-import { translate } from '../../../react/features/base/i18n';
-import { connect } from '../../../react/features/base/redux';
-
 const DEFAULT_ITEMS = {
     0: {
         name: 'ON',
@@ -32,16 +28,6 @@ function ToggleSwitch(props) {
         }
     }, [ props.activeIndex ]);
 
-    /*
-        $('li').click(function() {
-            $("li").removeClass("active") DONE
-            $(this).addClass("active") DONE
-            $('#slider').removeClass('slider__0') DONE
-            $('#slider').removeClass('slider__1') DONE
-            $('#slider').addClass('slider__'+$(this).data('i')); DONE
-        })
-    */
-
     const _toggleAction = index => {
         setLocalActiveIndex(index);
         toggleAction && toggleAction(index);
@@ -62,14 +48,6 @@ function ToggleSwitch(props) {
                             {items[indexKey].noPrivilegeTip}
                         </li>
                     )
-                }
-                {
-
-                    /*
-                    <li data-i="0" class="active start">Start</li>
-                    <li class="join" data-i="1">Join</li>
-                    */
-
                 }
             </ul>
             <div className="sliderBack">
@@ -92,4 +70,4 @@ function _mapStateToProps(state: Object) {
     };
 }
 
-export default translate(connect(_mapStateToProps)(ToggleSwitch));
+export default ToggleSwitch;
