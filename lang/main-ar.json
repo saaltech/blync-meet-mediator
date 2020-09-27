@@ -774,7 +774,8 @@
         "terms": "الشروط",
         "title": "Start a new meeting",
         "subTitle": "Meet and collaborate in a jiffy",
-        "placeholderEnterRoomName": "Enter the room name",
+        "placeholderEnterRoomName": "Enter a meeting name",
+        "placeholderEnterRoomCode": "Enter the meeting code",
         "startSession": "Go ahead, enter the meeting name and start or join the session."
     },
     "lonelyMeetingExperience": {

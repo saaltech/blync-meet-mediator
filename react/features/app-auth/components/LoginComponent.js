@@ -31,7 +31,7 @@ function LoginComponent(props) {
     const [ password, setPassword ] = useState('');
     const [ isSocialLogin, setIsSocialLogin ] = useState(false);
     const [ formDisabled, setFormDisabled ] = useState(true);
-    const { errorMsg, noSignInIcon = false, googleOfflineCode,
+    const { errorMsg, noSignInIcon = false, googleOfflineCode, reasonForLogin = '',
             closeAction, isOverlay = false, hideLogin = false, t } = props;
 
     useEffect(() => {
@@ -165,6 +165,9 @@ function LoginComponent(props) {
                         className = 'close-icon' />
                 }
                 <div className = { `${isOverlay ? 'content' : 'inline-content'}` }>
+                    {
+                        reasonForLogin && <div className="reasonForLogin">{reasonForLogin}</div>
+                    }
                     { !noSignInIcon && <Icon src = { IconSignInLock } /> }
                     <h2>{ t('loginPage.signinLabel') }</h2>
                     <form onSubmit={onSubmit}>
