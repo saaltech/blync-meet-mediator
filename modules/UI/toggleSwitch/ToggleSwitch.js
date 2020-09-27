@@ -60,14 +60,4 @@ function ToggleSwitch(props) {
     );
 }
 
-/**
- * Ties up to redux state changes
- *
- */
-function _mapStateToProps(state: Object) {
-    return {
-        // googleOfflineCode: state['features/app-auth'].googleOfflineCode
-    };
-}
-
 export default ToggleSwitch;
