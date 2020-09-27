@@ -127,6 +127,7 @@ class WelcomePage extends AbstractWelcomePage {
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
         this._closeLogin = this._closeLogin.bind(this);
+        this._cleanupTooltip = this._cleanupTooltip.bind(this);
         this.links = window.interfaceConfig.MOBILE_APP_LINKS;
     }
 
@@ -256,14 +257,30 @@ class WelcomePage extends AbstractWelcomePage {
         });
     }
 
+    /**
+     *
+     */
+    _cleanupTooltip() {
+        setTimeout(() => {
+            if (this._canCreateMeetings()) {
+                this.setState({
+                    showNoCreateMeetingPrivilegeTip: false
+                });
+            }
+        }, 300);
+    }
+
+    /**
+     *
+     */
     _closeLogin() {
         this.setState({
             hideLogin: true
         });
 
-        if (this.state.switchActiveIndex == 0) {
+        if (this.state.switchActiveIndex === 0) {
             this.setSwitchActiveIndex();
-            if(!this._canCreateMeetings()) {
+            if (!this._canCreateMeetings()) {
                 this.setState({
                     showNoCreateMeetingPrivilegeTip: true
                 });
@@ -375,7 +392,8 @@ class WelcomePage extends AbstractWelcomePage {
                                                         hideLogin: true
                                                     }) }>
                                                     <Profile
-                                                        showMenu = { true } />
+                                                        showMenu = { true } 
+                                                        postLogout = { this._cleanupTooltip } />
                                                 </div>
 
                                         }
