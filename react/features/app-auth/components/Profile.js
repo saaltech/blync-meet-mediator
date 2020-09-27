@@ -9,10 +9,13 @@ import { connect } from '../../base/redux';
 import { resolveAppLogout } from '../actions'
 
 import { useState, useEffect } from 'react';
-// import Router from 'next/router';
+
 import useRequest from '../../hooks/use-request';
 
-import Avatar from 'react-avatar';
+import { Avatar } from '../../base/avatar';
+
+import googleApi from '../../google-api/googleApi';
+import { signOut } from '../../google-api'
 
 import {
     Icon,
@@ -39,6 +42,9 @@ function Profile(props) {
     }
 
     const logout = () => {
+        if(googleApi.isSignedIn()) {
+            APP.store.dispatch(signOut())
+        }
         APP.store.dispatch(resolveAppLogout())
     }
 
@@ -49,7 +55,7 @@ function Profile(props) {
 
   return (
       <div className={`userProfile`} onClick={() => showMenu && setMenuExpanded(!menuExpanded)}>
-        <Avatar size={"54"} className="avatarProfile" name={ user.name } src={ user.avatar }/>
+        <Avatar size={"54"} className="avatarProfile" displayName={ user.name } url={ user.avatar }/>
         <div className={"userName"}>{ user.name }</div>
         {
             showMenu &&
