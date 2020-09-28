@@ -192,6 +192,14 @@ export function _mapStateToProps(state: Object, ownProps: Props) {
 
     let _loadableAvatarUrl = _participant?.loadableAvatarUrl;
 
+    if (_loadableAvatarUrl) {
+        const match = /=s\d+-c$/g.exec(_loadableAvatarUrl);
+
+        if (match) {
+            _loadableAvatarUrl = `${_loadableAvatarUrl.substr(0, match.index)}=s400-c`;
+        }
+    }
+
     if (participantId && screenShares.includes(participantId)) {
         _loadableAvatarUrl = IconShareDesktop;
     }
