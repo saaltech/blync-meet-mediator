@@ -192,6 +192,7 @@ class ChatInput extends Component<Props, State> {
      * @returns {void}
      */
     _onMessageChange(event) {
+        this.setState({ showSmileysPanel: false });
         this.setState({ message: event.target.value });
 
         this.props.onChange && this.props.onChange();
