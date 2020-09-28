@@ -37,7 +37,7 @@ class ChatMessage extends AbstractChatMessage<Props> {
             }
         });
 
-        console.log(this.props.message, 'messagemessagemessage');
+        // console.log(this.props.message, 'messagemessagemessage');
 
         return (
             <div className = 'chatmessage-wrapper'>

@@ -33,8 +33,14 @@ const logger = Logger.getLogger(__filename);
  *
  * @param {*} spanId
  */
-function createContainer(spanId) {
+function createContainer(spanId, isInView) {
     const container = document.createElement('span');
+
+    // const showVideoPaging = window.interfaceConfig.SHOW_VIDEO_PAGINATION;
+
+    // // if (!isInView && showVideoPaging) {
+    // //     container.style.display = 'none';
+    // // }
 
     container.id = spanId;
     container.className = 'videocontainer';
@@ -125,7 +131,10 @@ export default class RemoteVideo extends SmallVideo {
      *
      */
     addRemoteVideoContainer() {
-        this.container = createContainer(this.videoSpanId);
+        const { page } = APP.store.getState()['features/filmstrip'];
+        const isInView = this.VideoLayout.videoIsInView(this.videoSpanId, page);
+
+        this.container = createContainer(this.videoSpanId, isInView);
         this.$container = $(this.container);
         this.initializeAvatar();
         this._setThumbnailSize();

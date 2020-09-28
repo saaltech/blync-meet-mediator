@@ -2,6 +2,8 @@
 import truncate from 'lodash/truncate';
 import moment from 'moment';
 import React, { Component } from 'react';
+import Emoji from 'react-emoji-render';
+
 
 import { Avatar as AvatarDisplay } from '../../../../../react/features/base/avatar';
 import { Icon, IconSearch } from '../../../base/icons';
@@ -119,6 +121,7 @@ export default class ChatUsers extends Component<Props, State> {
      * @inheritdoc
      * @returns {ReactElement}
      */
+    
     render() {
         const { localParticipant } = this.props;
         let _participants = this._getEngagedUsers();
@@ -136,7 +139,6 @@ export default class ChatUsers extends Component<Props, State> {
                 .toLowerCase()
                 .includes(search);
         });
-
 
         return (
             <div className = 'chat-users'>
@@ -166,7 +168,10 @@ export default class ChatUsers extends Component<Props, State> {
                                         {!lastMessage.hasRead && <span className = 'chat-users__status--new-message' />}
                                     </div>
                                     {lastMessage.message && <div className = 'chat-users__user-details-body'>
-                                        {truncate(lastMessage.message, { length: 70 })}
+                                        {/* {truncate(lastMessage.message, { length: 70 })} */}
+                                        <Emoji 
+                                            text = {truncate(lastMessage.message, { length: 70 })}
+                                         />
                                     </div>}
                                 </div>
                                 {lastMessage.message && <div className = 'chat-users__chat-time'>

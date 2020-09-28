@@ -220,6 +220,12 @@ var interfaceConfig = {
     TILE_VIEW_MAX_COLUMNS: 3,
 
     /**
+     * Enable pagination. This will also enabled fitting lastN video streams
+     * to one's seen on the respective grid page
+     */
+    SHOW_VIDEO_PAGINATION: true,
+
+    /**
      * Enables redirecting the welcome page(on iOS/Android mobile devices) to the installed Jifmeet app 
      * or to its page on platform store if the app isn't installed.
      * Ensure the links point to Jifmeet app.

@@ -4,22 +4,46 @@ import React, { useState, useEffect } from 'react';
 
 import { config } from '../../../config';
 import { translate } from '../../base/i18n';
+import { connect } from '../../base/redux';
 import {
     Icon,
     IconSignInLock
 } from '../../base/icons';
 import { InputField } from '../../base/premeeting';
 
+import {
+    CALENDAR_TYPE,
+    signIn
+} from '../../calendar-sync';
+
+import {
+    updateProfile, GoogleSignInButton
+} from '../../google-api';
+
 
 // import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
 import { resolveAppLogin } from '../actions';
+import { showEnableCookieTip } from '../../google-api/functions';
 
 function LoginComponent(props) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ isSocialLogin, setIsSocialLogin ] = useState(false);
     const [ formDisabled, setFormDisabled ] = useState(true);
-    const { errorMsg, noSignInIcon = false } = props;
+    const { errorMsg, noSignInIcon = false, googleOfflineCode, reasonForLogin = '',
+            closeAction, isOverlay = false, hideLogin = false, t } = props;
+
+    useEffect(() => {
+        async function socialLogin() {
+            await doSocialSignIn(false);
+        }
+        
+        if(isSocialLogin && googleOfflineCode) {
+            socialLogin();
+            setIsSocialLogin(false)
+        }
+    }, [props.googleOfflineCode]);
 
     useEffect(() => {
         if (email != '' && password != '') {
@@ -29,7 +53,6 @@ function LoginComponent(props) {
         }
     });
 
-    const { closeAction, isOverlay = false, t } = props;
     const [ doRequest, errors ] = useRequest({
         url: config.unauthenticatedIRP + config.signInEP,
         method: 'post',
@@ -40,13 +63,23 @@ function LoginComponent(props) {
         onSuccess: data => onSuccess(data)
     });
 
+    const [ doSocialSignIn, errorsSocialSignIn ] = useRequest({
+        url: config.unauthenticatedIRP + config.socialSignInEP,
+        method: 'post',
+        body: {
+            code: googleOfflineCode,
+            provider: 'google'
+        },
+        onSuccess: data => onSuccess(data)
+    });
+
     const onSubmit = async event => {
         event.preventDefault();
 
         if (formDisabled) {
             return;
         }
-
+        showEnableCookieTip(false);
         // TODO: uncomment this once the api is ready
         await doRequest(false);
 
@@ -85,8 +118,41 @@ function LoginComponent(props) {
 
     };
 
+    /**
+     * Clear login form
+     */
+    const clearForm = () => {
+        setEmail("");
+        setPassword("");
+    }
+
+    /**
+     * Starts the sign in flow for Google calendar integration.
+     *
+     * @private
+     * @returns {void}
+     */
+    const _onClickGoogle = () => {
+        // Clear any existing errors shown
+        if(isOverlay && window.showEnableCookieTip) {
+            showEnableCookieTip(true)
+            return;
+        }
+        clearForm()
+        isOverlay && closeAction();
+        setIsSocialLogin(true);
+        APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
+        // setTimeout(() => {
+        //     APP.store.dispatch(updateProfile());
+        // }, 500);
+    }
+
     return (
-        <div className = { `appLoginComponent ${isOverlay ? 'overlay' : ''}` }>
+        <div className = { `appLoginComponent ${isOverlay ? 'overlay' : ''}` }
+            style={{
+                visibility: hideLogin ? 'hidden': 'visible'
+            }}
+        >
             {
                 isOverlay && <div
                     className = 'modal-overlay'
@@ -99,6 +165,9 @@ function LoginComponent(props) {
                         className = 'close-icon' />
                 }
                 <div className = { `${isOverlay ? 'content' : 'inline-content'}` }>
+                    {
+                        reasonForLogin && <div className="reasonForLogin">{reasonForLogin}</div>
+                    }
                     { !noSignInIcon && <Icon src = { IconSignInLock } /> }
                     <h2>{ t('loginPage.signinLabel') }</h2>
                     <form onSubmit={onSubmit}>
@@ -129,6 +198,13 @@ function LoginComponent(props) {
 
                         <button type="submit" style={{height: '0px', width: '0px', visibility: 'hidden'}}></button>
                     </form>
+                    {
+                        window.config.googleApiApplicationClientID &&
+                        window.config.enableCalendarIntegration &&
+                        <GoogleSignInButton
+                            onClick = { _onClickGoogle }
+                            text = { t('liveStreaming.signIn') } />
+                    }
                     
 
                     <div className = 'error'>{errors || errorMsg}</div>
@@ -138,4 +214,10 @@ function LoginComponent(props) {
     );
 }
 
-export default translate(LoginComponent);
+function _mapStateToProps(state: Object) {
+    return {
+        googleOfflineCode : state['features/app-auth'].googleOfflineCode
+    };
+}
+
+export default translate(connect(_mapStateToProps)(LoginComponent));

@@ -8,7 +8,8 @@ import {
     SET_USER_SIGNED_OUT,
     APP_LOGIN,
     EXPIRE_TOKEN,
-    SET_POST_WELCOME_SCREEN_DETAILS
+    SET_POST_WELCOME_SCREEN_DETAILS,
+    SET_GOOGLE_OFFLINE_CODE
 } from './actionTypes';
 import { LoginComponent } from './components';
 import logger from './logger';
@@ -74,13 +75,14 @@ export function decideAppLogin() {
     }
 }
 
-export function setPostWelcomePageScreen(room: string, meetingObj) {
+export function setPostWelcomePageScreen(room: string, meetingObj, isCode = false) {
 
     if(!meetingObj) {
         meetingObj = {
             meetingName: room,
-            meetingId: getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
-                getRandomArbitrary(100,999)
+            meetingId: isCode ? room : getRandomArbitrary(10,99) + "-" + (new Date()).getTime() + "-" +
+                getRandomArbitrary(100,999),
+            isMeetingCode: isCode
         }
     }
     
@@ -91,7 +93,7 @@ export function setPostWelcomePageScreen(room: string, meetingObj) {
 }
 
 
-async function validationFromNonComponents(tokenRequired) {
+export async function validationFromNonComponents(tokenRequired, isHomePage = false) {
     let validToken = !tokenRequired || validateToken();
 
       //TODO check for !validToken once testing is done
@@ -114,7 +116,7 @@ async function validationFromNonComponents(tokenRequired) {
             console.log("refresh Token error", e)
             if(e && e.response && e.response.status == 401) {
               // only in case of invalid grant
-              invalidateAndGoHome(true);
+              !isHomePage && invalidateAndGoHome(true);
               return false;
             }
           }
@@ -142,5 +144,12 @@ export async function saveHostJidToUserMapping(connection) {
         } catch (err) {
             console.log("Unable to save Jid to Host mapping",err)
         }
+    }
+}
+
+export function setGoogleOfflineCode(googleOfflineCode = null) {
+    return {
+        type: SET_GOOGLE_OFFLINE_CODE,
+        googleOfflineCode
     }
 }
