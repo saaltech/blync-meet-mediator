@@ -438,10 +438,10 @@ class WelcomePage extends AbstractWelcomePage {
                                             </form>
                                         </div>
                                         <div
-                                            className = { `welcome-page-button go ${this.state.formDisabled ? 'disabled' : ''}` }
+                                            className = { `welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}` }
                                             id = 'enter_room_button'
-
                                             onClick = { this._onFormSubmit }>
+                                            <div class='chat-piece'></div>
                                             {
                                                 showResponsiveText
                                                     ? t('welcomepage.goSmall')

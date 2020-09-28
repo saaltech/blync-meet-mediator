@@ -298,6 +298,34 @@ body.welcome-page {
             padding: 0px;
         }
 
+        &.go-button {
+            background-color: #80B363;
+            position: absolute;
+            border-radius: 40px 40px 0px 40px;
+            height: 54px;
+            // margin-top: 7px;
+            width: $welcomePageButtonWidth;
+            left: calc(#{$welcomePageEnterRoomWidth} - 5px);
+            font-size: 22px; //$welcomePageButtonFontSize;
+            line-height: 2.5em; //welcomePageButtonLineHeight
+            
+            .chat-piece {
+                position: absolute;
+                top: 44px;
+                left: 67px;
+                border: 13px solid transparent;
+                border-right: 40px solid #80B363;
+              }
+              
+              &.disabled {
+                cursor: not-allowed;
+                background-color: #BDD8AF;
+                .chat-piece {
+                  border-right: 40px solid #BDD8AF;
+                }
+            }
+        }
+
         &.go {
 
             &.disabled {
