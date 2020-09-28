@@ -9,7 +9,7 @@ import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
-import { Icon, IconWarning } from '../../base/icons';
+import { Icon, IconWarning, IconSadSmiley } from '../../base/icons';
 import { connect } from '../../base/redux';
 import { CalendarList, bootstrapCalendarIntegration } from '../../calendar-sync';
 import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
@@ -321,7 +321,7 @@ class WelcomePage extends AbstractWelcomePage {
                         <div
                             className = 'close-icon'
                             onClick = { () => this.setState({ showNoCreateMeetingPrivilegeTip: false }) } />
-                        <div />
+                        <div className = 'tooltip__icon'> <Icon src = { IconSadSmiley } /> </div>
                         <div className = 'tooltip__message'>{t('welcomepage.noCreateMeetingRights')}</div>
                     </div>
                 </>)
