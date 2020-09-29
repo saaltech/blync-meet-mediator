@@ -441,7 +441,7 @@ class WelcomePage extends AbstractWelcomePage {
                                             className = { `welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}` }
                                             id = 'enter_room_button'
                                             onClick = { this._onFormSubmit }>
-                                            <div class='chat-piece'></div>
+                                            <div className = 'chat-piece' />
                                             {
                                                 showResponsiveText
                                                     ? t('welcomepage.goSmall')
@@ -523,6 +523,7 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _onFormSubmit(event) {
         event.preventDefault();
+        event.target && event.target.elements && event.target.elements[0].blur();
 
         if (this.state.formDisabled) {
             return;
