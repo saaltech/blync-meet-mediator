@@ -286,15 +286,15 @@ body.welcome-page {
         &.signin {
             background: #005C85;
             width: 100px;
-            right: 30;
-            top: 25px;
+            right: 32px;
+            top: 40px;
             border-radius: $welcomePageButtonBorderRadius;
         }
 
         &.profile {
             background: transparent;
-            right: 30;
-            top: 25px;
+            right: 32px;
+            top: 40px;
             padding: 0px;
         }
 
