@@ -321,6 +321,8 @@ class Prejoin extends Component<Props, State> {
             pageErrorMessageKey
         } = this.props;
 
+        videoTrack && videoTrack._setMuted(true);
+
         const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName,
             _showDialog, _setParticpantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
         const { showJoinByPhoneButtons, navigatedFromHome } = this.state;
