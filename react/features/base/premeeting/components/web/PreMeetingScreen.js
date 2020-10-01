@@ -88,7 +88,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             meetNow: value
         }, () => {
-            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews && this.state.meetNow));
+            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
         })
     }
 
@@ -96,7 +96,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             showTrackPreviews: value
         }, () => {
-            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews && this.state.meetNow));
+            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
         })
     }
 
@@ -119,7 +119,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     exiting && <Loading />
                 }
                 {
-                    showTrackPreviews && meetNow ?
+                    showTrackPreviews || meetNow ?
                     <Preview
                             videoMuted = { videoMuted }
                             videoTrack = { videoTrack } >
