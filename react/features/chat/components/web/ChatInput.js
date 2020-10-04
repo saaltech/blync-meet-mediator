@@ -15,7 +15,11 @@ import { Picker } from 'emoji-mart';
 // Unified code names of Smileys to be excluded
 const SMILEYS_TO_EXCLUDE = [
     '1F975', // Overheated face ':hot_face'
-    'hot_face' // Overheated face ':hot_face'
+    'hot_face', // Overheated face ':hot_face'
+    '1F970', // smiling_face_with_3_hearts
+    'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
+    '1F976', // cold_face
+    'cold_face' // cold_face
 ];
 
 // default frequenlty used smileys
