@@ -122,9 +122,9 @@ class ChatInput extends Component<Props, State> {
                         </div>
                     </div>
                 </div>
-                {this.state.showSmileysPanel &&  <div className = { smileysPanelClassName }>
-                    <Picker defaultSearchValue = {'hell'} onSelect={this._onSmileySelect} />
-                </div>}
+                {this.state.showSmileysPanel && <div className = { smileysPanelClassName }>
+                    <Picker onSelect={this._onSmileySelect} />
+                </div> }
                 <div className = 'usrmsg-form'>
                     <TextareaAutosize
                         id = 'usermsg'
@@ -134,11 +134,11 @@ class ChatInput extends Component<Props, State> {
                         onHeightChange = { this.props.onResize }
                         onKeyDown = { this._onDetectSubmit }
                         placeholder = { this.props.t('chat.messagebox') }
-                    value = { this.state.message } /> 
-                     
+                        value = { this.state.message } />
                     <button
                         onClick = { () => {
                             const trimmed = this.state.message.trim();
+
                             this.props.onSend(trimmed);
                             this.setState({ message: '' });
                         } }><Icon src = { IconChatSend } /></button>
