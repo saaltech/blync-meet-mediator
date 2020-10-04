@@ -19,7 +19,9 @@ const SMILEYS_TO_EXCLUDE = [
     '1F970', // smiling_face_with_3_hearts
     'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
     '1F976', // cold_face
-    'cold_face' // cold_face
+    'cold_face', // cold_face
+    'compass', // compass
+    '1F9ED'
 ];
 
 // default frequenlty used smileys
