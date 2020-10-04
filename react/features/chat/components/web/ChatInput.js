@@ -122,12 +122,24 @@ class ChatInput extends Component<Props, State> {
      * (bug from the emoji library).
      */
     _filterFrequentlyUsedSmileys() {
-        const obj = JSON.parse(window.localStorage['emoji-mart.frequently'] || '{}');
+        const frequentEmoji = window.localStorage.getItem('emoji-mart.frequently');
+        const obj = JSON.parse(frequentEmoji || '{}');
+        let lastEmoji = window.localStorage.getItem('emoji-mart.last');
 
-        SMILEYS_TO_EXCLUDE.forEach(id => delete obj[id]);
+        lastEmoji = lastEmoji && JSON.parse(lastEmoji);
 
-        if (window.localStorage['emoji-mart.frequently']) {
+        SMILEYS_TO_EXCLUDE.forEach(id => {
+            delete obj[id];
+            if (id === lastEmoji) {
+                lastEmoji = '';
+            }
+        });
+
+        if (frequentEmoji) {
             window.localStorage.setItem('emoji-mart.frequently', JSON.stringify(obj));
+        }
+        if (!lastEmoji) {
+            window.localStorage.removeItem('emoji-mart.last');
         }
     }
 
@@ -251,6 +263,7 @@ class ChatInput extends Component<Props, State> {
         });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _onToggleSmileysPanel: () => void;
@@ -265,6 +278,7 @@ class ChatInput extends Component<Props, State> {
         this.setState({ showSmileysPanel: !this.state.showSmileysPanel });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _setTextAreaRef: (?HTMLTextAreaElement) => void;
