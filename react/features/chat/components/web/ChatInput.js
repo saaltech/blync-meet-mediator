@@ -8,8 +8,18 @@ import type { Dispatch } from 'redux';
 import { translate } from '../../../base/i18n';
 import { IconChatSend, Icon } from '../../../base/icons';
 import { connect } from '../../../base/redux';
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
+
+
+// Unified code names of Smileys to be excluded
+const SMILEYS_TO_EXCLUDE = [
+    '1F975', // Overheated face ':hot_face'
+    'hot_face' // Overheated face ':hot_face'
+];
+
+// default frequenlty used smileys
+const DEFAULT_FREQUENLT_USED_SMILEYS = ["+1", "grinning", "kissing_heart", "heart_eyes", "laughing", "stuck_out_tongue_winking_eye", "sweat_smile", "joy", "scream"]
 
 /**
  * The type of the React {@code Component} props of {@link ChatInput}.
@@ -99,6 +109,22 @@ class ChatInput extends Component<Props, State> {
          * manually focusing.
          */
         this._focus();
+
+        this._filterFrequentlyUsedSmileys();
+    }
+
+    /**
+     * Filter out the smileys that appear with proper enclosing html structure,
+     * (bug from the emoji library).
+     */
+    _filterFrequentlyUsedSmileys() {
+        const obj = JSON.parse(window.localStorage['emoji-mart.frequently'] || '{}');
+
+        SMILEYS_TO_EXCLUDE.forEach(id => delete obj[id]);
+
+        if (window.localStorage['emoji-mart.frequently']) {
+            window.localStorage.setItem('emoji-mart.frequently', JSON.stringify(obj));
+        }
     }
 
     /**
@@ -123,7 +149,13 @@ class ChatInput extends Component<Props, State> {
                     </div>
                 </div>
                 <div className = { smileysPanelClassName }>
-                    <Picker onSelect={this._onSmileySelect} />
+                    <Picker
+                        emojisToShowFilter = { emoji => {
+                            if (!SMILEYS_TO_EXCLUDE.includes(emoji.unified)) {
+                                return true;
+                            }
+                        } }
+                        onSelect = { this._onSmileySelect } />
                 </div>
                 <div className = 'usrmsg-form'>
                     <TextareaAutosize
