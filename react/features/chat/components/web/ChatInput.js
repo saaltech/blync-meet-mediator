@@ -152,7 +152,7 @@ class ChatInput extends Component<Props, State> {
                         </div>
                     </div>
                 </div>
-                <div className = { smileysPanelClassName }>
+                {this.state.showSmileysPanel && <div className = { smileysPanelClassName }>
                     <Picker
                         emojisToShowFilter = { emoji => {
                             if (!SMILEYS_TO_EXCLUDE.includes(emoji.unified)) {
@@ -160,7 +160,7 @@ class ChatInput extends Component<Props, State> {
                             }
                         } }
                         onSelect = { this._onSmileySelect } />
-                </div>
+                </div>}
                 <div className = 'usrmsg-form'>
                     <TextareaAutosize
                         id = 'usermsg'
