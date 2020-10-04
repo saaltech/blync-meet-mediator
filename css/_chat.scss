@@ -191,6 +191,7 @@
     font-size: 15px;
     padding: 10px;
     overflow-y: auto;
+    outline: none;
     resize: none;
     width: 100%;
     word-break: break-word;
@@ -272,7 +273,10 @@
 }
 
 .smiley {
-    font-size: 14pt;
+    font-size: 22px;
+    line-height: 28px;
+    width: auto !important;
+    height: auto !important;
 }
 
 #smileys {

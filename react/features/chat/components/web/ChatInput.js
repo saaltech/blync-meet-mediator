@@ -111,6 +111,12 @@ class ChatInput extends Component<Props, State> {
         const smileysPanelClassName = `${this.state.showSmileysPanel
             ? 'show-smileys' : 'hide-smileys'} smileys-panel`;
 
+        const {message} = this.state;
+        const _message = message.trim();
+        const firstLetter = _message[0];
+        const lastLetter = _message[_message.length - 1];
+        const iconSelected = (_message.length > 1 && firstLetter === ':' && lastLetter === ':');
+        const _inputMessage = iconSelected ? <Emoji text = {_message} /> : message;
         return (
             <div id = 'chat-input' >
                 <div className = 'smiley-input'>
@@ -122,11 +128,11 @@ class ChatInput extends Component<Props, State> {
                         </div>
                     </div>
                 </div>
-                <div className = { smileysPanelClassName }>
-                    <Picker onSelect={this._onSmileySelect} />
-                </div>
+                {this.state.showSmileysPanel &&  <div className = { smileysPanelClassName }>
+                    <Picker defaultSearchValue = {'hell'} onSelect={this._onSmileySelect} />
+                </div>}
                 <div className = 'usrmsg-form'>
-                    <TextareaAutosize
+                    {!iconSelected && <TextareaAutosize
                         id = 'usermsg'
                         inputRef = { this._setTextAreaRef }
                         maxRows = { 5 }
@@ -134,11 +140,17 @@ class ChatInput extends Component<Props, State> {
                         onHeightChange = { this.props.onResize }
                         onKeyDown = { this._onDetectSubmit }
                         placeholder = { this.props.t('chat.messagebox') }
-                        value = { this.state.message } />
+                    value = { _inputMessage } /> }
+                    {iconSelected && 
+                        <div contentEditable={true} id="usermsg" style={{fontSize: '18px'}}
+                            onInput={e => this.setState({message: e.currentTarget.textContent})}
+                    >
+                        {_inputMessage}
+                    </div>
+                    }    
                     <button
                         onClick = { () => {
                             const trimmed = this.state.message.trim();
-
                             this.props.onSend(trimmed);
                             this.setState({ message: '' });
                         } }><Icon src = { IconChatSend } /></button>
