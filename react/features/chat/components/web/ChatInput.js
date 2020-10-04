@@ -111,12 +111,6 @@ class ChatInput extends Component<Props, State> {
         const smileysPanelClassName = `${this.state.showSmileysPanel
             ? 'show-smileys' : 'hide-smileys'} smileys-panel`;
 
-        const {message} = this.state;
-        const _message = message.trim();
-        const firstLetter = _message[0];
-        const lastLetter = _message[_message.length - 1];
-        const iconSelected = (_message.length > 1 && firstLetter === ':' && lastLetter === ':');
-        const _inputMessage = iconSelected ? <Emoji text = {_message} /> : message;
         return (
             <div id = 'chat-input' >
                 <div className = 'smiley-input'>
@@ -132,7 +126,7 @@ class ChatInput extends Component<Props, State> {
                     <Picker defaultSearchValue = {'hell'} onSelect={this._onSmileySelect} />
                 </div>}
                 <div className = 'usrmsg-form'>
-                    {!iconSelected && <TextareaAutosize
+                    <TextareaAutosize
                         id = 'usermsg'
                         inputRef = { this._setTextAreaRef }
                         maxRows = { 5 }
@@ -140,14 +134,8 @@ class ChatInput extends Component<Props, State> {
                         onHeightChange = { this.props.onResize }
                         onKeyDown = { this._onDetectSubmit }
                         placeholder = { this.props.t('chat.messagebox') }
-                    value = { _inputMessage } /> }
-                    {iconSelected && 
-                        <div contentEditable={true} id="usermsg" style={{fontSize: '18px'}}
-                            onInput={e => this.setState({message: e.currentTarget.textContent})}
-                    >
-                        {_inputMessage}
-                    </div>
-                    }    
+                    value = { this.state.message } /> 
+                     
                     <button
                         onClick = { () => {
                             const trimmed = this.state.message.trim();
