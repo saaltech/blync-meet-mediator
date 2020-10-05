@@ -22,6 +22,15 @@ const SMILEYS_TO_EXCLUDE = [
     'woozy_face',
     'cold_face', // cold_face
 
+    // Tab 2
+    'orangutan',
+    'guid_dog',
+    'service_dog',
+    'sloth',
+    'otter',
+    'skunk',
+    'flamingo',
+
     // Tab 3
     'falafel',
     'waffle',
