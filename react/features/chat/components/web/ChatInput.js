@@ -14,18 +14,42 @@ import { Picker } from 'emoji-mart';
 
 // Unified code names of Smileys to be excluded
 const SMILEYS_TO_EXCLUDE = [
-    '1F975', // Overheated face ':hot_face'
-    'hot_face', // Overheated face ':hot_face'
-    '1F970', // smiling_face_with_3_hearts
-    'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
-    '1F976', // cold_face
-    'cold_face', // cold_face
-    'compass', // compass
-    '1F9ED'
-];
 
-// default frequenlty used smileys
-const DEFAULT_FREQUENLT_USED_SMILEYS = ["+1", "grinning", "kissing_heart", "heart_eyes", "laughing", "stuck_out_tongue_winking_eye", "sweat_smile", "joy", "scream"]
+    'hot_face', // Overheated face ':hot_face'
+    'partying_face',
+    'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
+    'compass',
+    'woozy_face',
+    'cold_face', // cold_face
+
+    // Tab 3
+    'falafel',
+    'waffle',
+    'onion',
+    'garlic',
+    'butter',
+    'oyster',
+    'ice_cube',
+    'mate_drink',
+    'beverage_box',
+
+    // Tab 6
+    'safety_vest',
+    'briefs',
+    'shorts',
+    'sari',
+    'one-piece_swimsuit',
+    'ballet_shoes',
+    'womans_flat_shoe',
+    'razor',
+    'drop_of_blood',
+    'adhesive_bandage',
+    'banjo',
+    'diya_lamp',
+    'chair',
+    'probing_cane',
+    'axe'
+];
 
 /**
  * The type of the React {@code Component} props of {@link ChatInput}.
@@ -169,7 +193,7 @@ class ChatInput extends Component<Props, State> {
                 {this.state.showSmileysPanel && <div className = { smileysPanelClassName }>
                     <Picker
                         emojisToShowFilter = { emoji => {
-                            if (!SMILEYS_TO_EXCLUDE.includes(emoji.unified)) {
+                            if (emoji.short_names.filter(symbol => SMILEYS_TO_EXCLUDE.includes(symbol)).length === 0) {
                                 return true;
                             }
                         } }
