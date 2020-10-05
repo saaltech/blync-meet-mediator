@@ -14,7 +14,7 @@ RUN apt-get update && apt install -y nodejs build-essential debhelper
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
 # Stage 2, "web stage"
-FROM scr.saal.ai/jitsi-base:latest
+FROM scr.saal.ai/blync-base:1
 
 ADD https://dl.eff.org/certbot-auto /usr/local/bin/
 
