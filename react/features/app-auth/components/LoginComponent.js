@@ -24,13 +24,14 @@ import {
 // import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
 import { resolveAppLogin } from '../actions';
+import { showEnableCookieTip } from '../../google-api/functions';
 
 function LoginComponent(props) {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ isSocialLogin, setIsSocialLogin ] = useState(false);
     const [ formDisabled, setFormDisabled ] = useState(true);
-    const { errorMsg, noSignInIcon = false, googleOfflineCode,
+    const { errorMsg, noSignInIcon = false, googleOfflineCode, reasonForLogin = '',
             closeAction, isOverlay = false, hideLogin = false, t } = props;
 
     useEffect(() => {
@@ -78,7 +79,7 @@ function LoginComponent(props) {
         if (formDisabled) {
             return;
         }
-
+        showEnableCookieTip(false);
         // TODO: uncomment this once the api is ready
         await doRequest(false);
 
@@ -132,6 +133,11 @@ function LoginComponent(props) {
      * @returns {void}
      */
     const _onClickGoogle = () => {
+        // Clear any existing errors shown
+        if(isOverlay && window.showEnableCookieTip) {
+            showEnableCookieTip(true)
+            return;
+        }
         clearForm()
         isOverlay && closeAction();
         setIsSocialLogin(true);
@@ -159,6 +165,9 @@ function LoginComponent(props) {
                         className = 'close-icon' />
                 }
                 <div className = { `${isOverlay ? 'content' : 'inline-content'}` }>
+                    {
+                        reasonForLogin && <div className="reasonForLogin">{reasonForLogin}</div>
+                    }
                     { !noSignInIcon && <Icon src = { IconSignInLock } /> }
                     <h2>{ t('loginPage.signinLabel') }</h2>
                     <form onSubmit={onSubmit}>

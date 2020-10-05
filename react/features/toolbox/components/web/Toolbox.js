@@ -1128,7 +1128,9 @@ class Toolbox extends Component<Props, State> {
                         } />
                 );
             case 'closedcaptions':
-                return <ClosedCaptionButton showLabel = { true } />;
+                return (<ClosedCaptionButton
+                    key = 'cc'
+                    showLabel = { true } />);
 
                 // case 'security':
                 // return (
@@ -1147,7 +1149,9 @@ class Toolbox extends Component<Props, State> {
             //             text = { t('toolbar.invite') } />
             //     );
             case 'tileview':
-                return <TileViewButton showLabel = { true } />;
+                return (<TileViewButton
+                    key = 'tileView'
+                    showLabel = { true } />);
             case 'localrecording':
                 return (
                     <OverflowMenuItem

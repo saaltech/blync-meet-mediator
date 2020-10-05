@@ -27,7 +27,7 @@ import {
 function Profile(props) {
   const [menuExpanded, setMenuExpanded] = useState(false);
 
-  const { showMenu = false, user = {}, t, disableMenu = true } = props;
+  const { showMenu = false, user = {}, t, disableMenu = true, postLogout } = props;
 
   const wrapperRef = React.createRef();
 
@@ -46,6 +46,7 @@ function Profile(props) {
             APP.store.dispatch(signOut())
         }
         APP.store.dispatch(resolveAppLogout())
+        postLogout && postLogout();
     }
 
   useEffect(() => {

@@ -226,7 +226,30 @@ var interfaceConfig = {
      * How many columns the tile view can expand to. The respected range is
      * between 1 and 5.
      */
-    // TILE_VIEW_MAX_COLUMNS: 5,
+    TILE_VIEW_MAX_COLUMNS: 3,
+
+    /**
+     * Enable pagination. This will also enabled fitting lastN video streams
+     * to one's seen on the respective grid page
+     */
+    SHOW_VIDEO_PAGINATION: true,
+
+    /**
+     * Enables redirecting the welcome page(on iOS/Android mobile devices) to the installed Jifmeet app 
+     * or to its page on platform store if the app isn't installed.
+     * Ensure the links point to Jifmeet app.
+     * Set to 'null' if redirection isn't needed.
+     */
+    MOBILE_APP_LINKS: {
+        ios: {
+            deepLink: "itms-apps://itunes.apple.com/ae/app/id1528158889",
+            storeLink: "https://apps.apple.com/ae/app/jifmeet/id1528158889"
+        },
+        android: {
+            deepLink: "market://details?id=ai.saal.jifmeet",
+            storeLink: "https://play.google.com/store/apps/details?id=ai.saal.jifmeet"
+        }
+    },
 
     /**
      * Specify custom URL for downloading android mobile app.

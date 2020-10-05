@@ -191,6 +191,7 @@
     font-size: 15px;
     padding: 10px;
     overflow-y: auto;
+    outline: none;
     resize: none;
     width: 100%;
     word-break: break-word;
@@ -243,6 +244,8 @@
     .usermessage {
         word-break: break-word;
         white-space: pre-wrap;
+        min-width: 20px;
+        min-height: 20px;
     }
 
     &.error {
@@ -272,7 +275,10 @@
 }
 
 .smiley {
-    font-size: 14pt;
+    font-size: 22px;
+    line-height: 28px;
+    width: auto !important;
+    height: auto !important;
 }
 
 #smileys {
@@ -299,14 +305,20 @@
 }
 
 .smileys-panel {
-    bottom: 100%;
+    bottom: 66px;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, .6) !important;
     height: auto;
     max-height: 0;
     overflow: hidden;
     position: absolute;
-    width: $sidebarWidth;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    .emoji-mart{
+        text-align: left;
+    }
 
     /**
      * CSS transitions do not apply for auto dimensions. So to produce the css
@@ -317,13 +329,12 @@
     transition: max-height 0.3s;
 
     &.show-smileys {
-        max-height: 500%;
+        max-height: 440px;
+        background-color: white !important;
     }
 
     #smileysContainer {
         background-color: $newToolbarBackgroundColor;
-        border-bottom: 1px solid;
-        border-top: 1px solid;
     }
 }
 
@@ -347,6 +358,32 @@
 #usermsg::-webkit-scrollbar-track-piece {
     background: #3a3a3a;
 }
+.emoji-mart-preview-emoji{
+    .emoji-mart-emoji {
+        span{
+            background-image: url('./../images/smileyset.png') !important;
+            //background-size: 36px !important;
+        }
+       
+    }
+}
+.emoji-mart-preview-skins{
+    display: none !important;
+}
+.emoji-mart-preview-data {
+    .emoji-mart-title-label{
+        font-size: 0 !important;
+        &::after{
+            content: 'Jifmeet';
+            font-size: 26px;
+        }
+    }
+}
+
+.emoji-mart-category-label{
+    background: #fff !important;
+}
+
 
 .chat-message-group {
     display: flex;
