@@ -27,11 +27,16 @@
         text-overflow: ellipsis;
         padding: 5px 0 0;
         color: #005C85;
+        height: 45px;
     }
 
     .menuIcon {
         padding: 10px 0 5px;
         float: left;
+        
+        > div {
+            height: 40px;
+        }
 
         .jitsi-icon svg {
             fill: #005C85;
@@ -44,13 +49,110 @@
             color: #393939;
             list-style: none;
             right: 5px;
-            padding: 5px 20px;
-            width: 100px;
+            padding: 5px 0px;
+            width: 110px;
             text-align: left;
+            z-index: 3;
+            top: 45px;
+            cursor: default;
+
+            &.wide {
+                width: 250px;
+            }
 
             li {
-                height: 30px;
+                height: 35px;
                 padding: 2px 0px 0px;
+                cursor: default;
+
+                display: flex;
+                justify-content: center;
+
+                &.calendar {
+                    display: block;
+                    height: auto;
+                    max-height: 290px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    cursor: default;
+                    padding: 0 12px;
+
+                    .upcoming-meetings {
+                        display: flex;
+                        padding-top: 10px;
+                        font-size: 16px;
+                        border-bottom: 2px solid #d1d1d1;
+
+                        > div:nth-child(1) {
+                            flex: 1;
+                        }
+
+                        > div.jitsi-icon {
+                            padding-top: 7px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .menu-action {
+                    width: 90px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 4px;
+                    cursor: pointer;
+                }
+
+                .calendar__event {
+                    position: relative;
+                    padding: 5px 0px;
+                    border-top: 1px solid #d1d1d1;
+                    height: 70px;
+
+                    &:hover {
+                        background-color: #f4f4f4;
+                    }
+
+                    &__disabled {
+                        // background-color: #bababa;
+                        cursor: not-allowed;
+                    }
+
+                    &__title {
+                        font-weight: 600;
+                        max-width: 200px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        line-height: 1.5em;
+                    }
+
+                    &__description {
+                        line-height: 1.5em;
+                        color: #888;
+                        max-width: 240px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+
+                        &.no-content {
+                            font-style: italic;
+                        }
+                    }
+
+                    &__timing {
+                        line-height: 1.5em;
+                        color: #888;
+                        font-size: 13px;
+                        padding-top: 5px;
+                    }
+                    
+                    &__join {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        cursor: pointer;
+                    }
+                }
             }
 
             .jitsi-icon {
@@ -61,6 +163,7 @@
                 position: relative;
                 top: -5px;
                 left: 15px;
+
             }
         }
     }

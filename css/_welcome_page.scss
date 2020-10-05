@@ -107,6 +107,7 @@ body.welcome-page {
         position: relative;
         //text-align: center;
         margin-left: 32px;
+        overflow: inherit;
 
         .header-text {
             display: flex;
