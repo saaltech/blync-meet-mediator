@@ -1,16 +1,17 @@
 /* global APP, $, interfaceConfig  */
 
 import Logger from 'jitsi-meet-logger';
-import { cloneDeep } from 'lodash';
 
 import { MEDIA_TYPE, VIDEO_TYPE } from '../../../react/features/base/media';
 import {
     getLocalParticipant as getLocalParticipantFromStore,
     getPinnedParticipant,
+    getDominantSpeaker,
     getParticipantById,
     pinParticipant
 } from '../../../react/features/base/participants';
 import { getTrackByMediaTypeAndParticipant, addClonedTrack } from '../../../react/features/base/tracks';
+import { shouldDisplayTileView, showPagination } from '../../../react/features/video-layout';
 import UIEvents from '../../../service/UI/UIEvents';
 import { SHARED_VIDEO_CONTAINER_TYPE } from '../shared_video/SharedVideo';
 import SharedVideoThumb from '../shared_video/SharedVideoThumb';
@@ -28,6 +29,8 @@ let localVideoThumbnail = null;
 let eventEmitter = null;
 
 let largeVideo;
+
+const showVideoPaging = showPagination();
 
 /**
  * flipX state of the localVideo
@@ -72,7 +75,7 @@ const getIntersectionObserverOptions = () => {
     return {
         root: document.getElementById('remoteVideos'),
         rootMargin: '0px',
-        threshold: 0.15
+        threshold: 0.4
     };
 };
 
@@ -134,69 +137,92 @@ const VideoLayout = {
 
         if (smallVideo) {
             smallVideo.updateAudioLevelIndicator(lvl);
+            smallVideo.updateDominantSpeakerNotifier(id, lvl);
         }
 
         if (largeVideo && id === largeVideo.id) {
             largeVideo.updateLargeVideoAudioLevel(lvl);
         }
     },
+    participantIds: [],
+    selectParticipantsTimerId: null,
     handleIntersection(entries) {
         const tracks = APP.store.getState()['features/base/tracks'] || [];
 
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
 
-        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
-
-        if (!tileViewEnabled) {
+        if (tileViewEnabled) {
             return;
         }
-
+        if (this.selectParticipantsTimerId) {
+            clearTimeout(this.selectParticipantsTimerId);
+            this.selectParticipantsTimerId = null;
+        }
 
         entries.forEach(entry => {
-            const containerId = entry.target.id;
-
-            let participantId = null;
-
-            if (containerId === 'localVideoTileViewContainer') {
+            if (entry.target.id === 'localVideoTileViewContainer') {
                 return;
             }
+
             const participantParts = entry.target.id.split('participant_');
 
             if (participantParts.length < 2) {
                 return;
             }
-
-            participantId = participantParts[1];
-
-
-            const track = tracks.find(t => t.participantId === participantId && t.mediaType === 'video');
-
-
-            if (!track || track.muted) {
-                return;
-            }
-
+            const participantId = participantParts[1];
 
             if (entry.intersectionRatio > getIntersectionObserverOptions().threshold) {
-                APP.UI.setVideoMuted(participantId, false);
-                track.jitsiTrack.stream.addTrack(track.jitsiTrack.track);
-
-                return;
+                if(!this.participantIds.includes(participantId)) {
+                    this.participantIds.push(participantId)
+                }
+            } else {
+                this.participantIds = this.participantIds.filter(id => id !== participantId);
             }
-
-            const streamTrack = track.jitsiTrack.stream.getTracks()[0];
-            if(!streamTrack) {
-                return;
-            }
-            const cacheTrack = streamTrack.clone();
-
-            APP.UI.setVideoMuted(participantId, true);
-            streamTrack.stop();
-            track.jitsiTrack.stream.removeTrack(streamTrack);
-
-            track.jitsiTrack.track = cacheTrack;
-            APP.store.dispatch(addClonedTrack(track.jitsiTrack));
-
         });
+
+        this.selectParticipantsTimerId = setTimeout(() => {
+            const conference = APP.store.getState()['features/base/conference'].conference;
+
+            if (conference && this.participantIds.length > 0 && window.config.channelLastN > 0) {
+            
+                // reversing an array is needed 
+                // so that the last duplicate participantID is retained when doing set operation
+                 
+                let copyParticipantIds = [...this.participantIds]
+                let pidsToSelect = [ ...new Set(copyParticipantIds.reverse()) ];
+                pidsToSelect.reverse()
+
+                const pinnedId = this.getPinnedId();
+                const dominantSpeakerId = this.getDominantSpeakerId();
+                var mustHaveIds = []
+                pinnedId && mustHaveIds.push(pinnedId)
+                if(pinnedId !== dominantSpeakerId) {
+                    dominantSpeakerId && mustHaveIds.push(dominantSpeakerId)
+                }
+                if (mustHaveIds.length > 0) {
+                    pidsToSelect = [...pidsToSelect, ...mustHaveIds];
+                    let copyPidsToSelect = [...pidsToSelect]
+                    pidsToSelect = [ ...new Set(copyPidsToSelect.reverse()) ];
+                    pidsToSelect.reverse()
+                }
+
+                if (pidsToSelect.length > window.config.channelLastN) {
+                    pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
+                }
+
+                conference.setReceiverVideoConstraint(180);
+
+                let t1 = setTimeout(() => {
+                    conference && conference.selectParticipants(pidsToSelect)
+                    let t2 = setTimeout(() => {
+                        // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
+                        conference && conference.setReceiverVideoConstraint(181);
+                        clearTimeout(t2);
+                    }, 300);
+                    clearTimeout(t1);
+                }, 300);
+            }
+        }, 1000);
     },
 
     stoppedStreams: [],
@@ -254,6 +280,127 @@ const VideoLayout = {
         } else {
             this.onVideoMute(id, stream.isMuted());
         }
+
+        this.refreshPagination();
+
+
+        // }
+    },
+
+    refreshPagination() {
+        const { page } = APP.store.getState()['features/filmstrip'];
+
+        this.updateVideoPage(page);
+    },
+
+    videoIsInView(videoId, page) {
+        const tileViewMaxColumns = this.getTileMaxColumns()
+        const localContainer = 'localVideoTileViewContainer';
+        const remoteVideosKeys = Object.keys(remoteVideos);
+        const videoIds = [ ...remoteVideosKeys, videoId, localContainer ];
+        const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
+        const upperLimit = maxGridSize * page;
+        const lowerLimit = upperLimit - maxGridSize;
+
+
+        const index = videoIds.findIndex(v => v === videoId);
+
+        if (index < 0) {
+            return false;
+        }
+
+        return index >= lowerLimit && index < upperLimit;
+    },
+
+    calculateNumberOfPages(participants = []) {
+        const tileViewMaxColumns = this.getTileMaxColumns()
+        const perPage = tileViewMaxColumns * tileViewMaxColumns;
+        const pages = Math.floor(participants / perPage);
+
+        if ((participants % perPage) > 0) {
+            return pages + 1;
+        }
+
+        return pages;
+    },
+
+    getTileMaxColumns() {
+        return (window.interfaceConfig.TILE_VIEW_MAX_COLUMNS || 5);
+    },
+
+    updateVideoPage(currentPage) {
+        if (!showVideoPaging) {
+            return;
+        }
+
+        const tileViewMaxColumns = this.getTileMaxColumns()
+        const maxGridSize = tileViewMaxColumns * tileViewMaxColumns;
+        const remoteVideosKeys = Object.keys(remoteVideos);
+        const upperLimit = maxGridSize * currentPage;
+        const lowerLimit = upperLimit - maxGridSize;
+        const localContainer = 'localVideoTileViewContainer';
+
+        const videosInView = [];
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        [ ...remoteVideosKeys, localContainer ].forEach((key, index) => {
+
+            let elementId = `#${key}`;
+
+            if (key !== localContainer) {
+                elementId = `#participant_${key}`;
+            }
+
+            if (tileViewEnabled === false) {
+                $(elementId).css({ display: 'block' });
+
+                return;
+            }
+
+            if (index >= lowerLimit && index < upperLimit) {
+                $(elementId).css({ display: 'block' });
+                if (key !== localContainer) {
+                    videosInView.push(key);
+                }
+            } else {
+                $(elementId).css({ display: 'none' });
+            }
+
+        });
+
+        if (!tileViewEnabled || currentPage === null) {
+            return;
+        }
+
+        const { conference } = APP.store.getState()['features/base/conference'];
+
+        let pidsToSelect = [ ...new Set(videosInView) ];
+
+        if (pidsToSelect.length > window.config.channelLastN) {
+            pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
+        }
+
+        if (pidsToSelect.length > 0) {
+            // check for muted video
+            pidsToSelect = pidsToSelect.filter(pid => {
+                const participant = APP.conference.getParticipantById(pid);
+                return participant && !participant.isVideoMuted();
+            });
+
+            let res = window.resolution || 720;
+            let preferredHeight = Math.floor(res/pidsToSelect.length);
+            // minus one so that we can cover up for the issue with ranking at JVB
+            preferredHeight = Math.max(180, preferredHeight - 1); 
+            conference && conference.setReceiverVideoConstraint(preferredHeight);
+
+            setTimeout(() => {
+                conference && conference.selectParticipants(pidsToSelect);
+                setTimeout(() => {
+                    // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
+                    conference && conference.setReceiverVideoConstraint(preferredHeight < res ? preferredHeight + 1: res)
+                }, 300);
+            }, 300);
+        }
     },
 
     onRemoteStreamRemoved(stream) {
@@ -267,6 +414,9 @@ const VideoLayout = {
         }
 
         this.updateMutedForNoTracks(id, stream.getType());
+
+
+        this.refreshPagination();
     },
 
     /**
@@ -318,6 +468,14 @@ const VideoLayout = {
 
         return id || null;
     },
+
+    getDominantSpeakerId() {
+        const { id } = getDominantSpeaker(APP.store.getState()) || {};
+
+        return id || null;
+    },
+
+    
 
     /**
      * Triggers a thumbnail to pin or unpin itself.
@@ -375,6 +533,13 @@ const VideoLayout = {
 
         const id = participant.id;
         const jitsiParticipant = APP.conference.getParticipantById(id);
+
+        const tileViewEnabled = shouldDisplayTileView(APP.store.getState());
+
+        if (tileViewEnabled && showVideoPaging) {
+            $('#localVideoTileViewContainer').css({ display: 'none' });
+        }
+
         const remoteVideo = new RemoteVideo(jitsiParticipant, VideoLayout);
 
         this._setRemoteControlProperties(jitsiParticipant, remoteVideo);
@@ -382,6 +547,8 @@ const VideoLayout = {
 
         this.updateMutedForNoTracks(id, 'audio');
         this.updateMutedForNoTracks(id, 'video');
+
+        this.refreshPagination();
 
         const observer = new IntersectionObserver(this.handleIntersection.bind(this), getIntersectionObserverOptions());
 
@@ -451,7 +618,8 @@ const VideoLayout = {
      * Display name changed.
      */
     onDisplayNameChanged(id) {
-        if (id === 'localVideoContainer'
+        if (id === 'localVideoTileViewContainer'
+            || id === 'localVideoContainer'
             || APP.conference.isLocalId(id)) {
             localVideoThumbnail.updateDisplayName();
         } else {
@@ -563,6 +731,9 @@ const VideoLayout = {
             logger.info(`Removing remote video: ${id}`);
             delete remoteVideos[id];
             remoteVideo.remove();
+            const { page } = APP.store.getState()['features/filmstrip'];
+
+            VideoLayout.updateVideoPage(page);
         } else {
             logger.warn(`No remote video for ${id}`);
         }

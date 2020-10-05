@@ -1,6 +1,7 @@
 // @flow
 
 import Filmstrip from '../../../modules/UI/videolayout/Filmstrip';
+import VideoLayout from '../../../modules/UI/videolayout/VideoLayout';
 import { getNearestReceiverVideoQualityLevel, setMaxReceiverVideoQuality } from '../base/conference';
 import { MiddlewareRegistry } from '../base/redux';
 import { CLIENT_RESIZED } from '../base/responsive-ui';
@@ -10,7 +11,7 @@ import {
     shouldDisplayTileView
 } from '../video-layout';
 
-import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS } from './actionTypes';
+import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_PAGE } from './actionTypes';
 import { setHorizontalViewDimensions, setTileViewDimensions } from './actions';
 
 /**
@@ -53,6 +54,10 @@ MiddlewareRegistry.register(store => next => action => {
             // Once the thumbnails are reactified this should be moved there too.
             Filmstrip.resizeThumbnailsForTileView(width, height, true);
         }
+        break;
+    }
+    case SET_PAGE: {
+        VideoLayout.updateVideoPage(action.page);
         break;
     }
     case SET_HORIZONTAL_VIEW_DIMENSIONS: {

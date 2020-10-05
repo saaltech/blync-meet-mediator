@@ -9,7 +9,7 @@ import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
-import { Icon, IconShareDesktop } from '../../../base/icons';
+import { Icon, IconArrowRight, IconShareDesktop, IconArrowLeft } from '../../../base/icons';
 import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
 import { getLocalVideoTrack } from '../../../base/tracks';
@@ -20,6 +20,7 @@ import {
 } from '../../../base/waiting-participants';
 import { Chat } from '../../../chat';
 import { Filmstrip, SpeakersList } from '../../../filmstrip';
+import { setPage } from '../../../filmstrip/actions.web';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
 import { KnockingParticipantList } from '../../../lobby';
@@ -35,7 +36,7 @@ import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-mo
 import {
     leavingMeeting
 } from '../../../toolbox/actions';
-import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
+import { LAYOUTS, getCurrentLayout, calculateNumberOfPages, showPagination } from '../../../video-layout';
 import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
@@ -291,6 +292,14 @@ class Conference extends AbstractConference<Props, *> {
         } = this.props;
         const hideLabels = filmstripOnly || _iAmRecorder;
 
+        const { page } = APP.store.getState()['features/filmstrip'];
+        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
+
+        // const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const participants = APP.store.getState()['features/base/participants'];
+        const totalPages = calculateNumberOfPages(participants.length);
+        const showPaging = showPagination();
+        
         if (window.location.pathname === '/privacy-policy') {
             return <PrivacyPage />;
         }
@@ -346,6 +355,30 @@ class Conference extends AbstractConference<Props, *> {
                     <KnockingParticipantList />
                     { hideLabels || <Labels /> }
                     <Filmstrip filmstripOnly = { filmstripOnly } />
+                    {(tileViewEnabled && totalPages > 1 && showPaging)
+                    && <div className = 'conference__pagination'>
+                        <button
+                            disabled = { page <= 1 }
+                            onClick = { () => {
+
+                                if (page <= 1) {
+                                    return;
+                                }
+                                APP.store.dispatch(setPage(page - 1));
+                            } }>
+                            <Icon src = { IconArrowLeft } />
+                        </button>
+                        <button
+                            disabled = { page >= totalPages }
+                            onClick = { () => {
+
+                                if (page >= totalPages) {
+
+                                    return;
+                                }
+                                APP.store.dispatch(setPage(page + 1));
+                            } }><Icon src = { IconArrowRight } /></button>
+                    </div>}
                 </div>
 
                 { filmstripOnly || _showPrejoin || <Toolbox /> }

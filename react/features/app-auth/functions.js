@@ -14,6 +14,12 @@ export function getRandomArbitrary(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 }
 
+/**
+ * Validate meeting code
+ */
+export function validateMeetingCode(code) {
+    return /^\d{2}-\d{13}-\d{3}$/g.test(code);
+}
 
 export function setToken(tokenRequired, authenticationHeader = false) {
     let headerDetails = {

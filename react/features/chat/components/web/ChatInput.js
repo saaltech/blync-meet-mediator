@@ -8,8 +8,48 @@ import type { Dispatch } from 'redux';
 import { translate } from '../../../base/i18n';
 import { IconChatSend, Icon } from '../../../base/icons';
 import { connect } from '../../../base/redux';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
-import SmileysPanel from './SmileysPanel';
+
+// Unified code names of Smileys to be excluded
+const SMILEYS_TO_EXCLUDE = [
+
+    'hot_face', // Overheated face ':hot_face'
+    'partying_face',
+    'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
+    'compass',
+    'woozy_face',
+    'cold_face', // cold_face
+
+    // Tab 3
+    'falafel',
+    'waffle',
+    'onion',
+    'garlic',
+    'butter',
+    'oyster',
+    'ice_cube',
+    'mate_drink',
+    'beverage_box',
+
+    // Tab 6
+    'safety_vest',
+    'briefs',
+    'shorts',
+    'sari',
+    'one-piece_swimsuit',
+    'ballet_shoes',
+    'womans_flat_shoe',
+    'razor',
+    'drop_of_blood',
+    'adhesive_bandage',
+    'banjo',
+    'diya_lamp',
+    'chair',
+    'probing_cane',
+    'axe'
+];
 
 /**
  * The type of the React {@code Component} props of {@link ChatInput}.
@@ -99,6 +139,34 @@ class ChatInput extends Component<Props, State> {
          * manually focusing.
          */
         this._focus();
+
+        this._filterFrequentlyUsedSmileys();
+    }
+
+    /**
+     * Filter out the smileys that appear with proper enclosing html structure,
+     * (bug from the emoji library).
+     */
+    _filterFrequentlyUsedSmileys() {
+        const frequentEmoji = window.localStorage.getItem('emoji-mart.frequently');
+        const obj = JSON.parse(frequentEmoji || '{}');
+        let lastEmoji = window.localStorage.getItem('emoji-mart.last');
+
+        lastEmoji = lastEmoji && JSON.parse(lastEmoji);
+
+        SMILEYS_TO_EXCLUDE.forEach(id => {
+            delete obj[id];
+            if (id === lastEmoji) {
+                lastEmoji = '';
+            }
+        });
+
+        if (frequentEmoji) {
+            window.localStorage.setItem('emoji-mart.frequently', JSON.stringify(obj));
+        }
+        if (!lastEmoji) {
+            window.localStorage.removeItem('emoji-mart.last');
+        }
     }
 
     /**
@@ -121,11 +189,16 @@ class ChatInput extends Component<Props, State> {
                                 text = ':)' />
                         </div>
                     </div>
-                    <div className = { smileysPanelClassName }>
-                        <SmileysPanel
-                            onSmileySelect = { this._onSmileySelect } />
-                    </div>
                 </div>
+                {this.state.showSmileysPanel && <div className = { smileysPanelClassName }>
+                    <Picker
+                        emojisToShowFilter = { emoji => {
+                            if (emoji.short_names.filter(symbol => SMILEYS_TO_EXCLUDE.includes(symbol)).length === 0) {
+                                return true;
+                            }
+                        } }
+                        onSelect = { this._onSmileySelect } />
+                </div>}
                 <div className = 'usrmsg-form'>
                     <TextareaAutosize
                         id = 'usermsg'
@@ -193,6 +266,7 @@ class ChatInput extends Component<Props, State> {
      * @returns {void}
      */
     _onMessageChange(event) {
+        this.setState({ showSmileysPanel: false });
         this.setState({ message: event.target.value });
 
         this.props.onChange && this.props.onChange();
@@ -210,11 +284,12 @@ class ChatInput extends Component<Props, State> {
      */
     _onSmileySelect(smileyText) {
         this.setState({
-            message: `${this.state.message} ${smileyText}`,
+            message: `${this.state.message} ${smileyText?.colons}`,
             showSmileysPanel: false
         });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _onToggleSmileysPanel: () => void;
@@ -229,6 +304,7 @@ class ChatInput extends Component<Props, State> {
         this.setState({ showSmileysPanel: !this.state.showSmileysPanel });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _setTextAreaRef: (?HTMLTextAreaElement) => void;

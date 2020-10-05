@@ -472,7 +472,7 @@ function GuestPrejoin(props) {
                                 <div
                                     className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`} 
                                     onClick={() => !disableJoin && setContinueAsGuest(true)}>
-                                    Continue as a Guest
+                                    Continue without login
                                 </div>
                             </div>
                             <div className="option-text-or">Or</div>

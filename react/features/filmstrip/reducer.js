@@ -9,7 +9,8 @@ import {
     SET_HORIZONTAL_VIEW_DIMENSIONS,
     SET_TILE_VIEW_DIMENSIONS,
     SET_FILMSTRIP_COLLAPSED,
-    SET_SHOW_SPEAKERS_LIST
+    SET_SHOW_SPEAKERS_LIST,
+    SET_PAGE
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -47,7 +48,9 @@ const DEFAULT_STATE = {
 
     collapsed: false,
 
-    showSpeakersList: false
+    showSpeakersList: false,
+
+    page: 1
 };
 
 ReducerRegistry.register(
@@ -65,6 +68,10 @@ ReducerRegistry.register(
                 ...state,
                 showSpeakersList: action.visible
             };
+
+        case SET_PAGE:
+            return { ...state,
+                page: action.page };
 
         case SET_FILMSTRIP_HOVERED:
             return {

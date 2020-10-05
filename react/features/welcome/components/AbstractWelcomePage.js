@@ -6,6 +6,7 @@ import type { Dispatch } from 'redux';
 
 import { createWelcomePageEvent, sendAnalytics } from '../../analytics';
 import { appNavigate } from '../../app';
+import { validateMeetingCode } from '../../app-auth/functions';
 import isInsecureRoomName from '../../base/util/isInsecureRoomName';
 import { isCalendarEnabled } from '../../calendar-sync';
 import { isRecentListEnabled } from '../../recent-list/functions';
@@ -175,6 +176,13 @@ export class AbstractWelcomePage extends Component<Props, *> {
      */
     _doRenderInsecureRoomNameWarning: () => React$Component<any>;
 
+    /**
+     * Renders the insecure room name warning.
+     *
+     * @returns {ReactElement}
+     */
+    _doRenderInvalidCode: () => React$Component<any>;
+
     _onJoin: () => void;
 
     /**
@@ -204,7 +212,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 = () => this._mounted && this.setState({ joining: false });
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
             //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
-            this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true"))
+            this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? "" : "?home=true")))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }
@@ -233,9 +241,14 @@ export class AbstractWelcomePage extends Component<Props, *> {
      *
      * @returns {ReactElement}
      */
-    _renderInsecureRoomNameWarning() {
+    _renderInsecureRoomNameWarning(code = false) {
         if (this.props._enableInsecureRoomNameWarning && this.state.insecureRoomName) {
             return this._doRenderInsecureRoomNameWarning();
+        }
+
+        // check meeting code format
+        if (code && !validateMeetingCode(this.state.room)) {
+            return this._doRenderInvalidCode();
         }
 
         return null;
@@ -285,8 +298,9 @@ export function _mapStateToProps(state: Object) {
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
         _settings: state['features/base/settings'],
-        _isUserSignedOut : !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
-        _postWelcomePageScreen: state['features/app-auth'].meetingDetails
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
+        _meetingDetails: state['features/app-auth'].meetingDetails,
+        _user: state['features/app-auth'].user
 
     };
 }

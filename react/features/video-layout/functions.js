@@ -1,10 +1,12 @@
 // @flow
 
 import { getPinnedParticipant } from '../base/participants';
+import { setPage } from '../filmstrip/actions.web';
 
 import { LAYOUTS } from './constants';
 
 declare var interfaceConfig: Object;
+declare var APP: Object;
 
 /**
  * Returns the {@code LAYOUTS} constant associated with the layout
@@ -83,4 +85,55 @@ export function shouldDisplayTileView(state: Object = {}) {
                 || !interfaceConfig.filmStripOnly)
             && !getPinnedParticipant(state)
     );
+}
+
+
+/**
+ * UpdatePage.
+ *
+ * @param {number} participantsCount - The redux state.
+ * @returns {number} True if tile view should be displayed.
+ */
+export function updatePage(participantsCount: number) {
+    const expectedPage = calculateNumberOfPages(participantsCount);
+
+    const { page } = APP.store.getState()['features/filmstrip'];
+
+    if (page <= expectedPage) {
+        return;
+    }
+
+
+    APP.store.dispatch(setPage(expectedPage));
+}
+
+/**
+ * CalculateNumberOfPages.
+ *
+ * @param {number} participantsCount - The redux state.
+ * @returns {number} True if tile view should be displayed.
+ */
+export function calculateNumberOfPages(participantsCount: number) {
+    const perPage = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+    const pages = Math.floor(participantsCount / perPage);
+
+    if ((participantsCount % perPage) > 0) {
+        return pages + 1;
+    }
+
+    if (pages <= 0) {
+        return 1;
+    }
+
+    return pages;
+}
+
+
+/**
+ * ShowPagination.
+ *
+ * @returns {boolean} True if to show pagination.
+ */
+export function showPagination() {
+    return interfaceConfig.SHOW_VIDEO_PAGINATION;
 }
