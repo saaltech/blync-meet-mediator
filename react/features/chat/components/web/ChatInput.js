@@ -18,6 +18,7 @@ const SMILEYS_TO_EXCLUDE = [
     'hot_face', // Overheated face ':hot_face'
     'partying_face',
     'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
+    'compass',
     'woozy_face',
     'cold_face', // cold_face
 
@@ -47,7 +48,7 @@ const SMILEYS_TO_EXCLUDE = [
     'diya_lamp',
     'chair',
     'probing_cane',
-    'axe',
+    'axe'
 ];
 
 /**
