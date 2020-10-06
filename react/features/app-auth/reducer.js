@@ -6,7 +6,8 @@ import {
     APP_LOGIN,
     SET_USER_SIGNED_OUT,
     EXPIRE_TOKEN,
-    SET_POST_WELCOME_SCREEN_DETAILS
+    SET_POST_WELCOME_SCREEN_DETAILS,
+    SET_GOOGLE_OFFLINE_CODE
 } from './actionTypes';
 
 import { PersistenceRegistry } from '../base/storage';
@@ -55,6 +56,12 @@ ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
             return assign(state, {
                 meetingDetails: action.meetingDetails 
             }) //postWelcomePageScreen
+        }
+
+        case SET_GOOGLE_OFFLINE_CODE: {
+            return assign(state, {
+                googleOfflineCode: action.googleOfflineCode
+            })
         }
     }
     return state;

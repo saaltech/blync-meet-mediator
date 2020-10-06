@@ -472,7 +472,7 @@ function GuestPrejoin(props) {
                                 <div
                                     className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`} 
                                     onClick={() => !disableJoin && setContinueAsGuest(true)}>
-                                    Continue as a Guest
+                                    Continue without login
                                 </div>
                             </div>
                             <div className="option-text-or">Or</div>
@@ -529,10 +529,7 @@ function GuestPrejoin(props) {
 
 function mapStateToProps(state): Object {
     return {
-        //meetingDetails: APP.store.getState()['features/app-auth'].meetingDetails,
-        _isUserSignedOut: state['features/app-auth'].isUserSignedOut,
-        _user: state['features/app-auth'].user,
-        _displayName: getDisplayName(state),
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
         _socketLink: getConferenceSocketBaseLink(),
         _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)

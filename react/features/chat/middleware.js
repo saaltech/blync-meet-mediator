@@ -220,7 +220,7 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, nick, pri
     const state = getState();
     const { isOpen: isChatOpen } = state['features/chat'];
 
-    if (!isChatOpen) {
+    if (!isChatOpen && navigator.product !== 'ReactNative') { // except for mobile
         dispatch(playSound(INCOMING_MSG_SOUND_ID));
     }
 

@@ -6,6 +6,7 @@ export { default as IconArrowBack } from './arrow_back.svg';
 export { default as IconArrowDown } from './arrow_down.svg';
 export { default as IconArrowDownSmall } from './arrow-down-small.svg';
 export { default as IconArrowLeft } from './arrow-left.svg';
+export { default as IconArrowRight } from './arrow-right.svg';
 export { default as IconAudioOnly } from './visibility.svg';
 export { default as IconAudioOnlyOff } from './visibility-off.svg';
 export { default as IconAudioRoute } from './volume.svg';
@@ -113,3 +114,4 @@ export { default as IconSpeaking } from './speaking.svg';
 export { default as IconAdmitAll } from './admit-all.svg';
 export { default as IconRejectAll } from './reject-all.svg';
 export { default as IconWaiting } from './waiting.svg';
+export { default as IconSadSmiley } from './sad.svg'
