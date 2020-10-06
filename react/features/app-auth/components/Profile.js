@@ -9,11 +9,10 @@ import {
     Icon,
     IconMenuDown,
     IconMenuUp,
-    IconLogout,
-    IconWaiting
+    IconLogout
 } from '../../base/icons';
 import { connect } from '../../base/redux';
-import { refreshCalendar } from '../../calendar-sync/actions';
+// import { refreshCalendar } from '../../calendar-sync/actions';
 import { signOut } from '../../google-api';
 import googleApi from '../../google-api/googleApi';
 import useRequest from '../../hooks/use-request';
@@ -97,10 +96,10 @@ function Profile(props) {
                             calendarEvents
                             && <li className = 'calendar' >
                                 <div className = 'upcoming-meetings'> <div>Upcoming meetings</div>
-                                    <Icon
+                                    {/*<Icon
                                         onClick = { () => APP.store.dispatch(refreshCalendar()) }
                                         size = { 20 }
-                                        src = { IconWaiting } />
+                                        src = { IconWaiting } />*/}
                                 </div>
                                 {
                                     calendarEvents.map(event =>
