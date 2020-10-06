@@ -3,7 +3,7 @@
 import React from 'react';
 
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
-import { LoginComponent, decideAppLogin, Profile, validationFromNonComponents } from '../../../features/app-auth';
+import { LoginComponent, decideAppLogin, Profile, CalendarProfile, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
@@ -391,9 +391,11 @@ class WelcomePage extends AbstractWelcomePage {
                                                     onClick = { () => this.setState({
                                                         hideLogin: true
                                                     }) }>
+                                                    <CalendarProfile
+                                                        showMenu = { true } />
                                                     <Profile
-                                                        showMenu = { true } 
-                                                        postLogout = { this._cleanupTooltip } />
+                                                        postLogout = { this._cleanupTooltip }
+                                                        showMenu = { true } />
                                                 </div>
 
                                         }
