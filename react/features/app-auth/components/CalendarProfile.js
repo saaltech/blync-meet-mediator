@@ -84,7 +84,7 @@ onClick = { () => _setMenuExpanded() } />
                                     calendarEvents
                                     && <div className = 'calendar-list'>
                                         {
-                                            Object.keys(calendarEventsGroup).map(key => <>
+                                            Object.keys(calendarEventsGroup).map(key => (<div key = { key } >
                                                 {
                                                     calendarEventsGroup[key].length > 0
                                                     && <div className = 'group-title'>
@@ -131,7 +131,7 @@ onClick = { () => _setMenuExpanded() } />
                                                             }
                                                         </div>))
                                                 }
-                                            </>)
+                                            </div>))
 
                                         }
                                     </div>
