@@ -301,17 +301,44 @@ const googleApi = {
 
                 // user can edit the events, so we want only those that
                 // can be edited
+                // return this._getGoogleApiClient()
+                //    .client.calendar.calendarList.list();
+
+                const startDate = new Date();
+                const endDate = new Date();
+
+                startDate.setDate(startDate.getDate() + fetchStartDays);
+                endDate.setDate(endDate.getDate() + fetchEndDays);
+
                 return this._getGoogleApiClient()
-                    .client.calendar.calendarList.list();
+                        .client.calendar.events.list({
+                            'calendarId': 'primary',
+                            'timeMin': startDate.toISOString(),
+                            'timeMax': endDate.toISOString(),
+                            'showDeleted': false,
+                            'singleEvents': true,
+                            'orderBy': 'startTime'
+                        });
             })
-            .then(calendarList => {
+            .then(eventList => {
 
                 // no result, maybe not signed in
-                if (!calendarList) {
+                if (!eventList) {
                     return Promise.resolve();
                 }
 
-                const calendarIds
+                const eventsList = eventList.result.items
+                            .map(item => {
+                                const resultItem = { ...item };
+
+                                // add the calendarId only for the events
+                                // we can edit
+                                resultItem.calendarId = 'primary';
+
+                                return resultItem;
+                            });
+
+                /* const calendarIds
                     = calendarList.result.items.map(en => {
                         return {
                             id: en.id,
@@ -347,13 +374,10 @@ const googleApi = {
                                 }
 
                                 return resultItem;
-                            }));
-                });
+                            }));*/
+                // });
 
-                return Promise.all(promises)
-                    .then(results => [].concat(...results))
-                    .then(entries =>
-                        entries.map(e => this._convertCalendarEntry(e)));
+                return eventsList.map(e => this._convertCalendarEntry(e));
             });
     },
 
