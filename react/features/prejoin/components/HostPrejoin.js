@@ -7,6 +7,7 @@ import { config } from '../../../config';
 import Loading from '../../always-on-top/Loading';
 import { Profile } from '../../app-auth';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
+import { getUserAgentDetails } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import {
     Icon,
@@ -35,11 +36,12 @@ function HostPrejoin(props) {
     const [ meetingFrom, setMeetingFrom ] = useState('');
     const [ meetingTo, setMeetingTo ] = useState(null);
     const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
-    const { isMeetNow } = props;
+    const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [ shareable, setShareable ] = useState(false);
     const { joinConference } = props;
     const [ exiting, setExiting ] = useState(false);
     const [ clearErrors, setClearErrors ] = useState(true);
+    const userAgent = getUserAgentDetails();
 
     const [ getConference, fetchErrors ] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
@@ -178,6 +180,26 @@ function HostPrejoin(props) {
         }
     };
 
+    const formJoinEventParticipantRequestBody = () => {
+        return {
+            "client": userAgent.getBrowserName(),
+            "clientVersion": userAgent.getBrowserVersion(),
+            "conferenceId": meetingId,
+            "displayName": _user?.name,
+            "jid": _jid,
+            "loginType": _isGoogleSigninUser ? 'google' : 'default',
+            "os": userAgent.getOSName(),
+            "osVersion": userAgent.getOSVersion(),
+            "userId": _user?.id
+        };
+    };
+
+    const [ participantJoin, participantJoinError]  = useRequest({
+        url: config.conferenceManager + config.unauthParticipantsEP + '/joinevent',
+        method: 'post',
+        body: formJoinEventParticipantRequestBody
+    });
+
     const scheduleDisabled = !meetNow && !meetingFrom;
 
     return (
@@ -268,6 +290,10 @@ function HostPrejoin(props) {
                 && <div
                     className = 'prejoin-page-button next'
                     onClick = { () => {
+                        // Make the join now audit call
+                        participantJoin().then().catch(err => {
+                            console.error('Unable to audit the host participant join event', err);
+                        });
                         APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
                         joinConference();
                     } }>
@@ -302,7 +328,10 @@ function HostPrejoin(props) {
 
 function mapStateToProps(state): Object {
     return {
-        meetingDetails: APP.store.getState()['features/app-auth'].meetingDetails
+        _isGoogleSigninUser: state['features/app-auth'].googleOfflineCode ? true : false,
+        _user: state['features/app-auth'].user,
+        _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
+        meetingDetails: state['features/app-auth'].meetingDetails
     };
 }
 
