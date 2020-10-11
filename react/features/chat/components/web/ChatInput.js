@@ -8,8 +8,108 @@ import type { Dispatch } from 'redux';
 import { translate } from '../../../base/i18n';
 import { IconChatSend, Icon } from '../../../base/icons';
 import { connect } from '../../../base/redux';
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
+
+
+// Unified code names of Smileys to be excluded
+const SMILEYS_TO_EXCLUDE = [
+
+    'hot_face', // Overheated face ':hot_face'
+    'partying_face',
+    'smiling_face_with_3_hearts', // smiling_face_with_3_hearts
+    'compass',
+    'woozy_face',
+    'cold_face', // cold_face
+
+    // Tab 1
+    'curly_haired_man',
+    'white_haired_man',
+    'bald_person',
+    'red_haired_woman',
+    'red_haired_person',
+    'curly_haired_woman',
+    'curly_haired_person',
+    'white_haired_woman',
+    'bald_woman',
+    'bald_person',
+    'health_worker',
+    'judge',
+    'female-teacher',
+    'farmer',
+    'cook',
+    'mechanic',
+    'factory_worker',
+    'office_worker',
+    'scientist',
+    'technologist',
+    'singer',
+    'male-singer',
+    'female-singer',
+    'artist',
+    'pilot',
+    'astronaut',
+    'firefighter',
+    'male_superhero',
+    'female_superhero',
+    'male_supervillain',
+    'man_with_probing_cane',
+    'female_supervillain',
+    'women_with_probing_cane',
+    'person_with_probing_cane',
+    'person_in_motorized_wheelchair',
+    'man_in_motorized_wheelchair',
+    'woman_in_motorized_wheelchair',
+    'person_in_manual_wheelchair',
+    'woman_in_manual_wheelchair',
+    'man_in_manual_wheelchair',
+    'people_holding_hands',
+
+    // Tab 2
+    'orangutan',
+    'guid_dog',
+    'service_dog',
+    'sloth',
+    'otter',
+    'skunk',
+    'flamingo',
+
+    // Tab 3
+    'falafel',
+    'waffle',
+    'onion',
+    'garlic',
+    'butter',
+    'oyster',
+    'ice_cube',
+    'mate_drink',
+    'beverage_box',
+
+    // Tab 5
+    'hindu_temple',
+    'manual_wheelchair',
+    'motorized_wheelchair',
+    'auto_rickshaw',
+    'parachute',
+    'ringed_planet',
+
+    // Tab 6
+    'safety_vest',
+    'briefs',
+    'shorts',
+    'sari',
+    'one-piece_swimsuit',
+    'ballet_shoes',
+    'womans_flat_shoe',
+    'razor',
+    'drop_of_blood',
+    'adhesive_bandage',
+    'banjo',
+    'diya_lamp',
+    'chair',
+    'probing_cane',
+    'axe'
+];
 
 /**
  * The type of the React {@code Component} props of {@link ChatInput}.
@@ -99,6 +199,34 @@ class ChatInput extends Component<Props, State> {
          * manually focusing.
          */
         this._focus();
+
+        this._filterFrequentlyUsedSmileys();
+    }
+
+    /**
+     * Filter out the smileys that appear with proper enclosing html structure,
+     * (bug from the emoji library).
+     */
+    _filterFrequentlyUsedSmileys() {
+        const frequentEmoji = window.localStorage.getItem('emoji-mart.frequently');
+        const obj = JSON.parse(frequentEmoji || '{}');
+        let lastEmoji = window.localStorage.getItem('emoji-mart.last');
+
+        lastEmoji = lastEmoji && JSON.parse(lastEmoji);
+
+        SMILEYS_TO_EXCLUDE.forEach(id => {
+            delete obj[id];
+            if (id === lastEmoji) {
+                lastEmoji = '';
+            }
+        });
+
+        if (frequentEmoji) {
+            window.localStorage.setItem('emoji-mart.frequently', JSON.stringify(obj));
+        }
+        if (!lastEmoji) {
+            window.localStorage.removeItem('emoji-mart.last');
+        }
     }
 
     /**
@@ -122,9 +250,15 @@ class ChatInput extends Component<Props, State> {
                         </div>
                     </div>
                 </div>
-                <div className = { smileysPanelClassName }>
-                    <Picker onSelect={this._onSmileySelect} />
-                </div>
+                {this.state.showSmileysPanel && <div className = { smileysPanelClassName }>
+                    <Picker
+                        emojisToShowFilter = { emoji => {
+                            if (emoji.short_names.filter(symbol => SMILEYS_TO_EXCLUDE.includes(symbol)).length === 0) {
+                                return true;
+                            }
+                        } }
+                        onSelect = { this._onSmileySelect } />
+                </div>}
                 <div className = 'usrmsg-form'>
                     <TextareaAutosize
                         id = 'usermsg'
@@ -215,6 +349,7 @@ class ChatInput extends Component<Props, State> {
         });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _onToggleSmileysPanel: () => void;
@@ -229,6 +364,7 @@ class ChatInput extends Component<Props, State> {
         this.setState({ showSmileysPanel: !this.state.showSmileysPanel });
 
         this._focus();
+        this._filterFrequentlyUsedSmileys();
     }
 
     _setTextAreaRef: (?HTMLTextAreaElement) => void;
