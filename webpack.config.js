@@ -49,6 +49,11 @@ const config = {
                 secure: false
             },
 
+            '/unauth/api/v1/participants': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
             '/unauth/api/v1/conferences': {
                 target: 'http://localhost:8082/',
                 secure: false

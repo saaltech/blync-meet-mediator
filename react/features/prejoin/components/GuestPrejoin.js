@@ -4,6 +4,7 @@ import React from 'react';
 
 import { translate } from '../../base/i18n';
 
+import { getUserAgentDetails } from '../../base/environment/utils';
 import MeetingInfo from './MeetingInfo';
 import useRequest from '../../hooks/use-request';
 import { LoginComponent, Profile } from '../../app-auth';
@@ -51,6 +52,7 @@ function GuestPrejoin(props) {
     const [ exiting, setExiting ] = useState(false);
     const [disableJoin, setDisableJoin] = useState(true);
     const [meetingId, setMeetingId] = useState(props.meetingId);
+    const userAgent = getUserAgentDetails();
     useEffect(() => {
         // if(meetingId && !_isUserSignedOut && !continueAsGuest && !window.sessionStorage.getItem('isJWTSet')) {
         //     //Host has already signed-in, so there will be no JWT token in the url
@@ -74,7 +76,7 @@ function GuestPrejoin(props) {
     const [meetingFrom, setMeetingFrom] = useState(null);
     const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true, 
-        joinMeeting, _jid } = props;
+        joinMeeting, _jid, _user, _isGoogleSigninUser } = props;
     const [isMeetingHost, setIsMeetingHost] = useState(false)
     const [continueAsGuest, setContinueAsGuest] = useState(false);
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
@@ -129,14 +131,25 @@ function GuestPrejoin(props) {
         body: formWaitingParticipantRequestBody
     })
 
-    
-
-    const formVerifySecretBody = () => {
+    const formJoinEventParticipantRequestBody = () => {
         return {
-            conferenceId: meetingId,
-            conferenceSecret: meetingPassword
-        }
-    }
+            "client": userAgent.getBrowserName(),
+            "clientVersion": userAgent.getBrowserVersion(),
+            "conferenceId": meetingId,
+            "displayName": guestName || _user?.name,
+            "jid": _jid,
+            "loginType": _isUserSignedOut ? null : (_isGoogleSigninUser ? 'google' : 'default'),
+            "os": userAgent.getOSName(),
+            "osVersion": userAgent.getOSVersion(),
+            "userId": _user?.id
+        };
+    };
+
+    const [ participantJoin, participantJoinError]  = useRequest({
+        url: config.conferenceManager + config.unauthParticipantsEP + '/joinevent',
+        method: 'post',
+        body: formJoinEventParticipantRequestBody
+    });
 
     const verifySecretPostProcess = async (data) => {
         if (data.status === "SUCCESS") {
@@ -161,13 +174,19 @@ function GuestPrejoin(props) {
         }
     }
 
+    const formVerifySecretBody = () => {
+        return {
+            conferenceId: meetingId,
+            conferenceSecret: meetingPassword
+        }
+    }
+
     const [verifySecret, verifySecretErrors] = useRequest({
         url: config.conferenceManager + config.verifySecretEP,
         method: 'post',
         body: formVerifySecretBody,
         onSuccess: (data) => verifySecretPostProcess(data)
     });
-
 
     const [meetingConnected, setMeetingConnected] = useState(null)
     useEffect(() => {
@@ -340,16 +359,24 @@ function GuestPrejoin(props) {
 
     }
 
+    /**
+     *
+     */
     const _joinConference = () => {
+        // Make the join now audit call
+        participantJoin().then().catch(err => {
+            console.error('Unable to audit the participant join event', err);
+        })
+
+        // Close any open socket connections
         closeSocketConnection();
+
         APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
         joinConference();
     }
 
     const joinNowDisabled = continueAsGuest
         && (guestName.trim() === "" || (isSecretEnabled && meetingPassword.trim() === ""))
-
-    
 
     useEffect(() => {
         if((!_isUserSignedOut || continueAsGuest)) {
@@ -529,6 +556,8 @@ function GuestPrejoin(props) {
 
 function mapStateToProps(state): Object {
     return {
+        _isGoogleSigninUser: state['features/app-auth'].googleOfflineCode ? true : false,
+        _user: state['features/app-auth'].user,
         _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
         _socketLink: getConferenceSocketBaseLink(),
