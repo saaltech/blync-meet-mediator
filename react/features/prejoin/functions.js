@@ -52,11 +52,18 @@ export function isDeviceStatusVisible(state: Object): boolean {
 export function getActiveVideoTrack(state: Object): Object {
     const track = getVideoTrack(state) || getContentSharingTrack(state);
 
-    if (track && track.isActive()) {
+    if (track /*&& track.isActive()*/) {
         return track;
     }
 
     return null;
+}
+
+/**
+ * Fix to disable/enabled camera light on prejoin page
+ */
+export function setPrejoinVideoTrackMuted(value: boolean) {
+    APP.store.getState()['features/prejoin']?.videoTrack?._setMuted(value);
 }
 
 /**

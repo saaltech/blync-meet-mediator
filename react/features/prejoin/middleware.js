@@ -68,12 +68,16 @@ MiddlewareRegistry.register(store => next => async action => {
     }
 
     case SET_AUDIO_MUTED: {
-        store.dispatch(setPrejoinAudioMuted(Boolean(action.muted)));
+        const { showPrejoin } = store.getState()['features/prejoin'];
+
+        showPrejoin && store.dispatch(setPrejoinAudioMuted(Boolean(action.muted)));
         break;
     }
 
     case SET_VIDEO_MUTED: {
-        store.dispatch(setPrejoinVideoMuted(Boolean(action.muted)));
+        const { showPrejoin } = store.getState()['features/prejoin'];
+
+        showPrejoin && store.dispatch(setPrejoinVideoMuted(Boolean(action.muted)));
         break;
     }
 
