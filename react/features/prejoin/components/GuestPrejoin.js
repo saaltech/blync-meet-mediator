@@ -394,7 +394,7 @@ function GuestPrejoin(props) {
     }
 
     return ( (fetchUnauthErrors || fetchErrors) ?  
-        <div className={`hostPrejoin`}> <div className="invalid-meeting-code">{'Invalid meeting code'} </div></div> :
+        <div className={`hostPrejoin`}> <div className="invalid-meeting-code">{'Invalid Meeting ID'} </div></div> :
         <div className={`hostPrejoin`}>
             {
                 exiting && <Loading />

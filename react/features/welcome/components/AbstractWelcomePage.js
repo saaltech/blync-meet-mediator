@@ -246,7 +246,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
             return this._doRenderInsecureRoomNameWarning();
         }
 
-        // check meeting code format
+        // check Meeting ID format
         if (code && !validateMeetingCode(this.state.room)) {
             return this._doRenderInvalidCode();
         }
