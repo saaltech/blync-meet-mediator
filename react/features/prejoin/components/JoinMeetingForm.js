@@ -38,7 +38,7 @@ function JoinMeetingForm(props) {
 
 
           <div className="form-field">
-              <div className = 'form-label'>{'Meeting Code'}</div>
+              <div className = 'form-label'>{'Meeting ID'}</div>
               <InputField
                   placeHolder = { 'Meeting ID' }
                   value = { meetingId } 
