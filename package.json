@@ -100,6 +100,7 @@
     "redux": "4.0.4",
     "redux-thunk": "2.2.0",
     "rnnoise-wasm": "github:jitsi/rnnoise-wasm.git#db96d11f175a22ef56c7db1ba9550835b716e615",
+    "sanitize-html": "^2.1.0",
     "styled-components": "3.4.9",
     "toastr": "^2.1.4",
     "util": "0.12.1",
