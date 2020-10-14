@@ -249,6 +249,7 @@ const googleApi = {
         return {
             calendarId: entry.calendarId,
             description: entry.description,
+            organizer: entry.organizer,
             endDate: entry.end.dateTime,
             id: entry.id,
             location: entry.location,
