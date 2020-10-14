@@ -37,20 +37,33 @@ function CalendarProfile(props) {
     const wrapperRef = React.createRef();
 
     const defaultOptions = {
-        allowedTags: [ 'b', 'i', 'em', 'strong', 'a' ],
+        // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
         allowedAttributes: {
-            'a': [ 'href' ]
-        },
-        allowedIframeHostnames: [ 'www.youtube.com' ]
+            'a': [ 'href', 'name', 'target' ]
+        }
     };
 
     const sanitize = (dirty, options) => ({
         __html: sanitizeHtml(
             dirty,
-            { options: {
+            {
                 ...defaultOptions,
                 ...options
-            } }
+            }
+        )
+    });
+
+    const defaultOptionsOneLiner = {
+        allowedTags: [ 'b', 'i', 'em', 'strong' ]
+    };
+
+    const sanitizeOneLiner = (dirty, options) => ({
+        __html: sanitizeHtml(
+            dirty,
+            {
+                ...defaultOptionsOneLiner,
+                ...options
+            }
         )
     });
 
@@ -130,10 +143,9 @@ onClick = { () => _setMenuExpanded() } />
                                                 {
                                                     calendarEventsGroup[key].map((event, index) =>
                                                         (<div
-                                                            className = { `calendar__event ${event.url ? '' : 'calendar__event__disabled'} 
+                                                            className = { `calendar__event ${event.description ? '' : 'calendar__event__disabled'} 
                                                             ${index === calendarEventsGroup.today.length - 1 ? 'last' : ''}` }
                                                             key = { event.id }
-                                                            onClick = { () => _eventSelected(event) }
                                                             onMouseEnter = { () => setJoinEventId(event.id) } >
                                                             <div
                                                                 className = 'calendar__event__title'
@@ -154,19 +166,28 @@ onClick = { () => _setMenuExpanded() } />
                                                                 className = { `calendar__event__description
                                                                                 ${event.description ? '' : 'no-content'}` }
                                                                 dangerouslySetInnerHTML = {
-                                                                    sanitize(event.description ? event.description : 'No content') } />
+                                                                    sanitizeOneLiner(event.description ? event.description : 'No content') } />
                                                             {
                                                                 event.url
-                                                            && <div
-                                                                className = { `calendar__event__join 
-                                                                    ${joinEventId === event.id ? 'show' : 'hide'}` }>
-                                                                <a
+                                                                && <a
                                                                     href = { event.url }
                                                                     rel = 'noopener noreferrer'
                                                                     target = '_blank' >
-                                                                    { 'Join' }
+                                                                    <div
+                                                                        className = { `calendar__event__join 
+                                                                        ${joinEventId === event.id ? 'show' : 'hide'}` }>
+                                                                        { 'Join' }
+                                                                    </div>
                                                                 </a>
-                                                            </div>
+                                                            }
+
+                                                            {
+                                                                event.description
+                                                                && <div
+                                                                    className = 'calendar__event__details'
+                                                                    onClick = { () => _eventSelected(event) } >
+                                                                    { '... more' }
+                                                                </div>
                                                             }
                                                         </div>))
                                                 }
@@ -184,7 +205,7 @@ onClick = { () => _setMenuExpanded() } />
                                                     </div>
                                                     {
                                                         selectedEvent.startDate
-                                                        && <div className = 'calendar__event__timing'>
+                                                        && <div className = 'calendar__event__timing __modal'>
                                                             { `${moment(selectedEvent.startDate).locale('en')
                                                                 .format('DD MMM, hh:mm a')}
                                                                 ${selectedEvent.endDate ? ` - ${moment(selectedEvent.endDate).locale('en')
@@ -200,17 +221,17 @@ onClick = { () => _setMenuExpanded() } />
 
                                                     {
                                                         selectedEvent.url
-                                                        && <div
-                                                            className = { `calendar__event__join __modal 
+                                                        && <a
+                                                            href = { selectedEvent.url }
+                                                            rel = 'noopener noreferrer'
+                                                            target = '_blank' >
+                                                            <div
+                                                                className = { `calendar__event__join __modal
                                                                 ${joinEventId === selectedEvent.id ? 'show' : 'hide'}` }>
-                                                            <a
-                                                                href = { selectedEvent.url }
-                                                                rel = 'noopener noreferrer'
-                                                                target = '_blank' >
                                                                 { 'Join' }
-                                                            </a>
-                                                        </div>
-                                                    }                                                 
+                                                            </div>
+                                                        </a>
+                                                    }
                                                 </div>
                                             </ModalComponent>
                                         }

@@ -71,6 +71,8 @@ export function _updateCalendarEntries(events: Array<Object>) {
                 // they have the same URL already under a different title.
                 entry.title,
 
+                entry.id,
+
                 // XXX Eventually, given that the URL and the title are the
                 // same, what sets one event apart from another is the start
                 // time of the day (note the use of toTimeString() bellow)! The

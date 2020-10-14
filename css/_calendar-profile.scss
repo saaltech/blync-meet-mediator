@@ -147,16 +147,17 @@
                         line-height: 1.5em;
 
                         &.__modal {
-                            max-width: 310px;
+                            max-width: 100%;
                             font-size: 25px;
                         }
                     }
 
                     &__description {
+                        padding-top: 1px;
                         height: 25px;
                         line-height: 1.5em;
                         color: #888;
-                        max-width: 350px;
+                        max-width: 300px;
                         text-overflow: ellipsis;
                         overflow: hidden;
                         white-space: nowrap;
@@ -166,9 +167,14 @@
                         }
 
                         &__modal {
-                            height: 70%;
+                            border: 1px solid #dadada;
+                            padding: 10px;
+                            height: 63%;
                             overflow: auto;
                             text-align: left;
+                            -webkit-user-select: text;
+                            user-select: text;
+                            white-space: pre;
                         }
                     }
 
@@ -177,6 +183,10 @@
                         color: #888;
                         font-size: 13px;
                         padding-top: 5px;
+
+                        &.__modal {
+                            padding: 5px 0px 15px;
+                        }
                     }
                     
                     &__join {
@@ -184,17 +194,22 @@
                         right: 0;
                         top: 10px;
                         cursor: pointer;
-                        border: 1px solid var(--unnamed-color-005c85);
                         border: 1px solid #005C85;
+                        color: #005C85;
                         border-radius: 19px;
                         opacity: 1;
                         width: 30px;
                         align-items: center;
                         justify-content: center;
                         padding: 0px 20px;
+
+                        &:hover {
+                            background-color: #005C85;
+                            color: #fff;
+                        }
                         
                         &.__modal {
-                            left: 40%;
+                            left: 42%;
                             bottom: 15px;
                             top: auto;
                         }
@@ -206,6 +221,22 @@
                                 text-decoration: none;
                             }
                         }
+                    }
+
+                    &__details {
+                        top: 55px;
+                        position: absolute;
+                        background-color: #fff;
+                        right: 0;
+                        cursor: pointer;
+                        color: #005C85;
+                        opacity: 1;
+                        width: 54px;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0 10px;
+                        height: 20px;
+                        line-height: 1em;
                     }
                 }
             }

@@ -377,7 +377,7 @@ const googleApi = {
                             }));*/
                 // });
 
-                return eventsList.map(e => this._convertCalendarEntry(e));
+                return eventsList.map(e => e.start && this._convertCalendarEntry(e));
             });
     },
 

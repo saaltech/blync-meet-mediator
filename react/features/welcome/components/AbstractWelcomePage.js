@@ -300,7 +300,8 @@ export function _mapStateToProps(state: Object) {
         _settings: state['features/base/settings'],
         _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         _meetingDetails: state['features/app-auth'].meetingDetails,
-        _user: state['features/app-auth'].user
+        _user: state['features/app-auth'].user,
+        _isGoogleSigninUser: Boolean(state['features/app-auth'].googleOfflineCode)
 
     };
 }

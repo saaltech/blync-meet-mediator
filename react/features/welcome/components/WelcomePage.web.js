@@ -301,7 +301,7 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {ReactElement|null}
      */
     render() {
-        const { t, _isUserSignedOut, _meetingDetails } = this.props;
+        const { t, _isUserSignedOut, _meetingDetails, _isGoogleSigninUser } = this.props;
         const { hideLogin, goClicked, sessionExpiredQuery, switchActiveIndex,
             showNoCreateMeetingPrivilegeTip } = this.state;
         const { APP_NAME } = interfaceConfig;
@@ -391,8 +391,12 @@ class WelcomePage extends AbstractWelcomePage {
                                                     onClick = { () => this.setState({
                                                         hideLogin: true
                                                     }) }>
-                                                    <CalendarProfile
-                                                        showMenu = { true } />
+                                                    {
+                                                        _isGoogleSigninUser
+                                                        && <CalendarProfile
+                                                            showMenu = { true } />
+                                                    }
+                                                    
                                                     <Profile
                                                         postLogout = { this._cleanupTooltip }
                                                         showMenu = { true } />
