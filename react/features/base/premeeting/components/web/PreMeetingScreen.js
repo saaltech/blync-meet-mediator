@@ -112,7 +112,7 @@ class PreMeetingScreen extends PureComponent<Props> {
 
         // This is needed to turn the prejoin video track camera light, 
         // that might be turned on with react re-render
-        setTimeout(() => setPrejoinVideoTrackMuted(videoMuted), 500);
+        setTimeout(() => setPrejoinVideoTrackMuted(!meetNow || videoMuted), 500);
 
         return (
             <div
