@@ -1,4 +1,6 @@
 .calendarProfile {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     margin-top: 5px;
     position: relative;
@@ -47,6 +49,7 @@
 
         .group-title {
             font-size: 16px;
+            padding: 5px 0px;
         }
     }
 
@@ -54,11 +57,12 @@
         display: flex;
         padding-top: 10px;
         font-size: 16px;
-        border-bottom: 2px solid #d1d1d1;
         padding: 0 12px;
+        font-weight: 600;
 
         > div:nth-child(1) {
-            flex: 1;
+            margin-right: 10px;
+            color: #005C85;
         }
 
         > div.jitsi-icon {
@@ -86,7 +90,7 @@
         padding: 5px 0px;
         border-bottom: 1px solid #d1d1d1;
         height: 90px;
-        padding: 5px 10px;
+        padding: 10px;
 
         .last {
             border: none;
@@ -159,7 +163,16 @@
             }
         }
 
-        &__timing {
+        &__time-container {
+            display: flex;
+            padding: 5px 0px;
+
+            >div:nth-child(1) {
+                margin-right: 20px;
+            }
+        }
+
+        &__timing, &__host-info, &__duration {
             line-height: 1.5em;
             color: #393939;
             font-size: 13px;
@@ -180,18 +193,12 @@
         }
 
         &__host-info {
-            line-height: 1.5em;
-            color: #393939;
-            font-size: 13px;
-            padding-top: 5px;
-            display: flex;
-
-            >div:nth-child(1) {
-                color: #00C062;
-            }
-
             >div:nth-child(2) {
                 padding: 1px 5px;
+                max-width: 70%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
         }
         
@@ -218,6 +225,7 @@
                 left: 42%;
                 bottom: 15px;
                 top: auto;
+                color: #005C85;
             }
 
             a {
@@ -230,7 +238,7 @@
         }
 
         &__details {
-            top: 55px;
+            bottom: 15px;
             position: absolute;
             background-color: #fff;
             right: 0;
@@ -256,5 +264,16 @@
         top: -5px;
         left: 15px;
 
+    }
+}
+
+
+@media only screen and (max-width: 1080px) {
+    .calendar-list {
+        max-height: none !important;
+    }
+
+    .calendarProfile {
+        margin-top: 50px;
     }
 }

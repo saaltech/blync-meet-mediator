@@ -69,7 +69,8 @@ class WelcomePage extends AbstractWelcomePage {
             sessionExpiredQuery: false,
             reasonForLogin: '',
             showNoCreateMeetingPrivilegeTip: false,
-            switchActiveIndex: this._canCreateMeetings() ? 0 : 1
+            switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
+            height: 0
         };
 
         /**
@@ -147,6 +148,10 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     async componentDidMount() {
+
+        const height = this.divElement.clientHeight;
+
+        this.setState({ height });
 
         await validationFromNonComponents(true, true);
 
@@ -389,8 +394,6 @@ class WelcomePage extends AbstractWelcomePage {
     render() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
         const { hideLogin, sessionExpiredQuery } = this.state;
-        const titleArr = t('welcomepage.enterRoomTitle').split(' ');
-        const separatedTitle = titleArr.pop();
 
         return (
             <div>
@@ -436,7 +439,11 @@ class WelcomePage extends AbstractWelcomePage {
                                                 this._renderMainContentSection()
                                             }
                                         </div>
-                                        <div className = 'right-content'>
+                                        <div
+                                            className = 'right-content'
+                                            ref = { divElement => {
+                                                this.divElement = divElement;
+                                            } } >
                                             {
                                                 _isUserSignedOut
                                                 && <LoginComponent
@@ -472,7 +479,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                         {
                                                             _isGoogleSigninUser
                                                             && <CalendarProfile
-                                                                showMenu = { false } />
+                                                                height = { this.state.height } />
                                                         }
                                                     </>
 

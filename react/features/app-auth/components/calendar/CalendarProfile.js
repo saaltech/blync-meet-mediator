@@ -6,6 +6,8 @@ import { IconContext } from 'react-icons';
 import { BiTime } from 'react-icons/bi';
 import { BsPersonLinesFill } from 'react-icons/bs';
 import { FaSyncAlt } from 'react-icons/fa';
+import { GiSandsOfTime } from 'react-icons/gi';
+import { HiOutlineRefresh } from 'react-icons/hi';
 import sanitizeHtml from 'sanitize-html';
 
 import ModalComponent from '../../../always-on-top/ModalComponent';
@@ -16,7 +18,8 @@ import { refreshCalendar } from '../../../calendar-sync/actions';
 type Props = {
     t: Object,
     calendarEvents: Object,
-    calendarEventsGroup: Object
+    calendarEventsGroup: Object,
+    height: any
 }
 /**
  *
@@ -79,12 +82,14 @@ function CalendarProfile(props: Props) {
                 <div
                     className = 'jitsi-icon'
                     onClick = { () => APP.store.dispatch(refreshCalendar()) } >
-                    <FaSyncAlt />
+                    <HiOutlineRefresh />
                 </div>
             </div>
             {
                 calendarEvents
-                && <div className = 'calendar-list'>
+                && <div
+                    className = 'calendar-list'
+                    style = {{ maxHeight: props.height - 200 }} >
                     {
                         Object.keys(calendarEventsGroup).map(key => (<div key = { key } >
                             {
@@ -118,21 +123,34 @@ function CalendarProfile(props: Props) {
                                         </div>
                                         
                                         {
-                                            event.startDate
-                                        && <div className = 'calendar__event__timing'>
-                                            <IconContext.Provider value = {{ style: { verticalAlign: 'middle' } }}>
+                                            event.startDate && event.endDate
+                                        && <div className = 'calendar__event__time-container'>
+                                            <div className = 'calendar__event__duration'>
+                                                <IconContext.Provider value = {{ style: { verticalAlign: 'middle' } }}>
+                                                    <div>
+                                                        <GiSandsOfTime size = { 20 } />
+                                                    </div>
+                                                </IconContext.Provider>
                                                 <div>
-                                                    <BiTime size = { 20 } />
+                                                    { `${moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()} minutes`}
                                                 </div>
-                                            </IconContext.Provider>
-                                            <div>
-                                                { `${moment(event.startDate).locale('en')
-                                                    .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
-                                                    ${event.endDate ? ` - ${moment(event.endDate).locale('en')
-                                                    .format('hh:mm a')}` : ''}`
-                                                }
+                                                
                                             </div>
-                                            
+                                            <div className = 'calendar__event__timing'>
+                                                <IconContext.Provider value = {{ style: { verticalAlign: 'middle' } }}>
+                                                    <div>
+                                                        <BiTime size = { 20 } />
+                                                    </div>
+                                                </IconContext.Provider>
+                                                <div>
+                                                    { `${moment(event.startDate).locale('en')
+                                                        .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
+                                                        ${event.endDate ? ` - ${moment(event.endDate).locale('en')
+                                                        .format('hh:mm a')}` : ''}`
+                                                    }
+                                                </div>
+                                                
+                                            </div>
                                         </div>
                                         }
                                         <div
@@ -145,7 +163,7 @@ function CalendarProfile(props: Props) {
                                             <div>
                                                 {
                                                     event.organizer
-                                                    && `${event.organizer.displayName || event.organizer.email}
+                                                    && `Hosted By: ${event.organizer.displayName || event.organizer.email}
                                                     ${event.organizer.self ? '(You)' : ''}`
                                                 }
                                             </div>
