@@ -1,7 +1,7 @@
 /* @flow */
 
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconContext } from 'react-icons';
 import { BiTime } from 'react-icons/bi';
 import { BsPersonLinesFill } from 'react-icons/bs';
@@ -32,6 +32,22 @@ function CalendarProfile(props: Props) {
     const [ selectedEvent, setSelectedEvent ] = useState(null);
 
     const { t, calendarEvents, calendarEventsGroup } = props;
+
+    const wrapperRef = React.createRef();
+
+    /**
+     * Collapse if clicked on outside of element.
+     */
+    const handleClickOutside = event => {
+        if (wrapperRef && wrapperRef.current
+            && !wrapperRef.current.contains(event.target)) {
+            setShowModal(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+    });
 
     const defaultOptions = {
         // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
@@ -189,33 +205,37 @@ function CalendarProfile(props: Props) {
                     }
                     {
                         showModal && selectedEvent && selectedEvent.description
-                        && <ModalComponent
-                            closeAction = { () => _closeModal() }>
-                            <div className = 'content'>
-                                <div
-                                    className = 'calendar__event__title __modal'
-                                    title = { selectedEvent.title } >
-                                    { selectedEvent.title }
+                        && <div
+                            className = 'details-overlay'
+                            ref = { wrapperRef } >
+                            <div
+                                className = 'close-icon'
+                                onClick = { () => setShowModal(!showModal) } />
+                            <div
+                                className = 'calendar__event__title __modal'
+                                title = { selectedEvent.title } >
+                                { selectedEvent.title }
+                            </div>
+                            {
+                                selectedEvent.startDate
+                                && <div className = 'calendar__event__timing __modal'>
+                                    { `${moment(selectedEvent.startDate).locale('en')
+                                        .format('DD MMM, hh:mm a')}
+                                        ${selectedEvent.endDate ? ` - ${moment(selectedEvent.endDate).locale('en')
+                                        .format('hh:mm a')}` : ''}`
+                                    }
                                 </div>
-                                {
-                                    selectedEvent.startDate
-                                    && <div className = 'calendar__event__timing __modal'>
-                                        { `${moment(selectedEvent.startDate).locale('en')
-                                            .format('DD MMM, hh:mm a')}
-                                            ${selectedEvent.endDate ? ` - ${moment(selectedEvent.endDate).locale('en')
-                                            .format('hh:mm a')}` : ''}`
-                                        }
-                                    </div>
-                                }
-                                <div
-                                    className = { `calendar__event__description__modal 
-                                                    ${selectedEvent.description ? '' : 'no-content'}` }
-                                    dangerouslySetInnerHTML = {
-                                        sanitize(selectedEvent.description ? selectedEvent.description : 'No content') } />  
+                            }
+                            <div
+                                className = { `calendar__event__description__modal 
+                                                ${selectedEvent.description ? '' : 'no-content'}` }
+                                dangerouslySetInnerHTML = {
+                                    sanitize(selectedEvent.description ? selectedEvent.description : 'No content') } />  
 
-                                {
-                                    selectedEvent.url
-                                    && <a
+                            {
+                                selectedEvent.url
+                                && <div className = 'join-section'>
+                                    <a
                                         href = { selectedEvent.url }
                                         rel = 'noopener noreferrer'
                                         target = '_blank' >
@@ -225,13 +245,16 @@ function CalendarProfile(props: Props) {
                                             { 'Join' }
                                         </div>
                                     </a>
-                                }
-                            </div>
-                        </ModalComponent>
+                                </div>
+                            }
+                        </div>
                     }
                 </div>
             }
-            <div className = 'coming-from-google'> { 'Coming from Google Calendar' } </div>
+            <div className = 'coming-from-google'>
+                <div> { 'Integrated with ' } </div>
+                <img src = './../images/google_calendar.png' />
+            </div>
         </div>
     );
 }

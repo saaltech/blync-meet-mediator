@@ -9,9 +9,17 @@
     color: #393939;
 
     .coming-from-google {
-        color: #00C062;
+        color: #717274;
         margin: 0 auto;
-        font-weight: 500;
+        font-weight: 400;
+        display: flex;
+
+        >div {
+            padding: 3px 5px;
+        }
+        img {
+            height: 45px;
+        }
     }
 
     .calendar-icon {
@@ -164,7 +172,7 @@
             }
 
             &.__modal {
-                max-width: 100%;
+                max-width: 90%;
                 font-size: 25px;
             }
         }
@@ -184,14 +192,19 @@
             }
 
             &__modal {
+                flex: 1;
                 border: 1px solid #dadada;
                 padding: 10px;
-                height: 63%;
+                height: 60%;
                 overflow: auto;
                 text-align: left;
                 -webkit-user-select: text;
                 user-select: text;
-                white-space: pre;
+                white-space: pre-wrap;
+                white-space: -moz-pre-wrap;
+                white-space: -pre-wrap;
+                white-space: -o-pre-wrap;
+                word-wrap: break-word;
             }
         }
 
@@ -258,6 +271,10 @@
                 bottom: 15px;
                 top: auto;
                 color: #005C85;
+                &:hover {
+                    background-color: #005C85;
+                    color: #fff;
+                }
             }
 
             a {
@@ -297,6 +314,65 @@
         left: 15px;
 
     }
+
+    .details-overlay {
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        position: absolute;
+        background: no-repeat padding-box #FFF;
+        box-shadow: 0 2px 15px #aeaeae;
+        color: #393939;
+        list-style: none;
+        padding: 5px 20px;
+        text-align: left;
+        border-radius: 10px;
+
+        margin: auto 5%;
+        width: 75%;
+        top: 15%;
+
+        .join-section {
+            height: 60px;
+        }
+
+        a {
+            color: #393939 !important;
+            cursor: pointer;
+            height: 0px;
+            width: 100%;
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        li {
+            height: 30px;
+            padding: 10px 0px 0px;
+        }
+
+        >li:nth-child(2) {
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .jitsi-icon {
+            float: left;
+        }
+
+        .menuLabel {
+            position: relative;
+        }
+    }
+}
+
+.close-action {
+    opacity: 0.6 !important;
+    width: 13px !important;
+    height: 13px !important;
+
+    &:hover {
+        opacity: 1 !important;
+    }
 }
 
 
@@ -307,5 +383,16 @@
 
     .calendarProfile {
         margin-top: 50px;
+    }
+
+    .details-overlay {
+        height: 400px !important;
+    }
+}
+
+@media only screen and (min-width: 1081px) {
+
+    .details-overlay {
+        height: 50% !important;
     }
 }
