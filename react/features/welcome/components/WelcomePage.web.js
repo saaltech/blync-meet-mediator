@@ -20,7 +20,7 @@ import logger from '../../settings/logger';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
-import Background from './background';
+import TncPrivacy from './TncPrivacy';
 
 /**
  * The pattern used to validate room name.
@@ -317,6 +317,20 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     /**
+     * Renders a Jifmeet terms and conditions and privacy section.
+     *
+     * @private
+     * @returns {ReactElement|null}
+     */
+    _renderPrivacySection () {
+        let reactElement = null;
+
+        reactElement = (<TncPrivacy />);
+
+        return reactElement;
+    }
+
+    /**
      */
     _renderMainContentSection() {
         const { t } = this.props;
@@ -382,6 +396,8 @@ class WelcomePage extends AbstractWelcomePage {
                 </div>
             </div>
             { this._renderInsecureRoomNameWarning(switchActiveIndex === 1) }
+
+            <div className = 'contacts-placeholder' />
                 </>);
     }
 
@@ -401,12 +417,6 @@ class WelcomePage extends AbstractWelcomePage {
                     <div
                         className = 'welcome without-content'
                         id = 'welcome_page'>
-
-                        {
-
-                            /* <Background />*/
-
-                        }
 
                         {
                             isMobileBrowser() && this.links
@@ -432,6 +442,9 @@ class WelcomePage extends AbstractWelcomePage {
                                         {
                                             this._renderLogo()
                                         }
+                                        {
+                                            this._renderPrivacySection()
+                                        }
                                     </div>
                                     <div className = 'content-area'>
                                         <div className = 'main-content'>
@@ -456,16 +469,19 @@ class WelcomePage extends AbstractWelcomePage {
                                             }
                                             {
                                                 _isUserSignedOut
-                                                    ? <div
-                                                        className = { 'welcome-page-button signin' }
-                                                        onClick = { () => this.setState({
-                                                            reasonForLogin: '',
-                                                            hideLogin: false
-                                                        }) }>
-                                                        {
-                                                            t('welcomepage.signinLabel')
-                                                        }
-                                                    </div>
+                                                    ? <>
+                                                        <div
+                                                            className = { 'welcome-page-button signin' }
+                                                            onClick = { () => this.setState({
+                                                                reasonForLogin: '',
+                                                                hideLogin: false
+                                                            }) }>
+                                                            {
+                                                                t('welcomepage.signinLabel')
+                                                            }
+                                                        </div>
+                                                        <div className = 'calendar-placeholder' />
+                                                    </>
                                                     : <>
                                                         <div
                                                             className = { 'welcome-page-button profile' }
@@ -478,8 +494,8 @@ class WelcomePage extends AbstractWelcomePage {
                                                         </div>
                                                         {
                                                             _isGoogleSigninUser
-                                                            && <CalendarProfile
-                                                                height = { this.state.height } />
+                                                            ? <CalendarProfile height = { this.state.height } />
+                                                            : <div className = 'calendar-placeholder' />
                                                         }
                                                     </>
 
@@ -494,20 +510,24 @@ class WelcomePage extends AbstractWelcomePage {
 
                 {
 
-                    /* !isMobileBrowser()
+                    !isMobileBrowser()
                     && <div className = 'legal-footer'>
-                        <p>Copyright © 2020 Jifmeet. All rights reserved.</p>
+                        <p>Copyright © 2020 · Jifmeet. All rights reserved</p>
 
-                        <div>
-                            <a
-                                href = '/TnC'
-                                target = '_blank'>Terms and Conditions</a>
-                            | <a
-                                href = '/privacy-policy'
-                                target = '_blank'>Privacy Policy</a>
-                        </div>
+                        {
+
+                            /* <div>
+                                <a
+                                    href = '/TnC'
+                                    target = '_blank'>Terms and Conditions</a>
+                                | <a
+                                    href = '/privacy-policy'
+                                    target = '_blank'>Privacy Policy</a>
+                            </div> */
+
+                        }
                     </div>
-                    */
+                    
 
                 }
 

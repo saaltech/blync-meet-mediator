@@ -41,7 +41,7 @@ function _isDisplayableCalendarEntry(entry) {
  * @returns {void}
  */
 export function _updateCalendarEntries(events: Array<Object>) {
-    if (!events || !events.length) {
+    if (!events /* || !events.length */) {
         return;
     }
 

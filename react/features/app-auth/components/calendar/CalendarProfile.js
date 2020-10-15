@@ -78,26 +78,32 @@ function CalendarProfile(props: Props) {
         <div
             className = { 'calendarProfile' } >
             <div className = 'upcoming-meetings'>
-                <div>{ `${calendarEvents ? '' : 'No '}Upcoming meetings`}</div>
+                <div>{ 'Upcoming meetings' }</div>
                 <div
                     className = 'jitsi-icon'
                     onClick = { () => APP.store.dispatch(refreshCalendar()) } >
                     <HiOutlineRefresh />
+                    <div className = 'last-synced'> { `Last synced: ${moment().locale('en')
+                        .format('DD MMM, hh:mm a')}` } </div>
                 </div>
             </div>
             {
-                calendarEvents
-                && <div
+                <div
                     className = 'calendar-list'
                     style = {{ maxHeight: props.height - 200 }} >
                     {
                         Object.keys(calendarEventsGroup).map(key => (<div key = { key } >
+                            <div className = 'group-title'>
+                                {
+                                    key === 'today' ? 'Today' : 'Tomorrow'
+                                }
+                            </div>
                             {
-                                calendarEventsGroup[key].length > 0
-                                && <div className = 'group-title'>
-                                    {
-                                        key === 'today' ? 'Today' : 'Tomorrow'
-                                    }
+                                calendarEventsGroup[key].length === 0
+                                && <div
+                                    className = { 'calendar__event calendar__event__disabled last no-meetings' }
+                                    key = { -1 } >
+                                    <div>{ `No meetings for ${key === 'today' ? key : 'tomorrow'}` }</div>
                                 </div>
                             }
                             {
@@ -225,6 +231,7 @@ function CalendarProfile(props: Props) {
                     }
                 </div>
             }
+            <div className = 'coming-from-google'> { 'Coming from Google Calendar' } </div>
         </div>
     );
 }

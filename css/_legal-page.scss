@@ -1,14 +1,14 @@
 .legal-footer {
   position: absolute;
-  z-index: 1000;
+  // z-index: 1000;
   bottom: 0;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 15px 32px;
+  padding: 20px 120px;
   box-sizing: border-box;
-  background: #005C85;
-  mix-blend-mode: multiply; 
+  // background: #005C85;
+  // mix-blend-mode: multiply; 
 
   a {
     color: #FFF !important;

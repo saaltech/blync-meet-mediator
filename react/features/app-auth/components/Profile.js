@@ -26,7 +26,7 @@ function Profile(props) {
     const wrapperRef = React.createRef();
 
     /**
-     * Alert if clicked on outside of element.
+     * Collapse if clicked on outside of element.
      */
     const handleClickOutside = event => {
         if (wrapperRef && wrapperRef.current
