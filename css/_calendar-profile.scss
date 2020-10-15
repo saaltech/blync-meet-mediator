@@ -151,7 +151,7 @@
             display: flex;
 
             >div:nth-child(1) {
-                max-width: 90%;
+                max-width: 85%;
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
@@ -173,7 +173,11 @@
 
             &.__modal {
                 max-width: 90%;
-                font-size: 25px;
+                font-size: 20px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                display: block;
             }
         }
 
@@ -332,7 +336,7 @@
         box-shadow: 0 2px 15px #aeaeae;
         color: #393939;
         list-style: none;
-        padding: 5px 20px;
+        padding: 10px 20px;
         text-align: left;
         border-radius: 10px;
 
