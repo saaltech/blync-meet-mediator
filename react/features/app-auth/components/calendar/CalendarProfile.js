@@ -14,6 +14,7 @@ import ModalComponent from '../../../always-on-top/ModalComponent';
 import { translate } from '../../../base/i18n';
 import { connect } from '../../../base/redux';
 import { refreshCalendar } from '../../../calendar-sync/actions';
+import { IFrame } from './Iframe'
 
 type Props = {
     t: Object,
@@ -52,7 +53,8 @@ function CalendarProfile(props: Props) {
     const defaultOptions = {
         // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
         allowedAttributes: {
-            'a': [ 'href', 'name', 'target' ]
+            // 'a': [ 'href', 'name', 'target' ],
+            'div': [ 'style' ]
         }
     };
 
@@ -81,6 +83,9 @@ function CalendarProfile(props: Props) {
     });
 
     const _eventSelected = calEvent => {
+        if (calEvent.description) {
+            calEvent.description = `<div class='jifmeet' style='font-family: open_sanslight,"Helvetica Neue",Helvetica,Arial,sans-serif!important; font-size: 15px;'>${calEvent.description}</div>`;
+        }
         setSelectedEvent(calEvent);
         setShowModal(true);
     };
@@ -226,11 +231,15 @@ function CalendarProfile(props: Props) {
                                     }
                                 </div>
                             }
+
                             <div
                                 className = { `calendar__event__description__modal 
-                                                ${selectedEvent.description ? '' : 'no-content'}` }
-                                dangerouslySetInnerHTML = {
-                                    sanitize(selectedEvent.description ? selectedEvent.description : 'No content') } />  
+                                                ${selectedEvent.description ? '' : 'no-content'}` } >
+                                <IFrame>
+                                    <div dangerouslySetInnerHTML = {
+                                        sanitize(selectedEvent.description ? selectedEvent.description : 'No content') } />
+                                </IFrame>
+                            </div>
 
                             {
                                 selectedEvent.url

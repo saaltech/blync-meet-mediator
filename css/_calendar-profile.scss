@@ -194,7 +194,7 @@
             &__modal {
                 flex: 1;
                 border: 1px solid #dadada;
-                padding: 10px;
+                padding: 5px;
                 height: 60%;
                 overflow: auto;
                 text-align: left;
@@ -205,9 +205,12 @@
                 white-space: -pre-wrap;
                 white-space: -o-pre-wrap;
                 word-wrap: break-word;
+                background-color: #fafafa;
 
-                * {
-                    all: unset !important;
+                iframe {
+                    border: 0 !important;
+                    height: 100% !important;
+                    width: 100% !important;
                 }
 
             }
