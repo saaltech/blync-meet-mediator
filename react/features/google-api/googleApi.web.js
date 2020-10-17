@@ -6,6 +6,8 @@ import {
     GOOGLE_SCOPE_YOUTUBE
 } from './constants';
 
+import { signOut as fullSignOut } from './actions';
+
 // const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
 const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/platform.js';
 
@@ -206,11 +208,16 @@ const googleApi = {
      *
      * @returns {Promise}
      */
-    signInIfNotSignedIn() {
+    signInIfNotSignedIn(isSignInAction = false) {
         return this.get()
             .then(() => this.isSignedIn())
             .then(isSignedIn => {
-                if (!isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
+                // signOut out and  sign in again if offlineCode isnt found.
+                if (isSignInAction && isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
+                    APP.store.dispatch(fullSignOut());
+
+                    return this.grantOfflineAccess();
+                } else if (!isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
                     // return this.showAccountSelection();
                     return this.grantOfflineAccess();
                 }

@@ -117,8 +117,8 @@ export async function validationFromNonComponents(tokenRequired, isHomePage = fa
             if(e && e.response && e.response.status == 401) {
               // only in case of invalid grant
               !isHomePage && invalidateAndGoHome(true);
-              return false;
             }
+            return false;
           }
         }
         else {

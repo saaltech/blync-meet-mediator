@@ -162,7 +162,7 @@ export function showAccountSelection() {
  */
 export function signIn() {
     return (dispatch: Dispatch<any>) => googleApi.get()
-            .then(() => googleApi.signInIfNotSignedIn())
+            .then(() => googleApi.signInIfNotSignedIn(true))
             .then( offlineCode => {
                 console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
                 dispatch(setGoogleOfflineCode(offlineCode))

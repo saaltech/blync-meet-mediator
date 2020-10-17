@@ -67,6 +67,7 @@ class WelcomePage extends AbstractWelcomePage {
             formDisabled: true,
             hideLogin: true,
             sessionExpiredQuery: false,
+            loginErrorMsg: '',
             reasonForLogin: '',
             showNoCreateMeetingPrivilegeTip: false,
             switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
@@ -125,6 +126,7 @@ class WelcomePage extends AbstractWelcomePage {
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
         this._closeLogin = this._closeLogin.bind(this);
+        this._onSocialLoginFailed = this._onSocialLoginFailed.bind(this);
         this._cleanupTooltip = this._cleanupTooltip.bind(this);
         this.links = window.interfaceConfig.MOBILE_APP_LINKS;
     }
@@ -153,21 +155,21 @@ class WelcomePage extends AbstractWelcomePage {
 
         this.setState({ height });
 
-        await validationFromNonComponents(true, true);
+        const refreshTokenResponse = await validationFromNonComponents(true, true);
 
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
-        window.showEnableCookieTip = false
+        window.showEnableCookieTip = false;
 
-        this.props.dispatch(bootstrapCalendarIntegration())
+        refreshTokenResponse
+        && this.props.dispatch(bootstrapCalendarIntegration())
             .catch(err => {
-                if(err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
+                if (err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
                     window.showEnableCookieTip = true;
                 }
                 logger.error('Google oauth bootstrapping failed', err)
             });
-            
 
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
         if (getQueryVariable('sessionExpired')) {
@@ -276,7 +278,8 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _closeLogin() {
         this.setState({
-            hideLogin: true
+            hideLogin: true,
+            loginErrorMsg: ''
         });
 
         if (this.state.switchActiveIndex === 0) {
@@ -287,6 +290,15 @@ class WelcomePage extends AbstractWelcomePage {
                 });
             }
         }
+    }
+
+    /**
+     */
+    _onSocialLoginFailed() {
+        this.setState({
+            hideLogin: false,
+            loginErrorMsg: 'Login failed. Please try again sometime later.'
+        });
     }
 
     _canCreateMeetings() {
@@ -409,7 +421,9 @@ class WelcomePage extends AbstractWelcomePage {
      */
     render() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
-        const { hideLogin, sessionExpiredQuery } = this.state;
+        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
+
+        const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
 
         return (
             <div>
@@ -461,9 +475,10 @@ class WelcomePage extends AbstractWelcomePage {
                                                 _isUserSignedOut
                                                 && <LoginComponent
                                                     closeAction = { this._closeLogin }
-                                                    errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' }
+                                                    errorMsg = { errorOnLoginPage }
                                                     hideLogin = { hideLogin }
                                                     isOverlay = { true }
+                                                    onSocialLoginFailed = { this._onSocialLoginFailed }
                                                     reasonForLogin = { this.state.reasonForLogin }
                                                     t = { t } />
                                             }
@@ -474,6 +489,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                             className = { 'welcome-page-button signin' }
                                                             onClick = { () => this.setState({
                                                                 reasonForLogin: '',
+                                                                loginErrorMsg: '',
                                                                 hideLogin: false
                                                             }) }>
                                                             {

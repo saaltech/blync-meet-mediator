@@ -36,13 +36,18 @@ function CalendarProfile(props: Props) {
 
     const wrapperRef = React.createRef();
 
+    const _closeModal = () => {
+        setSelectedEvent(null);
+        setShowModal(false);
+    };
+
     /**
      * Collapse if clicked on outside of element.
      */
     const handleClickOutside = event => {
         if (wrapperRef && wrapperRef.current
             && !wrapperRef.current.contains(event.target)) {
-            setShowModal(false);
+            _closeModal();
         }
     };
 
@@ -84,15 +89,13 @@ function CalendarProfile(props: Props) {
 
     const _eventSelected = calEvent => {
         if (calEvent.description) {
-            calEvent.description = `<div class='jifmeet' style='font-family: open_sanslight,"Helvetica Neue",Helvetica,Arial,sans-serif!important; font-size: 15px;'>${calEvent.description}</div>`;
+            calEvent.description
+                = `<div class='jifmeet'
+                    style='font-family: open_sanslight,"Helvetica Neue",Helvetica,Arial,sans-serif!important; 
+                        font-size: 15px;'>${calEvent.description}</div>`;
         }
         setSelectedEvent(calEvent);
         setShowModal(true);
-    };
-
-    const _closeModal = () => {
-        setSelectedEvent(null);
-        setShowModal(false);
     };
 
     return (
