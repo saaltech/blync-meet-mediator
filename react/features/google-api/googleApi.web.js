@@ -6,6 +6,8 @@ import {
     GOOGLE_SCOPE_YOUTUBE
 } from './constants';
 
+import { signOut as fullSignOut } from './actions';
+
 // const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
 const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/platform.js';
 
@@ -206,14 +208,19 @@ const googleApi = {
      *
      * @returns {Promise}
      */
-    signInIfNotSignedIn() {
+    signInIfNotSignedIn(isSignInAction = false) {
         return this.get()
             .then(() => this.isSignedIn())
             .then(isSignedIn => {
-                //if (!isSignedIn) {
+                // signOut out and  sign in again if offlineCode isnt found.
+                if (isSignInAction && isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
+                    APP.store.dispatch(fullSignOut());
+
+                    return this.grantOfflineAccess();
+                } else if (!isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
                     // return this.showAccountSelection();
                     return this.grantOfflineAccess();
-                //}
+                }
             });
     },
 
@@ -249,6 +256,7 @@ const googleApi = {
         return {
             calendarId: entry.calendarId,
             description: entry.description,
+            organizer: entry.organizer,
             endDate: entry.end.dateTime,
             id: entry.id,
             location: entry.location,
@@ -308,7 +316,9 @@ const googleApi = {
                 const endDate = new Date();
 
                 startDate.setDate(startDate.getDate() + fetchStartDays);
+                startDate.setHours(0, 0, 0, 0);
                 endDate.setDate(endDate.getDate() + fetchEndDays);
+                endDate.setHours(23, 59, 59, 999);
 
                 return this._getGoogleApiClient()
                         .client.calendar.events.list({
@@ -377,7 +387,7 @@ const googleApi = {
                             }));*/
                 // });
 
-                return eventsList.map(e => this._convertCalendarEntry(e));
+                return eventsList.map(e => e.start && this._convertCalendarEntry(e));
             });
     },
 

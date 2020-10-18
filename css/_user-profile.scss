@@ -38,6 +38,19 @@
         }
 
         .profileMenu {
+
+            &::after {
+                content: " ";
+                position: absolute;
+                opacity: 1;
+                bottom: 100%;  /* At the top of the tooltip */
+                right: 10px;
+                margin-left: -8px;
+                border-width: 8px;
+                border-style: solid;
+                border-color: transparent transparent #fff transparent;
+            }
+
             position: absolute;
             background: #FFFFFF 0% 0% no-repeat padding-box;
             box-shadow: 0 2px 15px #aeaeae;
@@ -47,6 +60,8 @@
             padding: 5px 20px;
             width: 100px;
             text-align: left;
+            top: 50px;
+            z-index: 200;
 
             li {
                 height: 30px;

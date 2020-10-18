@@ -1,0 +1,83 @@
+
+.tnc-privacy {
+    position: fixed;
+    bottom: 20;
+    left: 20px;
+    height: 60px;
+    width: 60px;
+    background-color: #00C062;
+    border-radius: 15px;
+    color: #00C062;
+    z-index: 1;
+    cursor: pointer;
+
+    >div {
+        margin: 15px;
+        background-color: #fff;
+        border-radius: 20px;
+    }
+
+    &__menu {
+        &::after {
+            content: " ";
+            position: absolute;
+            opacity: 1;
+            // bottom: 100%;  /* At the top of the tooltip */
+            left: 25px;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            // border-color: transparent transparent #fff transparent;
+
+            // position: absolute;
+            // opacity: 1;
+            bottom: -16px;
+            /* right: 10px; */
+            // margin-left: -8px;
+            // border-width: 8px;
+            border-color: #fff transparent transparent;
+        }
+
+        a {
+            color: #393939 !important;
+            cursor: pointer;
+            height: 30px;
+            width: 100%;
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        cursor: default;
+        position: absolute;
+        background: no-repeat padding-box #FFF;
+        box-shadow: 0 2px 15px #aeaeae;
+        color: #393939;
+        list-style: none;
+        right: -135px;
+        top: 11px;
+        padding: 5px 20px;
+        width: 150px;
+        text-align: left;
+        top: -115px;
+        border-radius: 10px;
+        height: 80px;
+
+        li {
+            height: 30px;
+            padding: 10px 0px 0px;
+        }
+
+        >li:nth-child(2) {
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .jitsi-icon {
+            float: left;
+        }
+
+        .menuLabel {
+            position: relative;
+        }
+    }
+}

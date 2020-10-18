@@ -41,7 +41,7 @@ function _isDisplayableCalendarEntry(entry) {
  * @returns {void}
  */
 export function _updateCalendarEntries(events: Array<Object>) {
-    if (!events || !events.length) {
+    if (!events /* || !events.length */) {
         return;
     }
 
@@ -70,6 +70,8 @@ export function _updateCalendarEntries(events: Array<Object>) {
                 // URL so they expect to see the title without realizing that
                 // they have the same URL already under a different title.
                 entry.title,
+
+                entry.id,
 
                 // XXX Eventually, given that the URL and the title are the
                 // same, what sets one event apart from another is the start
@@ -154,7 +156,9 @@ function _parseCalendarEntry(event, knownDomains) {
                 id: event.id,
                 startDate,
                 title: event.title,
-                url
+                url,
+                description: event.description,
+                organizer: event.organizer
             };
         }
     }

@@ -107,6 +107,7 @@ body.welcome-page {
         position: relative;
         //text-align: center;
         margin-left: 32px;
+        overflow: inherit;
 
         .header-text {
             display: flex;
@@ -212,11 +213,16 @@ body.welcome-page {
 
 
     #enter_room {
+        height: 50px;
+        position: relative;
+
         display: flex;
         align-items: center;
-        margin-left: 32px;
-        max-width: calc(100% - 40px);
-        width: $welcomePageEnterRoomWidth;
+        // margin-left: 32px;
+        // max-width: calc(100% - 40px);
+        // width: $welcomePageEnterRoomWidth;
+        max-width: 550px;
+        width: 75%;
         z-index: $zindex2;
         background-color: #fff;
         padding: $welcomePageEnterRoomPadding;
@@ -226,7 +232,7 @@ body.welcome-page {
 
         .enter-room-input-container {
             flex: 1;
-            padding: $welcomePageEnterRoomInputContainerPadding;
+            // padding: $welcomePageEnterRoomInputContainerPadding;
             text-align: left;
             color: #253858;
             height: fit-content;
@@ -284,18 +290,24 @@ body.welcome-page {
     .welcome-page-button {
 
         &.signin {
+            position: absolute;
+            margin: 30px 20px 30px auto;
             background: #005C85;
             width: 100px;
-            right: 32px;
-            top: 40px;
+            min-width: 100px;
             border-radius: $welcomePageButtonBorderRadius;
+            right: 0px;
+            padding: 5px;
         }
 
         &.profile {
+            position: absolute;
+            margin: 30px 20px 30px auto;
             background: transparent;
-            right: 32px;
-            top: 40px;
-            padding: 0px;
+            display: flex;
+            min-width: 200px;
+            width: 200px;
+            right: 0px;
         }
 
         &.go-button {
@@ -305,10 +317,11 @@ body.welcome-page {
             height: 54px;
             // margin-top: 7px;
             width: $welcomePageButtonWidth;
-            left: calc(#{$welcomePageEnterRoomWidth} - 5px);
+            left: 85%; // calc(#{$welcomePageEnterRoomWidth} - 5px);
             font-size: 22px; //$welcomePageButtonFontSize;
             line-height: 2.5em; //welcomePageButtonLineHeight
-            
+            padding: 5px;
+
             .chat-piece {
                 position: absolute;
                 top: 44px;
@@ -355,8 +368,6 @@ body.welcome-page {
         cursor: pointer;
 
         position: absolute;
-        
-        padding: 5px;
     }
 
     .welcome-page-settings {
@@ -380,6 +391,148 @@ body.welcome-page {
         position: absolute;
         width: 100%;
         height: 100%;
+    }
+}
+
+@media only screen and (max-width: 1080px) {
+    .welcome {
+        .content-area {
+            flex: 1;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            .main-content {
+                flex: 1;
+                margin-top: 85px;
+            }
+        
+            .right-content {
+                min-height: 150px;
+                margin: 0px 20px;
+            }
+        }
+
+        .welcome-page-button.profile, .welcome-page-button.signin {
+            position: initial;
+            right: 0;
+            z-index: 100;
+            margin-right: 30px;
+        }
+
+        .left-logo {
+            position: fixed;
+        }
+        
+        .content-header {
+            position: fixed;
+            right: 0;
+            z-index: 200;
+        }
+
+        .entry-section {
+            width: 100%;
+        }
+    }
+}
+
+@media only screen and (min-width: 1081px) {
+    .welcome {
+        .content-area {
+            flex: 1;
+    
+            .main-content {
+                flex: 4;
+                flex-direction: column;
+            }
+        
+            .right-content {
+                border-left: #E7EBF5;
+                min-width: 400px;
+                flex: 2;
+            }
+        }
+
+        .calendar-placeholder, .contacts-placeholder {
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .calendar-placeholder {
+            background-size: 75%;
+            background-image: url('./../images/calendar_illustration_2x.png');
+        }
+
+        .contacts-placeholder {
+            background-size: 50%;
+            background-image: url('./../images/contacts_2x.png');
+            flex: 1;
+        }
+    }
+}
+
+.welcome {
+    .show-flex  {
+        flex: 1;
+    }
+
+    .left-header {
+        width: 100px;
+        background-color: #fff;
+
+        .left-logo {
+            width: 80px;
+            height: 100px;
+            margin: 30px 10px 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+    }
+
+    .right-section {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: #F2F4FC;
+    }
+
+    .content-area {
+        display: flex;
+
+        .main-content {
+            display: flex;
+            background-color: #F2F4FC;
+
+            .entry-section {
+                // width: 100%;
+                padding: 20;
+                display: flex;
+                flex-direction: column;
+                height: 200px;
+                background: #005C84;
+                border-radius: 20px;
+                margin: 30;
+
+                &__label {
+                    font-size: 40px;
+                    color: white;
+                }
+
+                &.right-bg {
+                    left: 50%;
+                    background-image: url('./../images/person_bg.png');
+                    background-size: 380px;
+                    background-repeat: no-repeat;
+                    background-position: bottom right;
+                }
+            }
+        }
+
+        .right-content {
+            background-color: #F7F8FD;
+            display: flex;
+            flex-direction: column;
+        }
     }
 }
   

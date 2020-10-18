@@ -3,7 +3,7 @@
 import React from 'react';
 
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
-import { LoginComponent, decideAppLogin, Profile, validationFromNonComponents } from '../../../features/app-auth';
+import { LoginComponent, decideAppLogin, Profile, CalendarProfile, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
@@ -11,8 +11,7 @@ import { isMobileBrowser } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning, IconSadSmiley } from '../../base/icons';
 import { connect } from '../../base/redux';
-import { CalendarList, bootstrapCalendarIntegration } from '../../calendar-sync';
-import { FRAME_INITIALIZATION_FAILED } from '../../google-api/constants';
+import { CalendarList, bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
 import {
     getQueryVariable
 } from '../../prejoin/functions';
@@ -21,8 +20,7 @@ import logger from '../../settings/logger';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
-import Background from './background';
-
+import TncPrivacy from './TncPrivacy';
 
 /**
  * The pattern used to validate room name.
@@ -69,10 +67,11 @@ class WelcomePage extends AbstractWelcomePage {
             formDisabled: true,
             hideLogin: true,
             sessionExpiredQuery: false,
-            goClicked: false,
+            loginErrorMsg: '',
             reasonForLogin: '',
             showNoCreateMeetingPrivilegeTip: false,
-            switchActiveIndex: this._canCreateMeetings() ? 0 : 1
+            switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
+            height: 0
         };
 
         /**
@@ -127,6 +126,7 @@ class WelcomePage extends AbstractWelcomePage {
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
         this._closeLogin = this._closeLogin.bind(this);
+        this._onSocialLoginFailed = this._onSocialLoginFailed.bind(this);
         this._cleanupTooltip = this._cleanupTooltip.bind(this);
         this.links = window.interfaceConfig.MOBILE_APP_LINKS;
     }
@@ -151,21 +151,25 @@ class WelcomePage extends AbstractWelcomePage {
      */
     async componentDidMount() {
 
-        await validationFromNonComponents(true, true);
+        const height = this.divElement.clientHeight;
+
+        this.setState({ height });
+
+        const refreshTokenResponse = await validationFromNonComponents(true, true);
 
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
-        window.showEnableCookieTip = false
+        window.showEnableCookieTip = false;
 
-        this.props.dispatch(bootstrapCalendarIntegration())
+        refreshTokenResponse
+        && this.props.dispatch(bootstrapCalendarIntegration())
             .catch(err => {
-                if(err.error === FRAME_INITIALIZATION_FAILED) {
+                if (err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
                     window.showEnableCookieTip = true;
                 }
                 logger.error('Google oauth bootstrapping failed', err)
             });
-            
 
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
         if (getQueryVariable('sessionExpired')) {
@@ -176,9 +180,6 @@ class WelcomePage extends AbstractWelcomePage {
         }
         this.props.dispatch(decideAppLogin());
         super.componentDidMount();
-        this.setState({
-            goClicked: false
-        });
 
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
@@ -277,7 +278,8 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _closeLogin() {
         this.setState({
-            hideLogin: true
+            hideLogin: true,
+            loginErrorMsg: ''
         });
 
         if (this.state.switchActiveIndex === 0) {
@@ -290,28 +292,62 @@ class WelcomePage extends AbstractWelcomePage {
         }
     }
 
+    /**
+     */
+    _onSocialLoginFailed() {
+        this.setState({
+            hideLogin: false,
+            loginErrorMsg: 'Login failed. Please try again sometime later.'
+        });
+    }
+
     _canCreateMeetings() {
         const { _user } = this.props;
 
         return !_user || _user.role == 'manager'
     }
 
+
     /**
-     * Implements React's {@link Component#render()}.
+     * Renders a Jifmeet logo.
      *
-     * @inheritdoc
+     * @private
      * @returns {ReactElement|null}
      */
-    render() {
-        const { t, _isUserSignedOut, _meetingDetails } = this.props;
-        const { hideLogin, goClicked, sessionExpiredQuery, switchActiveIndex,
-            showNoCreateMeetingPrivilegeTip } = this.state;
-        const { APP_NAME } = interfaceConfig;
-        const showAdditionalContent = this._shouldShowAdditionalContent();
-        const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
-        const showResponsiveText = this._shouldShowResponsiveText();
-        const titleArr = t('welcomepage.enterRoomTitle').split(' ');
-        const separatedTitle = titleArr.pop();
+    _renderLogo() {
+        let reactElement = null;
+
+        const style = {
+            backgroundImage: `url(${interfaceConfig.LOGO_WITH_BOTTOM_LABEL_URL || '../images/logo_bottom_label.png'})`
+        };
+
+        reactElement = (<div
+            className = 'left-logo'
+            style = { style } />);
+
+        return reactElement;
+    }
+
+    /**
+     * Renders a Jifmeet terms and conditions and privacy section.
+     *
+     * @private
+     * @returns {ReactElement|null}
+     */
+    _renderPrivacySection () {
+        let reactElement = null;
+
+        reactElement = (<TncPrivacy />);
+
+        return reactElement;
+    }
+
+    /**
+     */
+    _renderMainContentSection() {
+        const { t } = this.props;
+        const { switchActiveIndex, showNoCreateMeetingPrivilegeTip } = this.state;
+
         const toggleSwitchItems = {
             0: {
                 name: 'Create',
@@ -332,16 +368,112 @@ class WelcomePage extends AbstractWelcomePage {
             }
         };
 
+        return (<>
+            <div className = 'entry-section right-bg'>
+                <div className = 'entry-section__label'>
+                    {
+                        t('welcomepage.enterRoomTitle')
+                    }
+                </div>
+                <div id = 'enter_room'>
+                    <ToggleSwitch
+                        activeIndex = { switchActiveIndex }
+                        containerStyle = {{ margin: '5px 0px 5px -7px' }}
+                        items = { toggleSwitchItems }
+                        toggleAction = { index => this.setSwitchActiveIndex(index) } />
+                    <div className = 'enter-room-input-container'>
+                        <form onSubmit = { this._onFormSubmit }>
+                            <input
+                                autoFocus = { true }
+                                className = 'enter-room-input'
+                                id = 'enter_room_field'
+                                onChange = { this._onRoomNameChanged }
+
+                                // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                placeholder = { switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
+                                    : t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
+                                ref = { this._setRoomInputRef }
+                                title = { t('welcomepage.roomNameAllowedChars') }
+                                type = 'text' />
+                        </form>
+                    </div>
+                    <div
+                        className = { `welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}` }
+                        onClick = { this._onFormSubmit }>
+                        <div className = 'chat-piece' />
+                        {
+                            t('welcomepage.go')
+                        }
+                    </div>
+                </div>
+            </div>
+            { this._renderInsecureRoomNameWarning(switchActiveIndex === 1) }
+
+            <div className = 'contacts-placeholder' />
+                </>);
+    }
+
+    /**
+     */
+    _renderContentHeaderSection() {
+        const { t, _isUserSignedOut } = this.props;
+        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
+
+        const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
+
+        return (<div>
+            {
+                _isUserSignedOut
+                && <LoginComponent
+                    closeAction = { this._closeLogin }
+                    errorMsg = { errorOnLoginPage }
+                    hideLogin = { hideLogin }
+                    isOverlay = { true }
+                    onSocialLoginFailed = { this._onSocialLoginFailed }
+                    reasonForLogin = { this.state.reasonForLogin }
+                    t = { t } />
+            }
+            {
+                _isUserSignedOut
+                    ? <div
+                        className = { 'welcome-page-button signin' }
+                        onClick = { () => this.setState({
+                            reasonForLogin: '',
+                            loginErrorMsg: '',
+                            hideLogin: false
+                        }) }>
+                        {
+                            t('welcomepage.signinLabel')
+                        }
+                    </div>
+                    : <div
+                        className = { 'welcome-page-button profile' }
+                        onClick = { () => this.setState({
+                            hideLogin: true
+                        }) }>
+                        <Profile
+                            postLogout = { this._cleanupTooltip }
+                            showMenu = { true } />
+                    </div>
+            }
+        </div>);
+    }
+
+    /**
+     * Implements React's {@link Component#render()}.
+     *
+     * @inheritdoc
+     * @returns {ReactElement|null}
+     */
+    render() {
+        const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
 
         return (
             <div>
                 {
                     <div
-                        className = { `welcome ${showAdditionalContent
-                            ? 'with-content' : 'without-content'}` }
+                        className = 'welcome without-content'
                         id = 'welcome_page'>
-
-                        <Background />
 
                         {
                             isMobileBrowser() && this.links
@@ -362,120 +494,74 @@ class WelcomePage extends AbstractWelcomePage {
                                         </div>
                                     </div>
                                 </div>
-                                : <>
-                                    {
-                                        _isUserSignedOut
-                                    && <LoginComponent
-                                        closeAction = { this._closeLogin }
-                                        errorMsg = { sessionExpiredQuery ? 'Session expired.' : '' }
-                                        hideLogin = { hideLogin }
-                                        isOverlay = { true }
-                                        reasonForLogin = { this.state.reasonForLogin }
-                                        t = { t } />
-                                    }
-
-                                    <div className = 'header'>
+                                : <div className = 'show-flex'>
+                                    <div className = 'left-header'>
                                         {
-                                            _isUserSignedOut
-                                                ? <div
-                                                    className = { 'welcome-page-button signin' }
-                                                    id = 'enter_room_button'
-                                                    onClick = { () => this.setState({
-                                                        reasonForLogin: '',
-                                                        hideLogin: false
-                                                    }) }>
-                                                    {
-                                                        t('welcomepage.signinLabel')
-                                                    }
-                                                </div>
-                                                : <div
-                                                    className = { 'welcome-page-button profile' }
-                                                    onClick = { () => this.setState({
-                                                        hideLogin: true
-                                                    }) }>
-                                                    <Profile
-                                                        showMenu = { true } 
-                                                        postLogout = { this._cleanupTooltip } />
-                                                </div>
-
+                                            this._renderLogo()
                                         }
-                                        <div className = 'header-image' />
-                                        <div className = 'header-text'>
-                                            <h1 className = 'header-text-title'>
-                                                <span>{ titleArr.join(' ') } </span>
-                                                <span>{ separatedTitle }</span>
-                                            </h1>
-                                            {/* <h3 className = 'header-text-sub-title'>
-                                            { t('welcomepage.subTitle') }
-                                        </h3>
-                                        <p className = 'header-text-description'>
-                                            { t('welcomepage.appDescription',
-                                                { app: APP_NAME }) }
-                                    </p>*/}
-                                        </div>
-                                        
+                                        {
+                                            this._renderPrivacySection()
+                                        }
                                     </div>
-                                    <div id = 'enter_room'>
-                                        <ToggleSwitch
-                                            activeIndex = { switchActiveIndex }
-                                            containerStyle = {{ margin: '5px 0px 5px -7px' }}
-                                            items = { toggleSwitchItems }
-                                            toggleAction = { index => this.setSwitchActiveIndex(index) } />
-                                        <div className = 'enter-room-input-container'>
-                                            <form onSubmit = { this._onFormSubmit }>
-                                                <input
-                                                    autoFocus = { true }
-                                                    className = 'enter-room-input'
-                                                    id = 'enter_room_field'
-                                                    onChange = { this._onRoomNameChanged }
-
-                                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                                    placeholder = { switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
-                                                        : t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
-                                                    ref = { this._setRoomInputRef }
-                                                    title = { t('welcomepage.roomNameAllowedChars') }
-                                                    type = 'text' />
-                                            </form>
-                                        </div>
-                                        <div
-                                            className = { `welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}` }
-                                            id = 'enter_room_button'
-                                            onClick = { this._onFormSubmit }>
-                                            <div className = 'chat-piece' />
+                                    <div className = 'right-section'>
+                                        <div className = 'content-header'>
                                             {
-                                                showResponsiveText
-                                                    ? t('welcomepage.goSmall')
-                                                    : t('welcomepage.go')
+                                                this._renderContentHeaderSection()
                                             }
                                         </div>
+                                        <div className = 'content-area'>
+                                            <div className = 'main-content'>
+                                                {
+                                                    this._renderMainContentSection()
+                                                }
+                                            </div>
+                                            <div
+                                                className = 'right-content'
+                                                ref = { divElement => {
+                                                    this.divElement = divElement;
+                                                } } >
+                                                {
+                                                    _isUserSignedOut
+                                                        ? <>
+                                                            <div className = 'calendar-placeholder' />
+                                                        </>
+                                                        : <>
+                                                            {
+                                                                _isGoogleSigninUser
+                                                                ? <CalendarProfile height = { this.state.height } />
+                                                                : <div className = 'calendar-placeholder' />
+                                                            }
+                                                        </>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
-                                    { this._renderInsecureRoomNameWarning(switchActiveIndex === 1) }
-                                    {/* this._renderTabs() */}
-                                    { showAdditionalContent
-                                        ? <div
-                                            className = 'welcome-page-content'
-                                            ref = { this._setAdditionalContentRef } />
-                                        : null }
-                            </>
+                                </div>
                         }
-
-
                     </div>
                 }
 
                 {
+
                     !isMobileBrowser()
                     && <div className = 'legal-footer'>
-                        <p>Copyright © 2020 Jifmeet. All rights reserved.</p>
+                        <p>Copyright © 2020 · Jifmeet. All rights reserved</p>
 
-                        <div>
-                            <a
-                                href = '/TnC'
-                                target = '_blank'>Terms and Conditions</a> | <a
-                                href = '/privacy-policy'
+                        {
+
+                            /* <div>
+                                <a
+                                    href = '/TnC'
+                                    target = '_blank'>Terms and Conditions</a>
+                                | <a
+                                    href = '/privacy-policy'
                                     target = '_blank'>Privacy Policy</a>
-                        </div>
+                            </div> */
+
+                        }
                     </div>
+                    
+
                 }
 
             </div>
@@ -543,9 +629,6 @@ class WelcomePage extends AbstractWelcomePage {
         });
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
-            this.setState({
-                goClicked: true
-            });
             this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
                 this.state.switchActiveIndex === 1));
 

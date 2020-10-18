@@ -71,5 +71,3 @@ export const GOOGLE_SCOPE_CALENDAR = 'https://www.googleapis.com/auth/calendar.e
 export const GOOGLE_SCOPE_YOUTUBE
     = 'https://www.googleapis.com/auth/youtube.readonly';
 
-
-export const FRAME_INITIALIZATION_FAILED = "idpiframe_initialization_failed"

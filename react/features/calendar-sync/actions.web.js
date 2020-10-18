@@ -4,8 +4,9 @@ import { generateRoomWithoutSeparator } from 'js-utils/random';
 import type { Dispatch } from 'redux';
 
 import { createCalendarConnectedEvent, sendAnalytics } from '../analytics';
-import { loadGoogleAPI, FRAME_INITIALIZATION_FAILED } from '../google-api';
+import { loadGoogleAPI } from '../google-api';
 import { showEnableCookieTip } from '../google-api/functions'
+import { ERRORS } from './constants';
 
 import {
     CLEAR_CALENDAR_INTEGRATION,
@@ -68,6 +69,7 @@ export function bootstrapCalendarIntegration(): Function {
                         if (signedIn) {
                             dispatch(setIntegrationReady(integrationType));
                             dispatch(updateProfile(integrationType));
+                            dispatch(refreshCalendar())
                         } else {
                             dispatch(clearCalendarIntegration());
                         }
@@ -207,20 +209,20 @@ export function signIn(calendarType: string): Function {
 
         return dispatch(integration.load())
             .then(() => dispatch(integration.signIn()))
-            // .then(() => 
-            //     dispatch(setIntegrationReady(calendarType))
-            // )
-            // .then(() => 
-            //     dispatch(updateProfile(calendarType))
-            // )
-            // .then(() => 
-            //     dispatch(refreshCalendar())
-            // )
+            .then(() => 
+                 dispatch(setIntegrationReady(calendarType))
+            )
+            .then(() => 
+                 dispatch(updateProfile(calendarType))
+            )
+            .then(() => 
+                 dispatch(refreshCalendar())
+            )
             // .then(() => 
             //     sendAnalytics(createCalendarConnectedEvent())
             // )
             .catch(error => {
-                if(error.error === FRAME_INITIALIZATION_FAILED) {
+                if(error.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
                     showEnableCookieTip(true);
                 }
                 logger.error(
