@@ -26,7 +26,6 @@ type Props = {
  *
  */
 function CalendarProfile(props: Props) {
-    const [ joinEventId, setJoinEventId ] = useState(null);
     const [ showModal, setShowModal ] = useState(false);
 
     // selected calendar event
@@ -58,8 +57,8 @@ function CalendarProfile(props: Props) {
     const defaultOptions = {
         // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
         allowedAttributes: {
-            // 'a': [ 'href', 'name', 'target' ],
-            'div': [ 'style' ]
+            'a': [ 'href', 'name', 'target' ] //,
+            // 'div': [ 'style' ]
         }
     };
 
@@ -88,12 +87,12 @@ function CalendarProfile(props: Props) {
     });
 
     const _eventSelected = calEvent => {
-        if (calEvent.description) {
+        /* if (calEvent.description) {
             calEvent.description
                 = `<div class='jifmeet'
                     style='font-family: open_sanslight,"Helvetica Neue",Helvetica,Arial,sans-serif!important; 
                         font-size: 15px;'>${calEvent.description}</div>`;
-        }
+        } */
         setSelectedEvent(calEvent);
         setShowModal(true);
     };
@@ -135,8 +134,7 @@ function CalendarProfile(props: Props) {
                                     (<div
                                         className = { `calendar__event ${event.description ? '' : 'calendar__event__disabled'} 
                                         ${index === calendarEventsGroup.today.length - 1 ? 'last' : ''}` }
-                                        key = { event.id }
-                                        onMouseEnter = { () => setJoinEventId(event.id) } >
+                                        key = { event.id } >
                                         <div
                                             className = 'calendar__event__title'
                                             title = { event.title } >
@@ -238,10 +236,10 @@ function CalendarProfile(props: Props) {
                             <div
                                 className = { `calendar__event__description__modal 
                                                 ${selectedEvent.description ? '' : 'no-content'}` } >
-                                <IFrame>
+                               { /* <IFrame> */ } 
                                     <div dangerouslySetInnerHTML = {
                                         sanitize(selectedEvent.description ? selectedEvent.description : 'No content') } />
-                                </IFrame>
+                                { /* </IFrame> */ }
                             </div>
 
                             {
@@ -252,8 +250,7 @@ function CalendarProfile(props: Props) {
                                         rel = 'noopener noreferrer'
                                         target = '_blank' >
                                         <div
-                                            className = { `calendar__event__join __modal
-                                            ${joinEventId === selectedEvent.id ? 'show' : 'hide'}` }>
+                                            className = { 'calendar__event__join __modal' }>
                                             { 'Join' }
                                         </div>
                                     </a>
