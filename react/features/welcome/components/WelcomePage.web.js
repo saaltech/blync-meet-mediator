@@ -414,6 +414,52 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     /**
+     */
+    _renderContentHeaderSection() {
+        const { t, _isUserSignedOut } = this.props;
+        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
+
+        const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
+
+        return (<div>
+            {
+                _isUserSignedOut
+                && <LoginComponent
+                    closeAction = { this._closeLogin }
+                    errorMsg = { errorOnLoginPage }
+                    hideLogin = { hideLogin }
+                    isOverlay = { true }
+                    onSocialLoginFailed = { this._onSocialLoginFailed }
+                    reasonForLogin = { this.state.reasonForLogin }
+                    t = { t } />
+            }
+            {
+                _isUserSignedOut
+                    ? <div
+                        className = { 'welcome-page-button signin' }
+                        onClick = { () => this.setState({
+                            reasonForLogin: '',
+                            loginErrorMsg: '',
+                            hideLogin: false
+                        }) }>
+                        {
+                            t('welcomepage.signinLabel')
+                        }
+                    </div>
+                    : <div
+                        className = { 'welcome-page-button profile' }
+                        onClick = { () => this.setState({
+                            hideLogin: true
+                        }) }>
+                        <Profile
+                            postLogout = { this._cleanupTooltip }
+                            showMenu = { true } />
+                    </div>
+            }
+        </div>);
+    }
+
+    /**
      * Implements React's {@link Component#render()}.
      *
      * @inheritdoc
@@ -421,9 +467,6 @@ class WelcomePage extends AbstractWelcomePage {
      */
     render() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
-        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
-
-        const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
 
         return (
             <div>
@@ -460,67 +503,41 @@ class WelcomePage extends AbstractWelcomePage {
                                             this._renderPrivacySection()
                                         }
                                     </div>
-                                    <div className = 'content-area'>
-                                        <div className = 'main-content'>
+                                    <div className = 'right-section'>
+                                        <div className = 'content-header'>
                                             {
-                                                this._renderMainContentSection()
+                                                this._renderContentHeaderSection()
                                             }
                                         </div>
-                                        <div
-                                            className = 'right-content'
-                                            ref = { divElement => {
-                                                this.divElement = divElement;
-                                            } } >
-                                            {
-                                                _isUserSignedOut
-                                                && <LoginComponent
-                                                    closeAction = { this._closeLogin }
-                                                    errorMsg = { errorOnLoginPage }
-                                                    hideLogin = { hideLogin }
-                                                    isOverlay = { true }
-                                                    onSocialLoginFailed = { this._onSocialLoginFailed }
-                                                    reasonForLogin = { this.state.reasonForLogin }
-                                                    t = { t } />
-                                            }
-                                            {
-                                                _isUserSignedOut
-                                                    ? <>
-                                                        <div
-                                                            className = { 'welcome-page-button signin' }
-                                                            onClick = { () => this.setState({
-                                                                reasonForLogin: '',
-                                                                loginErrorMsg: '',
-                                                                hideLogin: false
-                                                            }) }>
+                                        <div className = 'content-area'>
+                                            <div className = 'main-content'>
+                                                {
+                                                    this._renderMainContentSection()
+                                                }
+                                            </div>
+                                            <div
+                                                className = 'right-content'
+                                                ref = { divElement => {
+                                                    this.divElement = divElement;
+                                                } } >
+                                                {
+                                                    _isUserSignedOut
+                                                        ? <>
+                                                            <div className = 'calendar-placeholder' />
+                                                        </>
+                                                        : <>
                                                             {
-                                                                t('welcomepage.signinLabel')
+                                                                _isGoogleSigninUser
+                                                                ? <CalendarProfile height = { this.state.height } />
+                                                                : <div className = 'calendar-placeholder' />
                                                             }
-                                                        </div>
-                                                        <div className = 'calendar-placeholder' />
-                                                    </>
-                                                    : <>
-                                                        <div
-                                                            className = { 'welcome-page-button profile' }
-                                                            onClick = { () => this.setState({
-                                                                hideLogin: true
-                                                            }) }>
-                                                            <Profile
-                                                                postLogout = { this._cleanupTooltip }
-                                                                showMenu = { true } />
-                                                        </div>
-                                                        {
-                                                            _isGoogleSigninUser
-                                                            ? <CalendarProfile height = { this.state.height } />
-                                                            : <div className = 'calendar-placeholder' />
-                                                        }
-                                                    </>
-
-                                            }
+                                                        </>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                         }
-
                     </div>
                 }
 

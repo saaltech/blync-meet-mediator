@@ -143,8 +143,7 @@ function CalendarProfile(props: Props) {
                                                 event.url
                                                 && <div><a
                                                     href = { event.url }
-                                                    rel = 'noopener noreferrer'
-                                                    target = '_blank' >
+                                                    rel = 'noopener noreferrer' >
                                                     { 'Join' }
                                                 </a></div>
                                             }

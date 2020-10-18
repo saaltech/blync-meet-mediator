@@ -290,21 +290,24 @@ body.welcome-page {
     .welcome-page-button {
 
         &.signin {
-            position: relative;
+            position: absolute;
             margin: 30px 20px 30px auto;
             background: #005C85;
             width: 100px;
             min-width: 100px;
             border-radius: $welcomePageButtonBorderRadius;
+            right: 0px;
+            padding: 5px;
         }
 
         &.profile {
-            position: relative;
+            position: absolute;
             margin: 30px 20px 30px auto;
             background: transparent;
             display: flex;
             min-width: 200px;
             width: 200px;
+            right: 0px;
         }
 
         &.go-button {
@@ -317,7 +320,8 @@ body.welcome-page {
             left: 85%; // calc(#{$welcomePageEnterRoomWidth} - 5px);
             font-size: 22px; //$welcomePageButtonFontSize;
             line-height: 2.5em; //welcomePageButtonLineHeight
-            
+            padding: 5px;
+
             .chat-piece {
                 position: absolute;
                 top: 44px;
@@ -364,8 +368,6 @@ body.welcome-page {
         cursor: pointer;
 
         position: absolute;
-        
-        padding: 5px;
     }
 
     .welcome-page-settings {
@@ -396,26 +398,35 @@ body.welcome-page {
     .welcome {
         .content-area {
             flex: 1;
-            flex-direction: column-reverse;
+            flex-direction: column;
             justify-content: flex-end;
 
             .main-content {
                 flex: 1;
+                margin-top: 85px;
             }
         
             .right-content {
                 min-height: 150px;
+                margin: 0px 20px;
             }
         }
 
-        .welcome-page-button.profile {
-            position: fixed;
+        .welcome-page-button.profile, .welcome-page-button.signin {
+            position: initial;
             right: 0;
             z-index: 100;
+            margin-right: 30px;
         }
 
         .left-logo {
             position: fixed;
+        }
+        
+        .content-header {
+            position: fixed;
+            right: 0;
+            z-index: 200;
         }
 
         .entry-section {
@@ -476,7 +487,14 @@ body.welcome-page {
             background-size: contain;
             background-repeat: no-repeat;
         }
-    }    
+    }
+
+    .right-section {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        background-color: #F2F4FC;
+    }
 
     .content-area {
         display: flex;
