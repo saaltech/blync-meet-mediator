@@ -24,7 +24,7 @@ export const ERRORS = {
 /**
  * The number of days to fetch.
  */
-export const FETCH_END_DAYS = 2;
+export const FETCH_END_DAYS = 1; // 2 days
 
 /**
  * The number of days to go back when fetching.

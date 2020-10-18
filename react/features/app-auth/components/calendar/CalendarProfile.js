@@ -101,7 +101,7 @@ function CalendarProfile(props: Props) {
         <div
             className = { 'calendarProfile' } >
             <div className = 'upcoming-meetings'>
-                <div>{ 'Upcoming meetings' }</div>
+                <div>{ 'Scheduled meetings' }</div>
                 <div
                     className = 'jitsi-icon'
                     onClick = { () => APP.store.dispatch(refreshCalendar()) } >
