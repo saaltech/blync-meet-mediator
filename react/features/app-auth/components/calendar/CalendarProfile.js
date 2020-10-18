@@ -247,8 +247,7 @@ function CalendarProfile(props: Props) {
                                 && <div className = 'join-section'>
                                     <a
                                         href = { selectedEvent.url }
-                                        rel = 'noopener noreferrer'
-                                        target = '_blank' >
+                                        rel = 'noopener noreferrer' >
                                         <div
                                             className = { 'calendar__event__join __modal' }>
                                             { 'Join' }
