@@ -164,7 +164,7 @@ export function signIn() {
     return (dispatch: Dispatch<any>) => googleApi.get()
             .then(() => googleApi.signInIfNotSignedIn(true))
             .then( offlineCode => {
-                console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
+                // console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
                 dispatch(setGoogleOfflineCode(offlineCode))
                 return dispatch({
                     type: SET_GOOGLE_API_STATE,
@@ -204,9 +204,9 @@ export function updateProfile() {
     return (dispatch: Dispatch<any>) => googleApi.get()
         .then(() => googleApi.signInIfNotSignedIn())
         .then( offlineCode => {
-            console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+            // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
             if(offlineCode) {
-                console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+                // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
                 dispatch(setGoogleOfflineCode(offlineCode))
                 return dispatch({
                     type: SET_GOOGLE_API_STATE,
