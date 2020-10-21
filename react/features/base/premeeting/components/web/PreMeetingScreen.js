@@ -12,7 +12,8 @@ import { getCurrentConferenceUrl } from '../../../connection';
 import HostPrejoin from '../../../../prejoin/components/HostPrejoin'
 import GuestPrejoin from '../../../../prejoin/components/GuestPrejoin'
 import {
-    getQueryVariable
+    getQueryVariable,
+    setPrejoinVideoTrackMuted
 } from '../../../../prejoin/functions';
 
 import Loading from '../../../../always-on-top/Loading'
@@ -86,12 +87,16 @@ class PreMeetingScreen extends PureComponent<Props> {
     setMeetNow(value){
         this.setState({
             meetNow: value
+        }, () => {
+            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
         })
     }
 
     showTrackPreviews(value) {
         this.setState({
             showTrackPreviews: value
+        }, () => {
+            setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
         })
     }
 
@@ -104,6 +109,11 @@ class PreMeetingScreen extends PureComponent<Props> {
         if(guestFlow) {
             window.sessionStorage.removeItem('isJWTSet')
         }
+
+        // This is needed to turn the prejoin video track camera light, 
+        // that might be turned on with react re-render
+        setTimeout(() => setPrejoinVideoTrackMuted(!meetNow || videoMuted), 500);
+
         return (
             <div
                 className = 'premeeting-screen'
@@ -113,7 +123,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     exiting && <Loading />
                 }
                 {
-                    showTrackPreviews && meetNow ?
+                    showTrackPreviews || meetNow ?
                     <Preview
                             videoMuted = { videoMuted }
                             videoTrack = { videoTrack } >

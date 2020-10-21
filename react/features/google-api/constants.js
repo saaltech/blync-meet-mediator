@@ -61,7 +61,7 @@ export const GOOGLE_API_STATES = {
  *
  * @type {string}
  */
-export const GOOGLE_SCOPE_CALENDAR = 'https://www.googleapis.com/auth/calendar';
+export const GOOGLE_SCOPE_CALENDAR = 'https://www.googleapis.com/auth/calendar.events.readonly';
 
 /**
  * Google API auth scope to access YouTube streams.
@@ -71,5 +71,3 @@ export const GOOGLE_SCOPE_CALENDAR = 'https://www.googleapis.com/auth/calendar';
 export const GOOGLE_SCOPE_YOUTUBE
     = 'https://www.googleapis.com/auth/youtube.readonly';
 
-
-export const FRAME_INITIALIZATION_FAILED = "idpiframe_initialization_failed"

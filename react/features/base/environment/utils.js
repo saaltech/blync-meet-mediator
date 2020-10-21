@@ -1,5 +1,7 @@
 // @flow
 
+import Bowser from 'bowser';
+
 import Platform from '../react/Platform';
 
 /**
@@ -9,6 +11,15 @@ import Platform from '../react/Platform';
  */
 export function isMobileBrowser() {
     return Platform.OS === 'android' || Platform.OS === 'ios';
+}
+
+/**
+ * Returns user agent details.
+ *
+ * @returns {Object} Parsed Bowser object.
+ */
+export function getUserAgentDetails() {
+    return Bowser.getParser(window.navigator.userAgent);
 }
 
 /**

@@ -162,9 +162,9 @@ export function showAccountSelection() {
  */
 export function signIn() {
     return (dispatch: Dispatch<any>) => googleApi.get()
-            .then(() => googleApi.signInIfNotSignedIn())
+            .then(() => googleApi.signInIfNotSignedIn(true))
             .then( offlineCode => {
-                console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
+                // console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
                 dispatch(setGoogleOfflineCode(offlineCode))
                 return dispatch({
                     type: SET_GOOGLE_API_STATE,
@@ -204,9 +204,9 @@ export function updateProfile() {
     return (dispatch: Dispatch<any>) => googleApi.get()
         .then(() => googleApi.signInIfNotSignedIn())
         .then( offlineCode => {
-            console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+            // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
             if(offlineCode) {
-                console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+                // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
                 dispatch(setGoogleOfflineCode(offlineCode))
                 return dispatch({
                     type: SET_GOOGLE_API_STATE,
@@ -214,7 +214,18 @@ export function updateProfile() {
                 })
             }
         })
-        .then(() => googleApi.getCurrentUserProfile())
+        .then(() => {
+
+            function delay(t, v) {
+                return new Promise(function(resolve) { 
+                    setTimeout(resolve.bind(null, v), t)
+                });
+            }
+
+            return delay(1000).then(function() {
+                return googleApi.getCurrentUserProfile();
+            });
+        })
         .then(profile => {
             dispatch({
                 type: SET_GOOGLE_API_PROFILE,

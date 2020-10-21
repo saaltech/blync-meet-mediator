@@ -751,7 +751,7 @@
         "title": "Jifmeet",
         "subTitle": "Meet and collaborate in a jiffy",
         "placeholderEnterRoomName": "Enter a meeting name",
-        "placeholderEnterRoomCode": "Enter the meeting code",
+        "placeholderEnterRoomCode": "Enter the meeting ID",
         "startSession": "Go ahead, enter the meeting name and start the session."
     },
     "documentSharing": {

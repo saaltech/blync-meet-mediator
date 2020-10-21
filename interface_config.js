@@ -2,9 +2,13 @@
 /* eslint sort-keys: ["error", "asc", {"caseSensitive": false}] */
 
 var interfaceConfig = {
-    APP_NAME: 'Jitsi Meet',
+    APP_NAME: 'Jifmeet',
     AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
     AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
+
+    DEFAULT_BACKGROUND: '#474747',
+    DEFAULT_LOGO_URL: '../images/watermark.png',
+    LOGO_WITH_BOTTOM_LABEL_URL: '../images/logo_bottom_label.png',
 
     /**
      * A UX mode where the last screen share participant is automatically
@@ -47,7 +51,7 @@ var interfaceConfig = {
     DEFAULT_BACKGROUND: '#474747',
     DEFAULT_LOCAL_DISPLAY_NAME: 'me',
     DEFAULT_LOGO_URL: 'images/watermark.png',
-    DEFAULT_REMOTE_DISPLAY_NAME: 'Fellow Jitster',
+    DEFAULT_REMOTE_DISPLAY_NAME: 'Participant',
 
     DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
 
