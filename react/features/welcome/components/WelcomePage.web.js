@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+import { BiLoaderCircle } from 'react-icons/bi';
+
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
 import { LoginComponent, decideAppLogin, Profile, CalendarProfile, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
@@ -17,6 +19,7 @@ import {
 } from '../../prejoin/functions';
 import { RecentList } from '../../recent-list';
 import logger from '../../settings/logger';
+import { getMeetingById } from '../functions';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
@@ -71,7 +74,8 @@ class WelcomePage extends AbstractWelcomePage {
             reasonForLogin: '',
             showNoCreateMeetingPrivilegeTip: false,
             switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
-            height: 0
+            height: 0,
+            showGoLoader: false
         };
 
         /**
@@ -172,7 +176,11 @@ class WelcomePage extends AbstractWelcomePage {
             });
 
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
-        if (getQueryVariable('sessionExpired')) {
+        const invalidMeetingId = getQueryVariable('invalidMeetingId');
+
+        if (invalidMeetingId) {
+            this.setInvalidMeetingId(invalidMeetingId);
+        } else if (getQueryVariable('sessionExpired')) {
             this.setState({
                 hideLogin: false,
                 sessionExpiredQuery: true
@@ -198,6 +206,19 @@ class WelcomePage extends AbstractWelcomePage {
                 this._additionalToolbarContentTemplate.content.cloneNode(true)
             );
         }
+    }
+
+    /**
+     */
+    setInvalidMeetingId(invalidMeetingId) {
+        this.setValueInRoomInputBox(invalidMeetingId);
+        this.setSwitchActiveIndex(1);
+    }
+
+    /**
+     */
+    setValueInRoomInputBox(value) {
+        this._roomInputRef.value = value;
     }
 
     /**
@@ -234,10 +255,14 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     setSwitchActiveIndex(index = null) {
+
         this.setState({
             switchActiveIndex: index === null ? (this._canCreateMeetings() ? 0 : 1) : parseInt(index, 10)
         }, () => {
             this._decideFormDisability();
+            if (this.state.switchActiveIndex === 1) {
+                this.setValueInRoomInputBox(this._roomInputRef.value.substring(0, 20));
+            }
         });
     }
 
@@ -380,15 +405,17 @@ class WelcomePage extends AbstractWelcomePage {
                         activeIndex = { switchActiveIndex }
                         containerStyle = {{ margin: '5px 0px 5px -7px' }}
                         items = { toggleSwitchItems }
-                        toggleAction = { index => this.setSwitchActiveIndex(index) } />
+                        toggleAction = { index => {
+                            this.setSwitchActiveIndex(index);
+                        } } />
                     <div className = 'enter-room-input-container'>
                         <form onSubmit = { this._onFormSubmit }>
                             <input
                                 autoFocus = { true }
                                 className = 'enter-room-input'
                                 id = 'enter_room_field'
+                                maxLength = { switchActiveIndex ? '20' : '-1' }
                                 onChange = { this._onRoomNameChanged }
-
                                 // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
                                 placeholder = { switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
                                     : t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
@@ -404,11 +431,20 @@ class WelcomePage extends AbstractWelcomePage {
                         {
                             t('welcomepage.go')
                         }
+                        {
+                            this.state.showGoLoader
+                            && <div className = 'loader'>
+                                <BiLoaderCircle size = { 30 } />
+                            </div>
+                        }
+                        
                     </div>
                 </div>
+                {
+                    switchActiveIndex === 1
+                    && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
+                }
             </div>
-            { this._renderInsecureRoomNameWarning(switchActiveIndex === 1) }
-
             <div className = 'contacts-placeholder' />
                 </>);
     }
@@ -590,13 +626,13 @@ class WelcomePage extends AbstractWelcomePage {
      * @inheritdoc
      */
     _doRenderInvalidCode() {
-        return ( <></>
-            /*<div className = 'insecure-room-name-warning'>
+        return (
+            <div className = 'insecure-room-name-warning'>
                 <Icon src = { IconWarning } />
                 <span>
                     { this.props.t('security.insecureRoomCodeWarning') }
                 </span>
-            </div>*/
+            </div>
         );
     }
 
@@ -629,11 +665,16 @@ class WelcomePage extends AbstractWelcomePage {
         });
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
+
+            this.setState({
+                showGoLoader: true
+            });
+
             this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
                 this.state.switchActiveIndex === 1));
 
 
-            const intervalId = setInterval(() => {
+            const intervalId = setInterval(async () => {
                 // Done to fix the Redux persist store rehydration issue seen on Safari v13.x
                 // rehydration doesnt complete before we navigate to the prejoin page in _onJoin method below.
 
@@ -641,6 +682,23 @@ class WelcomePage extends AbstractWelcomePage {
 
                 if ((appAuth.meetingDetails || {}).meetingName) {
                     clearInterval(intervalId);
+
+                    // Check if the meeting exists
+                    if (appAuth.meetingDetails.isMeetingCode) {
+                        const meetingExists = await getMeetingById(appAuth.meetingDetails.meetingId);
+
+                        if (!meetingExists) {
+                            super._onRoomChange('');
+                            this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);
+
+                            this.setState({
+                                showGoLoader: false
+                            });
+
+                            return;
+                        }
+                    }
+
                     this._onJoin();
                 }
             }, 30);
