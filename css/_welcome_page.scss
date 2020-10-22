@@ -228,7 +228,8 @@ body.welcome-page {
         padding: $welcomePageEnterRoomPadding;
         border-radius: $welcomePageEnterRoomBorderRadius;
         border: 4px solid #005C85;
-        margin-bottom: 30px;
+        margin-bottom: 5px;
+        margin-top: 10px;
 
         .enter-room-input-container {
             flex: 1;
@@ -268,23 +269,27 @@ body.welcome-page {
                 }
             }
 
-            .insecure-room-name-warning {
-                align-items: center;
-                color: $defaultWarningColor;
-                display: flex;
-                flex-direction: row;
-                margin-top: 5px;
-
-                svg {
-                    fill: $defaultWarningColor
-                }
-            }
-
             ::placeholder {
                 color: #253858;
             }
         }
+    }
 
+    .insecure-room-name-warning {
+        align-items: center;
+        color: $defaultWarningColor;
+        display: flex;
+        flex-direction: row;
+        margin-top: 5px;
+
+        font-size: 15px;
+
+        .jitsi-icon {
+            svg {
+                fill: $defaultWarningColor
+            }
+            margin-right: 10px;
+        }
     }
 
     .welcome-page-button {
@@ -321,6 +326,28 @@ body.welcome-page {
             font-size: 22px; //$welcomePageButtonFontSize;
             line-height: 2.5em; //welcomePageButtonLineHeight
             padding: 5px;
+
+            .loader {
+                position: absolute;
+                right: 10px;
+                top: 17px;
+
+                animation-name: ckw;
+                animation-duration: 15.5s;
+                /* Things added */
+                animation-iteration-count: infinite;
+                display: inline-block;
+                    /* <--- */
+            }
+
+            @keyframes ckw {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
 
             .chat-piece {
                 position: absolute;
