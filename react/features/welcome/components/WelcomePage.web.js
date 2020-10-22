@@ -667,7 +667,8 @@ class WelcomePage extends AbstractWelcomePage {
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {
 
             this.setState({
-                showGoLoader: true
+                showGoLoader: true,
+                formDisabled: true
             });
 
             this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
@@ -692,7 +693,8 @@ class WelcomePage extends AbstractWelcomePage {
                             this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);
 
                             this.setState({
-                                showGoLoader: false
+                                showGoLoader: false,
+                                formDisabled: false
                             });
 
                             return;
