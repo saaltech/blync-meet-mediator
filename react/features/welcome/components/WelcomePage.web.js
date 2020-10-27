@@ -154,7 +154,8 @@ class WelcomePage extends AbstractWelcomePage {
      */
     async componentDidMount() {
         
-
+        super.componentDidMount();
+        
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
@@ -183,7 +184,7 @@ class WelcomePage extends AbstractWelcomePage {
             });
         }
         this.props.dispatch(decideAppLogin());
-        super.componentDidMount();
+        
 
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
