@@ -101,7 +101,7 @@ function CalendarProfile(props: Props) {
         <div
             className = { 'calendarProfile' } >
             <div className = 'upcoming-meetings'>
-                <div>{ 'Scheduled meetings' }</div>
+                <div>{ 'Calendar' }</div>
                 <div
                     className = 'jitsi-icon'
                     onClick = { () => APP.store.dispatch(refreshCalendar()) } >
@@ -112,8 +112,7 @@ function CalendarProfile(props: Props) {
             </div>
             {
                 <div
-                    className = 'calendar-list'
-                    style = {{ maxHeight: props.height - 200 }} >
+                    className = 'calendar-list' >
                     {
                         Object.keys(calendarEventsGroup).map(key => (<div key = { key } >
                             <div className = 'group-title'>

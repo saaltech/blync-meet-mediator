@@ -74,7 +74,6 @@ class WelcomePage extends AbstractWelcomePage {
             reasonForLogin: '',
             showNoCreateMeetingPrivilegeTip: false,
             switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
-            height: 0,
             showGoLoader: false
         };
 
@@ -154,18 +153,15 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     async componentDidMount() {
-
-        const height = this.divElement.clientHeight;
-
-        this.setState({ height });
-
-        const refreshTokenResponse = await validationFromNonComponents(true, true);
+        
 
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
         window.showEnableCookieTip = false;
 
+        const refreshTokenResponse = await validationFromNonComponents(true, true);
+        
         refreshTokenResponse
         && this.props.dispatch(bootstrapCalendarIntegration())
             .catch(err => {
@@ -551,11 +547,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                     this._renderMainContentSection()
                                                 }
                                             </div>
-                                            <div
-                                                className = 'right-content'
-                                                ref = { divElement => {
-                                                    this.divElement = divElement;
-                                                } } >
+                                            <div className = 'right-content' >
                                                 {
                                                     _isUserSignedOut
                                                         ? <>
@@ -564,7 +556,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                         : <>
                                                             {
                                                                 _isGoogleSigninUser
-                                                                ? <CalendarProfile height = { this.state.height } />
+                                                                ? <CalendarProfile />
                                                                 : <div className = 'calendar-placeholder' />
                                                             }
                                                         </>
