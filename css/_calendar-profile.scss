@@ -404,7 +404,11 @@
     }
 
     .calendarProfile {
-        // margin-top: 50px;
+        display: block;
+
+        .coming-from-google {
+            justify-content: flex-end;
+        }
     }
 
     .details-overlay {
