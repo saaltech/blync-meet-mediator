@@ -15,7 +15,7 @@ export function getRandomArbitrary(min, max) {
 }
 
 /**
- * Validate meeting code
+ * Validate Meeting ID
  */
 export function validateMeetingCode(code) {
     return /^\d{2}-\d{13}-\d{3}$/g.test(code);

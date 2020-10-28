@@ -35,7 +35,8 @@ import {
     getDialOutConferenceUrl,
     getDialOutCountry,
     getVideoTrack,
-    isJoinByPhoneDialogVisible
+    isJoinByPhoneDialogVisible,
+    setPrejoinVideoTrackMuted
 } from './functions';
 import logger from './logger';
 
@@ -401,7 +402,6 @@ export function setPrejoinVideoDisabled(value: boolean) {
     };
 }
 
-
 /**
  * Action used to mark video muted.
  *
@@ -409,6 +409,8 @@ export function setPrejoinVideoDisabled(value: boolean) {
  * @returns {Object}
  */
 export function setPrejoinVideoMuted(value: boolean) {
+    setPrejoinVideoTrackMuted(value);
+
     return {
         type: SET_PREJOIN_VIDEO_MUTED,
         value
