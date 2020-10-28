@@ -112,8 +112,7 @@ function CalendarProfile(props: Props) {
             </div>
             {
                 <div
-                    className = 'calendar-list'
-                    style = {{ maxHeight: props.height - 200 }} >
+                    className = 'calendar-list' >
                     {
                         Object.keys(calendarEventsGroup).map(key => (<div key = { key } >
                             <div className = 'group-title'>

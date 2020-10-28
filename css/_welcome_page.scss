@@ -427,6 +427,7 @@ body.welcome-page {
             flex: 1;
             flex-direction: column;
             justify-content: flex-end;
+            display: block !important;
 
             .main-content {
                 flex: 1;
@@ -436,6 +437,7 @@ body.welcome-page {
             .right-content {
                 min-height: 150px;
                 margin: 0px 20px;
+                height: 100vh !important;
             }
         }
 
