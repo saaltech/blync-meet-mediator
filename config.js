@@ -82,7 +82,7 @@ var config = {
     // Audio
 
     // Disable measuring of audio levels.
-    // disableAudioLevels: false,
+     disableAudioLevels: true,
     // audioLevelsInterval: 200,
 
     // Enabling this will run the lib-jitsi-meet no audio detection module which
@@ -142,14 +142,14 @@ var config = {
     // Enable / disable layer suspension.  If enabled, endpoints whose HD
     // layers are not in use will be suspended (no longer sent) until they
     // are requested again.
-    // enableLayerSuspension: false,
+     enableLayerSuspension: true,
 
     // Every participant after the Nth will start video muted.
-    // startVideoMuted: 10,
+     startVideoMuted: 10,
 
     // Start calls with video muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
-    // startWithVideoMuted: false,
+     startWithVideoMuted: false,
 
     // If set to true, prefer to use the H.264 video codec (if supported).
     // Note that it's not recommended to do this because simulcast is not
@@ -273,7 +273,7 @@ var config = {
     //
 
     // Require users to always specify a display name.
-    // requireDisplayName: true,
+     requireDisplayName: true,
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
@@ -287,7 +287,7 @@ var config = {
     // disable1On1Mode: false,
 
     // Default language for the user interface.
-    // defaultLanguage: 'en',
+    defaultLanguage: 'enGB',
 
     // If true all users without a token will be considered guests and all users
     // with token will be considered non-guests. Only guests will be allowed to
@@ -310,7 +310,7 @@ var config = {
 
     // Enables calendar integration, depends on googleApiApplicationClientID
     // and microsoftApiApplicationClientID
-    // enableCalendarIntegration: false,
+     enableCalendarIntegration: true,
 
     // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
     prejoinPageEnabled: true,
@@ -349,7 +349,7 @@ var config = {
     // If third party requests are disabled, no other server will be contacted.
     // This means avatars will be locally generated and callstats integration
     // will not function.
-    // disableThirdPartyRequests: false,
+    disableThirdPartyRequests: false,
 
 
     // Peer-To-Peer mode: used (if enabled) when there are just 2 participants.
@@ -466,16 +466,16 @@ var config = {
     // },
 
     // Options related to end-to-end (participant to participant) ping.
-    // e2eping: {
+     e2eping: {
     //   // The interval in milliseconds at which pings will be sent.
     //   // Defaults to 10000, set to <= 0 to disable.
-    //   pingInterval: 10000,
+       pingInterval: -1,
     //
     //   // The interval in milliseconds at which analytics events
     //   // with the measured RTT will be sent. Defaults to 60000, set
     //   // to <= 0 to disable.
     //   analyticsInterval: 60000,
-    //   },
+    },
 
     // If set, will attempt to use the provided video input device label when
     // triggering a screenshare, instead of proceeding through the normal flow
@@ -568,6 +568,8 @@ var config = {
      tokenAuthUrl
      */
 
+    googleApiApplicationClientID: '143401360954-91aq4dbaj70tj4q6demjgsj5odk1bppt.apps.googleusercontent.com',
+
     // List of undocumented settings used in lib-jitsi-meet
     /**
      _peerConnStatusOutOfLastNTimeout
@@ -590,11 +592,11 @@ var config = {
      nick
      startBitrate
      */
-
+    disableAEC: false,
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
-    makeJsonParserHappy: 'even if last key had a trailing comma'
+    makeJsonParserHappy: 'even if last key had a trailing comma',
 
     // no configuration value should follow this line.
 };
