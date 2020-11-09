@@ -9,7 +9,7 @@ var config = {
         domain: 'meet.jitsi',
 
         // When using authentication, domain for guest users.
-        // anonymousdomain: 'guest.example.com',
+        anonymousdomain: 'guest.meet.jitsi',
 
         // Domain for authenticated users. Defaults to <domain>.
         // authdomain: 'meet.jitsi',
@@ -82,7 +82,7 @@ var config = {
     // Audio
 
     // Disable measuring of audio levels.
-    // disableAudioLevels: false,
+     disableAudioLevels: true,
     // audioLevelsInterval: 200,
 
     // Enabling this will run the lib-jitsi-meet no audio detection module which
@@ -142,10 +142,10 @@ var config = {
     // Enable / disable layer suspension.  If enabled, endpoints whose HD
     // layers are not in use will be suspended (no longer sent) until they
     // are requested again.
-    // enableLayerSuspension: false,
+     enableLayerSuspension: true,
 
     // Every participant after the Nth will start video muted.
-    // startVideoMuted: 10,
+     startVideoMuted: 10,
 
     // Start calls with video muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
@@ -466,16 +466,16 @@ var config = {
     // },
 
     // Options related to end-to-end (participant to participant) ping.
-    // e2eping: {
+    e2eping: {
     //   // The interval in milliseconds at which pings will be sent.
     //   // Defaults to 10000, set to <= 0 to disable.
-    //   pingInterval: 10000,
+      pingInterval: -1,
     //
     //   // The interval in milliseconds at which analytics events
     //   // with the measured RTT will be sent. Defaults to 60000, set
     //   // to <= 0 to disable.
     //   analyticsInterval: 60000,
-    //   },
+       },
 
     // If set, will attempt to use the provided video input device label when
     // triggering a screenshare, instead of proceeding through the normal flow
@@ -590,7 +590,8 @@ var config = {
      nick
      startBitrate
      */
-
+    // This property should be always set to false, to avoid echo from speakers of other participants
+    disableAEC: false,
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
