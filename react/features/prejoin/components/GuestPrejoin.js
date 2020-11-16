@@ -433,7 +433,7 @@ function GuestPrejoin(props) {
                 shareable = { false } />
 
                 {
-                    enableWaitingRoom
+                    enableWaitingRoom && _jid
                                 && <SockJsClient
                                     onMessage = { participant => {
                                         updateWaitingStatus(participant);
