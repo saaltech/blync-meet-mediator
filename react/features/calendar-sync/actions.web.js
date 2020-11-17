@@ -41,7 +41,7 @@ export function bootstrapCalendarIntegration(): Function {
         } = state['features/base/config'];
         const {
             integrationReady,
-            integrationType
+            integrationType = 'google'
         } = state['features/calendar-sync'];
 
         return Promise.resolve()
