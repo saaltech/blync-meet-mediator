@@ -20,7 +20,7 @@ import {
 import UIEvents from '../../service/UI/UIEvents';
 
 import EtherpadManager from './etherpad/Etherpad';
-import SharedVideoManager from './shared_video/SharedVideo';
+// import SharedVideoManager from './shared_video/SharedVideo';
 import messageHandler from './util/MessageHandler';
 import UIUtil from './util/UIUtil';
 import VideoLayout from './videolayout/VideoLayout';
@@ -151,8 +151,13 @@ UI.start = function() {
     // will be seen animating in.
     VideoLayout.resizeVideoArea();
 
-    sharedVideoManager = new SharedVideoManager(eventEmitter);
+    sharedVideoManager = null; // new SharedVideoManager(eventEmitter);
 
+    // This disables the legacy notification and only allows the newly created
+    // notification for vmeet. This should be removed when the legacy notification
+    // has been completely removed
+    APP.store.dispatch(setNotificationsEnabled(false));
+    
     if (isMobileBrowser()) {
         $('body').addClass('mobile-browser');
     } else {

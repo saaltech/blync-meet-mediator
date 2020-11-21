@@ -8,6 +8,9 @@ import {
     SET_GOOGLE_API_PROFILE,
     SET_GOOGLE_API_STATE
 } from './actionTypes';
+import {
+    setGoogleOfflineCode
+} from '../app-auth/actions'
 import { GOOGLE_API_STATES } from './constants';
 import googleApi from './googleApi';
 
@@ -159,11 +162,15 @@ export function showAccountSelection() {
  */
 export function signIn() {
     return (dispatch: Dispatch<any>) => googleApi.get()
-            .then(() => googleApi.signInIfNotSignedIn())
-            .then(() => dispatch({
-                type: SET_GOOGLE_API_STATE,
-                googleAPIState: GOOGLE_API_STATES.SIGNED_IN
-            }));
+            .then(() => googleApi.signInIfNotSignedIn(true))
+            .then( offlineCode => {
+                // console.log(`Response (signIn)--> ${JSON.stringify(offlineCode)}`)
+                dispatch(setGoogleOfflineCode(offlineCode))
+                return dispatch({
+                    type: SET_GOOGLE_API_STATE,
+                    googleAPIState: GOOGLE_API_STATES.SIGNED_IN
+                })
+            });
 }
 
 /**
@@ -176,6 +183,7 @@ export function signOut() {
         googleApi.get()
             .then(() => googleApi.signOut())
             .then(() => {
+                dispatch(setGoogleOfflineCode())
                 dispatch({
                     type: SET_GOOGLE_API_STATE,
                     googleAPIState: GOOGLE_API_STATES.LOADED
@@ -195,11 +203,29 @@ export function signOut() {
 export function updateProfile() {
     return (dispatch: Dispatch<any>) => googleApi.get()
         .then(() => googleApi.signInIfNotSignedIn())
-        .then(() => dispatch({
-            type: SET_GOOGLE_API_STATE,
-            googleAPIState: GOOGLE_API_STATES.SIGNED_IN
-        }))
-        .then(() => googleApi.getCurrentUserProfile())
+        .then( offlineCode => {
+            // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+            if(offlineCode) {
+                // console.log(`Response (updateProfile)--> ${JSON.stringify(offlineCode)}`)
+                dispatch(setGoogleOfflineCode(offlineCode))
+                return dispatch({
+                    type: SET_GOOGLE_API_STATE,
+                    googleAPIState: GOOGLE_API_STATES.SIGNED_IN
+                })
+            }
+        })
+        .then(() => {
+
+            function delay(t, v) {
+                return new Promise(function(resolve) { 
+                    setTimeout(resolve.bind(null, v), t)
+                });
+            }
+
+            return delay(1000).then(function() {
+                return googleApi.getCurrentUserProfile();
+            });
+        })
         .then(profile => {
             dispatch({
                 type: SET_GOOGLE_API_PROFILE,

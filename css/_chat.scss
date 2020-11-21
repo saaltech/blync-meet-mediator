@@ -1,14 +1,19 @@
 #sideToolbarContainer {
     background-color: $newToolbarBackgroundColor;
     box-sizing: border-box;
-    color: #FFF;
+    color: #393939;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    left: -$sidebarWidth;
+    /**
+     * Make the sidebar flush with the top of the toolbar. Take the size of
+     * the toolbar and subtract from 100%.
+     */
+    height: calc(100% - #{$newToolbarSizeWithPadding});
+    right: 0;
     overflow: hidden;
     position: absolute;
     top: 0;
+    transition: left 0.5s;
     width: $sidebarWidth;
     z-index: $sideToolbarContainerZ;
 
@@ -17,7 +22,7 @@
      * side of the window when it should be visible.
      */
     &.slideInExt {
-        left: 0;
+        right: 0;
     }
 }
 
@@ -73,6 +78,14 @@
         background: #06a5df;
         border-radius: 4px;
     }
+
+    .remote a {
+        color: #005C85;
+    }
+
+    .avatar .jitsi-icon {
+        transform: translateY(50%) translateX(25%);
+    }
 }
 
 #chat-recipient {
@@ -98,26 +111,42 @@
 }
 
 .chat-header {
+    padding: 19px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: $chatHeaderBackgroundColor;
-    height: 70px;
-    position: relative;
-    width: 100%;
-    z-index: 1;
+
+    .chat-label {
+        font-size: 21px;
+        letter-spacing: 0px;
+        color: #393939;
+        font-weight: bold;
+        padding: 16px;
+        align-items: center;
+
+        color: #393939;
+        
+        display: flex;
+        font-size: 21px;
+        font-weight: bold;
+        position: relative;
+
+        &--btn {
+            cursor: pointer;
+        }
+    }
 
     .chat-close {
-        align-items: center;
-        bottom: 8px;
-        color: white;
+        border: none;
+        background: none;
+        outline: none;
+        padding: 16px;
         cursor: pointer;
-        display: flex;
-        font-size: 18px;
-        height: 40px;
-        justify-content: center;
-        line-height: 15px;
-        padding: 4px;
-        position: absolute;
-        right: 5px;
-        width: 40px;
+
+        .jitsi-icon svg {
+            fill: #414F50 !important;
+        }
 
         &:hover {
             color: rgba(255, 255, 255, 0.8);
@@ -141,16 +170,28 @@
 
 .usrmsg-form {
     flex: 1;
+    display: flex;
+    align-items: center;
+
+    button {
+        border: none;
+        outline: none;
+    }
+
+    svg {
+        fill: #005C85;
+    }
 }
 
 #usermsg {
     border: 0px none;
     border-radius:0;
     box-shadow: none;
-    color: white;
+    color: #393939;
     font-size: 15px;
     padding: 10px;
     overflow-y: auto;
+    outline: none;
     resize: none;
     width: 100%;
     word-break: break-word;
@@ -201,7 +242,10 @@
     }
 
     .usermessage {
+        word-break: break-word;
         white-space: pre-wrap;
+        min-width: 20px;
+        min-height: 20px;
     }
 
     &.error {
@@ -231,7 +275,10 @@
 }
 
 .smiley {
-    font-size: 14pt;
+    font-size: 22px;
+    line-height: 28px;
+    width: auto !important;
+    height: auto !important;
 }
 
 #smileys {
@@ -258,14 +305,20 @@
 }
 
 .smileys-panel {
-    bottom: 100%;
+    bottom: 66px;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, .6) !important;
     height: auto;
     max-height: 0;
     overflow: hidden;
     position: absolute;
-    width: $sidebarWidth;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
+    .emoji-mart{
+        text-align: left;
+    }
 
     /**
      * CSS transitions do not apply for auto dimensions. So to produce the css
@@ -276,13 +329,12 @@
     transition: max-height 0.3s;
 
     &.show-smileys {
-        max-height: 500%;
+        max-height: 440px;
+        background-color: white !important;
     }
 
     #smileysContainer {
         background-color: $newToolbarBackgroundColor;
-        border-bottom: 1px solid;
-        border-top: 1px solid;
     }
 }
 
@@ -306,10 +358,70 @@
 #usermsg::-webkit-scrollbar-track-piece {
     background: #3a3a3a;
 }
+.emoji-mart-preview-emoji{
+    .emoji-mart-emoji {
+        span{
+            background-image: url('./../images/smileyset.png') !important;
+            //background-size: 36px !important;
+        }
+       
+    }
+}
+.emoji-mart-preview-skins{
+    display: none !important;
+}
+.emoji-mart-preview-data {
+    .emoji-mart-title-label{
+        font-size: 0 !important;
+        &::after{
+            content: 'Jifmeet';
+            font-size: 26px;
+        }
+    }
+}
+
+.emoji-mart-category-label{
+    background: #fff !important;
+}
+
 
 .chat-message-group {
     display: flex;
     flex-direction: column;
+
+    .chatmessage-wrapper__container {
+        display: flex;
+        align-items: flex-end;
+
+        .avatar {
+            flex-shrink: 0;
+        }
+
+        .avatar-space {
+            width: 40px;
+            height: 40px;
+        }
+    } 
+
+    &.local .chatmessage-wrapper__container {
+        flex-direction: row-reverse !important;
+    }
+
+    &.local .chatmessage-wrapper__container .avatar {
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    &.remote .chatmessage-wrapper__container .avatar {
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .timestamp {
+        font-size: 12px;
+        opacity: 0.8;
+        padding: 0 40px;
+    }
 
     &.local {
         align-items: flex-end;
@@ -329,6 +441,21 @@
 
         .timestamp {
             text-align: right;
+            margin-right: 5px;
+        }
+    }
+
+    &.remote {
+        .display-name {
+            color: $chatRemoteMessageColor;
+        }
+
+        .usermessage {
+            color: $chatRemoteMessageColor;
+        }
+
+        .timestamp {
+            margin-left: 5px;
         }
     }
 
@@ -342,7 +469,7 @@
         .display-name {
             display: none;
         }
-    }
+    }  
 
     .chatmessage-wrapper {
         max-width: 100%;
@@ -377,5 +504,150 @@
         &.privatemessage {
             background-color: $chatPrivateMessageBackgroundColor;
         }
+    }
+}
+
+
+.chat {
+    &__switcher {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 37px;
+    }
+
+    &__switcher button {
+        background: white;
+        border: 1px solid #9A9A9A;
+        height: 36px;
+        min-width: 107px;
+        padding: 9px 24px;
+        font-size: 13px;;
+        color: #9A9A9A;
+        outline: none;
+    }
+
+    &__switcher &__switcher-btn--active {
+        background: $chatPrimaryColor;
+        border: none;
+        color:white;
+    }
+
+
+    &__switcher button:first-child {
+        border-radius: 18px 0px 0px 18px;
+        border-right: 0;
+    }
+
+    &__switcher button:last-child {
+        border-radius: 0 18px 18px 0;
+    }
+
+    &__back-icon {
+        fill: #000;
+        position: absolute;
+        left: -12px;
+        transform: translateY(5%);
+    }
+
+    &__private-user-name {
+        height: 53px;
+        margin-bottom: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #E7EFF4;
+        color: #393939;
+        font-size: 22px;
+    }
+}
+
+.chat-users {
+    @extend #chatconversation;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+    &__list {
+        padding: 0 20px;
+        margin: 0;
+    }
+
+    &__list  li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #EAEAEA;
+        padding: 20px 0;
+        cursor: pointer;
+    }
+
+    &__list  li:last-child {
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    &__avatar {
+        width: 44px !important;
+        height: 44px !important;
+        border: 2px solid #EAEAEA !important;
+    }
+
+    &__user-details {
+        padding: 0 24px;
+        flex: 1;
+    }
+
+    &__user-header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__username {
+        color: #393939;
+        font-size: 16px;
+    }
+
+    &__status--new-message {
+        width: 9px;
+        height: 9px;
+        background: #00C062;
+        display: inline-block;
+        border-radius: 10px;
+        margin: 0 5px;
+    }
+
+    &__user-details-body {
+        color: #C7C7C7;
+        font-size: 14px;
+        padding-top: 10px;
+    }
+
+    &__chat-time {
+        font-size: 14px; 
+        color: #C7C7C7;
+    }
+
+    &__search {
+        height: 53px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background: #E7EFF4;
+        padding: 0 20px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+
+    &__search svg {
+        fill: #393939;
+    }
+    &__search input {
+        border: none;
+        height: 100%;
+        flex: 1;
+        background: transparent;
+        color: #393939;
+        font-size: 14px;
+        padding: 0 .5rem;
     }
 }

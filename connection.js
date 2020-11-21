@@ -15,6 +15,8 @@ import {
 } from './react/features/base/lib-jitsi-meet';
 import { setPrejoinDisplayNameRequired } from './react/features/prejoin/actions';
 
+import { saveHostJidToUserMapping } from './react/features/app-auth/actions'
+
 const logger = Logger.getLogger(__filename);
 
 /**
@@ -82,7 +84,7 @@ function checkForAttachParametersAndConnect(id, password, connection) {
  */
 function connect(id, password, roomName) {
     const connectionConfig = Object.assign({}, config);
-    const { jwt } = APP.store.getState()['features/base/jwt'];
+    const { issuer, jwt } = APP.store.getState()['features/base/jwt'];
 
     // Use Websocket URL for the web app if configured. Note that there is no 'isWeb' check, because there's assumption
     // that this code executes only on web browsers/electron. This needs to be changed when mobile and web are unified.
@@ -94,7 +96,11 @@ function connect(id, password, roomName) {
     //  in future). It's included for the time being for Jitsi Meet and lib-jitsi-meet versions interoperability.
     connectionConfig.serviceUrl = connectionConfig.bosh = serviceUrl;
 
-    const connection = new JitsiMeetJS.JitsiConnection(null, jwt, connectionConfig);
+    const connection
+        = new JitsiMeetJS.JitsiConnection(
+            null,
+            jwt && issuer && issuer !== 'anonymous' ? jwt : undefined,
+            connectionConfig);
 
     if (config.iAmRecorder) {
         connection.addFeature(DISCO_JIBRI_FEATURE);
@@ -153,6 +159,7 @@ function connect(id, password, roomName) {
          *
          */
         function handleConnectionEstablished() {
+            saveHostJidToUserMapping(connection)
             APP.store.dispatch(connectionEstablished(connection, Date.now()));
             unsubscribe();
             resolve(connection);
@@ -207,9 +214,10 @@ export function openConnection({ id, password, retry, roomName }) {
 
     return connect(id, password, roomName).catch(err => {
         if (retry) {
-            const { jwt } = APP.store.getState()['features/base/jwt'];
+            const { issuer, jwt } = APP.store.getState()['features/base/jwt'];
 
-            if (err === JitsiConnectionErrors.PASSWORD_REQUIRED && !jwt) {
+            if (err === JitsiConnectionErrors.PASSWORD_REQUIRED
+                    && (!jwt || issuer === 'anonymous')) {
                 return AuthHandler.requestAuth(roomName, connect);
             }
         }

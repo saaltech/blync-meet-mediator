@@ -64,6 +64,10 @@ const UIUtil = {
      * @param {el} The DOM element we'd like to check for visibility
      */
     isVisible(el) {
+        if (!el) {
+            return false;
+        }
+
         return el.offsetParent !== null;
     }
 };

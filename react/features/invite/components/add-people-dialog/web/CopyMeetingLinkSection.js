@@ -1,11 +1,11 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 
-import CopyButton from '../../../../base/buttons/CopyButton';
 import { translate } from '../../../../base/i18n';
-import { getDecodedURI } from '../../../../base/util';
+import { Icon, IconCheck, IconCopy } from '../../../../base/icons';
 
+import { copyText } from './utils';
 
 type Props = {
 
@@ -17,7 +17,9 @@ type Props = {
     /**
      * The URL of the conference.
      */
-    url: string
+    url: string,
+    inviteText: string,
+    custom?: boolean
 };
 
 /**
@@ -25,16 +27,85 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function CopyMeetingLinkSection({ t, url }: Props) {
+function CopyMeetingLinkSection({ t, url, inviteText, custom = false }: Props) {
+    const [ isClicked, setIsClicked ] = useState(false);
+    const [ isHovered, setIsHovered ] = useState(false);
+
+    /**
+     * Click handler for the element.
+     *
+     * @returns {void}
+     */
+    function onClick() {
+        setIsHovered(false);
+        if (copyText(inviteText)) {
+            setIsClicked(true);
+
+            setTimeout(() => {
+                setIsClicked(false);
+            }, 2500);
+        }
+    }
+
+    /**
+     * Hover handler for the element.
+     *
+     * @returns {void}
+     */
+    function onHoverIn() {
+        if (!isClicked) {
+            setIsHovered(true);
+        }
+    }
+
+    /**
+     * Hover handler for the element.
+     *
+     * @returns {void}
+     */
+    function onHoverOut() {
+        setIsHovered(false);
+    }
+
+    /**
+     * Renders the content of the link based on the state.
+     *
+     * @returns {React$Element<any>}
+     */
+    function renderLinkContent() {
+        if (isClicked) {
+            return (
+                <>
+                    <div className = 'invite-more-dialog copy-link-text selected'>
+                        {t('addPeople.linkCopied')}
+                    </div>
+                    <Icon src = { IconCheck } />
+                </>
+            );
+        }
+
+        const displayUrl = decodeURI(url.replace(/^https?:\/\//i, ''));
+    
+        return (
+            <>
+                <div className = 'invite-more-dialog invite-more-dialog-conference-url copy-link-text'>
+                    {isHovered ? 'Copy meeting details' : displayUrl }
+                </div>
+                <Icon src = { IconCopy } />
+            </>
+        );
+    }
+
     return (
         <>
-            <span>{t('addPeople.shareLink')}</span>
-            <CopyButton
-                className = 'invite-more-dialog-conference-url'
-                displayedText = { getDecodedURI(url) }
-                textOnCopySuccess = { t('addPeople.linkCopied') }
-                textOnHover = { t('addPeople.copyLink') }
-                textToCopy = { url } />
+            { !custom && <span>{t('addPeople.shareLink')}</span> }
+            <div
+                className = { `invite-more-dialog copy-link${isClicked ? ' clicked' : ''}` }
+                onClick = { onClick }
+                onMouseOut = { onHoverOut }
+                onMouseOver = { onHoverIn }>
+                { renderLinkContent() }
+            </div>
         </>
     );
 }

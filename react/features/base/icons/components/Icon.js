@@ -40,7 +40,12 @@ type Props = {
     /**
      * Style object to be applied.
      */
-    style?: Object
+    style?: Object,
+
+    /**
+     * The on-hover title (tooltip) to show.
+     */
+    title?: string
 };
 
 export const DEFAULT_COLOR = navigator.product === 'ReactNative' ? 'white' : undefined;
@@ -60,7 +65,8 @@ export default function Icon(props: Props) {
         onClick,
         size,
         src: IconComponent,
-        style
+        style,
+        title
     } = props;
 
     const {
@@ -75,7 +81,8 @@ export default function Icon(props: Props) {
         <Container
             className = { `jitsi-icon ${className}` }
             onClick = { onClick }
-            style = { restStyle }>
+            style = { restStyle }
+            title = { title } >
             <IconComponent
                 fill = { calculatedColor }
                 height = { calculatedSize }

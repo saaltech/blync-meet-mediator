@@ -8,7 +8,7 @@ import { Icon, IconConnectionActive, IconConnectionInactive } from '../../../bas
 import { JitsiParticipantConnectionStatus } from '../../../base/lib-jitsi-meet';
 import { MEDIA_TYPE } from '../../../base/media';
 import { getLocalParticipant, getParticipantById } from '../../../base/participants';
-import { Popover } from '../../../base/popover';
+// import { Popover } from '../../../base/popover';
 import { connect } from '../../../base/redux';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { ConnectionStatsTable } from '../../../connection-stats';
@@ -174,23 +174,18 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
         const indicatorContainerClassNames
             = `connection-indicator indicator ${colorClass}`;
 
-        return (
-            <Popover
-                className = { rootClassNames }
-                content = { this._renderStatisticsTable() }
-                disablePopover = { !this.props.enableStatsDisplay }
-                position = { this.props.statsPopoverPosition }>
-                <div className = 'popover-trigger'>
-                    <div
-                        className = { indicatorContainerClassNames }
-                        style = {{ fontSize: this.props.iconSize }}>
-                        <div className = 'connection indicatoricon'>
-                            { this._renderIcon() }
-                        </div>
-                    </div>
+
+        return (<div
+            className = { `popover-trigger ${rootClassNames}` }
+            title = { `Connection: ${this._getConnectionStatusTip()}` }>
+            <div
+                className = { indicatorContainerClassNames }
+                style = {{ fontSize: this.props.iconSize }}>
+                <div className = 'connection indicatoricon'>
+                    { this._renderIcon() }
                 </div>
-            </Popover>
-        );
+            </div>
+        </div>);
     }
 
     /**

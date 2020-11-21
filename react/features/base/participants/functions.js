@@ -232,6 +232,19 @@ export function getPinnedParticipant(stateful: Object | Function) {
 }
 
 /**
+ * Returns the participant which has its dominantSpeaker state set to truthy.
+ *
+ * @param {(Function|Object|Participant[])} stateful - The redux state
+ * features/base/participants, the (whole) redux state, or redux's
+ * {@code getState} function to be used to retrieve the state
+ * features/base/participants.
+ * @returns {(Participant|undefined)}
+ */
+export function getDominantSpeaker(stateful: Object | Function) {
+    return _getAllParticipants(stateful).find(p => p.dominantSpeaker);
+}
+
+/**
  * Returns array of participants from Redux state.
  *
  * @param {(Function|Object|Participant[])} stateful - The redux state

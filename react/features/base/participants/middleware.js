@@ -1,7 +1,8 @@
 // @flow
 
 import UIEvents from '../../../../service/UI/UIEvents';
-import { NOTIFICATION_TIMEOUT, showNotification } from '../../notifications';
+import { NOTIFICATION_TIMEOUT } from '../../notifications';
+import { showNotification } from '../../notifications-toasts';
 import { CALLING, INVITED } from '../../presence-status';
 import { APP_WILL_MOUNT, APP_WILL_UNMOUNT } from '../app';
 import {
@@ -437,13 +438,19 @@ function _raiseHandUpdated({ dispatch, getState }, conference, participantId, ne
         raisedHand
     }));
 
+    const { toastNotificationSettings } = getState()['features/toolbox-more'];
+
+    if (!toastNotificationSettings.showRaisedHand) {
+        return;
+    }
+
     if (raisedHand) {
+
         dispatch(showNotification({
-            titleArguments: {
-                name: getParticipantDisplayName(getState, participantId)
-            },
-            titleKey: 'notify.raisedHand'
-        }, NOTIFICATION_TIMEOUT));
+            userId: participantId,
+            userName: getParticipantDisplayName(getState, participantId),
+            type: 'RAISED_HAND'
+        }));
     }
 }
 

@@ -99,8 +99,10 @@ function _setConfigOrLocationURL({ dispatch, getState }, next, action) {
 
     const { locationURL } = getState()['features/base/connection'];
 
+    const jwtToken = APP.store.getState()['features/app-auth'] 
+            && APP.store.getState()['features/app-auth'].meetingAccessToken
     dispatch(
-        setJWT(locationURL ? parseJWTFromURLParams(locationURL) : undefined));
+        setJWT(jwtToken || (locationURL ? parseJWTFromURLParams(locationURL) : undefined)));
 
     return result;
 }
@@ -125,6 +127,12 @@ function _setJWT(store, next, action) {
 
     if (!Object.keys(actionPayload).length) {
         if (jwt) {
+            const {
+                enableUserRolesBasedOnToken
+            } = store.getState()['features/base/config'];
+
+            action.isGuest = !enableUserRolesBasedOnToken;
+
             let jwtPayload;
 
             try {

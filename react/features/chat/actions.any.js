@@ -4,7 +4,10 @@ import {
     ADD_MESSAGE,
     CLEAR_MESSAGES,
     SEND_MESSAGE,
-    SET_PRIVATE_MESSAGE_RECIPIENT
+    SET_PRIVATE_MESSAGE_RECIPIENT,
+    MARK_AS_READ,
+    MARK_PUBLIC_AS_READ,
+    HIDE_CHAT
 } from './actionTypes';
 
 /**
@@ -83,3 +86,53 @@ export function setPrivateMessageRecipient(participant: Object) {
         type: SET_PRIVATE_MESSAGE_RECIPIENT
     };
 }
+
+/**
+ * Toggles display of the chat side panel.
+ *
+ * @returns {{
+ *     type: HIDE_CHAT
+ * }}
+ */
+export function hideChat() {
+    return {
+        type: HIDE_CHAT
+    };
+}
+
+
+
+/**
+ * Marks message as read.
+ *
+ * @param {Object} localParticipant - The participant.
+ * @param {Object} remoteParticipant - The localeParticipant.
+ *
+ * @returns {{
+ *     localParticipant: Object,
+ *     remoteParticipant: Object,
+ *     type: MARK_AS_READ
+ * }}
+ */
+export function markAsRead(
+        localParticipant: Object, remoteParticipant: Object): Object {
+    return {
+        localParticipant,
+        remoteParticipant,
+        type: MARK_AS_READ
+    };
+}
+
+/**
+ * Marks public messages as read.
+ *
+ * @returns {{
+ *     type: MARK_PUBLIC_AS_READ
+ * }}
+ */
+export function markPublicAsRead(): Object {
+    return {
+        type: MARK_PUBLIC_AS_READ
+    };
+}
+   

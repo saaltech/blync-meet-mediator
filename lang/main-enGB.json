@@ -431,6 +431,7 @@
         "connectedThreePlusMembers": "{{name}} and {{count}} others joined the meeting",
         "connectedTwoMembers": "{{first}} and {{second}} joined the meeting",
         "disconnected": "disconnected",
+        "sombody-disconnected": "{{name}} disconnected",
         "focus": "Conference focus",
         "focusFail": "{{component}} not available - retry in {{ms}} sec",
         "grantedTo": "Moderator rights granted to {{to}}!",
@@ -713,7 +714,7 @@
     "videothumbnail": {
         "domute": "Mute",
         "flip": "Flip",
-        "kick": "Kick out",
+        "kick": "Remove",
         "moderator": "Moderator",
         "mute": "Member is muted",
         "muted": "Muted",
@@ -734,7 +735,7 @@
         "calendar": "Calendar",
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "",
-        "enterRoomTitle": "Start a new meeting",
+        "enterRoomTitle": "Create or Join a meeting",
         "go": "GO",
         "join": "JOIN",
         "info": "Info",
@@ -747,7 +748,11 @@
         "roomnameHint": "Enter the name or URL of the room you want to join. You may make a name up, just let the people you are meeting know it so that they enter the same name.",
         "sendFeedback": "Send feedback",
         "terms": "Terms",
-        "title": "Secure, fully featured, and completely free video conferencing"
+        "title": "Jifmeet",
+        "subTitle": "Meet and collaborate in a jiffy",
+        "placeholderEnterRoomName": "Enter a meeting name",
+        "placeholderEnterRoomCode": "Enter the meeting ID",
+        "startSession": "Go ahead, enter the meeting name and start the session."
     },
     "documentSharing": {
         "title": ""

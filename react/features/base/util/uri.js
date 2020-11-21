@@ -585,6 +585,11 @@ export function addHashParamsToURL(url: URL, hashParamsToAdd: Object = {}) {
         ...hashParamsToAdd
     });
 
+    // Remove home query param from the url.
+    if(url.searchParams) {
+        url.searchParams.delete("home")
+    }
+
     if (urlParamsArray.length) {
         url.hash = `#${urlParamsArray.join('&')}`;
     }

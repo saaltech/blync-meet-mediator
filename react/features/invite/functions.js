@@ -1,5 +1,7 @@
 // @flow
 
+import { init } from 'amplitude-js';
+
 import { i18next } from '../base/i18n';
 import { isLocalParticipantModerator } from '../base/participants';
 import { toState } from '../base/redux';
@@ -244,18 +246,42 @@ export function getInviteText({
     _locationUrl,
     _dialIn,
     _liveStreamViewURL,
+    _password,
+    _fromDate,
+    _toDate,
+    _meetingName,
+    _meetingId,
     phoneNumber,
     t
 }: Object) {
     const inviteURL = _decodeRoomURI(_inviteUrl);
 
     let invite = _localParticipantName
-        ? t('info.inviteURLFirstPartPersonal', { name: _localParticipantName })
+        ? t('info.inviteURLFirstPartPersonal', { name: _localParticipantName,
+            app: interfaceConfig.APP_NAME })
         : t('info.inviteURLFirstPartGeneral');
+
+    invite += `\nTopic: ${_meetingName}\n`;
 
     invite += t('info.inviteURLSecondPart', {
         url: inviteURL
     });
+
+    invite += `\nMeeting ID: ${_meetingId}`;
+
+    if (_password) {
+        invite += `\nPassword: ${_password}`;
+    }
+
+    if (_fromDate) {
+        invite += `\nStart Time: ${new Date(_fromDate).toString()}`;
+        invite += `\nEnd Time: ${new Date(_toDate).toString()}\n`;
+    }
+
+    // Name: <Meeting Name>
+    // URL:
+    // Password (if it is set)
+    // From: (time, if its the scheduled meeting)
 
     if (_liveStreamViewURL) {
         const liveStream = t('info.inviteLiveStream', {
@@ -352,7 +378,7 @@ export function invitePeopleAndChatRooms( // eslint-disable-line max-params
 export function isAddPeopleEnabled(state: Object): boolean {
     const { peopleSearchUrl } = state['features/base/config'];
 
-    return state['features/base/jwt'].jwt && Boolean(peopleSearchUrl);
+    return !isGuest(state) && Boolean(peopleSearchUrl);
 }
 
 /**
@@ -366,6 +392,16 @@ export function isDialOutEnabled(state: Object): boolean {
 
     return isLocalParticipantModerator(state)
         && conference && conference.isSIPCallingSupported();
+}
+
+/**
+ * Determines if the current user is guest or not.
+ *
+ * @param {Object} state - Current state.
+ * @returns {boolean}
+ */
+export function isGuest(state: Object): boolean {
+    return state['features/base/jwt'].isGuest;
 }
 
 /**

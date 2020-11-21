@@ -26,11 +26,15 @@
                         color: #6FB1EA;
                     }
 
-                    & > :first-child:not(:last-child) {	
-                        margin-right: 24px;	
+                    &>a+a {
+                        margin-left: 24px;
                     }
                 }
             }
+        }
+
+        &> :first-child:not(:last-child) {
+            margin-right: 24px;
         }
 
         .separator-line {
@@ -47,10 +51,13 @@
     }
 }
 
+.new-toolbox .toolbox-content .toolbox-icon.security-toolbar-button,
 .new-toolbox .toolbox-content .toolbox-icon.toggled.security-toolbar-button {
-    border-width: 0;
+    background: rgba(241, 173, 51, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 
-    &:not(:hover) {
-        background: unset;
+    &:hover {
+        background: rgba(241, 173, 51, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
 }

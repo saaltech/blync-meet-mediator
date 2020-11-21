@@ -6,7 +6,10 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'jitsi-meet.example.com',
+        domain: 'vmeet.saal.ai',
+
+        // When using authentication, domain for guest users.
+        anonymousdomain: 'guest.vmeet.saal.ai',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
@@ -21,11 +24,11 @@ var config = {
         // focus: 'focus.jitsi-meet.example.com',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'conference.jitsi-meet.example.com'
+        muc: 'conference.vmeet.saal.ai'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
-    bosh: '//jitsi-meet.example.com/http-bind',
+    bosh: '//vmeet.saal.ai/http-bind',
 
     // Websocket URL
     // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
@@ -49,7 +52,11 @@ var config = {
 
         // P2P test mode disables automatic switching to P2P when there are 2
         // participants in the conference.
-        p2pTestMode: false
+        p2pTestMode: false,
+
+        octo: {
+            probability: 1
+        }
 
         // Enables the test specific features consumed by jitsi-meet-torture
         // testMode: false
@@ -86,7 +93,7 @@ var config = {
     // Audio
 
     // Disable measuring of audio levels.
-    // disableAudioLevels: false,
+    disableAudioLevels: true,
     // audioLevelsInterval: 200,
 
     // Enabling this will run the lib-jitsi-meet no audio detection module which
@@ -153,14 +160,14 @@ var config = {
     // Enable / disable layer suspension.  If enabled, endpoints whose HD
     // layers are not in use will be suspended (no longer sent) until they
     // are requested again.
-    // enableLayerSuspension: false,
+    enableLayerSuspension: true,
 
     // Every participant after the Nth will start video muted.
-    // startVideoMuted: 10,
+    startVideoMuted: 10,
 
     // Start calls with video muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
-    // startWithVideoMuted: false,
+    startWithVideoMuted: false,
 
     // If set to true, prefer to use the H.264 video codec (if supported).
     // Note that it's not recommended to do this because simulcast is not
@@ -174,6 +181,22 @@ var config = {
     // disableH264: false,
 
     // Desktop sharing
+
+    // The ID of the jidesha extension for Chrome.
+    desktopSharingChromeExtId: null,
+
+    // Whether desktop sharing should be disabled on Chrome.
+    // desktopSharingChromeDisabled: false,
+
+    // The media sources to use when using screen sharing with the Chrome
+    // extension.
+    desktopSharingChromeSources: [ 'screen', 'window', 'tab' ],
+
+    // Required version of Chrome extension
+    desktopSharingChromeMinExtVersion: '0.1',
+
+    // Whether desktop sharing should be disabled on Firefox.
+    // desktopSharingFirefoxDisabled: false,
 
     // Optional desktop sharing frame rate options. Default value: min:5, max:5.
     // desktopSharingFrameRate: {
@@ -347,7 +370,7 @@ var config = {
     // hideLobbyButton: false,
 
     // Require users to always specify a display name.
-    // requireDisplayName: true,
+    requireDisplayName: true,
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
@@ -361,10 +384,15 @@ var config = {
     // disable1On1Mode: false,
 
     // Default language for the user interface.
-    // defaultLanguage: 'en',
+    defaultLanguage: 'enGB',
 
     // Disables profile and the edit of all fields from the profile settings (display name and email)
     // disableProfile: false,
+
+    // If true all users without a token will be considered guests and all users
+    // with token will be considered non-guests. Only guests will be allowed to
+    // edit their profile.
+    enableUserRolesBasedOnToken: false,
 
     // Whether or not some features are checked based on token.
     // enableFeaturesBasedOnToken: false,
@@ -379,10 +407,10 @@ var config = {
 
     // Enables calendar integration, depends on googleApiApplicationClientID
     // and microsoftApiApplicationClientID
-    // enableCalendarIntegration: false,
+    enableCalendarIntegration: true,
 
     // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
-    // prejoinPageEnabled: false,
+    prejoinPageEnabled: true,
 
     // If true, shows the unsafe room name warning label when a room name is
     // deemed unsafe (due to the simplicity in the name) and a password is not
@@ -425,7 +453,7 @@ var config = {
     // If third party requests are disabled, no other server will be contacted.
     // This means avatars will be locally generated and callstats integration
     // will not function.
-    // disableThirdPartyRequests: false,
+    disableThirdPartyRequests: false,
 
 
     // Peer-To-Peer mode: used (if enabled) when there are just 2 participants.
@@ -440,12 +468,15 @@ var config = {
         // connection.
         enabled: true,
 
+        // Use XEP-0215 to fetch STUN and TURN servers.
+        useStunTurn: true,
+
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
-            // { urls: 'stun:jitsi-meet.example.com:3478' },
+            // { urls: 'stun:jitsi-meet.example.com:4446' },
             { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
-        ]
+        ],
 
         // Sets the ICE transport policy for the p2p connection. At the time
         // of this writing the list of possible values are 'all' and 'relay',
@@ -457,7 +488,7 @@ var config = {
 
         // If set to true, it will prefer to use H.264 for P2P calls (if H.264
         // is supported). This setting is deprecated, use preferredCodec instead.
-        // preferH264: true
+        preferH264: true,
 
         // Provides a way to set the video codec preference on the p2p connection. Acceptable
         // codec values are 'VP8', 'VP9' and 'H264'.
@@ -465,7 +496,7 @@ var config = {
 
         // If set to true, disable H.264 video codec by stripping it out of the
         // SDP. This setting is deprecated, use disabledCodec instead.
-        // disableH264: false,
+        disableH264: false
 
         // Provides a way to prevent a video codec from being negotiated on the p2p connection.
         // disabledCodec: '',
@@ -477,7 +508,7 @@ var config = {
 
     analytics: {
         // The Google Analytics Tracking ID:
-        // googleAnalyticsTrackingId: 'your-tracking-id-UA-123456-1'
+        googleAnalyticsTrackingId: 'UA-155257911-1',
 
         // Matomo configuration:
         // matomoEndpoint: 'https://your-matomo-endpoint/',
@@ -502,10 +533,10 @@ var config = {
         // rtcstatsPolIInterval: 1000
 
         // Array of script URLs to load as lib-jitsi-meet "analytics handlers".
-        // scriptURLs: [
-        //      "libs/analytics-ga.min.js", // google-analytics
+        scriptURLs: [
+            "libs/analytics-ga.min.js", // google-analytics
         //      "https://example.com/my-custom-analytics.js"
-        // ],
+        ],
     },
 
     // Logs that should go be passed through the 'log' event if a handler is defined for it
@@ -515,8 +546,8 @@ var config = {
     // the user region as seen by the server.
     deploymentInfo: {
         // shard: "shard1",
-        // region: "europe",
-        // userRegion: "asia"
+        region: "region1",
+        userRegion: "region1"
     },
 
     // Decides whether the start/stop recording audio notifications should play on record.
@@ -555,16 +586,16 @@ var config = {
     // },
 
     // Options related to end-to-end (participant to participant) ping.
-    // e2eping: {
+    e2eping: {
     //   // The interval in milliseconds at which pings will be sent.
     //   // Defaults to 10000, set to <= 0 to disable.
-    //   pingInterval: 10000,
+         pingInterval: -1
     //
     //   // The interval in milliseconds at which analytics events
     //   // with the measured RTT will be sent. Defaults to 60000, set
     //   // to <= 0 to disable.
     //   analyticsInterval: 60000,
-    //   },
+    },
 
     // If set, will attempt to use the provided video input device label when
     // triggering a screenshare, instead of proceeding through the normal flow
@@ -662,6 +693,8 @@ var config = {
      */
     // brandingRoomAlias: null,
 
+    googleApiApplicationClientID: '143401360954-91aq4dbaj70tj4q6demjgsj5odk1bppt.apps.googleusercontent.com',
+
     // List of undocumented settings used in lib-jitsi-meet
     /**
      _peerConnStatusOutOfLastNTimeout
@@ -684,10 +717,12 @@ var config = {
      startBitrate
      */
 
+    // This property should be always set to false, to avoid echo from speakers of other participants
+    disableAEC: false, //wasnt present in latest jitsi-meet code
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
-    makeJsonParserHappy: 'even if last key had a trailing comma'
+    makeJsonParserHappy: 'even if last key had a trailing comma',
 
     // no configuration value should follow this line.
 };

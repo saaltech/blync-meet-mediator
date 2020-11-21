@@ -21,7 +21,7 @@ import { playSound, registerSound, unregisterSound } from '../base/sounds';
 import { showToolbox } from '../toolbox/actions';
 import { isButtonEnabled } from '../toolbox/functions';
 
-import { SEND_MESSAGE, SET_PRIVATE_MESSAGE_RECIPIENT } from './actionTypes';
+import { ADD_MESSAGE, SEND_MESSAGE, SET_PRIVATE_MESSAGE_RECIPIENT } from './actionTypes';
 import { addMessage, clearMessages, toggleChat } from './actions';
 import { ChatPrivacyDialog } from './components';
 import {
@@ -66,7 +66,6 @@ MiddlewareRegistry.register(store => next => action => {
     case CONFERENCE_JOINED:
         _addChatMsgListener(action.conference, store);
         break;
-
     case SEND_MESSAGE: {
         const state = store.getState();
         const { conference } = state['features/base/conference'];
@@ -218,7 +217,7 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, privateMe
     const state = getState();
     const { isOpen: isChatOpen } = state['features/chat'];
 
-    if (!isChatOpen) {
+    if (!isChatOpen && navigator.product !== 'ReactNative') { // except for mobile
         dispatch(playSound(INCOMING_MSG_SOUND_ID));
     }
 
@@ -227,7 +226,7 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, privateMe
     const participant = getParticipantById(state, id) || {};
     const localParticipant = getLocalParticipant(getState);
     const displayName = getParticipantDisplayName(state, id);
-    const hasRead = participant.local || isChatOpen;
+    const hasRead = participant.local;
     const timestampToDate = timestamp ? new Date(timestamp) : new Date();
     const millisecondsTimestamp = timestampToDate.getTime();
 
@@ -235,10 +234,12 @@ function _handleReceivedMessage({ dispatch, getState }, { id, message, privateMe
         displayName,
         hasRead,
         id,
+        senderId: id,
         messageType: participant.local ? MESSAGE_TYPE_LOCAL : MESSAGE_TYPE_REMOTE,
         message,
         privateMessage,
         recipient: getParticipantDisplayName(state, localParticipant.id),
+        recipientId: localParticipant.id,
         timestamp: millisecondsTimestamp
     }));
 
@@ -289,10 +290,12 @@ function _persistSentPrivateMessage({ dispatch, getState }, recipientID, message
         displayName,
         hasRead: true,
         id: localParticipant.id,
+        senderId: localParticipant.id,
         messageType: MESSAGE_TYPE_LOCAL,
         message,
         privateMessage: true,
         recipient: getParticipantDisplayName(getState, recipientID),
+        recipientId: recipientID,
         timestamp: Date.now()
     }));
 }

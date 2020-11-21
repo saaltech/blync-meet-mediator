@@ -2,7 +2,8 @@
 
 import { CHAT_SIZE } from '../chat/constants';
 
-import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS } from './actionTypes';
+import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS,
+    SET_FILMSTRIP_COLLAPSED, SET_PAGE } from './actionTypes';
 import { calculateThumbnailSizeForHorizontalView, calculateThumbnailSizeForTileView } from './functions';
 
 /**
@@ -22,18 +23,10 @@ const TILE_VIEW_SIDE_MARGINS = 10 * 2;
  *     dimensions: Object
  * }}
  */
-export function setTileViewDimensions(dimensions: Object, windowSize: Object, isChatOpen: boolean) {
-    const { clientWidth, clientHeight } = windowSize;
-    let widthToUse = clientWidth;
-
-    if (isChatOpen) {
-        widthToUse -= CHAT_SIZE;
-    }
-
+export function setTileViewDimensions(dimensions: Object, windowSize: Object) {
     const thumbnailSize = calculateThumbnailSizeForTileView({
         ...dimensions,
-        clientWidth: widthToUse,
-        clientHeight
+        ...windowSize
     });
     const filmstripWidth = dimensions.columns * (TILE_VIEW_SIDE_MARGINS + thumbnailSize.width);
 
@@ -63,4 +56,35 @@ export function setHorizontalViewDimensions(clientHeight: number = 0) {
     };
 }
 
+/**
+ * Sets the whether filmstrip is collapsed or not.
+ *
+ * @param {boolean} collapsed - Collapse status.
+ * @returns {{
+    *     type: SET_HORIZONTAL_VIEW_DIMENSIONS,
+    *     dimensions: Object
+    * }}
+    */
+export function setFilmStripCollapsed(collapsed: boolean) {
+    return {
+        type: SET_FILMSTRIP_COLLAPSED,
+        collapsed
+    };
+}
+
+/**
+ * Sets page.
+ *
+ * @param {int} page - Page.
+ * @returns {{
+    *     type: SET_PAGE,
+    *     dimensions: Object
+    * }}
+    */
+export function setPage(page: number = 1) {
+    return {
+        type: SET_PAGE,
+        page
+    };
+}
 export * from './actions.native';

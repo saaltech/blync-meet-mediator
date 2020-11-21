@@ -44,6 +44,7 @@ function createContainer(spanId) {
 
     container.innerHTML = `
         <div class = 'videocontainer__background'></div>
+        <div class = 'videocontainer__host'>Host</div>
         <div class = 'videocontainer__toptoolbar'></div>
         <div class = 'videocontainer__toolbar'></div>
         <div class = 'videocontainer__hoverOverlay'></div>
@@ -115,7 +116,10 @@ export default class RemoteVideo extends SmallVideo {
      *
      */
     addRemoteVideoContainer() {
-        this.container = createContainer(this.videoSpanId);
+        const { page } = APP.store.getState()['features/filmstrip'];
+        const isInView = this.VideoLayout.videoIsInView(this.videoSpanId, page);
+
+        this.container = createContainer(this.videoSpanId, isInView);
         this.$container = $(this.container);
         this.initializeAvatar();
         this._setThumbnailSize();
@@ -124,6 +128,7 @@ export default class RemoteVideo extends SmallVideo {
         this.updateStatusBar();
         this.addAudioLevelIndicator();
         this.addPresenceLabel();
+        this.initializeHost();
 
         return this.container;
     }
@@ -174,7 +179,7 @@ export default class RemoteVideo extends SmallVideo {
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
             remoteMenuPosition = 'left bottom';
         } else {
-            remoteMenuPosition = 'top center';
+            remoteMenuPosition = 'bottom center';
         }
 
         ReactDOM.render(

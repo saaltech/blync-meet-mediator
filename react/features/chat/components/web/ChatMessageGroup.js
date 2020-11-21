@@ -49,6 +49,7 @@ class ChatMessageGroup extends Component<Props> {
                         <ChatMessage
                             key = { i }
                             message = { message }
+                            opacity = { 1 }
                             showDisplayName = { i === 0 }
                             showTimestamp = { i === messages.length - 1 } />
                     ))
