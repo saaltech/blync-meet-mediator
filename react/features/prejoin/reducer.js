@@ -123,8 +123,8 @@ ReducerRegistry.register(
         case SET_DEVICE_STATUS: {
             return {
                 ...state,
-                deviceStatusText: action.text,
-                deviceStatusType: action.type
+                deviceStatusText: action.value.deviceStatusText,
+                deviceStatusType: action.value.deviceStatusType
             };
         }
 

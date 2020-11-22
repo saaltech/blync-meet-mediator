@@ -7,13 +7,14 @@ ADD . /saal-repo/saal-meeting/
 WORKDIR /saal-repo/saal-meeting
 RUN find . -type f -name "*.*" -exec chmod 644 {} +
 # RUN npm cache clean -f
+RUN apt-get update && apt install -y git make
 RUN npm install --registry https://npr.saal.ai
 RUN make
 RUN apt-get update && apt install -y nodejs build-essential debhelper
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
 # Stage 2, "web stage"
-FROM scr.saal.ai/jitsi-base:latest
+FROM scr.saal.ai/blync-base:1
 
 ADD https://dl.eff.org/certbot-auto /usr/local/bin/
 
