@@ -75,7 +75,8 @@ export default class OverlayFrame extends Component<Props, State> {
             contentClass += ' filmstrip-only';
         }
 
-        return (
+        return (<>
+            <div class="modal-overlay"></div>
             <div
                 className = { containerClass }
                 id = 'overlay'>
@@ -85,6 +86,7 @@ export default class OverlayFrame extends Component<Props, State> {
                     }
                 </div>
             </div>
+            </>
         );
     }
 }
