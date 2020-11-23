@@ -39,7 +39,8 @@ export function bootstrapCalendarIntegration(): Function {
         const {
             googleApiApplicationClientID
         } = state['features/base/config'];
-        const {
+        
+        let {
             integrationReady,
             integrationType
         } = state['features/calendar-sync'];
@@ -51,6 +52,15 @@ export function bootstrapCalendarIntegration(): Function {
                 }
             })
             .then(() => {
+                const {
+                    googleOfflineCode,
+                    isUserSignedOut
+                } = state['features/app-auth'];
+
+                if(!integrationType && googleOfflineCode && !isUserSignedOut) {
+                    integrationType = 'google'
+                }
+
                 if (!integrationType || integrationReady) {
                     return;
                 }

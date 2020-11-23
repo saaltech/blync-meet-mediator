@@ -431,15 +431,8 @@ function GuestPrejoin(props) {
                 }}
                 shareable = { false } />
 
-            {
-                meetingConnected !== null && meetingConnected === false
-                    ? <div className = 'waiting-display'>
-                        {
-                            !participantRejected && !meetingEnded
-                                ? <>
-                                    <h2>
-                                        {
-                                            enableWaitingRoom
+                {
+                    enableWaitingRoom && _jid
                                 && <SockJsClient
                                     onMessage = { participant => {
                                         updateWaitingStatus(participant);
@@ -451,6 +444,13 @@ function GuestPrejoin(props) {
                                     url = { props._socketLink } />
                                         }
 
+            {
+                meetingConnected !== null && meetingConnected === false
+                    ? <div className = 'waiting-display'>
+                        {
+                            !participantRejected && !meetingEnded
+                                ? <>
+                                    <h2>
                                         {
                                             meetingWaiting
                                                 ? 'Please wait, the meeting host will let you in soon.'
