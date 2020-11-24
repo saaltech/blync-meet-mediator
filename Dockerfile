@@ -1,6 +1,7 @@
 # Stage 1, "dpkg-stage"
 # scr.saal.ai/saal-meeting-base:1 from base.dockerfile
 FROM scr.saal.ai/saal-meeting-base:latest as dpkg-package
+ARG VERSIONMIN
 RUN mkdir /saal-repo
 RUN mkdir /saal-repo/saal-meeting
 ADD . /saal-repo/saal-meeting/
@@ -11,6 +12,13 @@ RUN apt-get update && apt install -y git make
 RUN npm install --registry https://npr.saal.ai
 RUN make
 RUN apt-get update && apt install -y nodejs build-essential debhelper
+
+# Use the jifmeet package version as the version for our js and css files below
+RUN sed -i.bak  -e "s/app.bundle.min.js?v=[[:digit:]]*/app.bundle.min.js?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/lib-jitsi-meet.min.js?v=[[:digit:]]*/lib-jitsi-meet.min.js?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/all.css/all.css?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/interface_config.js?v=[[:digit:]]*/interface_config.js?v=${VERSIONMIN}v/" index.html
+
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
 # Stage 2, "web stage"
