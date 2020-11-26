@@ -255,7 +255,7 @@ var config = {
 
     // Use the TURN servers discovered via XEP-0215 for the jitsi-videobridge
     // connection
-    // useStunTurn: true,
+    useStunTurn: true,
 
     // Use TURN/UDP servers for the jitsi-videobridge connection (by default
     // we filter out TURN/UDP because it is usually not needed since the
@@ -368,11 +368,16 @@ var config = {
         useStunTurn: true,
 
         // The STUN servers that will be used in the peer to peer connections
+        // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
-            // { urls: 'stun:meet.jitsi:3478' },
-            { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
-        ]
+            // { urls: 'stun:meet.jifmeet.com:3478' },
+           // { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
+
+    	    { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:stun1.l.google.com:19302" },
+            { urls: "stun:stun2.l.google.com:19302" }
+        ],
 
         // Sets the ICE transport policy for the p2p connection. At the time
         // of this writing the list of possible values are 'all' and 'relay',
