@@ -40,6 +40,7 @@ RUN \
   dpkg -x ./jitsi-meet-web-config_*.deb /jitsi-meet-web-config && \
   cp /jitsi-meet-web-config/usr/share/jitsi-meet-web-config/config.js /defaults && \
 	cp /usr/share/jitsi-meet/interface_config.js /defaults && \
+		cp /usr/share/jitsi-meet/apple-app-site-association.json /defaults && \
   rm -rf /var/lib/apt/lists/ && \
 	rm -f /etc/nginx/conf.d/default.conf && \
 	rm -rf /var/cache/apt && \
