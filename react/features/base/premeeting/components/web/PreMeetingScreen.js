@@ -18,6 +18,9 @@ import {
 
 import Loading from '../../../../always-on-top/Loading'
 import { goHome } from '../../../../app-auth'
+import {
+    setVideoMuted
+} from '../../../../base/media';
 
 type Props = {
 
@@ -88,7 +91,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             meetNow: value
         }, () => {
-            // setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
+            APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
         })
     }
 
@@ -96,7 +99,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             showTrackPreviews: value
         }, () => {
-            // setPrejoinVideoTrackMuted(!(this.state.showTrackPreviews || this.state.meetNow));
+            // APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
         })
     }
 
