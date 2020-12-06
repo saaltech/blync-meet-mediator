@@ -347,8 +347,28 @@ export default class LargeVideoManager {
      * Update container size.
      */
     updateContainerSize() {
-        this.width = UIUtil.getAvailableVideoWidth();
-        this.height = window.innerHeight;
+        if (typeof width === 'number') {
+            this.preferredWidth = width;
+        }
+        if (typeof height === 'number') {
+            this.preferredHeight = height;
+        }
+
+        let widthToUse = this.preferredWidth || window.innerWidth;
+        /* 
+        const { isOpen } = APP.store.getState()['features/chat'];
+
+        if (isOpen) {
+            /**
+             * If chat state is open, we re-compute the container width
+             * by subtracting the default width of the chat.
+             *
+            widthToUse -= CHAT_SIZE;
+        }
+        */
+
+        this.width = widthToUse;
+        this.height = this.preferredHeight || window.innerHeight;
     }
 
     /**
