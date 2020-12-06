@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+               "appIDs": [ "624W2JC8H4.com.jifmeet.meet"],
+             "paths":["*"]
+            }
+        ]
+    }
+}

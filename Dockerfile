@@ -12,11 +12,12 @@ RUN apt-get update && apt install -y git make
 RUN npm install --registry https://npr.saal.ai
 RUN make
 RUN apt-get update && apt install -y nodejs build-essential debhelper
-# Use the jitsi-meet package version as the version for app.bundle.js
-RUN sed -i.bak  -e "s/app.bundle.min.js?v=[[:digit:]]*/app.bundle.min.js?v=${VERSIONMIN}/" index.html
-RUN sed -i.bak  -e "s/lib-jitsi-meet.min.js?v=[[:digit:]]*/lib-jitsi-meet.min.js?v=${VERSIONMIN}/" index.html
-RUN sed -i.bak  -e "s/all.css/all.css?v=$VERSIONMIN/" index.html
-RUN sed -i.bak  -e "s/interface_config.js?v=[[:digit:]]*/interface_config.js?v=${VERSIONMIN}/" index.html
+
+# Use the jifmeet package version as the version for our js and css files below
+RUN sed -i.bak  -e "s/app.bundle.min.js?v=[[:digit:]]*/app.bundle.min.js?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/lib-jitsi-meet.min.js?v=[[:digit:]]*/lib-jitsi-meet.min.js?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/all.css/all.css?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/interface_config.js?v=[[:digit:]]*/interface_config.js?v=${VERSIONMIN}v/" index.html
 
 RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 
@@ -39,6 +40,7 @@ RUN \
   dpkg -x ./jitsi-meet-web-config_*.deb /jitsi-meet-web-config && \
   cp /jitsi-meet-web-config/usr/share/jitsi-meet-web-config/config.js /defaults && \
 	cp /usr/share/jitsi-meet/interface_config.js /defaults && \
+		cp /usr/share/jitsi-meet/apple-app-site-association.json /defaults && \
   rm -rf /var/lib/apt/lists/ && \
 	rm -f /etc/nginx/conf.d/default.conf && \
 	rm -rf /var/cache/apt && \
