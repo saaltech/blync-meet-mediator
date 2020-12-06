@@ -8,7 +8,7 @@ import { Icon, IconConnectionActive, IconConnectionInactive } from '../../../bas
 import { JitsiParticipantConnectionStatus } from '../../../base/lib-jitsi-meet';
 import { MEDIA_TYPE } from '../../../base/media';
 import { getLocalParticipant, getParticipantById } from '../../../base/participants';
-import { Popover } from '../../../base/popover';
+// import { Popover } from '../../../base/popover';
 import { connect } from '../../../base/redux';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { ConnectionStatsTable } from '../../../connection-stats';
@@ -83,6 +83,12 @@ type Props = AbstractProps & {
      * The Redux dispatch function.
      */
     dispatch: Dispatch<any>,
+
+    /**
+     * Whether or not should display the "Save Logs" link in the local video
+     * stats table.
+     */
+    enableSaveLogs: boolean,
 
     /**
      * Whether or not clicking the indicator should display a popover for more
@@ -174,23 +180,18 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
         const indicatorContainerClassNames
             = `connection-indicator indicator ${colorClass}`;
 
-        return (
-            <Popover
-                className = { rootClassNames }
-                content = { this._renderStatisticsTable() }
-                disablePopover = { !this.props.enableStatsDisplay }
-                position = { this.props.statsPopoverPosition }>
-                <div className = 'popover-trigger'>
-                    <div
-                        className = { indicatorContainerClassNames }
-                        style = {{ fontSize: this.props.iconSize }}>
-                        <div className = 'connection indicatoricon'>
-                            { this._renderIcon() }
-                        </div>
-                    </div>
+
+        return (<div
+            className = { `popover-trigger ${rootClassNames}` }
+            title = { `Connection: ${this._getConnectionStatusTip()}` }>
+            <div
+                className = { indicatorContainerClassNames }
+                style = {{ fontSize: this.props.iconSize }}>
+                <div className = 'connection indicatoricon'>
+                    { this._renderIcon() }
                 </div>
-            </Popover>
-        );
+            </div>
+        </div>);
     }
 
     /**
@@ -386,6 +387,7 @@ class ConnectionIndicator extends AbstractConnectionIndicator<Props, State> {
                 codec = { codec }
                 connectionSummary = { this._getConnectionStatusTip() }
                 e2eRtt = { e2eRtt }
+                enableSaveLogs = { this.props.enableSaveLogs }
                 framerate = { framerate }
                 isLocalVideo = { this.props.isLocalVideo }
                 maxEnabledResolution = { maxEnabledResolution }
@@ -440,7 +442,8 @@ export function _mapStateToProps(state: Object, ownProps: Props) {
     const participant
         = typeof participantId === 'undefined' ? getLocalParticipant(state) : getParticipantById(state, participantId);
     const props = {
-        _connectionStatus: participant?.connectionStatus
+        _connectionStatus: participant?.connectionStatus,
+        enableSaveLogs: state['features/base/config'].enableSaveLogs
     };
 
     if (conference) {

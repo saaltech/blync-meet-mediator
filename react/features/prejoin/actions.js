@@ -29,7 +29,8 @@ import {
     SET_JOIN_BY_PHONE_DIALOG_VISIBLITY,
     SET_PRECALL_TEST_RESULTS,
     SET_PREJOIN_DEVICE_ERRORS,
-    SET_PREJOIN_PAGE_VISIBILITY
+    SET_PREJOIN_PAGE_VISIBILITY,
+    SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY
 } from './actionTypes';
 import {
     getFullDialOutNumber,
@@ -211,7 +212,7 @@ export function initPrejoin(tracks: Object[], errors: Object) {
 export function joinConference(options?: Object) {
     return {
         type: PREJOIN_START_CONFERENCE,
-        options
+        options: Object.assign({}, options, { interim: true })
     };
 }
 
@@ -466,6 +467,19 @@ export function setPrejoinDeviceErrors(value: Object) {
 export function setPrejoinPageVisibility(value: boolean) {
     return {
         type: SET_PREJOIN_PAGE_VISIBILITY,
+        value
+    };
+}
+
+/**
+ * Action used to set the initial errors after creating the tracks.
+ *
+ * @param {Object} value - The track errors.
+ * @returns {Object}
+ */
+export function setPrejoinPageErrorMessageKey(value: Object) {
+    return {
+        type: SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY,
         value
     };
 }

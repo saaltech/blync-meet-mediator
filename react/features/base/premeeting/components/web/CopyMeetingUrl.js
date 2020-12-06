@@ -47,6 +47,8 @@ const COPY_TIMEOUT = 2000;
  */
 class CopyMeetingUrl extends Component<Props, State> {
 
+    textarea: Object;
+
     /**
      * Initializes a new {@code Prejoin} instance.
      *
@@ -55,6 +57,7 @@ class CopyMeetingUrl extends Component<Props, State> {
     constructor(props) {
         super(props);
 
+        this.textarea = React.createRef();
         this.state = {
             showCopyLink: false,
             showLinkCopied: false
@@ -74,12 +77,18 @@ class CopyMeetingUrl extends Component<Props, State> {
      *
      * @returns {void}
      */
-    _copyUrl() {
-        const success = copyText(this.props.url);
+    async _copyUrl() {
+        const textarea = this.textarea.current;
 
-        if (success) {
+        try {
+            textarea.select();
+            //document.execCommand('copy');
+            await navigator.clipboard.writeText(textarea.value)
+            textarea.blur();
             this._showLinkCopied();
             window.setTimeout(this._hideLinkCopied, COPY_TIMEOUT);
+        } catch (err) {
+            console.log('error when copying the meeting url. ', err);
         }
     }
 
@@ -181,10 +190,13 @@ class CopyMeetingUrl extends Component<Props, State> {
      */
     render() {
         const { showCopyLink, showLinkCopied } = this.state;
-        const { url, t } = this.props;
+        let { url, t, meetingUrl } = this.props;
         const { _copyUrl, _showCopyLink, _hideCopyLink } = this;
         const src = showLinkCopied ? IconCheck : IconCopy;
 
+        if(!url && meetingUrl){
+             url = meetingUrl
+        }
         return (
             <div
                 className = 'copy-meeting'
@@ -193,16 +205,20 @@ class CopyMeetingUrl extends Component<Props, State> {
                 <div
                     className = { `url ${showLinkCopied ? 'done' : ''}` }
                     onClick = { _copyUrl } >
-                    <div className = 'copy-meeting-text'>
-                        { !showCopyLink && !showLinkCopied && getDecodedURI(url) }
-                        { showCopyLink && t('prejoin.copyAndShare') }
-                        { showLinkCopied && t('prejoin.linkCopied') }
-                    </div>
+                    { !showCopyLink && !showLinkCopied && 
+                        <div className="url-text">{url}</div> }
+                    { showCopyLink && t('prejoin.copyAndShare') }
+                    { showLinkCopied && t('prejoin.linkCopied') }
                     <Icon
                         onClick = { _copyUrl }
                         size = { 24 }
                         src = { src } />
                 </div>
+                <textarea
+                    readOnly = { true }
+                    ref = { this.textarea }
+                    tabIndex = '-1'
+                    value = { url } />
             </div>
         );
     }

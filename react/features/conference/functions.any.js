@@ -1,6 +1,7 @@
 import { toState } from '../base/redux';
 import { areThereNotifications } from '../notifications';
 import { getOverlayToRender } from '../overlay';
+import { config } from '../../config'
 
 /**
  * Tells whether or not the notifications should be displayed within
@@ -17,4 +18,17 @@ export function shouldDisplayNotifications(stateful) {
     return areThereNotifications(state)
       && !isAnyOverlayVisible
       && !calleeInfoVisible;
+}
+
+export function getAppSocketEndPoint() {
+  return `/app`
+}
+
+export function getConferenceSocketBaseLink() {
+  return `${window.location.origin}`+ //  `https://dev-blync.saal.ai/`+
+      `${config.conferenceManager}/wss`
+}
+
+export function getWaitingParticipantsSocketTopic(state = {}) {
+  return `/conference/${state['features/app-auth']?.meetingDetails?.meetingId}/participants`
 }

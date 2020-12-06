@@ -34,7 +34,11 @@ const AVATAR_CHECKER_FUNCTIONS = [
     },
     (participant, store) => {
         if (participant && participant.email) {
-            return getGravatarURL(participant.email, store.getState()['features/base/config'].gravatarBaseURL);
+            // TODO: remove once libravatar has deployed their new scaled up infra. -saghul
+            const gravatarBaseURL
+                = store.getState()['features/base/config'].gravatarBaseURL ?? 'https://www.gravatar.com/avatar/';
+
+            return getGravatarURL(participant.email, gravatarBaseURL);
         }
 
         return null;
@@ -229,6 +233,19 @@ export function getParticipants(stateful: Object | Function) {
  */
 export function getPinnedParticipant(stateful: Object | Function) {
     return _getAllParticipants(stateful).find(p => p.pinned);
+}
+
+/**
+ * Returns the participant which has its dominantSpeaker state set to truthy.
+ *
+ * @param {(Function|Object|Participant[])} stateful - The redux state
+ * features/base/participants, the (whole) redux state, or redux's
+ * {@code getState} function to be used to retrieve the state
+ * features/base/participants.
+ * @returns {(Participant|undefined)}
+ */
+export function getDominantSpeaker(stateful: Object | Function) {
+    return _getAllParticipants(stateful).find(p => p.dominantSpeaker);
 }
 
 /**

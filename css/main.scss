@@ -24,7 +24,7 @@ $flagsImagePath: "../images/";
 /* Flags END */
 
 /* Modules BEGIN */
-
+@import 'options-panel';
 @import 'aui_reset';
 @import 'atlaskit_overrides';
 @import 'base';
@@ -33,11 +33,9 @@ $flagsImagePath: "../images/";
 @import 'inlay';
 @import 'reload_overlay/reload_overlay';
 @import 'mini_toolbox';
-@import 'buttons/copy.scss';
 @import 'modals/desktop-picker/desktop-picker';
 @import 'modals/device-selection/device-selection';
 @import 'modals/dialog';
-@import 'modals/embed-meeting/embed-meeting';
 @import 'modals/feedback/feedback';
 @import 'modals/invite/info';
 @import 'modals/settings/settings';
@@ -71,6 +69,7 @@ $flagsImagePath: "../images/";
 @import 'policy';
 @import 'popover';
 @import 'filmstrip/filmstrip_toolbar';
+@import 'filmstrip/filmstrip_headers';
 @import 'filmstrip/horizontal_filmstrip';
 @import 'filmstrip/small_video';
 @import 'filmstrip/tile_view';
@@ -91,6 +90,10 @@ $flagsImagePath: "../images/";
 @import 'promotional-footer';
 @import 'chrome-extension-banner';
 @import 'settings-button';
+@import 'toolbox-more-items';
+@import 'icons';
+@import 'login-component';
+@import 'user-profile';
 @import 'meter';
 @import 'audio-preview';
 @import 'video-preview';
@@ -100,8 +103,14 @@ $flagsImagePath: "../images/";
 @import 'modals/invite/invite_more';
 @import 'modals/security/security';
 @import 'premeeting-screens';
-@import 'e2ee';
-@import 'responsive';
-@import 'connection-status';
-
+@import 'chat-preview';
+@import 'speakers-list';
+@import 'meeting-info';
+@import 'participants-list';
+@import 'invite-participants';
+@import 'legal-page';
+@import 'toggle-switch';
+@import 'calendar-profile';
+@import 'modal-component';
+@import 'tnc-privacy';
 /* Modules END */

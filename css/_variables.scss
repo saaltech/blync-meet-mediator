@@ -37,7 +37,7 @@ $presence-idle: rgb(172, 172, 172);
 /**
  * Toolbar
  */
-$newToolbarBackgroundColor: rgba(22, 38, 55, 0.8);
+$newToolbarBackgroundColor: rgba(255, 255, 255,1);
 $newToolbarButtonHoverColor: rgba(255, 255, 255, 0.15);
 $newToolbarButtonToggleColor: rgba(255, 255, 255, 0.2);
 $AOTToolbarButtonHoverColor: rgba(14, 20, 35, 0.6);
@@ -45,12 +45,12 @@ $AOTToolbarButtonToggleColor: rgba(14, 20, 35, 1);
 $newToolbarFontSize: 24px;
 $newToolbarHangupFontSize: 32px;
 $newToolbarSize: 40px;
-$newToolbarSizeWithPadding: calc(#{$newToolbarSize} + 24px);
+$newToolbarSizeWithPadding: calc(#{$newToolbarSize} + 50px);
 $toolbarTitleFontSize: 19px;
-$overflowMenuBG: initial;
-$overflowMenuItemHoverBG: #313D52;
-$overflowMenuItemHoverColor: #B8C7E0;
-$overflowMenuItemColor: #B8C7E0;
+$overflowMenuBG: #fff;
+$overflowMenuItemHoverBG: #E7E7E8;
+$overflowMenuItemHoverColor: #393939;
+$overflowMenuItemColor: #393939;
 
 /**
  * Video layout
@@ -60,7 +60,7 @@ $videoThumbnailSelected: #165ECC;
 $participantNameColor: #fff;
 $thumbnailPictogramColor: #fff;
 $dominantSpeakerBg: #165ecc;
-$raiseHandBg: #D6D61E;
+$raiseHandBg: green;
 $audioLevelBg: #44A5FF;
 $connectionIndicatorBg: #165ecc;
 $audioLevelShadow: rgba(9, 36, 77, 0.9);
@@ -90,12 +90,14 @@ $modalTextColor: #333;
  * Chat
  */
 $chatActionsSeparatorColor: rgb(173, 105, 112);
-$chatHeaderBackgroundColor: rgba(42, 58, 75, 0.9);
+$chatHeaderBackgroundColor: rgba(255, 255, 255, 0.9);
 $chatInputSeparatorColor: #A4B8D1;
-$chatLocalMessageBackgroundColor: rgb(4, 98, 178);
+$chatLocalMessageBackgroundColor: #005C85;
 $chatPrivateMessageBackgroundColor: rgb(153, 69, 77);
-$chatRemoteMessageBackgroundColor:  rgb(86, 101, 114);
+$chatRemoteMessageBackgroundColor:  #EDF0F5;
+$chatRemoteMessageColor:  #393939;
 $sidebarWidth: 375px;
+$chatPrimaryColor: #005C85;
 
  /**
  * Misc.
@@ -161,46 +163,75 @@ $unsupportedDesktopBrowserTextFontSize: 21px;
 /**
  * The size of the default watermark.
  */
-$watermarkWidth: 71px;
-$watermarkHeight: 32px;
-
-$welcomePageWatermarkWidth: 71px;
-$welcomePageWatermarkHeight: 32px;
+$watermarkWidth: 186px;
+$watermarkHeight: 74px;
 
 /**
  * Welcome page variables.
  */
-$welcomePageDescriptionColor: #fff;
+$welcomePageDescriptionColor: #005C85;
 $welcomePageFontFamily: inherit;
-$welcomePageBackground: none;
-$welcomePageTitleColor: #fff;
+$welcomePageBackground: linear-gradient(-90deg, #1251AE 0%, #0074FF 50%, #1251AE 100%);
+$welcomePageBackgroundColor: #fff;
+$welcomePageTitleColor: #005C85;
 
-$welcomePageHeaderBackground: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/welcome-background.png');
-$welcomePageHeaderBackgroundPosition: center;
+$welcomePageHeaderBackground: none;
+$welcomePageHeaderBackgroundSmall: none;
+$welcomePageHeaderBackgroundPosition: none;
 $welcomePageHeaderBackgroundRepeat: none;
-$welcomePageHeaderBackgroundSize: cover;
+$welcomePageHeaderBackgroundSize: none;
 $welcomePageHeaderPaddingBottom: 0px;
-$welcomePageHeaderTitleMaxWidth: initial;
-$welcomePageHeaderTextAlign: center;
 
-$welcomePageHeaderContainerDisplay: flex;
-$welcomePageHeaderContainerMargin: 104px 32px 0 32px;
+$welcomePageHeaderTextMarginTop: 35px;
+$welcomePageHeaderTextMarginBottom: 35px;
 
-$welcomePageHeaderTextTitleMarginBottom: 0;
-$welcomePageHeaderTextTitleFontSize: 42px;
-$welcomePageHeaderTextTitleFontWeight: normal;
-$welcomePageHeaderTextTitleLineHeight: 50px;
+$welcomePageHeaderTextTitleMarginBottom: 16px;
+$welcomePageHeaderTextTitleFontSize: 2.5rem;
+$welcomePageHeaderTextTitleFontWeight: 500;
+$welcomePageHeaderTextTitleLineHeight: 1.18;
 $welcomePageHeaderTextTitleOpacity: 1;
 
-$welcomePageEnterRoomDisplay: flex;
-$welcomePageEnterRoomWidth: calc(100% - 32px);
-$welcomePageEnterRoomPadding: 4px;
-$welcomePageEnterRoomMargin: 0 auto;
+$welcomePageHeaderTextSubTitleFontSize: 1.5rem;
+$welcomePageHeaderTextSubTitleMarginTop: 10px;
+$welcomePageHeaderTextSubTitleLineHeight: 1;
+
+$welcomePageHeaderTextDescriptionDisplay: inherit;
+$welcomePageHeaderTextDescriptionFontSize: 1rem;
+$welcomePageHeaderTextDescriptionFontWeight: 400;
+$welcomePageHeaderTextDescriptionLineHeight: 24px;
+$welcomePageHeaderTextDescriptionMarginBottom: 20px;
+$welcomePageHeaderTextDescriptionAlignSelf: inherit;
+
+$welcomePageEnterRoomWidth: 430px;
+$welcomePageEnterRoomPadding: 2px 15px;
+$welcomePageEnterRoomBorderRadius: 30px;
+
+$welcomePageEnterRoomInputContainerPadding: 5px 8px 5px 0px;
+$welcomePageEnterRoomInputContainerBorderWidth: 0px 0px 0px 0px;
+$welcomePageEnterRoomInputContainerBorderStyle: solid;
+$welcomePageEnterRoomInputContainerBorderImage: linear-gradient(to right, #dee1e6, #fff) 1;
+
+$welcomePageEnterRoomTitleDisplay: inherit;
+
+$welcomePageStartSessionTitle: #4D4D4D;
 
 $welcomePageTabContainerDisplay: flex;
 $welcomePageTabContentDisplay: inherit;
 $welcomePageTabButtonsDisplay: flex;
 $welcomePageTabDisplay: block;
+
+$welcomePageButtonWidth: 110px;
+$welcomePageButtonMinWidth: inherit;
+$welcomePageButtonFontSize: 14px;
+$welcomePageButtonHeight: 35px;
+$welcomePageButtonFontWeight: inherit;
+$welcomePageButtonBorderRadius: 25px;
+$welcomePageButtonLineHeight: 35px;
+
+/**
+ * Pre-join page variables
+ */
+ $prejoinContentWidth: 350px;
 
 /**
  * Deep-linking page variables.
@@ -258,3 +289,5 @@ $chromeExtensionBannerRightInMeeeting: 10px;
 */
 $smallScreen: 700px;
 $verySmallScreen: 500px;
+
+$optionsPanelPadding: 35px;

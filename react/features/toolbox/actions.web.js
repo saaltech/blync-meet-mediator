@@ -4,7 +4,12 @@ import type { Dispatch } from 'redux';
 
 import {
     FULL_SCREEN_CHANGED,
-    SET_FULL_SCREEN
+    SET_FULL_SCREEN,
+    LEAVING_MEETING,
+    SHOW_PARTICIPANTS_LIST,
+    TOGGLE_PARTICIPANTS_LIST,
+    SHOW_INVITE_PEOPLE,
+    TOGGLE_INVITE_PEOPLE
 } from './actionTypes';
 import {
     clearToolboxTimeout,
@@ -73,7 +78,8 @@ export function hideToolbox(force: boolean = false): Function {
         const {
             alwaysVisible,
             hovered,
-            timeoutMS
+            timeoutMS,
+            overflowMenuVisible
         } = state['features/toolbox'];
 
         if (alwaysVisible) {
@@ -84,8 +90,11 @@ export function hideToolbox(force: boolean = false): Function {
 
         if (!force
                 && (hovered
+                    || overflowMenuVisible
                     || state['features/invite'].calleeInfoVisible
-                    || state['features/chat'].isOpen)) {
+                    || state['features/chat'].isOpen
+                    || state['features/toolbox-more'].toastNotificationVisible
+                )) {
             dispatch(
                 setToolboxTimeout(
                     () => dispatch(hideToolbox()),
@@ -141,5 +150,66 @@ export function showToolbox(timeout: number = 0): Object {
                 dispatch(setToolboxTimeoutMS(interfaceConfig.TOOLBAR_TIMEOUT));
             }
         }
+    };
+}
+
+export function leavingMeeting(leaving: boolean) {
+    return {
+        type: LEAVING_MEETING,
+        leaving
+    };
+}
+
+
+/**
+ * Show participants list.
+ *
+ * @param {boolean} show -
+ * @returns {Object}
+ */
+export function showParticipantsList(show: boolean) {
+    return {
+        type: SHOW_PARTICIPANTS_LIST,
+        show
+    };
+}
+
+
+/**
+ * Show participants list.
+ *
+ * @param {boolean} show -
+ * @returns {Object}
+ */
+export function toggleParticipantsList() {
+    return {
+        type: TOGGLE_PARTICIPANTS_LIST
+    };
+}
+
+
+/**
+ * Show invite list.
+ *
+ * @param {boolean} show -
+ * @returns {Object}
+ */
+export function showInvitePeople(show: boolean) {
+    return {
+        type: SHOW_INVITE_PEOPLE,
+        show
+    };
+}
+
+
+/**
+ * Show InvitePeople list.
+ *
+ * @param {boolean} show -
+ * @returns {Object}
+ */
+export function toggleInvitePeople() {
+    return {
+        type: TOGGLE_INVITE_PEOPLE
     };
 }

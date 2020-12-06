@@ -24,7 +24,8 @@ const minimize
  */
 function getPerformanceHints(size) {
     return {
-        hints: minimize ? 'error' : false,
+        //hints: minimize ? 'error' : false,
+        hints: false,
         maxAssetSize: size,
         maxEntrypointSize: size
     };
@@ -37,6 +38,42 @@ const config = {
         https: true,
         inline: true,
         proxy: {
+            
+            '/api/users/sign-in': {
+                target: 'http://dev-blync.saal.ai:8100/auth/',
+                secure: false
+            },
+
+            '/api/users/accesstoken/refresh': {
+                target: 'http://dev-blync.saal.ai:8100/auth/',
+                secure: false
+            },
+
+            '/unauth/api/v1/participants': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
+            '/unauth/api/v1/conferences': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
+            '/auth/api/v1/conferences': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
+            '/unauth/api/v1/conferences/validatesecret': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
+            '/auth/api/v1/jid': {
+                target: 'http://localhost:8082/',
+                secure: false
+            },
+
             '/': {
                 bypass: devServerProxyBypass,
                 secure: false,
@@ -162,12 +199,12 @@ const config = {
                 analyzerMode: 'disabled',
                 generateStatsFile: true
             }),
-        detectCircularDeps
+        /* detectCircularDeps
             && new CircularDependencyPlugin({
                 allowAsyncCycles: false,
                 exclude: /node_modules/,
                 failOnError: false
-            })
+            }) */
     ].filter(Boolean),
     resolve: {
         alias: {
@@ -260,6 +297,12 @@ module.exports = [
     Object.assign({}, config, {
         entry: {
             'rnnoise-processor': './react/features/stream-effects/rnnoise/index.js'
+        },
+        node: {
+            // Emscripten generated glue code "rnnoise.js" expects node fs module,
+            // we need to specify this parameter so webpack knows how to properly
+            // interpret it when encountered.
+            fs: 'empty'
         },
         output: Object.assign({}, config.output, {
             library: [ 'JitsiMeetJS', 'app', 'effects', 'rnnoise' ],

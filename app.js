@@ -20,6 +20,10 @@ import keyboardshortcut from './modules/keyboardshortcut/keyboardshortcut';
 import remoteControl from './modules/remotecontrol/RemoteControl';
 import translation from './modules/translation/translation';
 
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import es from 'date-fns/locale/es';
+import "react-datepicker/dist/react-datepicker.css"
+
 // Initialize Olm as early as possible.
 if (window.Olm) {
     window.Olm.init().catch(e => {
@@ -27,6 +31,8 @@ if (window.Olm) {
         delete window.Olm;
     });
 }
+
+registerLocale('es', es)
 
 window.APP = {
     API,

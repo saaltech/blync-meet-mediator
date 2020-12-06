@@ -24,12 +24,12 @@ export const ERRORS = {
 /**
  * The number of days to fetch.
  */
-export const FETCH_END_DAYS = 10;
+export const FETCH_END_DAYS = 1; // 2 days
 
 /**
  * The number of days to go back when fetching.
  */
-export const FETCH_START_DAYS = -1;
+export const FETCH_START_DAYS = 0;
 
 /**
  * The max number of events to fetch from the calendar.

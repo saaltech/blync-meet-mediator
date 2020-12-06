@@ -12,7 +12,12 @@ import {
     SET_TOOLBOX_TIMEOUT,
     SET_TOOLBOX_TIMEOUT_MS,
     SET_TOOLBOX_VISIBLE,
-    TOGGLE_TOOLBOX_VISIBLE
+    TOGGLE_TOOLBOX_VISIBLE,
+    LEAVING_MEETING,
+    SHOW_PARTICIPANTS_LIST,
+    TOGGLE_PARTICIPANTS_LIST,
+    SHOW_INVITE_PEOPLE,
+    TOGGLE_INVITE_PEOPLE
 } from './actionTypes';
 
 declare var interfaceConfig: Object;
@@ -107,7 +112,10 @@ function _getInitialState() {
          *
          * @type {boolean}
          */
-        visible
+        visible,
+
+        participantsListOpen: false,
+        invitePeopleVisible: false
     };
 }
 
@@ -119,6 +127,12 @@ ReducerRegistry.register(
             return {
                 ...state,
                 timeoutID: undefined
+            };
+
+        case LEAVING_MEETING:
+            return {
+                ...state,
+                leaving: action.leaving
             };
 
         case FULL_SCREEN_CHANGED:
@@ -170,7 +184,29 @@ ReducerRegistry.register(
 
         case TOGGLE_TOOLBOX_VISIBLE:
             return set(state, 'visible', state.alwaysVisible || !state.visible);
+
+        case SHOW_PARTICIPANTS_LIST:
+            return {
+                ...state,
+                participantsListOpen: action.show
+            };
+        case TOGGLE_PARTICIPANTS_LIST:
+            return {
+                ...state,
+                participantsListOpen: !state.participantsListOpen
+            };
+        case SHOW_INVITE_PEOPLE:
+            return {
+                ...state,
+                invitePeopleVisible: action.show
+            };
+        case TOGGLE_INVITE_PEOPLE:
+            return {
+                ...state,
+                invitePeopleVisible: !state.invitePeopleVisible
+            };
         }
+
 
         return state;
     });

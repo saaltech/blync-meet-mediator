@@ -41,6 +41,7 @@ $overlayButtonBg: #0074E0;
 * Color variables
 **/
 $defaultBackground: #474747;
+$filmstripOnlyOverlayBg: #000;
 $reloadProgressBarBg: #0074E0;
 
 /**
@@ -56,8 +57,12 @@ $dialogErrorText: #344563;
 /**
 * Inlay colors
 **/
-$inlayColorBg: lighten($defaultBackground, 20%);
+$inlayColorBg: #fff; // lighten($defaultBackground, 20%);
 $inlayBorderColor: lighten($baseLight, 10%);
+$inlayIconBg: #000;
+$inlayIconColor: #fff;
+$inlayFilmstripOnlyColor: #474747;
+$inlayFilmstripOnlyBg: #fff;
 
 // Main controls
 $placeHolderColor: #a7a7a7;
@@ -76,7 +81,7 @@ $feedbackCancelFontColor: #333;
 
 // Popover colors
 $popoverBg: initial;
-$popoverFontColor: #ffffff !important;
+$popoverFontColor: #3a3a3a !important;
 $popupMenuColor: #ffffff !important;
 $popupMenuHoverColor: #ffffff !important;
 $popupMenuHoverBackground: rgba(255, 255, 255, 0.1);
@@ -87,7 +92,7 @@ $secondaryToolbarBg: rgba(0, 0, 0, 0.5);
 // TOFIX: Once moved to react rename to match the side panel class name.
 $sideToolbarContainerBg: rgba(0, 0, 0, 0.75);
 $toolbarBackground: rgba(0, 0, 0, 0.5);
-$toolbarBadgeBackground: #165ECC;
+$toolbarBadgeBackground: #F15946;
 $toolbarBadgeColor: #FFFFFF;
 $toolbarButtonColor: #FFFFFF;
 $toolbarSelectBackground: rgba(0, 0, 0, .6);

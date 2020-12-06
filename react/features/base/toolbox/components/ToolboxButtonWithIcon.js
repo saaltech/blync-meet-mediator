@@ -109,6 +109,7 @@ export default class ToolboxButtonWithIcon extends Component<Props, State> {
         if (iconDisabled) {
             iconProps.className
                 = 'settings-button-small-icon settings-button-small-icon--disabled';
+            iconProps.title = "This feature is not available on your browser"
         } else {
             iconProps.className = 'settings-button-small-icon';
             iconProps.onClick = onIconClick;

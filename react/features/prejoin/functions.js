@@ -161,3 +161,30 @@ export function isPrejoinPageEnabled(state: Object): boolean {
 export function isPrejoinPageVisible(state: Object): boolean {
     return isPrejoinPageEnabled(state) && state['features/prejoin']?.showPrejoin;
 }
+
+export function isInterimPrejoinPageVisible(state: Object): boolean {
+    return isPrejoinPageEnabled(state) && state['features/prejoin']?.interimPrejoin;
+}
+
+/**
+ * Returns the page error message to be shown, if the prejoin page is visible & active.
+ *
+ * @param {Object} state - The state of the app.
+ * @returns {boolean}
+ */
+export function getPageErrorMessageKey(state: Object): boolean {
+    return state['features/prejoin']?.pageErrorMessageKey;
+}
+
+export function getQueryVariable(variable)
+{
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){
+            return pair[1];
+        }
+    }
+    return(false);
+}

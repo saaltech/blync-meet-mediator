@@ -5,6 +5,8 @@ import type { Dispatch } from 'redux';
 
 import { createCalendarConnectedEvent, sendAnalytics } from '../analytics';
 import { loadGoogleAPI } from '../google-api';
+import { showEnableCookieTip } from '../google-api/functions'
+import { ERRORS } from './constants';
 
 import {
     CLEAR_CALENDAR_INTEGRATION,
@@ -37,7 +39,8 @@ export function bootstrapCalendarIntegration(): Function {
         const {
             googleApiApplicationClientID
         } = state['features/base/config'];
-        const {
+        
+        let {
             integrationReady,
             integrationType
         } = state['features/calendar-sync'];
@@ -49,6 +52,15 @@ export function bootstrapCalendarIntegration(): Function {
                 }
             })
             .then(() => {
+                const {
+                    googleOfflineCode,
+                    isUserSignedOut
+                } = state['features/app-auth'];
+
+                if(!integrationType && googleOfflineCode && !isUserSignedOut) {
+                    integrationType = 'google'
+                }
+
                 if (!integrationType || integrationReady) {
                     return;
                 }
@@ -67,6 +79,7 @@ export function bootstrapCalendarIntegration(): Function {
                         if (signedIn) {
                             dispatch(setIntegrationReady(integrationType));
                             dispatch(updateProfile(integrationType));
+                            dispatch(refreshCalendar())
                         } else {
                             dispatch(clearCalendarIntegration());
                         }
@@ -206,13 +219,24 @@ export function signIn(calendarType: string): Function {
 
         return dispatch(integration.load())
             .then(() => dispatch(integration.signIn()))
-            .then(() => dispatch(setIntegrationReady(calendarType)))
-            .then(() => dispatch(updateProfile(calendarType)))
-            .then(() => dispatch(refreshCalendar()))
-            .then(() => sendAnalytics(createCalendarConnectedEvent()))
+            .then(() => 
+                 dispatch(setIntegrationReady(calendarType))
+            )
+            .then(() => 
+                 dispatch(updateProfile(calendarType))
+            )
+            .then(() => 
+                 dispatch(refreshCalendar())
+            )
+            // .then(() => 
+            //     sendAnalytics(createCalendarConnectedEvent())
+            // )
             .catch(error => {
+                if(error.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
+                    showEnableCookieTip(true);
+                }
                 logger.error(
-                    'Error occurred while signing into calendar integration',
+                    'Error occurred while signing in using Google oauth',
                     error);
 
                 return Promise.reject(error);
@@ -286,6 +310,9 @@ export function updateProfile(calendarType: string): Function {
         return dispatch(integration.getCurrentEmail())
             .then(email => {
                 dispatch(setCalendarProfileEmail(email));
+            })
+            .catch((e) => {
+                console.log(e)
             });
     };
 }
