@@ -24,7 +24,7 @@ RUN dpkg-buildpackage -A -rfakeroot -us -uc -tc
 # Stage 2, "web stage"
 FROM scr.saal.ai/blync-base:1
 
-ADD https://dl.eff.org/certbot-auto /usr/local/bin/
+ADD https://raw.githubusercontent.com/acmesh-official/acme.sh/2.8.8/acme.sh /opt
 
 COPY rootfs/ /
 
@@ -34,7 +34,7 @@ COPY --from=dpkg-package /saal-repo/jitsi-meet-web_*.deb ./
 
 RUN \
   apt-get update && \
-	apt-get install -y cron nginx-extras && \
+	apt-get install -y cron nginx-extras socat && \
 	apt-get -d install -y ./jitsi-meet-web-config_*.deb && \
 	apt-get install -y ./jitsi-meet-web_*.deb && \
   dpkg -x ./jitsi-meet-web-config_*.deb /jitsi-meet-web-config && \
@@ -47,10 +47,6 @@ RUN \
   rm ./jitsi-meet-web*.deb && \
   rm -rf /jitsi-meet-web-config
 
-RUN \
-	chmod a+x /usr/local/bin/certbot-auto && \
-	certbot-auto --noninteractive --install-only
-
 EXPOSE 80 443
 
-VOLUME ["/config", "/etc/letsencrypt", "/usr/share/jitsi-meet/transcripts"]
+VOLUME ["/config", "/usr/share/jitsi-meet/transcripts"]
