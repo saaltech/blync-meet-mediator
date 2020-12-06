@@ -80,7 +80,7 @@ export function calculateThumbnailSizeForHorizontalView(clientHeight: number = 0
         },
         remote: {
             height,
-            width: Math.floor(interfaceConfig.REMOTE_THUMBNAIL_RATIO * height)
+            width: Math.floor(interfaceConfig.LOCAL_THUMBNAIL_RATIO * height)
         }
     };
 }
