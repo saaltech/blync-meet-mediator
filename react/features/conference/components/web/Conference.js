@@ -197,10 +197,10 @@ class Conference extends AbstractConference<Props, *> {
         }
         document.querySelector('body').classList.remove('legal-page-body');
         this.sendMessageWaitingParticipants();
-        if (this.props._shouldDisplayTileView
-            === prevProps._shouldDisplayTileView) {
-            return;
-        }
+        // if (this.props._shouldDisplayTileView
+        //     === prevProps._shouldDisplayTileView) {
+        //     return;
+        // }
 
         // TODO: For now VideoLayout is being called as LargeVideo and Filmstrip
         // sizing logic is still handled outside of React. Once all components
