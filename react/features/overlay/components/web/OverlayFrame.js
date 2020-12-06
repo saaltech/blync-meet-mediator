@@ -34,12 +34,12 @@ export default class OverlayFrame extends Component<Props> {
     render() {
         let containerClass = this.props.isLightOverlay
             ? 'overlay__container-light' : 'overlay__container';
-        let contentClass = 'overlay__content';
+        // let contentClass = 'overlay__content';
 
-        if (this.state.filmstripOnly) {
+        /*if (this.state.filmstripOnly) {
             containerClass += ' filmstrip-only';
             contentClass += ' filmstrip-only';
-        }
+        }*/
 
         return (<>
             <div class="modal-overlay"></div>
