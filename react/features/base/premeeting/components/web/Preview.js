@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { Avatar } from '../../../avatar';
 import { Video } from '../../../media';
 import { connect } from '../../../redux';
 import { getLocalVideoTrack } from '../../../tracks';
@@ -39,7 +40,17 @@ function Preview(props: Props) {
         );
     }
 
-    return null;
+    return (
+        <div
+            className = 'no-video'
+            id = 'preview'>
+            <Avatar
+                className = 'preview-avatar'
+                displayName = { name }
+                size = { 200 } />
+            { children }
+        </div>
+    );
 }
 
 /**
