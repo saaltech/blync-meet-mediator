@@ -477,7 +477,7 @@ var config = {
 
     analytics: {
         // The Google Analytics Tracking ID:
-        // googleAnalyticsTrackingId: 'your-tracking-id-UA-123456-1'
+        googleAnalyticsTrackingId: 'UA-155257911-2',
 
         // Matomo configuration:
         // matomoEndpoint: 'https://your-matomo-endpoint/',
