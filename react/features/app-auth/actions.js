@@ -34,7 +34,8 @@ export function resolveAppLogin(details, refreshCall = false) {
         }
 
         if(refreshCall) {
-            details['user'] = APP.store.getState()['features/app-auth'].user
+            details['user'] = Object.assign({}, APP.store.getState()['features/app-auth'].user, 
+                                    details.user || {});
         }
 
         dispatch({ type: APP_LOGIN, payload: details });
