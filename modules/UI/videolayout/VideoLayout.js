@@ -211,13 +211,13 @@ const VideoLayout = {
                     pidsToSelect = pidsToSelect.splice(pidsToSelect.length - window.config.channelLastN);
                 }
 
-                conference.setReceiverVideoConstraint(180);
+                conference.setReceiverVideoConstraint(360);
 
                 let t1 = setTimeout(() => {
                     conference && conference.selectParticipants(pidsToSelect)
                     let t2 = setTimeout(() => {
                         // plus one so that the last select participants will be ranked higher at JVB for lastN calculation
-                        conference && conference.setReceiverVideoConstraint(181);
+                        conference && conference.setReceiverVideoConstraint(361);
                         clearTimeout(t2);
                     }, 300);
                     clearTimeout(t1);
