@@ -326,7 +326,7 @@ class WelcomePage extends AbstractWelcomePage {
     _canCreateMeetings() {
         const { _user } = this.props;
 
-        return !_user || _user.role == 'manager'
+        return !_user || _user.isPartOfTheCircle;
     }
 
 
@@ -438,7 +438,7 @@ class WelcomePage extends AbstractWelcomePage {
                     </div>
                 </div>
                 {
-                    switchActiveIndex === 1
+                    switchActiveIndex === 1 && this._roomInputRef
                     && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
