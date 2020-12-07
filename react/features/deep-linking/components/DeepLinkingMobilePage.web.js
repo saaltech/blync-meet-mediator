@@ -81,6 +81,8 @@ class DeepLinkingMobilePage extends Component<Props> {
         sendAnalytics(
             createDeepLinkingPageEvent(
                 'displayed', 'DeepLinkingMobile', { isMobileBrowser: true }));
+
+        window.location.href=window.location.origin;
     }
 
     /**
@@ -90,8 +92,8 @@ class DeepLinkingMobilePage extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _downloadUrl, _room, t } = this.props;
-        const { HIDE_DEEP_LINKING_LOGO, NATIVE_APP_NAME, SHOW_DEEP_LINKING_IMAGE } = interfaceConfig;
+        /*const { _downloadUrl, _room, t } = this.props;
+        const { NATIVE_APP_NAME, SHOW_DEEP_LINKING_IMAGE } = interfaceConfig;
         const downloadButtonClassName
             = `${_SNS}__button ${_SNS}__button_primary`;
 
@@ -110,18 +112,15 @@ class DeepLinkingMobilePage extends Component<Props> {
                 // browser re-triggers the app-open behavior.
                 target: '_blank',
                 rel: 'noopener noreferrer'
-            };
+            };*/
 
         return (
-            <div className = { _SNS }>
+            <></>
+            /*<div className = { _SNS }>
                 <div className = 'header'>
-                    {
-                        HIDE_DEEP_LINKING_LOGO
-                            ? null
-                            : <img
-                                className = 'logo'
-                                src = 'images/logo-deep-linking.png' />
-                    }
+                    <img
+                        className = 'logo'
+                        src = 'images/logo-deep-linking.png' />
                 </div>
                 <div className = { `${_SNS}__body` }>
                     {
@@ -176,6 +175,7 @@ class DeepLinkingMobilePage extends Component<Props> {
                         room = { _room } />
                 </div>
             </div>
+            */
         );
     }
 
