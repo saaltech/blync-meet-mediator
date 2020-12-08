@@ -18,6 +18,8 @@ const minimize
     = process.argv.indexOf('-p') !== -1
         || process.argv.indexOf('--optimize-minimize') !== -1;
 
+const isProd = process.argv.indexOf('--isprod') !== -1
+
 /**
  * Build a Performance configuration object for the given size.
  * See: https://webpack.js.org/configuration/performance/
@@ -84,7 +86,7 @@ const config = {
             }
         }
     },
-    devtool: minimize ? 'hidden-source-map' : 'source-map',
+    devtool: isProd ? 'hidden-source-map' : 'source-map',
     mode: minimize ? 'production' : 'development',
     module: {
         rules: [ {

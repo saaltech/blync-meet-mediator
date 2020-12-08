@@ -2,6 +2,7 @@
 # scr.saal.ai/saal-meeting-base:1 from base.dockerfile
 FROM scr.saal.ai/saal-meeting-base:latest as dpkg-package
 ARG VERSIONMIN
+ARG IS_PROD
 RUN mkdir /saal-repo
 RUN mkdir /saal-repo/saal-meeting
 ADD . /saal-repo/saal-meeting/
@@ -10,7 +11,7 @@ RUN find . -type f -name "*.*" -exec chmod 644 {} +
 # RUN npm cache clean -f
 RUN apt-get update && apt install -y git make
 RUN npm install --registry https://npr.saal.ai
-RUN make
+RUN make prod=${IS_PROD}
 RUN apt-get update && apt install -y nodejs build-essential debhelper
 
 # Use the jifmeet package version as the version for our js and css files below
