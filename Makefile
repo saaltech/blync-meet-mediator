@@ -14,10 +14,18 @@ STYLES_MAIN = css/main.scss
 WEBPACK = ./node_modules/.bin/webpack
 WEBPACK_DEV_SERVER = ./node_modules/.bin/webpack-dev-server
 
+isprod_arg = --isprod
+
+ifeq ($(prod), 1)
+  webpack_isprod_arg=$(isprod_arg)
+else
+  webpack_isprod_arg=
+endif
+
 all: compile deploy clean
 
 compile:
-	$(WEBPACK) -p
+	$(WEBPACK) -p $(webpack_isprod_arg)
 
 clean:
 	rm -fr $(BUILD_DIR)
