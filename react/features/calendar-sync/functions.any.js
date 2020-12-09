@@ -22,10 +22,9 @@ function _isDisplayableCalendarEntry(entry) {
     //   - Is not an all day event and there is only one attendee (these events
     //     are usually placeholder events that don't need to be shown.)
     // return entry.endDate > Date.now() && 
-    // return !((entry.allDay
-    //            || entry.endDate - entry.startDate > ALLDAY_EVENT_LENGTH)
-    //                && (!entry.attendees || entry.attendees.length < 2));
-    return true;
+    return !((entry.allDay
+                || entry.endDate - entry.startDate > ALLDAY_EVENT_LENGTH)
+                    && (!entry.attendees || entry.attendees.length < 2));
 }
 
 /**
