@@ -384,7 +384,7 @@ const VideoLayout = {
                 return participant && !participant.isVideoMuted();
             });
 
-            let res = window.resolution || 720;
+            let res = window.config.resolution || 720;
             let preferredHeight = Math.floor(res/pidsToSelect.length);
             // minus one so that we can cover up for the issue with ranking at JVB
             preferredHeight = Math.max(180, preferredHeight - 1); 
