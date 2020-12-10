@@ -32,3 +32,14 @@ export function getConferenceSocketBaseLink() {
 export function getWaitingParticipantsSocketTopic(state = {}) {
   return `/conference/${state['features/app-auth']?.meetingDetails?.meetingId}/participants`
 }
+
+
+export function setConferenceLastNToOne(act = false) {
+  const { conference } = APP.store.getState()['features/base/conference'];
+  if(act) {
+      conference && conference.setLastN(1);
+  }
+  else {
+      conference && conference.setLastN(window.config.channelLastN);
+  }
+}

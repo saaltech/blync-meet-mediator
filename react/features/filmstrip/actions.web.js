@@ -5,6 +5,7 @@ import { CHAT_SIZE } from '../chat/constants';
 import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS,
     SET_FILMSTRIP_COLLAPSED, SET_PAGE } from './actionTypes';
 import { calculateThumbnailSizeForHorizontalView, calculateThumbnailSizeForTileView } from './functions';
+import { setConferenceLastNToOne } from '../conference/functions.any';
 
 /**
  * The size of the side margins for each tile as set in CSS.
@@ -66,6 +67,8 @@ export function setHorizontalViewDimensions(clientHeight: number = 0) {
     * }}
     */
 export function setFilmStripCollapsed(collapsed: boolean) {
+    setTimeout(() => setConferenceLastNToOne(collapsed), 10);
+    
     return {
         type: SET_FILMSTRIP_COLLAPSED,
         collapsed
