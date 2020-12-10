@@ -43,3 +43,4 @@ export function setConferenceLastNToOne(act = false) {
       conference && conference.setLastN(window.config.channelLastN);
   }
 }
+  
