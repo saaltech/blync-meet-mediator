@@ -1,5 +1,8 @@
 export const config = {};
 
+// set true for debugging in local only
+process.env.REACT_APP_JIFMEET_LOG = false
+
 // TODO: change this value to dev or something  else for local development
 process.env.REACT_APP_ENV = "prod"
 config.unauthenticatedIRP =
