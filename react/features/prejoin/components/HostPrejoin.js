@@ -263,7 +263,16 @@ function HostPrejoin(props) {
                     }}
                     meetingPassword = {{
                         meetingPassword,
-                        setMeetingPassword
+                        setMeetingPassword,
+                        validation: {
+                            message: 'Only alphabets and numbers are allowed.',
+                            action: e => {
+                                const re = /[0-9a-fA-F]+/g;
+                                if (!re.test(e.key)) {
+                                e.preventDefault();
+                                }
+                            }
+                        }
                     }}
                     meetingFrom = {{
                         meetingFrom,
