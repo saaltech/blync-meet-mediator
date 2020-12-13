@@ -19,12 +19,14 @@ function MeetingInfo(props) {
     const shareable = props.shareable;
     const { meetingId, setMeetingId } = props.meetingId;
     const { meetingName, setMeetingName } = props.meetingName;
-    const { meetingPassword, setMeetingPassword } = props.meetingPassword;
+    const { meetingPassword, setMeetingPassword, validation } = props.meetingPassword;
     const { isPrivate, setIsPrivate } = props.isPrivate || false;
     const { enableWaitingRoom, setEnableWaitingRoom } = props.enableWaitingRoom || false;
     const { meetingFrom, setMeetingFrom } = props.meetingFrom;
     const { meetingTo, setMeetingTo } = props.meetingTo;
     const isPureJoinFlow = props.isPureJoinFlow;
+
+    const isMeetingBeingCreated = meetNow || shareable;
 
 
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
@@ -180,7 +182,18 @@ function MeetingInfo(props) {
                   onChange = { value => setMeetingPassword(value.trim()) }
                   placeHolder = { 'Meeting password' }
                   value = { meetingPassword }
-                  disabled = { shareable || !isPrivate } />
+                  disablePaste = { isMeetingBeingCreated }
+                  disabled = { shareable || !isPrivate } 
+                  onKeyPress = { (e) => {
+                      if(validation?.action) {
+                        validation.action(e);
+                      }
+                  }} />
+
+              {
+                  validation?.message
+                  && <div className='input-message'>{ validation.message }</div>
+              }
           </div>
             }
 

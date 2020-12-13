@@ -50,6 +50,9 @@ type Props = {
 
     disabled?: boolean,
     focused?: boolean,
+
+    disablePaste?: boolean,
+    onKeyPress?: function
 };
 
 type State = {
@@ -142,6 +145,13 @@ export default class InputField extends PureComponent<Props, State> {
                 onChange = { this._onChange }
                 onFocus = { this._onFocus }
                 onKeyDown = { this._onKeyDown }
+                onPaste = { e => {
+                    if(this.props.disablePaste) {
+                        e.preventDefault();
+                        return false; 
+                    } 
+                }}
+                onKeyPress = { this.props.onKeyPress }
                 placeholder = { this.props.placeHolder }
                 ref = { input => {
                     this.nameInput = input;
