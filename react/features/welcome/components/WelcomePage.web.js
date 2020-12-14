@@ -326,7 +326,7 @@ class WelcomePage extends AbstractWelcomePage {
     _canCreateMeetings() {
         const { _user } = this.props;
 
-        return !_user || _user.isPartOfTheCircle;
+        return !_user || (_user.isPartOfTheCircle && _user.role == 'manager');
     }
 
 
