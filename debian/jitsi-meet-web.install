@@ -14,5 +14,4 @@ connection_optimization	/usr/share/jitsi-meet/
 resources/robots.txt	/usr/share/jitsi-meet/
 resources/*.sh			/usr/share/jitsi-meet/scripts/
 pwa-worker.js			/usr/share/jitsi-meet/
-manifest.json			/usr/share/jitsi-meet/
 apple-app-site-association.json	        /usr/share/jitsi-meet/
