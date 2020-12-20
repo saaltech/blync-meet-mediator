@@ -2,32 +2,63 @@
 
 import _ from 'lodash';
 import React from 'react';
+import SockJsClient from 'react-stomp';
 
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
+import Loading from '../../../always-on-top/Loading';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';
+import { Icon, IconArrowRight, IconShareDesktop, IconArrowLeft } from '../../../base/icons';
+import { getLocalParticipant, PARTICIPANT_ROLE } from '../../../base/participants';
 import { connect as reactReduxConnect } from '../../../base/redux';
+import { getLocalVideoTrack } from '../../../base/tracks';
+import {
+    addWaitingParticipants,
+    flushOutWaitingList,
+    removeWaitingParticipants
+} from '../../../base/waiting-participants';
 import { Chat } from '../../../chat';
-import { Filmstrip } from '../../../filmstrip';
+import { Filmstrip, SpeakersList } from '../../../filmstrip/components';
+import { setPage } from '../../../filmstrip/actions.web';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
-import { KnockingParticipantList, LobbyScreen } from '../../../lobby';
-import { Prejoin, isPrejoinPageVisible } from '../../../prejoin';
-import { fullScreenChanged, showToolbox } from '../../../toolbox/actions.web';
-import { Toolbox } from '../../../toolbox/components/web';
-import { LAYOUTS, getCurrentLayout } from '../../../video-layout';
-import { maybeShowSuboptimalExperienceNotification } from '../../functions';
+import { KnockingParticipantList } from '../../../lobby';
+import { NotificationsToasts, showNotification } from '../../../notifications-toasts';
+import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
+import {
+    Toolbox
+} from '../../../toolbox/components';
+import {
+    fullScreenChanged,
+    setToolboxAlwaysVisible,
+    showToolbox
+} from '../../../toolbox/actions';
+import { ToolboxMoreItems, ToastNotificationSettings } from '../../../toolbox-more-items';
+import {
+    leavingMeeting
+} from '../../../toolbox/actions';
+import { LAYOUTS, getCurrentLayout, calculateNumberOfPages, showPagination } from '../../../video-layout';
+import { maybeShowSuboptimalExperienceNotification,
+    getConferenceSocketBaseLink,
+    getWaitingParticipantsSocketTopic,
+    getAppSocketEndPoint } from '../../functions';
 import {
     AbstractConference,
     abstractMapStateToProps
 } from '../AbstractConference';
 import type { AbstractProps } from '../AbstractConference';
 
+import InviteParticipants from './InviteParticipants';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
+import ParticipantsList from './ParticipantsList';
+import PrivacyPage from './privacy/privacy';
+import TermsPage from './terms/terms';
+
 
 declare var APP: Object;
+declare var config: Object;
 declare var interfaceConfig: Object;
 
 /**
@@ -67,11 +98,6 @@ type Props = AbstractProps & {
     _iAmRecorder: boolean,
 
     /**
-     * Returns true if the 'lobby screen' is visible.
-     */
-    _isLobbyScreenVisible: boolean,
-
-    /**
      * The CSS class to apply to the root of {@link Conference} to modify the
      * application layout.
      */
@@ -88,7 +114,11 @@ type Props = AbstractProps & {
     _showPrejoin: boolean,
 
     dispatch: Function,
-    t: Function
+    t: Function,
+    _iAmSharingScreen: boolean,
+    _isModerator: boolean,
+    _sharer: Object,
+    _otherSharers: Array<Object>,
 }
 
 /**
@@ -98,6 +128,7 @@ class Conference extends AbstractConference<Props, *> {
     _onFullScreenChange: Function;
     _onShowToolbar: Function;
     _originalOnShowToolbar: Function;
+    isLegalPage: boolean;
 
     /**
      * Initializes a new Conference instance.
@@ -107,11 +138,13 @@ class Conference extends AbstractConference<Props, *> {
      */
     constructor(props) {
         super(props);
+        this.isLegalPage = (window.location.pathname === '/privacy-policy') || (window.location.pathname === '/TnC');
 
-        // Throttle and bind this component's mousemove handler to prevent it
+        if (!this.isLegalPage) {
+            // Throttle and bind this component's mousemove handler to prevent it
         // from firing too often.
-        this._originalOnShowToolbar = this._onShowToolbar;
-        this._onShowToolbar = _.throttle(
+            this._originalOnShowToolbar = this._onShowToolbar;
+            this._onShowToolbar = _.throttle(
             () => this._originalOnShowToolbar(),
             100,
             {
@@ -119,8 +152,13 @@ class Conference extends AbstractConference<Props, *> {
                 trailing: false
             });
 
-        // Bind event handler so it is only bound once for every instance.
-        this._onFullScreenChange = this._onFullScreenChange.bind(this);
+            this.state = {
+                waitingParticipantsFetchDone: false
+            };
+
+            // Bind event handler so it is only bound once for every instance.
+            this._onFullScreenChange = this._onFullScreenChange.bind(this);
+        }
     }
 
     /**
@@ -129,7 +167,19 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentDidMount() {
+        if (this.isLegalPage) {
+            document.querySelector('body').classList.add('legal-page-body');
+
+            return;
+        }
+        document.querySelector('body').classList.remove('legal-page-body');
+
+        this.closeSocketConnection();
+        this.props._isModerator && this.props.dispatch(flushOutWaitingList());
+
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
+        APP.store.dispatch(leavingMeeting(false));
+
         this._start();
     }
 
@@ -140,10 +190,17 @@ class Conference extends AbstractConference<Props, *> {
      * returns {void}
      */
     componentDidUpdate(prevProps) {
-        if (this.props._shouldDisplayTileView
-            === prevProps._shouldDisplayTileView) {
+        if (this.isLegalPage) {
+            document.querySelector('body').classList.add('legal-page-body');
+
             return;
         }
+        document.querySelector('body').classList.remove('legal-page-body');
+        this.sendMessageWaitingParticipants();
+        // if (this.props._shouldDisplayTileView
+        //     === prevProps._shouldDisplayTileView) {
+        //     return;
+        // }
 
         // TODO: For now VideoLayout is being called as LargeVideo and Filmstrip
         // sizing logic is still handled outside of React. Once all components
@@ -159,13 +216,55 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentWillUnmount() {
+        if (this.isLegalPage) {
+            return;
+        }
+        this.closeSocketConnection();
+
+        this.setState({ waitingParticipantsFetchDone: false });
+
         APP.UI.unbindEvents();
 
         FULL_SCREEN_EVENTS.forEach(name =>
             document.removeEventListener(name, this._onFullScreenChange));
 
         APP.conference.isJoined() && this.props.dispatch(disconnect());
+
+
     }
+
+    /**
+     * Send message over socket to fetch the waiting participants list.
+     *
+     */
+    sendMessageWaitingParticipants() {
+        if (this.isLegalPage) {
+            return;
+        }
+
+        if (this.props._isModerator
+            && !this.state.waitingParticipantsFetchDone
+            && this.clientRef && this.clientRef.client.connected) {
+            this.setState({ waitingParticipantsFetchDone: true });
+            this.clientRef.sendMessage(`${getAppSocketEndPoint() + this.props._participantsSocketTopic}`,
+                    JSON.stringify({ 'status': 'PENDING' }));
+        }
+
+    }
+
+    /**
+     * Close the existing socket connection.
+     *
+     */
+    closeSocketConnection() {
+        if (this.isLegalPage) {
+            return;
+        }
+        if (this.clientRef && this.clientRef.client.connected) {
+            this.clientRef.disconnect();
+        }
+    }
+
 
     /**
      * Implements React's {@link Component#render()}.
@@ -175,12 +274,43 @@ class Conference extends AbstractConference<Props, *> {
      */
     render() {
         const {
+            // XXX The character casing of the name filmStripOnly utilized by
+            // interfaceConfig is obsolete but legacy support is required.
+            filmStripOnly: filmstripOnly
+        } = interfaceConfig;
+        const {
             _iAmRecorder,
-            _isLobbyScreenVisible,
             _layoutClassName,
-            _showPrejoin
+            _showPrejoin,
+            _leavingMeeting,
+            _otherSharers,
+            _iAmSharingScreen,
+            _sharer,
+            _socketLink,
+            _participantsSocketTopic,
+            _isModerator,
+            _isWaitingEnabled,
+            _toastNotificationSettings
         } = this.props;
-        const hideLabels = _iAmRecorder;
+        const hideLabels = filmstripOnly || _iAmRecorder;
+
+        const { page } = APP.store.getState()['features/filmstrip'];
+        const { tileViewEnabled } = APP.store.getState()['features/video-layout'];
+
+        // const maxGridSize = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+        const participants = APP.store.getState()['features/base/participants'];
+        const totalPages = calculateNumberOfPages(participants.length);
+        const showPaging = showPagination();
+        
+        if (window.location.pathname === '/privacy-policy') {
+            return <PrivacyPage />;
+        }
+
+        if (window.location.pathname === '/TnC') {
+            return <TermsPage />;
+        }
+
+
 
         return (
             <div
@@ -188,22 +318,104 @@ class Conference extends AbstractConference<Props, *> {
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
 
+                {
+                    _isModerator && _isWaitingEnabled
+                    && <SockJsClient
+                        url = { _socketLink }
+                        topics = { [ _participantsSocketTopic ] }
+                        onMessage = { res => {
+                            if (res.action === 'REMOVE') {
+                                APP.store.dispatch(removeWaitingParticipants(res.participants.map(p => p.jid)));
+                            } else {
+                                APP.store.dispatch(addWaitingParticipants(res.participants));
+                                if (_toastNotificationSettings.showParticipantWaiting) {
+                                    res.participants && res.participants.forEach(p => {
+                                        APP.store.dispatch(showNotification({
+                                            userName: p.username,
+                                            type: 'WAITING_TO_JOIN'
+                                        }));
+                                    });
+                                }
+
+                            }
+
+                        } }
+                        ref = { client => {
+                            this.clientRef = client;
+                        } } />
+                }
+
+
+                {
+                    _leavingMeeting
+                    && <Loading />
+                }
+
                 <Notice />
                 <div id = 'videospace'>
                     <LargeVideo />
                     <KnockingParticipantList />
-                    <Filmstrip />
                     { hideLabels || <Labels /> }
+                    <Filmstrip filmstripOnly = { filmstripOnly } />
+                    {(tileViewEnabled && totalPages > 1 && showPaging)
+                    && <div className = 'conference__pagination'>
+                        <button
+                            disabled = { page <= 1 }
+                            onClick = { () => {
+
+                                if (page <= 1) {
+                                    return;
+                                }
+                                APP.store.dispatch(setPage(page - 1));
+                            } }>
+                            <Icon src = { IconArrowLeft } />
+                        </button>
+                        <button
+                            disabled = { page >= totalPages }
+                            onClick = { () => {
+
+                                if (page >= totalPages) {
+
+                                    return;
+                                }
+                                APP.store.dispatch(setPage(page + 1));
+                            } }><Icon src = { IconArrowRight } /></button>
+                    </div>}
                 </div>
 
-                { _showPrejoin || _isLobbyScreenVisible || <Toolbox /> }
-                <Chat />
+                { filmstripOnly || _showPrejoin || <Toolbox /> }
+                { filmstripOnly || <Chat /> }
+
+                <ToolboxMoreItems />
+                <ToastNotificationSettings />
+                {_isModerator && <SpeakersList />}
 
                 { this.renderNotificationsContainer() }
 
                 <CalleeInfoContainer />
 
-                { _showPrejoin && <Prejoin />}
+                {(_sharer || _iAmSharingScreen) && <div
+                    className = 'conference__screen-shared'
+                    title = { (_otherSharers || []).reduce((agg, t) => `${t.name} \n${agg}`, '') }>
+                    <Icon src = { IconShareDesktop } />
+                    {_iAmSharingScreen && 'You are sharing screen'}
+                    {!_iAmSharingScreen && _sharer && `${_sharer.name} is sharing screen`}
+                    {(_otherSharers || []).length > 0 && ` +${(_otherSharers || []).length} other(s)` }
+                </div>}
+
+                {/* {(this.props._screensharing && !this.props._sharer) && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />Your screen is being shared
+                </div>}
+
+                {this.props._sharer && <div className = 'conference__screen-shared'>
+                    <Icon src = { IconShareDesktop } />
+                    {this.props._sharer.name} {_otherSharers.length > 0 ? `+${_otherSharers.length} other(s) are` : 'is'} sharing screen
+                </div>} */}
+
+                <NotificationsToasts />
+                <ParticipantsList />
+                <InviteParticipants />
+                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
             </div>
         );
     }
@@ -250,6 +462,9 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
 
         maybeShowSuboptimalExperienceNotification(dispatch, t);
+
+        interfaceConfig.filmStripOnly
+            && dispatch(setToolboxAlwaysVisible(true));
     }
 }
 
@@ -262,13 +477,33 @@ class Conference extends AbstractConference<Props, *> {
  * @returns {Props}
  */
 function _mapStateToProps(state) {
+    const tracks = state['features/base/tracks'];
+    const participants = state['features/base/participants'];
+    const localVideo = getLocalVideoTrack(tracks);
+    const { participantId: screenSharerId } = tracks.find(t => t.videoType === 'desktop') || {};
+    const sharer = participants.find(p => p.id === screenSharerId);
+    const localParticipant = getLocalParticipant(state);
+    const isModerator = (localParticipant || {}).role === PARTICIPANT_ROLE.MODERATOR;
+
     return {
         ...abstractMapStateToProps(state),
+        _iAmSharingScreen: localVideo && localVideo.videoType === 'desktop',
+        _sharer: localParticipant.id === screenSharerId ? null : sharer,
+        _otherSharers: tracks
+            .filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId)
+            .map(t => participants.find(p => p.id === t.participantId) || {}),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
-        _isLobbyScreenVisible: state['features/base/dialog']?.component === LobbyScreen,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
-        _showPrejoin: isPrejoinPageVisible(state)
+        _showPrejoin: isPrejoinPageVisible(state),
+        _interimPrejoin: isInterimPrejoinPageVisible(state),
+        _isModerator: isModerator,
+        _leavingMeeting: state['features/toolbox'].leaving,
+        _socketLink: getConferenceSocketBaseLink(),
+        _participantsSocketTopic: getWaitingParticipantsSocketTopic(state),
+        _isWaitingEnabled: state['features/app-auth'].meetingDetails?.isWaitingEnabled,
+        _toastNotificationSettings: state['features/toolbox-more'].toastNotificationSettings
+
     };
 }
 

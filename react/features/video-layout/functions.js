@@ -1,11 +1,12 @@
 // @flow
 
-import { getPinnedParticipant, getParticipantCount } from '../base/participants';
-import { isYoutubeVideoPlaying } from '../youtube-player/functions';
+import { getPinnedParticipant } from '../base/participants';
+import { setPage } from '../filmstrip/actions.web';
 
 import { LAYOUTS } from './constants';
 
 declare var interfaceConfig: Object;
+declare var APP: Object;
 
 /**
  * Returns the {@code LAYOUTS} constant associated with the layout
@@ -17,8 +18,6 @@ declare var interfaceConfig: Object;
 export function getCurrentLayout(state: Object) {
     if (shouldDisplayTileView(state)) {
         return LAYOUTS.TILE_VIEW;
-    } else if (interfaceConfig.VERTICAL_FILMSTRIP) {
-        return LAYOUTS.VERTICAL_FILMSTRIP_VIEW;
     }
 
     return LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW;
@@ -73,46 +72,68 @@ export function getTileViewGridDimensions(state: Object, maxColumns: number = ge
  * @returns {boolean} True if tile view should be displayed.
  */
 export function shouldDisplayTileView(state: Object = {}) {
-    const participantCount = getParticipantCount(state);
+    return Boolean(
+        state['features/video-layout']
+            && state['features/video-layout'].tileViewEnabled
+            && (!state['features/etherpad']
+                || !state['features/etherpad'].editing)
 
-    // In case of a lonely meeting, we don't allow tile view.
-    // But it's a special case too, as we don't even render the button,
-    // see TileViewButton component.
-    if (participantCount < 2) {
-        return false;
-    }
-
-    const { tileViewEnabled } = state['features/video-layout'];
-
-    if (tileViewEnabled !== undefined) {
-        // If the user explicitly requested a view mode, we
-        // do that.
-        return tileViewEnabled;
-    }
-
-    const { iAmRecorder } = state['features/base/config'];
-
-    // None tile view mode is easier to calculate (no need for many negations), so we do
-    // that and negate it only once.
-    const shouldDisplayNormalMode = Boolean(
-
-        // Reasons for normal mode:
-
-        // Editing etherpad
-        state['features/etherpad']?.editing
-
-        // We pinned a participant
-        || getPinnedParticipant(state)
-
-        // It's a 1-on-1 meeting
-        || participantCount < 3
-
-        // There is a shared YouTube video in the meeting
-        || isYoutubeVideoPlaying(state)
-
-        // We want jibri to use stage view by default
-        || iAmRecorder
+            // Truthy check is needed for interfaceConfig to prevent errors on
+            // mobile which does not have interfaceConfig. On web, tile view
+            // should never be enabled for filmstrip only mode.
+            && (typeof interfaceConfig === 'undefined'
+                || !interfaceConfig.filmStripOnly)
+            && !getPinnedParticipant(state)
     );
+}
 
-    return !shouldDisplayNormalMode;
+
+/**
+ * UpdatePage.
+ *
+ * @param {number} participantsCount - The redux state.
+ * @returns {number} True if tile view should be displayed.
+ */
+export function updatePage(participantsCount: number) {
+    const expectedPage = calculateNumberOfPages(participantsCount);
+
+    const { page } = APP.store.getState()['features/filmstrip'];
+
+    if (page <= expectedPage) {
+        return;
+    }
+
+
+    APP.store.dispatch(setPage(expectedPage));
+}
+
+/**
+ * CalculateNumberOfPages.
+ *
+ * @param {number} participantsCount - The redux state.
+ * @returns {number} True if tile view should be displayed.
+ */
+export function calculateNumberOfPages(participantsCount: number) {
+    const perPage = window.interfaceConfig.TILE_VIEW_MAX_COLUMNS * window.interfaceConfig.TILE_VIEW_MAX_COLUMNS;
+    const pages = Math.floor(participantsCount / perPage);
+
+    if ((participantsCount % perPage) > 0) {
+        return pages + 1;
+    }
+
+    if (pages <= 0) {
+        return 1;
+    }
+
+    return pages;
+}
+
+
+/**
+ * ShowPagination.
+ *
+ * @returns {boolean} True if to show pagination.
+ */
+export function showPagination() {
+    return interfaceConfig.SHOW_VIDEO_PAGINATION;
 }

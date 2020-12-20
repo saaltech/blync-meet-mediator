@@ -163,7 +163,7 @@
         "conferenceDisconnectMsg": "You may want to check your network connection. Reconnecting in {{seconds}} sec...",
         "conferenceDisconnectTitle": "You have been disconnected.",
         "conferenceReloadMsg": "We're trying to fix this. Reconnecting in {{seconds}} sec...",
-        "conferenceReloadTitle": "Unfortunately, something went wrong.",
+        "conferenceReloadTitle": "Oops, something went wrong.",
         "confirm": "Confirm",
         "confirmNo": "No",
         "confirmYes": "Yes",
@@ -184,6 +184,8 @@
         "IamHost": "I am the host",
         "incorrectRoomLockPassword": "Incorrect password",
         "incorrectPassword": "Incorrect username or password",
+        "invalidHost": "Sorry, You cannot host this meeting. Please wait for the host to join.",
+        "guestErrorMessage": "Please wait for the host to join.",
         "inlineInstallationMsg": "You need to install our desktop sharing extension.",
         "inlineInstallExtension": "Install now",
         "internalError": "Oops! Something went wrong. The following error occurred: {{error}}",
@@ -579,7 +581,7 @@
     },
     "startupoverlay": {
         "policyText": " ",
-        "title": "{{app}} needs to use your microphone and camera."
+        "title": "Microphone and Camera access required for an uninterrupted experience."
     },
     "suspendedoverlay": {
         "rejoinKeyTitle": "Rejoin",
@@ -739,7 +741,7 @@
         "domute": "Mute",
         "domuteOthers": "Mute everyone else",
         "flip": "Flip",
-        "kick": "Kick out",
+        "kick": "Remove",
         "moderator": "Moderator",
         "mute": "Participant is muted",
         "muted": "Muted",

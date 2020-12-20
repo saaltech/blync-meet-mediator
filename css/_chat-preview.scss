@@ -1,0 +1,138 @@
+.chat-preview {
+    position: absolute;
+    left: 47px;
+    top: auto;
+    bottom: 30px;
+    z-index: $filmstripVideosZ;
+    height: inherit;
+    max-height: 60vh;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+
+    &--visible {
+        display: flex;
+    }
+
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        // background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 71%);
+
+        height: 50px;
+    }
+
+    #chatconversation {
+        display: flex;
+        flex-direction: column-reverse;
+        overflow: hidden;
+    
+        a:link, a:visited, a:hover, a:active {
+            color: #005C85;
+        }
+    }
+}
+
+.chat-preview-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    transition: opacity 0.3s ease-in, transform .5s ease-in;
+    align-items: flex-end;
+    min-height: 2rem;
+
+    &.expired {
+        opacity: 0;
+        transform: translateY(-200%);
+    }
+
+    .chatmessage {
+        background-color: #FFF;
+        border-radius: 6px 6px 6px 0px;
+        display: inline-block;
+        margin-top: 3px;
+        color: #393939;
+    }
+
+    .usermessage {
+        display: flex;
+        align-items: center;
+    }
+
+    .usermessage .jitsi-icon {
+        padding: 0 .5rem;
+    }
+
+    &--participant_joined .chatmessage {
+        background-color: #D1FFE9;
+    }
+
+    &--participant_left .chatmessage {
+        background-color: #FFD9D5;
+    }
+
+    &--raised_hand .chatmessage {
+        background-color: #D7EBF7;
+    }
+
+    .chatmessage-wrapper:not(:last-child) .chatmessage {
+        margin-bottom: 10px;
+    }
+
+     
+    .display-name {
+        display: none;
+    }
+
+    &.error {
+        .chatmessage {
+            background-color: $defaultWarningColor;
+            border-radius: 0px;
+            font-weight: 100;
+        }
+
+        .display-name {
+            display: none;
+        }
+    }
+
+    .chatmessage-wrapper {
+        max-width: 100%;
+
+        .replywrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .messageactions {
+                align-self: stretch;
+                border-left: 1px solid $chatActionsSeparatorColor;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 5px;
+
+                .toolbox-icon {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .avatar {
+        min-width: 45px;
+        min-height: 45px;
+        width: 45px !important;
+        height: 45px !important;
+        margin-right: 10px;
+        border: 2px solid #EAEAEA;
+
+        .jitsi-icon {
+            transform: translateY(50%) translateX(25%);
+        }
+    }
+}

@@ -56,6 +56,9 @@ export function shouldRemoteVideosBeVisible(state: Object) {
                     || ((pinnedParticipant = getPinnedParticipant(state))
                         && pinnedParticipant.local)))
 
+            || (typeof interfaceConfig === 'object'
+                && interfaceConfig.filmStripOnly)
+
             || state['features/base/config'].disable1On1Mode);
 }
 
@@ -77,7 +80,7 @@ export function calculateThumbnailSizeForHorizontalView(clientHeight: number = 0
         },
         remote: {
             height,
-            width: Math.floor(interfaceConfig.REMOTE_THUMBNAIL_RATIO * height)
+            width: Math.floor(interfaceConfig.LOCAL_THUMBNAIL_RATIO * height)
         }
     };
 }
@@ -100,7 +103,7 @@ export function calculateThumbnailSizeForTileView({
 
     // Minimum space to keep between the sides of the tiles and the sides
     // of the window.
-    const sideMargins = 30 * 2;
+    const sideMargins = 90 * 2;
 
     const verticalMargins = visibleRows * 10;
     const viewWidth = clientWidth - sideMargins;

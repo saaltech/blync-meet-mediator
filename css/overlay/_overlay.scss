@@ -7,20 +7,33 @@
         height: 100%;
         position: fixed;
         z-index: $overlayZ;
-        background: $defaultBackground;
+        background: transparent;
+        &.filmstrip-only {
+            @include transparentBg($filmstripOnlyOverlayBg, 0.8);
+        }
     }
 
     &__container-light {
         @include transparentBg($defaultBackground, 0.7);
+        &.filmstrip-only {
+            @include transparentBg($filmstripOnlyOverlayBg, 0.2);
+        }
     }
 
     &__content {
         position: absolute;
         margin: 0 auto;
         height: 100%;
-        width: 56%;
+        width: 50%;
+        min-width: 500px;
+        max-width: 600px;
         left: 50%;
         @include transform(translateX(-50%));
+        &.filmstrip-only {
+            left: 0px;
+            width: 100%;
+            @include transform(none);
+        }
 
         &_bottom {
             position: absolute;

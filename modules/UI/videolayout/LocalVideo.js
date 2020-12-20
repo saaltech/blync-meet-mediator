@@ -45,13 +45,14 @@ export default class LocalVideo extends SmallVideo {
         }
         this.emitter = emitter;
         this.statsPopoverLocation = interfaceConfig.VERTICAL_FILMSTRIP ? 'left top' : 'top center';
-
+        this.id = APP.conference.getMyUserId();
         Object.defineProperty(this, 'id', {
             get() {
                 return APP.conference.getMyUserId();
             }
         });
         this.initBrowserSpecificProperties();
+        this.initializeHost();
 
         // Set default display name.
         this.updateDisplayName();
@@ -63,7 +64,6 @@ export default class LocalVideo extends SmallVideo {
 
         this.addAudioLevelIndicator();
         this.updateIndicators();
-        this.updateStatusBar();
 
         this.container.onclick = this._onContainerClick;
     }
@@ -79,6 +79,7 @@ export default class LocalVideo extends SmallVideo {
 
         containerSpan.innerHTML = `
             <div class = 'videocontainer__background'></div>
+            <div class = 'videocontainer__host'>Host</div>
             <span id = 'localVideoWrapper'></span>
             <div class = 'videocontainer__toolbar'></div>
             <div class = 'videocontainer__toptoolbar'></div>
@@ -104,7 +105,7 @@ export default class LocalVideo extends SmallVideo {
         }
 
         this._renderDisplayName({
-            allowEditing: !config.disableProfile,
+            allowEditing: APP.store.getState()['features/base/jwt'].isGuest,
             displayNameSuffix: interfaceConfig.DEFAULT_LOCAL_DISPLAY_NAME,
             elementID: 'localDisplayName',
             participantID: this.id

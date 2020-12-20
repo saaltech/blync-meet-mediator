@@ -1,6 +1,7 @@
 // @flow
 
 import type { Dispatch } from 'redux';
+import { setConferenceLastNToOne } from '../conference/functions.any';
 
 import {
     SCREEN_SHARE_PARTICIPANTS_UPDATED,
@@ -37,6 +38,11 @@ export function setParticipantsWithScreenShare(participantIds: Array<string>) {
  * }}
  */
 export function setTileView(enabled: ?boolean) {
+    // perform only if the filemstrip is already collapsed
+    setTimeout(() => 
+        APP.store.getState()['features/filmstrip'].collapsed && setConferenceLastNToOne(!enabled)
+    , 10);
+
     return {
         type: SET_TILE_VIEW,
         enabled

@@ -268,6 +268,42 @@ export default class SmallVideo {
         }
     }
 
+    updateDominantSpeakerNotifier(id, lvl) {
+        // const displayModeInput = this.computeDisplayModeInput();
+        // if(!displayModeInput.tileViewEnabled) {
+        //     return;
+        // }
+
+        let dominantSpeakerNotifier = document.getElementById("dominantSpeakerNotifier");
+        let nameContainer = this.$displayName();
+        
+        if (lvl > 0.2 && !nameContainer.find("#localDisplayName").length > 0) {
+            dominantSpeakerNotifier.classList.add("fade-in");
+            let name = nameContainer[0].textContent;
+            dominantSpeakerNotifier.innerHTML = `<div title='${name}'>${name}</div>&nbsp;is speaking`;
+            this._setDominantSpeakerNotifierTimer(dominantSpeakerNotifier, (dominantSpeakerNotifier.innerHTML.trim() !== ""));
+        }
+    }
+
+    _clearDominantSpeakerNotifierTimer() {
+        clearTimeout(APP.conference.dominantSpeakerNotifierTimer);
+        APP.conference.dominantSpeakerNotifierTimer = null;
+    } 
+
+    _setDominantSpeakerNotifierTimer(dominantSpeakerNotifier, clearTimer = false) {
+        if(clearTimer) {
+            this._clearDominantSpeakerNotifierTimer();
+        }
+        
+        APP.conference.dominantSpeakerNotifierTimer = setTimeout(() => {
+            dominantSpeakerNotifier.classList.remove("fade-in");
+            setTimeout(() => {
+                dominantSpeakerNotifier.innerHTML = "";
+                this._clearDominantSpeakerNotifierTimer();
+            }, 1000);
+        }, 2000)
+    }
+
     /**
      * Queries the component's DOM for the element that should be the parent to the
      * AudioLevelIndicator.
@@ -300,6 +336,20 @@ export default class SmallVideo {
      */
     $avatar() {
         return this.$container.find('.avatar-container');
+    }
+
+    /**
+     * Selects the HTML image element which displays hosts label.
+     *
+     * @return {jQuery|HTMLElement} a jQuery selector pointing to the HTML image
+     * element which displays the hosts label.
+     */
+    $host() {
+        if (!this.container) {
+            return null;
+        }
+
+        return this.$container.find('.videocontainer__host');
     }
 
     /**
@@ -540,6 +590,34 @@ export default class SmallVideo {
     }
 
     /**
+     * Updates the react component displaying the host label
+     * url.
+     *
+     * @returns {void}
+     */
+    initializeHost() {
+        const hostLabel = this.$host();
+
+        if (!hostLabel) {
+            return;
+        }
+        const user = APP.store.getState()['features/base/participants']
+        .find(p => p.id === this.id);
+
+        if (!user) {
+            hostLabel.hide();
+
+            return;
+        }
+
+        if (user._role === 'moderator' || user.role === 'moderator') {
+            hostLabel.show();
+        } else {
+            hostLabel.hide();
+        }
+    }
+
+    /**
      * Unmounts any attached react components (particular the avatar image) from
      * the avatar container.
      *
@@ -679,14 +757,14 @@ export default class SmallVideo {
         let statsPopoverPosition, tooltipPosition;
 
         if (currentLayout === LAYOUTS.TILE_VIEW) {
-            statsPopoverPosition = 'right top';
-            tooltipPosition = 'right';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else if (currentLayout === LAYOUTS.VERTICAL_FILMSTRIP_VIEW) {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'left';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         } else {
-            statsPopoverPosition = this.statsPopoverLocation;
-            tooltipPosition = 'top';
+            statsPopoverPosition = 'bottom left';
+            tooltipPosition = 'bottom';
         }
 
         ReactDOM.render(

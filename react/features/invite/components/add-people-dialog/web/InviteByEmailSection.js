@@ -1,7 +1,8 @@
 // @flow
 
 import Tooltip from '@atlaskit/tooltip';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { WhatsappShareButton } from 'react-share';
 
 import { translate } from '../../../../base/i18n';
 import {
@@ -11,9 +12,12 @@ import {
     IconEmail,
     IconGoogle,
     IconOutlook,
-    IconYahoo
+    IconYahoo,
+    IconWhatsapp
 } from '../../../../base/icons';
-import { copyText, openURLInBrowser } from '../../../../base/util';
+import { openURLInBrowser } from '../../../../base/util';
+
+import { copyText } from './utils';
 
 type Props = {
 
@@ -31,6 +35,8 @@ type Props = {
      * Invoked to obtain translated strings.
      */
     t: Function,
+
+    custom?: boolean
 };
 
 /**
@@ -38,10 +44,14 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
+function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: Props) {
     const [ isActive, setIsActive ] = useState(false);
     const encodedInviteSubject = encodeURIComponent(inviteSubject);
     const encodedInviteText = encodeURIComponent(inviteText);
+
+    useEffect(() => {
+        setIsActive(custom);
+    });
 
     /**
      * Copies the conference invitation to the clipboard.
@@ -50,6 +60,15 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
      */
     function _onCopyText() {
         copyText(inviteText);
+    }
+
+    /**
+     * Returns the conference invitation text.
+     *
+     * @returns {string}
+     */
+    function _getInviteText() {
+        return inviteText;
     }
 
     /**
@@ -113,8 +132,9 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
                             key = { idx }
                             position = 'top'>
                             <div
+                                className = 'invite-icon'
                                 onClick = { _onSelectProvider(url) }>
-                                <Icon src = { icon } />
+                                <Icon src = { icon } size={30}/>
                             </div>
                         </Tooltip>
                     ))
@@ -124,28 +144,46 @@ function InviteByEmailSection({ inviteSubject, inviteText, t }: Props) {
 
     }
 
+    function renderWhatsappShare(url) {
+        return (<Tooltip
+            content = { 'Whatsapp message' }
+            position = 'top'>
+            <WhatsappShareButton
+                round = { "true" }
+                url = { url }>
+                <Icon src = { IconWhatsapp }  size = { 30 } />
+            </WhatsappShareButton>
+        </Tooltip>);
+    }
+
     return (
         <>
-            <div>
-                <div
-                    className = { `invite-more-dialog email-container${isActive ? ' active' : ''}` }
-                    onClick = { _onToggleActiveState }>
-                    <span>{t('addPeople.shareInvite')}</span>
-                    <Icon src = { IconArrowDownSmall } />
-                </div>
-                <div className = { `invite-more-dialog icon-container${isActive ? ' active' : ''}` }>
-                    <Tooltip
-                        content = { t('addPeople.copyInvite') }
-                        position = 'top'>
-                        <div
-                            className = 'copy-invite-icon'
-                            onClick = { _onCopyText }>
-                            <Icon src = { IconCopy } />
+            {
+                custom
+                    ? <div className = 'share-meeting-details'>
+                        <div className = 'label'>{t('addPeople.shareInvite')}</div>
+                        <div className = 'modalities'>
+                            {renderEmailIcons()}
+                            {renderWhatsappShare(_getInviteText())}
                         </div>
-                    </Tooltip>
-                    {renderEmailIcons()}
-                </div>
-            </div>
+                    </div>
+                    : <>
+                        <div>
+                            <div
+                                className = { `invite-more-dialog email-container${isActive ? ' active' : ''}` }
+                                onClick = { _onToggleActiveState }>
+                                <span>{t('addPeople.shareInvite')}</span>
+                                <Icon src = { IconArrowDownSmall } />
+                            </div>
+                            <div className = { `invite-more-dialog icon-container${isActive ? ' active' : ''}` }>
+                                {renderEmailIcons()}
+                                {renderWhatsappShare(_getInviteText())}
+                            </div>
+                        </div>
+                        <div className = 'invite-more-dialog separator' />
+            </>
+            }
+
         </>
     );
 }

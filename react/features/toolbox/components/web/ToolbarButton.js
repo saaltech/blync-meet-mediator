@@ -22,7 +22,8 @@ type Props = AbstractToolbarButtonProps & {
      * From which direction the tooltip should appear, relative to the
      * button.
      */
-    tooltipPosition: string
+    tooltipPosition: string,
+    showArrow?: boolean
 };
 
 /**
@@ -93,6 +94,11 @@ class ToolbarButton extends AbstractToolbarButton<Props> {
                 onKeyDown = { this._onKeyDown }
                 role = 'button'
                 tabIndex = { 0 }>
+                    {this.props.showArrow && <div
+                    className = 'arrow-down'
+                    style = {{
+                        display: this.props.toggled ? 'block' : 'none'
+                    }} />}
                 { this.props.tooltip
                     ? <Tooltip
                         content = { this.props.tooltip }

@@ -4,7 +4,8 @@ import {
     SET_FILMSTRIP_ENABLED,
     SET_FILMSTRIP_HOVERED,
     SET_FILMSTRIP_VISIBLE,
-    SET_TILE_VIEW_DIMENSIONS
+    SET_TILE_VIEW_DIMENSIONS,
+    SET_SHOW_SPEAKERS_LIST
 } from './actionTypes';
 
 /**
@@ -75,5 +76,21 @@ export function setTileViewDimensions({ thumbnailSize }: Object) {
         dimensions: {
             thumbnailSize
         }
+    };
+}
+
+/**
+ * Sets whether the filmstrip is visible.
+ *
+ * @param {boolean} visible - Whether the filmstrip is visible.
+ * @returns {{
+    *     type: SET_SHOW_SPEAKERS_LIST,
+    *     visible: boolean
+    * }}
+    */
+export function setShowSpeakersList(visible: boolean) {
+    return {
+        type: SET_SHOW_SPEAKERS_LIST,
+        visible
     };
 }

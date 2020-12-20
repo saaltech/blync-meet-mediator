@@ -10,11 +10,14 @@ import {
     PIN_PARTICIPANT,
     getParticipantById
 } from '../base/participants';
+import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actionTypes'
 import { MiddlewareRegistry } from '../base/redux';
 import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
-import { SET_FILMSTRIP_VISIBLE } from '../filmstrip';
+import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED, setFilmStripCollapsed } from '../filmstrip';
 
+import { SET_TILE_VIEW } from './actionTypes';
 import './middleware.any';
+import { updatePage } from './functions.js';
 
 declare var APP: Object;
 
@@ -35,24 +38,42 @@ MiddlewareRegistry.register(store => next => action => {
     switch (action.type) {
     case CONFERENCE_JOINED:
         VideoLayout.mucJoined();
+
+        // window.VideoLayout = VideoLayout;
+
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
         break;
 
     case CONFERENCE_WILL_LEAVE:
         VideoLayout.reset();
         break;
 
+    case SCREEN_SHARE_PARTICIPANTS_UPDATED: {
+        APP.store.dispatch(setFilmStripCollapsed(true));
+        break;
+    }    
+
     case PARTICIPANT_JOINED:
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
         if (!action.participant.local) {
             VideoLayout.addRemoteParticipantContainer(
                 getParticipantById(store.getState(), action.participant.id));
         }
+
         break;
 
-    case PARTICIPANT_LEFT:
+    case PARTICIPANT_LEFT: {
         VideoLayout.removeParticipantContainer(action.participant.id);
+
+        const participants = store.getState()['features/base/participants'];
+
+        updatePage(participants.length);
+
         break;
+    }
 
     case PARTICIPANT_UPDATED: {
+
         // Look for actions that triggered a change to connectionStatus. This is
         // done instead of changing the connection status change action to be
         // explicit in order to minimize changes to other code.
@@ -61,6 +82,9 @@ MiddlewareRegistry.register(store => next => action => {
                 action.participant.id,
                 action.participant.connectionStatus);
         }
+
+        setTimeout(() => VideoLayout.onHostChange(), 2000);
+
         break;
     }
 
@@ -79,6 +103,14 @@ MiddlewareRegistry.register(store => next => action => {
     case TRACK_ADDED:
         if (!action.track.local) {
             VideoLayout.onRemoteStreamAdded(action.track.jitsiTrack);
+        }
+        break;
+
+    case SET_TILE_VIEW:
+        if (action.enabled) {
+            VideoLayout.refreshPagination();
+        } else {
+            VideoLayout.updateVideoPage(null);
         }
 
         break;

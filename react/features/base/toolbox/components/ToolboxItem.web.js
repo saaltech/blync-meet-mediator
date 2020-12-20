@@ -63,6 +63,7 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
             onClick,
             showLabel,
             tooltipPosition,
+            showIcon = true,
             toggled
         } = this.props;
         const className = showLabel ? 'overflow-menu-item' : 'toolbox-button';
@@ -81,7 +82,7 @@ export default class ToolboxItem extends AbstractToolboxItem<Props> {
         const useTooltip = this.tooltip && this.tooltip.length > 0;
         let children = (
             <Fragment>
-                { this._renderIcon() }
+                { showIcon && this._renderIcon() }
                 { showLabel && <span>
                     { this.label }
                 </span> }

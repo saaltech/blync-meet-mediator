@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { isVpaasMeeting } from '../../../../billing-counter/functions';
 import { translate } from '../../../i18n';
 import { connect } from '../../../redux';
+import { isMobileBrowser } from '../../../../base/environment/utils'
 
 
 declare var interfaceConfig: Object;
@@ -106,8 +107,9 @@ class Watermarks extends Component<Props, State> {
                 {
                     this._renderJitsiWatermark()
                 }
-                {
+                {/*
                     this._renderBrandWatermark()
+                    */
                 }
                 {
                     this._renderPoweredBy()
@@ -165,22 +167,26 @@ class Watermarks extends Component<Props, State> {
         if (_showJitsiWatermark) {
             const style = {
                 backgroundImage: `url(${_logoUrl})`,
-                maxWidth: 140,
-                maxHeight: 70
+                maxWidth: 180,
             };
 
             reactElement = (<div
-                className = 'watermark leftwatermark'
+                className = {`watermark leftwatermark ${isMobileBrowser() ? 'mobileView': ''}`}
                 style = { style } />);
 
             if (_logoLink) {
                 reactElement = (
+                    <>
+                        { reactElement }
+                    </>
+                );
+                /*reactElement = (
                     <a
-                        href = { _logoLink }
+                        href = { link }
                         target = '_new'>
                         { reactElement }
                     </a>
-                );
+                );*/
             }
         }
 

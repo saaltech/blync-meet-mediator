@@ -1,4 +1,9 @@
 .video-quality-dialog {
+    .hide-warning {
+        height: 0;
+        visibility: hidden;
+    }
+
     .video-quality-dialog-title {
         margin-bottom: 10px;
     }
@@ -104,6 +109,30 @@
             word-spacing: unset;
         }
     }
+
+    &.video-not-supported {
+        .video-quality-dialog-labels {
+            color: gray;
+        }
+
+        .video-quality-dialog-slider {
+            @mixin sliderTrackDisabledStyles() {
+                background: rgba(14, 22, 36, 0.1);
+            }
+
+            &::-ms-track {
+                @include sliderTrackDisabledStyles();
+            }
+
+            &::-moz-range-track {
+                @include sliderTrackDisabledStyles();
+            }
+
+            &::-webkit-slider-runnable-track {
+                @include sliderTrackDisabledStyles();
+            }
+        }
+    }
 }
 
 .modal-dialog-form {
@@ -114,4 +143,5 @@
 
 #videoResolutionLabel {
     z-index: $zindex3 + 1;
+    display: none;
 }

@@ -2,6 +2,8 @@
 
 import { WELCOME_PAGE_ENABLED, getFeatureFlag } from '../base/flags';
 import { toState } from '../base/redux';
+import axios from 'axios';
+import { config } from '../../config';
 
 declare var APP: Object;
 
@@ -46,3 +48,28 @@ export function isWelcomePageUserEnabled(stateful: Function | Object) {
             ? true
             : toState(stateful)['features/base/config'].enableWelcomePage);
 }
+
+/**
+ */
+export function redirectOnInvalidMeeting(meetingId) {
+    window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
+}
+
+/**
+ * Check if the meeting exists, given the meeting Id
+ */
+export async function getMeetingById(meetingId) {
+    try {
+        const res = await axios.get(`${config.conferenceManager + config.unauthConferenceEP}/${meetingId}`);
+
+        if (res) {
+            return true;
+        }
+    } catch (e) {
+        return false;
+    }
+
+    return false;
+}
+
+

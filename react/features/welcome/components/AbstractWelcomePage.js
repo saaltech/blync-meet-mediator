@@ -1,11 +1,12 @@
 // @flow
 
-import { generateRoomWithoutSeparator } from '@jitsi/js-utils/random';
+// import { generateRoomWithoutSeparator } from '@jitsi/js-utils/random';
 import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { createWelcomePageEvent, sendAnalytics } from '../../analytics';
 import { appNavigate } from '../../app/actions';
+import { validateMeetingCode } from '../../app-auth/functions';
 import isInsecureRoomName from '../../base/util/isInsecureRoomName';
 import { isCalendarEnabled } from '../../calendar-sync';
 import { isRecentListEnabled } from '../../recent-list/functions';
@@ -180,6 +181,13 @@ export class AbstractWelcomePage extends Component<Props, *> {
      */
     _doRenderInsecureRoomNameWarning: () => React$Component<any>;
 
+    /**
+     * Renders the insecure room name warning.
+     *
+     * @returns {ReactElement}
+     */
+    _doRenderInvalidCode: () => React$Component<any>;
+
     _onJoin: () => void;
 
     /**
@@ -205,8 +213,9 @@ export class AbstractWelcomePage extends Component<Props, *> {
             // may have already been unmounted.
             const onAppNavigateSettled
                 = () => this._mounted && this.setState({ joining: false });
-
-            this.props.dispatch(appNavigate(room))
+            const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
+            //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
+            this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? "" : "?home=true")))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
         }
     }
@@ -235,9 +244,14 @@ export class AbstractWelcomePage extends Component<Props, *> {
      *
      * @returns {ReactElement}
      */
-    _renderInsecureRoomNameWarning() {
+    _renderInsecureRoomNameWarning(code = false) {
         if (this.props._enableInsecureRoomNameWarning && this.state.insecureRoomName) {
             return this._doRenderInsecureRoomNameWarning();
+        }
+
+        // check Meeting ID format
+        if (code && !validateMeetingCode(this.state.room)) {
+            return this._doRenderInvalidCode();
         }
 
         return null;
@@ -253,7 +267,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @returns {void}
      */
     _updateRoomname() {
-        const generatedRoomname = generateRoomWithoutSeparator();
+        const generatedRoomname = ''; // generateRoomWithoutSeparator();
         const roomPlaceholder = '';
         const updateTimeoutId = setTimeout(this._updateRoomname, 10000);
 
@@ -274,7 +288,11 @@ export class AbstractWelcomePage extends Component<Props, *> {
  *
  * @param {Object} state - The redux state.
  * @protected
- * @returns {Props}
+ * @returns {{
+ *     _calendarEnabled: boolean,
+ *     _room: string,
+ *     _settings: Object
+ * }}
  */
 export function _mapStateToProps(state: Object) {
     return {
@@ -283,6 +301,10 @@ export function _mapStateToProps(state: Object) {
         _moderatedRoomServiceUrl: state['features/base/config'].moderatedRoomServiceUrl,
         _recentListEnabled: isRecentListEnabled(),
         _room: state['features/base/conference'].room,
-        _settings: state['features/base/settings']
+        _settings: state['features/base/settings'],
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
+        _meetingDetails: state['features/app-auth'].meetingDetails,
+        _user: state['features/app-auth'].user,
+        _isGoogleSigninUser: Boolean(state['features/app-auth'].googleOfflineCode)
     };
 }

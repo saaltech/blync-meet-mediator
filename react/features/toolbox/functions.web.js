@@ -46,14 +46,16 @@ export function isToolboxVisible(state: Object) {
     const {
         alwaysVisible,
         timeoutID,
-        visible
+        visible,
+        participantsListOpen,
+        invitePeopleVisible
     } = state['features/toolbox'];
     const { audioSettingsVisible, videoSettingsVisible } = state['features/settings'];
     const { isOpen } = state['features/chat'];
     const isMobileChatOpen = isMobileBrowser() && isOpen;
 
     return Boolean(!isMobileChatOpen && !iAmSipGateway && (timeoutID || visible || alwaysVisible
-                                      || audioSettingsVisible || videoSettingsVisible));
+                                      || audioSettingsVisible || videoSettingsVisible || participantsListOpen || invitePeopleVisible));
 }
 
 /**

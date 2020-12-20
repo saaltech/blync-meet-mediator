@@ -68,3 +68,8 @@ export const SET_PREJOIN_DEVICE_ERRORS = 'SET_PREJOIN_DEVICE_ERRORS';
  * Action type to set the visibility of the prejoin page.
  */
 export const SET_PREJOIN_PAGE_VISIBILITY = 'SET_PREJOIN_PAGE_VISIBILITY';
+
+/**
+ * Action type to set/unset error message to show on the prejoin page
+ */
+export const SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY = 'SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY';

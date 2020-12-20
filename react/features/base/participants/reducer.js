@@ -82,7 +82,7 @@ ReducerRegistry.register('features/base/participants', (state = [], action) => {
         // the app and "leaves" at the end of the app).
         const { conference, id } = action.participant;
 
-        return state.filter(p =>
+        const newList = state.filter(p =>
             !(
                 p.id === id
 
@@ -92,6 +92,8 @@ ReducerRegistry.register('features/base/participants', (state = [], action) => {
                     // removal is requested.
                     && p.conference === conference
                     && (conference || p.local)));
+
+        return newList;
     }
     }
 

@@ -10,7 +10,8 @@ import {
     SET_PREJOIN_DEVICE_ERRORS,
     SET_PREJOIN_DISPLAY_NAME_REQUIRED,
     SET_PREJOIN_PAGE_VISIBILITY,
-    SET_SKIP_PREJOIN
+    SET_SKIP_PREJOIN,
+    SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY
 } from './actionTypes';
 
 const DEFAULT_STATE = {
@@ -109,6 +110,13 @@ ReducerRegistry.register(
             return {
                 ...state,
                 isDisplayNameRequired: true
+            };
+        }
+        
+        case SET_PREJOIN_PAGE_ERROR_MESSAGE_KEY: {
+            return {
+                ...state,
+                pageErrorMessageKey: action.value
             };
         }
 

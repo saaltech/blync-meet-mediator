@@ -2,6 +2,7 @@
 
 import React from 'react';
 
+import { Avatar } from '../../../avatar';
 import { Video } from '../../../media';
 import { connect } from '../../../redux';
 import { getLocalVideoTrack } from '../../../tracks';
@@ -26,7 +27,7 @@ export type Props = {
  * @returns {ReactElement}
  */
 function Preview(props: Props) {
-    const { videoMuted, videoTrack } = props;
+    const { videoMuted, videoTrack, children } = props;
 
     if (!videoMuted && videoTrack) {
         return (
@@ -34,11 +35,22 @@ function Preview(props: Props) {
                 <Video
                     className = 'flipVideoX'
                     videoTrack = {{ jitsiTrack: videoTrack }} />
+                { children }
             </div>
         );
     }
 
-    return null;
+    return (
+        <div
+            className = 'no-video'
+            id = 'preview'>
+            <Avatar
+                className = 'preview-avatar'
+                displayName = { name }
+                size = { 200 } />
+            { children }
+        </div>
+    );
 }
 
 /**

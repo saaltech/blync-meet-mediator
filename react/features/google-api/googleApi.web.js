@@ -6,7 +6,10 @@ import {
     GOOGLE_SCOPE_YOUTUBE
 } from './constants';
 
-const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
+import { signOut as fullSignOut } from './actions';
+
+// const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/api.js';
+const GOOGLE_API_CLIENT_LIBRARY_URL = 'https://apis.google.com/js/platform.js';
 
 /**
  * A promise for dynamically loading the Google API Client Library.
@@ -115,6 +118,11 @@ const googleApi = {
         }
 
         googleClientLoadPromise = new Promise((resolve, reject) => {
+            const metaTag = document.createElement('meta');
+            metaTag.name = 'google-signin-client_id';
+            metaTag.content = window.config.googleApiApplicationClientID;
+            document.head.appendChild(metaTag);
+
             const scriptTag = document.createElement('script');
 
             scriptTag.async = true;
@@ -179,17 +187,39 @@ const googleApi = {
     },
 
     /**
+     * Prompts the participant to sign in (for offline access) to the Google API Client Library, even
+     * if already signed in.
+     *
+     * @returns {Promise}
+     */
+    grantOfflineAccess() {
+        return this.get()
+            .then(api => 
+                api.auth2.getAuthInstance().grantOfflineAccess({ scope: 'profile email' })
+            )
+            .then((resp) => {
+                return resp.code;
+            });
+    },
+
+    /**
      * Prompts the participant to sign in to the Google API Client Library, if
      * not already signed in.
      *
      * @returns {Promise}
      */
-    signInIfNotSignedIn() {
+    signInIfNotSignedIn(isSignInAction = false) {
         return this.get()
             .then(() => this.isSignedIn())
             .then(isSignedIn => {
-                if (!isSignedIn) {
-                    return this.showAccountSelection();
+                // signOut out and  sign in again if offlineCode isnt found.
+                if (isSignInAction && isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
+                    APP.store.dispatch(fullSignOut());
+
+                    return this.grantOfflineAccess();
+                } else if (!isSignedIn && !APP.store.getState()['features/app-auth'].googleOfflineCode) {
+                    // return this.showAccountSelection();
+                    return this.grantOfflineAccess();
                 }
             });
     },
@@ -226,6 +256,7 @@ const googleApi = {
         return {
             calendarId: entry.calendarId,
             description: entry.description,
+            organizer: entry.organizer,
             endDate: entry.end.dateTime,
             id: entry.id,
             location: entry.location,
@@ -278,17 +309,46 @@ const googleApi = {
 
                 // user can edit the events, so we want only those that
                 // can be edited
+                // return this._getGoogleApiClient()
+                //    .client.calendar.calendarList.list();
+
+                const startDate = new Date();
+                const endDate = new Date();
+
+                startDate.setDate(startDate.getDate() + fetchStartDays);
+                startDate.setHours(0, 0, 0, 0);
+                endDate.setDate(endDate.getDate() + fetchEndDays);
+                endDate.setHours(23, 59, 59, 999);
+
                 return this._getGoogleApiClient()
-                    .client.calendar.calendarList.list();
+                        .client.calendar.events.list({
+                            'calendarId': 'primary',
+                            'timeMin': startDate.toISOString(),
+                            'timeMax': endDate.toISOString(),
+                            'showDeleted': false,
+                            'singleEvents': true,
+                            'orderBy': 'startTime'
+                        });
             })
-            .then(calendarList => {
+            .then(eventList => {
 
                 // no result, maybe not signed in
-                if (!calendarList) {
+                if (!eventList) {
                     return Promise.resolve();
                 }
 
-                const calendarIds
+                const eventsList = eventList.result.items
+                            .map(item => {
+                                const resultItem = { ...item };
+
+                                // add the calendarId only for the events
+                                // we can edit
+                                resultItem.calendarId = 'primary';
+
+                                return resultItem;
+                            });
+
+                /* const calendarIds
                     = calendarList.result.items.map(en => {
                         return {
                             id: en.id,
@@ -324,13 +384,10 @@ const googleApi = {
                                 }
 
                                 return resultItem;
-                            }));
-                });
+                            }));*/
+                // });
 
-                return Promise.all(promises)
-                    .then(results => [].concat(...results))
-                    .then(entries =>
-                        entries.map(e => this._convertCalendarEntry(e)));
+                return eventsList.map(e => e.start && this._convertCalendarEntry(e));
             });
     },
 
