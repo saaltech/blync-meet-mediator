@@ -11,6 +11,7 @@ import { getLocalParticipant } from '../../base/participants';
 import CopyMeetingUrl from '../../base/premeeting/components/web/CopyMeetingUrl';
 import { connect } from '../../base/redux';
 import useRequest from '../../hooks/use-request';
+import { Icon, IconCheck, IconCopy } from '../../base/icons';
 import CopyMeetingLinkSection from '../../invite/components/add-people-dialog/web/CopyMeetingLinkSection';
 import InviteByEmailSection from '../../invite/components/add-people-dialog/web/InviteByEmailSection';
 import { getInviteText } from '../../invite/functions';
@@ -21,7 +22,7 @@ import MeetingInfo from './MeetingInfo';
 declare var interfaceConfig: Object;
 
 function ShareMeeting(props) {
-    const [ meetingId, setMeetingId ] = useState(null);
+    const [meetingId, setMeetingId] = useState(null);
     const {
         meetingUrl,
         t,
@@ -56,19 +57,21 @@ function ShareMeeting(props) {
     });
 
     return (
-        <div className = { 'shareMeeting' }>
-            <div className = 'label'>Share Meeting Details</div>
+        <div className="shareMeetingWrapper">
+            <div className={'shareMeeting'}>
+                {/* <div className='label'>Share Meeting Details</div>
 
-            <CopyMeetingLinkSection
-                url = { _inviteUrl }
-                inviteText = { invite }
-                custom = { true } />
-            <InviteByEmailSection
-                inviteSubject = { inviteSubject }
-                inviteText = { invite }
-                custom = { true } />
+                <CopyMeetingLinkSection
+                    url={_inviteUrl}
+                    inviteText={invite}
+                    custom={true} /> */}
+                <InviteByEmailSection
+                    inviteSubject={inviteSubject}
+                    inviteText={invite}
+                    custom={true} />
 
-            {/* <CopyMeetingUrl meetingUrl={meetingUrl}/> */}
+                {/* <CopyMeetingUrl meetingUrl={meetingUrl}/> */}
+            </div>
         </div>
     );
 }
@@ -80,7 +83,7 @@ const mapStateToProps = state => {
         _conferenceName: getRoomName(state),
         _dialIn: state['features/invite'],
         _inviteUrl: getInviteURL(state) + '?join=true', //+ '#config.disableDeepLinking=true',
-        _localParticipantName: localParticipant?.name,
+        _localParticipantName: localParticipant ?.name,
         _locationUrl: state['features/base/connection'].locationURL
     };
 };

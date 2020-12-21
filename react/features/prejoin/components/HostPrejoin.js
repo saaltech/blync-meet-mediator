@@ -28,22 +28,22 @@ import MeetingInfo from './MeetingInfo';
 
 
 function HostPrejoin(props) {
-    const [ meetNow, setMeetNow ] = useState(true);
-    const [ meetingId, setMeetingId ] = useState((props.meetingDetails || {}).meetingId);
-    const [ meetingName, setMeetingName ] = useState((props.meetingDetails || {}).meetingName);
-    const [ isPrivate, setIsPrivate ] = useState(false);
-    const [ meetingPassword, setMeetingPassword ] = useState('');
-    const [ meetingFrom, setMeetingFrom ] = useState('');
-    const [ meetingTo, setMeetingTo ] = useState(null);
-    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
+    const [meetNow, setMeetNow] = useState(true);
+    const [meetingId, setMeetingId] = useState((props.meetingDetails || {}).meetingId);
+    const [meetingName, setMeetingName] = useState((props.meetingDetails || {}).meetingName);
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [meetingPassword, setMeetingPassword] = useState('');
+    const [meetingFrom, setMeetingFrom] = useState('');
+    const [meetingTo, setMeetingTo] = useState(null);
+    const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
-    const [ shareable, setShareable ] = useState(false);
+    const [shareable, setShareable] = useState(false);
     const { joinConference } = props;
-    const [ exiting, setExiting ] = useState(false);
-    const [ clearErrors, setClearErrors ] = useState(true);
+    const [exiting, setExiting] = useState(false);
+    const [clearErrors, setClearErrors] = useState(true);
     const userAgent = getUserAgentDetails();
 
-    const [ getConference, fetchErrors ] = useRequest({
+    const [getConference, fetchErrors] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
         method: 'get',
         onSuccess: data => updateConferenceState(data)
@@ -56,18 +56,18 @@ function HostPrejoin(props) {
             'conferenceSecret': meetingPassword,
             'scheduledFrom': meetNow ? '' : meetingFrom, // "2020-07-08T09:34:00.567Z",
             'scheduledTo': meetNow ? '' : meetingTo, // "2020-07-08T09:34:00.567Z"
-            'isWaitingEnabled' : enableWaitingRoom
+            'isWaitingEnabled': enableWaitingRoom
         };
     };
 
-    const [ updateConference, updateErrors ] = useRequest({
+    const [updateConference, updateErrors] = useRequest({
         url: config.conferenceManager + config.conferenceEP,
         method: 'put',
         body: formRequestBody,
         onSuccess: data => updateConferenceState(data)
     });
 
-    const [ saveConference, saveErrors ] = useRequest({
+    const [saveConference, saveErrors] = useRequest({
         url: config.conferenceManager + config.conferenceEP,
         method: 'post',
         body: formRequestBody,
@@ -75,23 +75,23 @@ function HostPrejoin(props) {
     });
 
     const updateConferenceState = data => {
-    /*
-        {
-            "conferenceId": "string",
-            "conferenceName": "string",
-            "conferenceStatus": "NOT_STARTED",
-            "conferenceSecret": "string",
-            "createdDateTime": "2020-07-08T09:43:59.668Z",
-            "hostJids": [
-                "string"
-            ],
-            "id": "string",
-            "lastModifiedDateTime": "2020-07-08T09:43:59.668Z",
-            "ownerId": "string",
-            "scheduledFrom": "2020-07-08T09:43:59.668Z",
-            "scheduledTo": "2020-07-08T09:43:59.668Z"
-        }
-    */
+        /*
+            {
+                "conferenceId": "string",
+                "conferenceName": "string",
+                "conferenceStatus": "NOT_STARTED",
+                "conferenceSecret": "string",
+                "createdDateTime": "2020-07-08T09:43:59.668Z",
+                "hostJids": [
+                    "string"
+                ],
+                "id": "string",
+                "lastModifiedDateTime": "2020-07-08T09:43:59.668Z",
+                "ownerId": "string",
+                "scheduledFrom": "2020-07-08T09:43:59.668Z",
+                "scheduledTo": "2020-07-08T09:43:59.668Z"
+            }
+        */
         setMeetingId(data.conferenceId);
         setMeetingName(data.conferenceName);
         setMeetingPassword(data.conferenceSecret);
@@ -143,15 +143,15 @@ function HostPrejoin(props) {
         }
 
         APP.store.dispatch(setPostWelcomePageScreen(null,
-        {
-            meetingId,
-            meetingName,
-            meetingPassword,
-            meetingFrom: meetNow ? '' : meetingFrom,
-            meetingTo: meetNow ? '' : meetingTo,
-            meetNow,
-            isWaitingEnabled: enableWaitingRoom
-        }
+            {
+                meetingId,
+                meetingName,
+                meetingPassword,
+                meetingFrom: meetNow ? '' : meetingFrom,
+                meetingTo: meetNow ? '' : meetingTo,
+                meetNow,
+                isWaitingEnabled: enableWaitingRoom
+            }
         ));
 
         /* if (meetNow) {
@@ -185,16 +185,16 @@ function HostPrejoin(props) {
             "client": userAgent.getBrowserName(),
             "clientVersion": userAgent.getBrowserVersion(),
             "conferenceId": meetingId,
-            "displayName": _user?.name,
+            "displayName": _user ?.name,
             "jid": _jid,
             "loginType": _isGoogleSigninUser ? 'google' : 'default',
             "os": userAgent.getOSName(),
             "osVersion": userAgent.getOSVersion(),
-            "userId": _user?.id
+            "userId": _user ?.id
         };
     };
 
-    const [ participantJoin, participantJoinError]  = useRequest({
+    const [participantJoin, participantJoinError] = useRequest({
         url: config.conferenceManager + config.unauthParticipantsEP + '/joinevent',
         method: 'post',
         body: formJoinEventParticipantRequestBody
@@ -203,65 +203,70 @@ function HostPrejoin(props) {
     const scheduleDisabled = !meetNow && !meetingFrom;
 
     return (
-        <div className = { 'hostPrejoin' }>
+        <div className={'hostPrejoin'}>
             {
                 exiting && <Loading />
             }
+            <div
+                onClick={props.onClickClose}
+                className="close-icon"></div>
 
             {
                 shareable
-            && <Icon
-                className = 'backArrow'
-                src = { IconArrowBack }
-                onClick = { () => setShareableAction(!shareable) } />
+                && <Icon
+                    className='backArrow'
+                    src={IconArrowBack}
+                    onClick={() => setShareableAction(!shareable)} />
             }
 
             {
                 shareable && meetNow
-            && <div className = 'page-title'> Join Now </div>
+                && <div className='page-title'> Join Now </div>
             }
 
-            <div className = 'profileSection'>
+            {/* <div className = 'profileSection'>
                 <Profile />
-            </div>
+            </div> */}
 
-            <div className = 'modesSection'>
+            <div className='modesSection'>
                 {
                     !shareable
-            && <ul>
-                <li
-                    className = { `${meetNow ? 'selected' : ''}` }
-                    onClick = { () => setMeetNowAndUpdatePage(true) }>
-                    Meet Now
+                    && <ul>
+                        <li
+                            className={`${meetNow ? 'selected' : ''}`}
+                            onClick={() => setMeetNowAndUpdatePage(true)}>
+                            Meet Now
                 </li>
-                <li
-                    className = { `${!meetNow ? 'selected' : ''}` }
-                    onClick = { () => setMeetNowAndUpdatePage(false) }>
-                    Schedule
+                        <li
+                            className={`${!meetNow ? 'selected' : ''}`}
+                            onClick={() => setMeetNowAndUpdatePage(false)}>
+                            Schedule
                 </li>
-            </ul>
+                    </ul>
                 }
 
-
                 <MeetingInfo
-                    shareable = { shareable }
-                    meetNow = { meetNow }
-                    meetingId = {{
+                    shareable={shareable}
+                    meetNow={meetNow}
+                    videoMuted={props.videoMuted}
+                    videoTrack={props.videoTrack}
+                    previewFooter={props.previewFooter}
+                    meetingId={{
                         meetingId
                     }}
-                    meetingName = {{
+                    meetingName={{
                         meetingName,
                         setMeetingName
                     }}
-                    enableWaitingRoom = {{
+                    enableWaitingRoom={{
                         enableWaitingRoom,
                         setEnableWaitingRoom
                     }}
-                    isPrivate = {{
+                    isPrivate={{
                         isPrivate,
                         setIsPrivate
                     }}
-                    meetingPassword = {{
+                    meetingPassword={{
                         meetingPassword,
                         setMeetingPassword,
                         validation: {
@@ -269,69 +274,70 @@ function HostPrejoin(props) {
                             action: e => {
                                 const re = /[0-9a-fA-F]+/g;
                                 if (!re.test(e.key)) {
-                                e.preventDefault();
+                                    e.preventDefault();
                                 }
                             }
                         }
                     }}
-                    meetingFrom = {{
+                    meetingFrom={{
                         meetingFrom,
                         setMeetingFrom
                     }}
-                    meetingTo = {{
+                    meetingTo={{
                         meetingTo,
                         setMeetingTo
                     }} />
 
                 {
                     !shareable
-                && <div
-                    className = { `prejoin-page-button next 
+                    && <div
+                        className={`prejoin-page-button next 
                         ${scheduleDisabled ? 'disabled' : ''} 
                         ${isPrivate && !meetingPassword ? 'disabled' : ''} 
                         ` }
-                    onClick = { saveConferenceAction }>
-                    Next
+                        onClick={saveConferenceAction}>
+                        Next
                 </div>
                 }
                 {
                     shareable && meetNow
-                && <div
-                    className = 'prejoin-page-button next'
-                    onClick = { () => {
-                        // Make the join now audit call
-                        participantJoin().then().catch(err => {
-                            console.error('Unable to audit the host participant join event', err);
-                        });
-                        APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
-                        joinConference();
-                    } }>
-                    Join Now
+                    && <div
+                        className='prejoin-page-button next'
+                        onClick={() => {
+                            // Make the join now audit call
+                            participantJoin().then().catch(err => {
+                                console.error('Unable to audit the host participant join event', err);
+                            });
+                            APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+                            joinConference();
+                        }}>
+                        Join Now
                 </div>
                 }
+                <div style={{ marginTop: '10px', borderBottom: '1px solid gray' }} />
 
                 {
                     shareable && !meetNow
-                && <div
-                    className = 'prejoin-page-button next'
-                    onClick = { goToHome }>Close</div>
+                    && <div
+                        className='prejoin-page-button next'
+                        onClick={goToHome}>Close</div>
                 }
 
                 {
                     !(shareable && !meetNow)
-                && <div
-                    className = 'cancel'
-                    onClick = { goToHome }>Cancel</div>
+                    && <div
+                        className='cancel'
+                        onClick={goToHome}>Cancel</div>
                 }
 
                 {
                     saveErrors && !clearErrors
-                    && <div className = { 'error-block' }> { 'Unable to process your new meeting request right now. Please try again after some time.' }</div>
+                    && <div className={'error-block'}> {'Unable to process your new meeting request right now. Please try again after some time.'}</div>
                 }
 
 
             </div>
-        </div>
+        </div >
     );
 }
 
@@ -339,7 +345,7 @@ function mapStateToProps(state): Object {
     return {
         _isGoogleSigninUser: state['features/app-auth'].googleOfflineCode ? true : false,
         _user: state['features/app-auth'].user,
-        _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
+        _jid: state['features/base/connection'].connection ?.xmpp ?.connection ?._stropheConn ?.jid,
         meetingDetails: state['features/app-auth'].meetingDetails
     };
 }

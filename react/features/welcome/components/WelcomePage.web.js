@@ -208,6 +208,7 @@ class WelcomePage extends AbstractWelcomePage {
     /**
      */
     setInvalidMeetingId(invalidMeetingId) {
+        console.log('hi invalid', invalidMeetingId);
         this.setValueInRoomInputBox(invalidMeetingId);
         this.setSwitchActiveIndex(1);
     }
@@ -673,6 +674,7 @@ class WelcomePage extends AbstractWelcomePage {
                 // rehydration doesnt complete before we navigate to the prejoin page in _onJoin method below.
 
                 const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
+                console.log('hi', appAuth);
 
                 if ((appAuth.meetingDetails || {}).meetingName) {
                     clearInterval(intervalId);
@@ -680,7 +682,7 @@ class WelcomePage extends AbstractWelcomePage {
                     // Check if the meeting exists
                     if (appAuth.meetingDetails.isMeetingCode) {
                         const meetingExists = await getMeetingById(appAuth.meetingDetails.meetingId);
-
+                        console.log('hinnn', meetingExists);
                         if (!meetingExists) {
                             super._onRoomChange('');
                             this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);

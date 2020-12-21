@@ -48,7 +48,7 @@ type Props = {
      * The video track to render as preview (if omitted, the default local track will be rendered).
      */
     videoTrack?: Object,
-    
+
     navigatedFromHome?: boolean,
 
     meetNowSelected?: boolean
@@ -82,12 +82,12 @@ class PreMeetingScreen extends PureComponent<Props> {
     componentDidMount() {
         this.setState({
             meetNow: true,
-            navigatedFromHome: getQueryVariable('home') ? true: false,
+            navigatedFromHome: getQueryVariable('home') ? true : false,
             joinMeeting: getQueryVariable('join') ? true : false
         });
     }
 
-    setMeetNow(value){
+    setMeetNow(value) {
         this.setState({
             meetNow: value
         }, () => {
@@ -105,11 +105,11 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreviews, navigatedFromHome, exiting, 
+        const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
             joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
-        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
-        if(guestFlow) {
+        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome == false
+        if (guestFlow) {
             window.sessionStorage.removeItem('isJWTSet')
         }
 
@@ -119,57 +119,61 @@ class PreMeetingScreen extends PureComponent<Props> {
 
         return (
             <div
-                className = 'premeeting-screen'
-                id = 'lobby-screen'>
-                <Background backgroundColor='black'/>
+                className='premeeting-screen'
+                id='lobby-screen'>
+                {/* <Background backgroundColor='black'/> */}
+
                 {
                     exiting && <Loading />
                 }
-                {
-                    showTrackPreviews || meetNow ?
-                    <Preview
-                            videoMuted = { videoMuted }
-                            videoTrack = { videoTrack } >
-                        <div className = 'media-btn-container'>
-                            <AudioSettingsButton visible = { true } />
-                            <VideoSettingsButton visible = { true } />
-                        </div>
-                        { this.props.footer }
-                    </Preview>
-                    :
-                    <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
+                <div style={{ border: '1px solid black', borderRadius: '40px' }}>
+                    {/* {
+                        showTrackPreviews || meetNow ?
+                            <Preview
+                                videoMuted={videoMuted}
+                                videoTrack={videoTrack} >
+                                <div className='media-btn-container'>
+                                    <AudioSettingsButton visible={true} />
+                                    <VideoSettingsButton visible={true} />
+                                </div>
+                                {this.props.footer}
+                            </Preview>
+                            :
+                            <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
 
+                            </div>
+                    }
+ */}
+
+                    <div className='content'>
+                        {
+                            navigatedFromHome &&
+                            <HostPrejoin
+                                isMeetNow={this.setMeetNow}
+                                onClickClose={() => {
+                                    this.setState({ exiting: true },
+                                        () => {
+                                            goHome()
+                                        })
+                                }}
+                                //Show join now after page reload in case of `meet now` option
+                                joinNow={meetNowSelected}
+                                meetingName={urlToShow}
+                                videoMuted={videoMuted}
+                                videoTrack={videoTrack}
+                                previewFooter={this.props.footer}
+                                showTrackPreviews={this.showTrackPreviews}
+                            />
+                        }
+                        {
+                            guestFlow &&
+                            <GuestPrejoin
+                                joinMeeting={joinMeeting}
+                                meetingId={urlToShow}
+                                showTrackPreviews={this.showTrackPreviews}
+                            />
+                        }
                     </div>
-                }
-                
-
-                <div className = 'content'>
-                    <div 
-                        onClick={() => {
-                            this.setState({exiting: true},
-                            () => {
-                                goHome()
-                            })
-                        }} 
-                        className="close-icon"></div>
-                    {
-                        navigatedFromHome && 
-                        <HostPrejoin 
-                            isMeetNow={this.setMeetNow} 
-                            //Show join now after page reload in case of `meet now` option
-                            joinNow={meetNowSelected}
-                            meetingName={urlToShow}
-                            showTrackPreviews={this.showTrackPreviews}
-                        />
-                    }
-                    {
-                        guestFlow && 
-                        <GuestPrejoin 
-                            joinMeeting={ joinMeeting }
-                            meetingId={urlToShow}
-                            showTrackPreviews={this.showTrackPreviews}
-                        />
-                    }
                 </div>
             </div>
         );
