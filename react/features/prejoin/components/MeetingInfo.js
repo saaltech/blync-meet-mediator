@@ -128,7 +128,15 @@ function MeetingInfo(props) {
                     //     return d;
                     // })() }
                     selected = { meetingTo && new Date(meetingTo) }
-                    onChange = { value => setMeetingTo(value) }
+                    onChange = { value => {
+                        if(moment(value).isSameOrBefore(meetingFrom)) {
+                            return false;
+                        }
+                        else {
+                            setMeetingTo(value) 
+                        }
+                        
+                    }}
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMM d, yyyy h:mm aa' />
