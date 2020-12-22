@@ -49,7 +49,10 @@ function MeetingInfo(props) {
                         moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
                     }
                     {
-                        meetingTo && (` - ${moment(meetingTo).locale('en').format('hh:mm a')}`)
+                        meetingTo && (
+                            ` - ${ moment(meetingTo).isSame(meetingFrom, 'day') ?
+                                moment(meetingTo).locale('en').format('hh:mm a') :
+                                moment(meetingTo).locale('en').format('DD MMM, hh:mm a')}`)
                     }
                 </div>
             }
