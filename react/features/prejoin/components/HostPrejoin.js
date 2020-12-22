@@ -219,10 +219,10 @@ function HostPrejoin(props) {
                     onClick={() => setShareableAction(!shareable)} />
             }
 
-            {
+            {/* {
                 shareable && meetNow
                 && <div className='page-title'> Join Now </div>
-            }
+            } */}
 
             {/* <div className = 'profileSection'>
                 <Profile />
@@ -302,7 +302,7 @@ function HostPrejoin(props) {
                 {
                     shareable && meetNow
                     && <div
-                        className='prejoin-page-button next'
+                        className='prejoin-page-button join'
                         onClick={() => {
                             // Make the join now audit call
                             participantJoin().then().catch(err => {
@@ -323,12 +323,12 @@ function HostPrejoin(props) {
                         onClick={goToHome}>Close</div>
                 }
 
-                {
+                {/* {
                     !(shareable && !meetNow)
                     && <div
                         className='cancel'
                         onClick={goToHome}>Cancel</div>
-                }
+                } */}
 
                 {
                     saveErrors && !clearErrors

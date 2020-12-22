@@ -36,6 +36,12 @@
     cursor: pointer;
     padding: 5px;
     margin: 15px auto;
+    &.join {
+        font-size: 14px;
+        background: #005C85;
+        width: 160px;
+        border-radius: $welcomePageButtonBorderRadius;
+    }
 }
 
 .hostPrejoin {
@@ -47,7 +53,7 @@
     height: 100%;
     width: 600px;
     border-radius: 40px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     text-align: center;
     color: #393939;
@@ -125,8 +131,8 @@
             top: 10px;
             display: block;
             box-sizing: border-box;
-            position: fixed;
-            right: 305px;
+            position: absolute;
+            left: 10px;
             cursor: pointer;
 
             svg {
@@ -184,7 +190,7 @@
     }
 
     .share-meeting-details {
-        padding: 20px 0px;
+        // padding: 20px 0px;
         display: flex;
 
         .label {
@@ -197,6 +203,10 @@
         .modalities {
             display: flex;
             justify-content: space-between;
+
+            .Copy-Link {
+                cursor: pointer;
+            }
             // div {
             //     margin-right: 20px;
             // }

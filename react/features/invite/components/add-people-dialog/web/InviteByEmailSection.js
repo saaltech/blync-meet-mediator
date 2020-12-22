@@ -190,6 +190,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
                                 <Icon src={IconArrowDownSmall} />
                             </div>
                             <div className={`invite-more-dialog icon-container${isActive ? ' active' : ''}`}>
+                                {renderCopyIcon()}
                                 {renderEmailIcons()}
                                 {renderWhatsappShare(_getInviteText())}
                             </div>

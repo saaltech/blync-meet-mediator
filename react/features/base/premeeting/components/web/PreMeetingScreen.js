@@ -169,6 +169,9 @@ class PreMeetingScreen extends PureComponent<Props> {
                             guestFlow &&
                             <GuestPrejoin
                                 joinMeeting={joinMeeting}
+                                videoMuted={videoMuted}
+                                videoTrack={videoTrack}
+                                previewFooter={this.props.footer}
                                 meetingId={urlToShow}
                                 showTrackPreviews={this.showTrackPreviews}
                             />
