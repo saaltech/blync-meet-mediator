@@ -153,10 +153,9 @@ UI.start = function() {
 
     sharedVideoManager = null; // new SharedVideoManager(eventEmitter);
 
-    // This disables the legacy notification and only allows the newly created
-    // notification for vmeet. This should be removed when the legacy notification
-    // has been completely removed
-    APP.store.dispatch(setNotificationsEnabled(false));
+    // Enable the legacy notification along with the newly created
+    // notification for vmeet.
+    APP.store.dispatch(setNotificationsEnabled(true));
     
     if (isMobileBrowser()) {
         $('body').addClass('mobile-browser');

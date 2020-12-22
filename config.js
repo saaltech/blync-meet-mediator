@@ -104,7 +104,7 @@ var config = {
     // notify the user if there is noise, other than voice, coming from the current
     // selected microphone. The purpose it to let the user know that the input could
     // be potentially unpleasant for other meeting participants.
-    enableNoisyMicDetection: false,
+    enableNoisyMicDetection: true,
 
     // Start the conference in audio only mode (no video is being received nor
     // sent).
@@ -692,6 +692,8 @@ var config = {
      hiddenDomain
      ignoreStartMuted
      */
+
+    enableTalkWhileMuted: true,
 
     // This property should be always set to false, to avoid echo from speakers of other participants
     disableAEC: false, //wasnt present in latest jitsi-meet code

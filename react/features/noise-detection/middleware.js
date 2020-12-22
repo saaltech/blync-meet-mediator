@@ -39,6 +39,7 @@ MiddlewareRegistry.register(store => next => action => {
         conference.on(
             JitsiConferenceEvents.NOISY_MIC, () => {
                 const notification = showNotification({
+                    modal: true,
                     titleKey: 'toolbar.noisyAudioInputTitle',
                     descriptionKey: 'toolbar.noisyAudioInputDesc'
                 });

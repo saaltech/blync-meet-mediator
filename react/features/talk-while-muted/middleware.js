@@ -42,7 +42,9 @@ MiddlewareRegistry.register(store => next => action => {
         conference.on(
             JitsiConferenceEvents.TALK_WHILE_MUTED, () => {
                 const notification = showNotification({
+                    modal: true,
                     titleKey: 'toolbar.talkWhileMutedPopup',
+                    descriptionKey: 'toolbar.talkWhileMutedPopupDesc',
                     customActionNameKey: 'notify.unmute',
                     customActionHandler: () => dispatch(setAudioMuted(false))
                 });
