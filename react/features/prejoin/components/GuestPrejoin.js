@@ -42,25 +42,25 @@ import MeetingInfo from './MeetingInfo';
  */
 function GuestPrejoin(props) {
     let clientRef;
-    const [ exiting, setExiting ] = useState(false);
-    const [ disableJoin, setDisableJoin ] = useState(true);
-    const [ meetingId, setMeetingId ] = useState(props.meetingId);
+    const [exiting, setExiting] = useState(false);
+    const [disableJoin, setDisableJoin] = useState(true);
+    const [meetingId, setMeetingId] = useState(props.meetingId);
     const userAgent = getUserAgentDetails();
-    const [ meetingName, setMeetingName ] = useState('');
-    const [ meetingPassword, setMeetingPassword ] = useState('');
-    const [ meetingFrom, setMeetingFrom ] = useState(null);
-    const [ meetingTo, setMeetingTo ] = useState(null);
+    const [meetingName, setMeetingName] = useState('');
+    const [meetingPassword, setMeetingPassword] = useState('');
+    const [meetingFrom, setMeetingFrom] = useState(null);
+    const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true,
         joinMeeting, _jid, _user, _isGoogleSigninUser } = props;
-    const [ isMeetingHost, setIsMeetingHost ] = useState(false);
-    const [ continueAsGuest, setContinueAsGuest ] = useState(false);
-    const [ showJoinMeetingForm, setShowJoinMeetingForm ] = useState(false);
-    const [ showPasswordError, setShowPasswordError ] = useState('');
-    const [ isSecretEnabled, setIsSecretEnabled ] = useState(false);
-    const [ conferenceStatus, setConferenceStatus ] = useState('');
-    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
-    const [ participantRejected, setParticipantRejected ] = useState(false);
-    const [ meetingEnded, setMeetingEnded ] = useState(false);
+    const [isMeetingHost, setIsMeetingHost] = useState(false);
+    const [continueAsGuest, setContinueAsGuest] = useState(false);
+    const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
+    const [showPasswordError, setShowPasswordError] = useState('');
+    const [isSecretEnabled, setIsSecretEnabled] = useState(false);
+    const [conferenceStatus, setConferenceStatus] = useState('');
+    const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
+    const [participantRejected, setParticipantRejected] = useState(false);
+    const [meetingEnded, setMeetingEnded] = useState(false);
 
     useEffect(() => {
         setTimeout(async () => {
@@ -70,34 +70,34 @@ function GuestPrejoin(props) {
                 refreshTokenAndFetchConference();
             }
         }, 3000);
-    }, [ meetingId ]);
+    }, [meetingId]);
 
-    const [ guestName, setGuestName ] = useState('');
+    const [guestName, setGuestName] = useState('');
 
     useEffect(() => {
         continueAsGuest && guestName.trim() !== ''
-        && props.updateSettings({
-            displayName: guestName,
-            email: guestEmail // Done to reset the avatar that might have been set in the previous session
-        });
-    }, [ guestName ]);
+            && props.updateSettings({
+                displayName: guestName,
+                email: guestEmail // Done to reset the avatar that might have been set in the previous session
+            });
+    }, [guestName]);
 
-    const [ guestEmail, setGuestEmail ] = useState('');
+    const [guestEmail, setGuestEmail] = useState('');
 
     useEffect(() => {
         continueAsGuest
-        && props.updateSettings({
-            email: guestEmail
-        });
-    }, [ guestEmail ]);
+            && props.updateSettings({
+                email: guestEmail
+            });
+    }, [guestEmail]);
 
-    const [ unauthGetConference, fetchUnauthErrors ] = useRequest({
+    const [unauthGetConference, fetchUnauthErrors] = useRequest({
         url: `${config.conferenceManager + config.unauthConferenceEP}/${meetingId}`,
         method: 'get',
         onSuccess: data => updateConferenceState(data)
     });
 
-    const [ getConference, fetchErrors ] = useRequest({
+    const [getConference, fetchErrors] = useRequest({
         url: `${config.conferenceManager + config.conferenceEP}/${meetingId}`,
         method: 'get',
         onSuccess: data => updateConferenceState(data)
@@ -112,7 +112,7 @@ function GuestPrejoin(props) {
         };
     };
 
-    const [ addWaitingParticipant, addWaitingParticipantError ] = useRequest({
+    const [addWaitingParticipant, addWaitingParticipantError] = useRequest({
         url: config.conferenceManager + config.unauthParticipantsEP,
         method: 'post',
         body: formWaitingParticipantRequestBody
@@ -123,16 +123,16 @@ function GuestPrejoin(props) {
             'client': userAgent.getBrowserName(),
             'clientVersion': userAgent.getBrowserVersion(),
             'conferenceId': meetingId,
-            'displayName': guestName || _user?.name,
+            'displayName': guestName || _user ?.name,
             'jid': _jid,
             'loginType': _isUserSignedOut ? null : _isGoogleSigninUser ? 'google' : 'default',
             'os': userAgent.getOSName(),
             'osVersion': userAgent.getOSVersion(),
-            'userId': _user?.id
+            'userId': _user ?.id
         };
     };
 
-    const [ participantJoin, participantJoinError ] = useRequest({
+    const [participantJoin, participantJoinError] = useRequest({
         url: `${config.conferenceManager + config.unauthParticipantsEP}/joinevent`,
         method: 'post',
         body: formJoinEventParticipantRequestBody
@@ -166,14 +166,14 @@ function GuestPrejoin(props) {
         };
     };
 
-    const [ verifySecret, verifySecretErrors ] = useRequest({
+    const [verifySecret, verifySecretErrors] = useRequest({
         url: config.conferenceManager + config.verifySecretEP,
         method: 'post',
         body: formVerifySecretBody,
         onSuccess: data => verifySecretPostProcess(data)
     });
 
-    const [ meetingConnected, setMeetingConnected ] = useState(null);
+    const [meetingConnected, setMeetingConnected] = useState(null);
 
     useEffect(() => {
         if (meetingConnected === false) {
@@ -183,17 +183,17 @@ function GuestPrejoin(props) {
                 checkWaitingStatus();
             }
         }
-    }, [ meetingConnected ]);
+    }, [meetingConnected]);
 
-    const [ meetingWaiting, setMeetingWaiting ] = useState(false);
+    const [meetingWaiting, setMeetingWaiting] = useState(false);
 
-    const [ meetingStatusCheck, meetingStatusErrors ] = useRequest({
+    const [meetingStatusCheck, meetingStatusErrors] = useRequest({
         url: `${config.conferenceManager + config.unauthConferenceEP}/${meetingId}`,
         method: 'get',
-        onSuccess: data => {}
+        onSuccess: data => { }
     });
 
-    const [ waitingStatusCheck, waitingStatusCheckErrors ] = useRequest({
+    const [waitingStatusCheck, waitingStatusCheckErrors] = useRequest({
         url: `${config.conferenceManager}${config.unauthParticipantsEP}?conferenceId=${meetingId}&jid=${_jid}`,
         method: 'get'
     });
@@ -236,14 +236,14 @@ function GuestPrejoin(props) {
             retry: true,
             roomName: meetingId
         })
-        .then(connection => {
-            APP.conference.init({
-                roomName: APP.conference.roomName
+            .then(connection => {
+                APP.conference.init({
+                    roomName: APP.conference.roomName
+                });
+            })
+            .catch(err => {
+                console.log('Unable to open new connection', err);
             });
-        })
-        .catch(err => {
-            console.log('Unable to open new connection', err);
-        });
     };
 
     const setMeetNowAndUpdatePage = value => {
@@ -347,9 +347,9 @@ function GuestPrejoin(props) {
     const _joinConference = () => {
         // Make the join now audit call
         participantJoin().then()
-        .catch(err => {
-            console.error('Unable to audit the participant join event', err);
-        });
+            .catch(err => {
+                console.error('Unable to audit the participant join event', err);
+            });
 
         // Close any open socket connections
         closeSocketConnection();
@@ -383,162 +383,163 @@ function GuestPrejoin(props) {
     }
 
     return fetchUnauthErrors || fetchErrors
-        ? <div className = { 'hostPrejoin' }> <div className = 'invalid-meeting-code'>{'Invalid Meeting ID'} </div></div>
-        : <div className = { 'hostPrejoin' }>
-            {
-                exiting && <Loading />
-            }
-            {
-                !_isUserSignedOut
-                ? <div className = 'profileSection'>
-                    <Profile />
-                </div>
-                : <>
-                    {
-                        !continueAsGuest
-                        && <div
-                            className = 'login-message'>
-                            <span>Please</span>
-                            <span className = 'sign-in-link'> sign in </span>
-                            <span>if you are the host.</span>
+        ? <div className={'hostPrejoin'}> <div className='invalid-meeting-code'>{'Invalid Meeting ID'} </div></div>
+        : <div className={'hostPrejoin'}>
+            <div style={{ width: '70%', margin: '0 auto' }}>
+                {
+                    exiting && <Loading />
+                }
+                {
+                    !_isUserSignedOut
+                        ? <div className='profileSection'>
+                            <Profile />
                         </div>
-                    }
-                </>
-            }
+                        : <>
+                            {
+                                !continueAsGuest
+                                && <div
+                                    className='login-message'>
+                                    <span>Please</span>
+                                    <span className='sign-in-link'> sign in </span>
+                                    <span>if you are the host.</span>
+                                </div>
+                            }
+                        </>
+                }
 
-            <MeetingInfo
-                isPureJoinFlow = {{
-                    isMeetingHost
-                }}
-                meetingFrom = {{
-                    meetingFrom,
-                    setMeetingFrom
-                }}
-                meetingId = {{
-                    meetingId
-                }}
-                meetingName = {{
-                    meetingName,
-                    setMeetingName
-                }}
-                meetingPassword = {{
-                    meetingPassword,
-                    setMeetingPassword
-                }}
-                meetingTo = {{
-                    meetingTo,
-                    setMeetingTo
-                }}
-                shareable = { false } />
+                <MeetingInfo
+                    isPureJoinFlow={{
+                        isMeetingHost
+                    }}
+                    meetingFrom={{
+                        meetingFrom,
+                        setMeetingFrom
+                    }}
+                    meetingId={{
+                        meetingId
+                    }}
+                    meetingName={{
+                        meetingName,
+                        setMeetingName
+                    }}
+                    meetingPassword={{
+                        meetingPassword,
+                        setMeetingPassword
+                    }}
+                    meetingTo={{
+                        meetingTo,
+                        setMeetingTo
+                    }}
+                    shareable={false} />
 
                 {
                     enableWaitingRoom && _jid
-                                && <SockJsClient
-                                    onMessage = { participant => {
-                                        updateWaitingStatus(participant);
-                                    } }
-                                    ref = { client => {
-                                        clientRef = client;
-                                    } }
-                                    topics = { [ `${props._participantsSocketTopic}/${ _jid.split('/')[0]}` ] }
-                                    url = { props._socketLink } />
-                                        }
+                    && <SockJsClient
+                        onMessage={participant => {
+                            updateWaitingStatus(participant);
+                        }}
+                        ref={client => {
+                            clientRef = client;
+                        }}
+                        topics={[`${props._participantsSocketTopic}/${_jid.split('/')[0]}`]}
+                        url={props._socketLink} />
+                }
 
-            {
-                meetingConnected !== null && meetingConnected === false
-                    ? <div className = 'waiting-display'>
-                        {
-                            !participantRejected && !meetingEnded
-                                ? <>
-                                    <h2>
-                                        {
-                                            meetingWaiting
-                                                ? 'Please wait, the meeting host will let you in soon.'
-                                                : 'Please wait for the host to join the meeting...'
-                                        }
-                                    </h2>
-                                    <Icon
-                                        size = { 120 }
-                                        src = { IconLogo } />
-                        </>
-                                : <>
-                                    <h2>
-                                        {
-                                            meetingEnded
-                                                ? 'The meeting has ended'
-                                                : 'The host apparently hasn\'t approved your request to join in. Please contact the meeting host.'
-                                        }
-                                    </h2>
+                {
+                    meetingConnected !== null && meetingConnected === false
+                        ? <div className='waiting-display'>
+                            {
+                                !participantRejected && !meetingEnded
+                                    ? <>
+                                        <h2>
+                                            {
+                                                meetingWaiting
+                                                    ? 'Please wait, the meeting host will let you in soon.'
+                                                    : 'Please wait for the host to join the meeting...'
+                                            }
+                                        </h2>
+                                        <Icon
+                                            size={120}
+                                            src={IconLogo} />
+                                    </>
+                                    : <>
+                                        <h2>
+                                            {
+                                                meetingEnded
+                                                    ? 'The meeting has ended'
+                                                    : 'The host apparently hasn\'t approved your request to join in. Please contact the meeting host.'
+                                            }
+                                        </h2>
 
-                                    <div
-                                        className = { 'prejoin-page-button next' }
-                                        onClick = { goToHome }>
-                                Exit
+                                        <div
+                                            className={'prejoin-page-button next'}
+                                            onClick={goToHome}>
+                                            Exit
                                     </div>
-                        </>
-                        }
-                    </div>
-                    : <>
-                        {
-                            (_isUserSignedOut && !continueAsGuest)
-                        && <>
-                            <div className = 'no-account'>
-                                <div
-                                    className = { `prejoin-page-button guest ${disableJoin ? 'disabled' : ''}` }
-                                    onClick = { () => !disableJoin && setContinueAsGuest(true) }>
-                                    Continue without login
-                                </div>
-                            </div>
-                            <div className = 'option-text-or'>Or</div>
-                            <LoginComponent
-                                closeAction = { () => {
-                                    // Fetch the conference details for the logged in user
-                                    setDisableJoin(true);
-                                    refreshTokenAndFetchConference(true);
-
-                                } }
-                                noSignInIcon = { true } />
-                        </>
-                        }
-
-                        {
-                            ((!_isUserSignedOut && showJoinMeetingForm)
-                            || (!_isUserSignedOut && !isMeetingHost)
-                        || continueAsGuest)
-                        && <JoinMeetingForm
-                            guestEmail = {{
-                                guestEmail,
-                                setGuestEmail
-                            }}
-                            guestName = {{
-                                guestName,
-                                setGuestName
-                            }}
-                            isSecretEnabled = { isSecretEnabled }
-                            isUserSignedOut = { _isUserSignedOut }
-                            meetingId = { meetingId }
-                            meetingPassword = {{
-                                meetingPassword,
-                                setMeetingPassword
-                            }}
-                            passwordError = { showPasswordError } />
-                        }
-
-                        {
-                            (!_isUserSignedOut || continueAsGuest)
-                        && <div
-                            className = { `prejoin-page-button next 
-                            ${disableJoin || joinNowDisabled ? 'disabled' : ''} ` }
-                            onClick = { async () => (!disableJoin && !joinNowDisabled) && handleJoinNow() }>
-                            Join Now
+                                    </>
+                            }
                         </div>
-                        }
-                </>
-            }
+                        : <>
+                            {
+                                (_isUserSignedOut && !continueAsGuest)
+                                && <>
+                                    <div className='no-account'>
+                                        <div
+                                            className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`}
+                                            onClick={() => !disableJoin && setContinueAsGuest(true)}>
+                                            Continue without login
+                                </div>
+                                    </div>
+                                    <div className='option-text-or'>Or</div>
+                                    <LoginComponent
+                                        closeAction={() => {
+                                            // Fetch the conference details for the logged in user
+                                            setDisableJoin(true);
+                                            refreshTokenAndFetchConference(true);
 
+                                        }}
+                                        noSignInIcon={true} />
+                                </>
+                            }
 
+                            {
+                                ((!_isUserSignedOut && showJoinMeetingForm)
+                                    || (!_isUserSignedOut && !isMeetingHost)
+                                    || continueAsGuest)
+                                && <JoinMeetingForm
+                                    guestEmail={{
+                                        guestEmail,
+                                        setGuestEmail
+                                    }}
+                                    guestName={{
+                                        guestName,
+                                        setGuestName
+                                    }}
+                                    isSecretEnabled={isSecretEnabled}
+                                    isUserSignedOut={_isUserSignedOut}
+                                    meetingId={meetingId}
+                                    meetingPassword={{
+                                        meetingPassword,
+                                        setMeetingPassword
+                                    }}
+                                    passwordError={showPasswordError} />
+                            }
+
+                            {
+                                (!_isUserSignedOut || continueAsGuest)
+                                && <div
+                                    className={`prejoin-page-button next 
+                            ${disableJoin || joinNowDisabled ? 'disabled' : ''} `}
+                                    onClick={async () => (!disableJoin && !joinNowDisabled) && handleJoinNow()}>
+                                    Join Now
+                        </div>
+                            }
+                        </>
+                }
+
+            </div>
         </div>
-    ;
+        ;
 }
 
 /**
@@ -548,7 +549,7 @@ function mapStateToProps(state): Object {
         _isGoogleSigninUser: Boolean(state['features/app-auth'].googleOfflineCode),
         _user: state['features/app-auth'].user,
         _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
-        _jid: state['features/base/connection'].connection?.xmpp?.connection?._stropheConn?.jid,
+        _jid: state['features/base/connection'].connection ?.xmpp ?.connection ?._stropheConn ?.jid,
         _socketLink: getConferenceSocketBaseLink(),
         _participantsSocketTopic: getWaitingParticipantsSocketTopic(state)
     };

@@ -736,6 +736,8 @@
         "connectCalendarButton": "Connect your calendar",
         "connectCalendarText": "",
         "enterRoomTitle": "Create or Join a meeting",
+        "enterJoinMeetingTitle": "Join a meeting",
+        "enterCreateMeetingTitle": "Create a meeting",
         "go": "GO",
         "join": "JOIN",
         "info": "Info",

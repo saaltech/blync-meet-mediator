@@ -505,19 +505,6 @@ body.welcome-page {
         flex: 1;
     }
 
-    .left-header {
-        width: 100px;
-        background-color: #fff;
-
-        .left-logo {
-            width: 80px;
-            height: 100px;
-            margin: 30px 10px 10px;
-            background-size: contain;
-            background-repeat: no-repeat;
-        }
-    }
-
     .right-section {
         display: flex;
         flex: 1;
@@ -532,27 +519,44 @@ body.welcome-page {
             display: flex;
             background-color: #F2F4FC;
 
+            .button-wrapper{
+                display: flex;
+                margin-top: 20px;
+                .schedule--button{
+                    margin-left: 10px;
+                }
+            }
+
             .entry-section {
                 // width: 100%;
                 padding: 20;
                 display: flex;
                 flex-direction: column;
-                height: 200px;
+                height: 130px;
                 background: #005C84;
                 border-radius: 20px;
                 margin: 30;
+                margin-top: 10;
 
                 &__label {
-                    font-size: 40px;
-                    color: white;
+                    font-size: 20px;
+                    margin-top: 30px;
+                    color: #005c85;
+                    margin-left: 30px;
                 }
 
                 &.right-bg {
                     left: 50%;
                     background-image: url('./../images/person_bg.png');
-                    background-size: 380px;
+                    background-size: 300px;
                     background-repeat: no-repeat;
                     background-position: bottom right;
+                }
+                .label-content{
+                    font-size: 17px;
+                    line-height: 0.8px;
+                    margin-top: 20px;
+                    color: #005;
                 }
             }
         }

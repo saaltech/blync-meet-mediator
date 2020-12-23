@@ -55,6 +55,10 @@ export function redirectOnInvalidMeeting(meetingId) {
     window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
 }
 
+export function redirectOnButtonChange(buttonType) {
+    window.location.href = `${window.location.origin}?actions=${buttonType}`;
+}
+
 /**
  * Check if the meeting exists, given the meeting Id
  */

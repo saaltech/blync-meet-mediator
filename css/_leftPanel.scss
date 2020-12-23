@@ -1,0 +1,16 @@
+.left-header {
+    width: 100px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: $toolbarZ + 2;
+
+    .left-logo {
+        width: 80px;
+        height: 100px;
+        margin: 30px 10px 10px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+}

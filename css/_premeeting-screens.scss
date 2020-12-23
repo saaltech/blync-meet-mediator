@@ -1,6 +1,9 @@
 /**
  * Shared style for full screen local track based dialogs/modals.
  */
+ .premeeting-wrapper {
+     display: flex;
+     height: 100%;
  .premeeting-screen {
     //align-items: stretch;
     width: 100%;
@@ -288,6 +291,7 @@
         bottom: 0px;
     }
 }
+ }
 
 #preview {
     width: 600px;

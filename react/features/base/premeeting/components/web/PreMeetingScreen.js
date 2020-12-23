@@ -15,6 +15,8 @@ import {
     getQueryVariable,
     // setPrejoinVideoTrackMuted
 } from '../../../../prejoin/functions';
+import LeftPanel from '../../../leftPanel';
+import { redirectOnButtonChange } from '../../../../welcome/functions';
 
 import Loading from '../../../../always-on-top/Loading'
 import { goHome } from '../../../../app-auth'
@@ -72,7 +74,9 @@ class PreMeetingScreen extends PureComponent<Props> {
             showTrackPreviews: false,
             navigatedFromHome: undefined,
             joinMeeting: false,
-            exiting: false
+            exiting: false,
+            activeButton: 'join',
+            actions: 'meetNow'
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -83,8 +87,19 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             meetNow: true,
             navigatedFromHome: getQueryVariable('home') ? true : false,
+            actions: getQueryVariable('actions') ? getQueryVariable('actions') : '',
             joinMeeting: getQueryVariable('join') ? true : false
         });
+        const activeButtonAction = getQueryVariable('actions');
+        if (activeButtonAction) {
+            this.setState({ activeButton: 'create' });
+        } else {
+            this.setState({ activeButton: 'join' });
+        }
+    }
+
+    handleRouteChange(value) {
+        redirectOnButtonChange(value);
     }
 
     setMeetNow(value) {
@@ -118,16 +133,20 @@ class PreMeetingScreen extends PureComponent<Props> {
         // setTimeout(() => setPrejoinVideoTrackMuted(!meetNow || videoMuted), 500);
 
         return (
-            <div
-                className='premeeting-screen'
-                id='lobby-screen'>
-                {/* <Background backgroundColor='black'/> */}
-
+            <div className="premeeting-wrapper">
                 {
                     exiting && <Loading />
                 }
-                <div style={{ border: '1px solid black', borderRadius: '40px' }}>
-                    {/* {
+                <LeftPanel
+                    activeButton={this.state.activeButton}
+                    setActiveButton={this.handleRouteChange} />
+                <div
+                    className='premeeting-screen'
+                    id='lobby-screen'>
+                    {/* <Background backgroundColor='black'/> */}
+
+                    <div style={{ border: '1px solid black', borderRadius: '40px', height: '100%' }}>
+                        {/* {
                         showTrackPreviews || meetNow ?
                             <Preview
                                 videoMuted={videoMuted}
@@ -145,37 +164,39 @@ class PreMeetingScreen extends PureComponent<Props> {
                     }
  */}
 
-                    <div className='content'>
-                        {
-                            navigatedFromHome &&
-                            <HostPrejoin
-                                isMeetNow={this.setMeetNow}
-                                onClickClose={() => {
-                                    this.setState({ exiting: true },
-                                        () => {
-                                            goHome()
-                                        })
-                                }}
-                                //Show join now after page reload in case of `meet now` option
-                                joinNow={meetNowSelected}
-                                meetingName={urlToShow}
-                                videoMuted={videoMuted}
-                                videoTrack={videoTrack}
-                                previewFooter={this.props.footer}
-                                showTrackPreviews={this.showTrackPreviews}
-                            />
-                        }
-                        {
-                            guestFlow &&
-                            <GuestPrejoin
-                                joinMeeting={joinMeeting}
-                                videoMuted={videoMuted}
-                                videoTrack={videoTrack}
-                                previewFooter={this.props.footer}
-                                meetingId={urlToShow}
-                                showTrackPreviews={this.showTrackPreviews}
-                            />
-                        }
+                        <div className='content' style={{ height: '100%' }}>
+                            {
+                                navigatedFromHome &&
+                                <HostPrejoin
+                                    isMeetNow={this.setMeetNow}
+                                    onClickClose={() => {
+                                        this.setState({ exiting: true },
+                                            () => {
+                                                goHome()
+                                            })
+                                    }}
+                                    //Show join now after page reload in case of `meet now` option
+                                    joinNow={meetNowSelected}
+                                    meetingName={urlToShow}
+                                    videoMuted={videoMuted}
+                                    videoTrack={videoTrack}
+                                    actions={this.state.actions}
+                                    previewFooter={this.props.footer}
+                                    showTrackPreviews={this.showTrackPreviews}
+                                />
+                            }
+                            {
+                                guestFlow &&
+                                <GuestPrejoin
+                                    joinMeeting={joinMeeting}
+                                    videoMuted={videoMuted}
+                                    videoTrack={videoTrack}
+                                    previewFooter={this.props.footer}
+                                    meetingId={urlToShow}
+                                    showTrackPreviews={this.showTrackPreviews}
+                                />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

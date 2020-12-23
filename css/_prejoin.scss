@@ -10,20 +10,6 @@
         background: #5497b4;
         cursor: not-allowed;
     }
-
-    &.guest {
-        &.disabled {
-            color: #5497b4;
-            cursor: not-allowed;
-            border: 1px solid #5497b4;
-        }
-        font-weight: 600;
-        background: #FFFFFF;
-        color: #005C85;
-        width: 190px;
-        border: 1px solid #005C85;
-        border-radius: $welcomePageButtonBorderRadius;
-    }
     
     min-width: $welcomePageButtonMinWidth;
     height: $welcomePageButtonHeight;
@@ -36,6 +22,20 @@
     cursor: pointer;
     padding: 5px;
     margin: 15px auto;
+    &.guest {
+        &.disabled {
+            color: #5497b4;
+            cursor: not-allowed;
+            border: 1px solid #5497b4;
+        }
+        font-weight: 200;
+        background: #FFFFFF;
+        color: #005C85;
+        width: 330px;
+        font-size: 20px;
+        border: 1px solid #005C85;
+        border-radius: $welcomePageButtonBorderRadius;
+    }
     &.join {
         font-size: 14px;
         background: #005C85;

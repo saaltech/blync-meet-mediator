@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 import { config } from '../../../config';
@@ -38,7 +38,8 @@ function HostPrejoin(props) {
     const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [shareable, setShareable] = useState(false);
-    const { joinConference } = props;
+    const { joinConference, actions } = props;
+    console.log('actions', actions);
     const [exiting, setExiting] = useState(false);
     const [clearErrors, setClearErrors] = useState(true);
     const userAgent = getUserAgentDetails();
@@ -49,6 +50,11 @@ function HostPrejoin(props) {
         onSuccess: data => updateConferenceState(data)
     });
 
+    useEffect(() => {
+        setClearErrors(true);
+        setMeetNow(actions === 'meetNow');
+        isMeetNow(actions === 'meetNow');
+    },[]);
     const formRequestBody = () => {
         return {
             'conferenceId': meetingId,
@@ -229,21 +235,24 @@ function HostPrejoin(props) {
             </div> */}
 
             <div className='modesSection'>
-                {
+                {/* {
                     !shareable
-                    && <ul>
-                        <li
-                            className={`${meetNow ? 'selected' : ''}`}
-                            onClick={() => setMeetNowAndUpdatePage(true)}>
-                            Meet Now
-                </li>
-                        <li
-                            className={`${!meetNow ? 'selected' : ''}`}
-                            onClick={() => setMeetNowAndUpdatePage(false)}>
-                            Schedule
-                </li>
-                    </ul>
-                }
+                    && <div className="meetNow">
+                        {actions === 'schedule' ? 'Schedule' : 'MeetNow'}
+                    </div>
+                //     <ul>
+                //         <li
+                //             className={`${meetNow ? 'selected' : ''}`}
+                //             onClick={() => setMeetNowAndUpdatePage(true)}>
+                //             Meet Now
+                // </li>
+                //         <li
+                //             className={`${!meetNow ? 'selected' : ''}`}
+                //             onClick={() => setMeetNowAndUpdatePage(false)}>
+                //             Schedule
+                // </li>
+                //     </ul>
+                } */}
 
                 <MeetingInfo
                     shareable={shareable}

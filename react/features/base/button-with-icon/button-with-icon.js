@@ -1,0 +1,23 @@
+import React from 'react';
+import { IconContext } from 'react-icons';
+
+export default function ButtonWithIcon(props) {
+    const { className = '', onButtonClick, backGroundColor = '', IconComponent = {}, labelText } = props;
+
+    return (
+        <div onClick={onButtonClick} className={`buttonWithIconComponent ${className}`} style={{ backgroundColor: backGroundColor }}>
+            <span className="button-with-icon__icon">
+                <IconContext.Provider value={{
+                    style: {
+                        color: IconComponent.color,
+                    }
+                }}>
+                    <IconComponent.component size={IconComponent.size} />
+                </IconContext.Provider>
+            </span>
+            <span className="button--label">
+                {labelText}
+            </span>
+        </div>
+    )
+}

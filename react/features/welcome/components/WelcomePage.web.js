@@ -3,16 +3,19 @@
 import React from 'react';
 
 import { BiLoaderCircle } from 'react-icons/bi';
-
+import { FaCalendarAlt } from 'react-icons/fa';
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
 import { LoginComponent, decideAppLogin, Profile, CalendarProfile, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
+import { redirectOnButtonChange } from '../../welcome/functions';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning, IconSadSmiley } from '../../base/icons';
+import LeftPanel from '../../base/leftPanel';
 import { connect } from '../../base/redux';
+
 import { CalendarList, bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
 import {
     getQueryVariable
@@ -23,13 +26,14 @@ import { getMeetingById } from '../functions';
 
 import { AbstractWelcomePage, _mapStateToProps } from './AbstractWelcomePage';
 import Tabs from './Tabs';
-import TncPrivacy from './TncPrivacy';
+import ButtonWithIcon from '../../base/button-with-icon';
 
 /**
  * The pattern used to validate room name.
  * @type {string}
  */
 export const ROOM_NAME_VALIDATE_PATTERN_STR = '^[^?&:\u0022\u0027%#]+$';
+
 
 /**
  * Maximum number of pixels corresponding to a mobile layout.
@@ -72,6 +76,7 @@ class WelcomePage extends AbstractWelcomePage {
             sessionExpiredQuery: false,
             loginErrorMsg: '',
             reasonForLogin: '',
+            activeButton: 'join',
             showNoCreateMeetingPrivilegeTip: false,
             switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
             showGoLoader: false
@@ -120,6 +125,7 @@ class WelcomePage extends AbstractWelcomePage {
 
         // Bind event handlers so they are only bound once per instance.
         this._onFormSubmit = this._onFormSubmit.bind(this);
+        this.handleClickMeetNow = this.handleClickMeetNow.bind(this);
         this._onRoomChange = this._onRoomChange.bind(this);
         this._onRoomNameChanged = this._onRoomNameChanged.bind(this);
         this._setAdditionalContentRef
@@ -153,27 +159,28 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     async componentDidMount() {
-        
+
         super.componentDidMount();
-        
+
         if (isMobileBrowser() && this.links) {
             this.launchApp();
         }
         window.showEnableCookieTip = false;
 
         const refreshTokenResponse = await validationFromNonComponents(true, true);
-        
+
         refreshTokenResponse
-        && this.props.dispatch(bootstrapCalendarIntegration())
-            .catch(err => {
-                if (err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
-                    window.showEnableCookieTip = true;
-                }
-                logger.error('Google oauth bootstrapping failed', err)
-            });
+            && this.props.dispatch(bootstrapCalendarIntegration())
+                .catch(err => {
+                    if (err.error === ERRORS.GOOGLE_APP_MISCONFIGURED) {
+                        window.showEnableCookieTip = true;
+                    }
+                    logger.error('Google oauth bootstrapping failed', err)
+                });
 
         this.props.dispatch(setPostWelcomePageScreen(null, {}));
         const invalidMeetingId = getQueryVariable('invalidMeetingId');
+        const activeButtonAction = getQueryVariable('actions');
 
         if (invalidMeetingId) {
             this.setInvalidMeetingId(invalidMeetingId);
@@ -183,8 +190,16 @@ class WelcomePage extends AbstractWelcomePage {
                 sessionExpiredQuery: true
             });
         }
+
+        if (activeButtonAction) {
+            this.setState({ activeButton: activeButtonAction });
+            this.setSwitchActiveIndex(activeButtonAction === 'create' ? 0 : 1);
+        } else {
+            this.setSwitchActiveIndex(1);
+            this.setState({ activeButton: 'join' });
+        }
         this.props.dispatch(decideAppLogin());
-        
+
 
         document.body.classList.add('welcome-page');
         document.title = interfaceConfig.APP_NAME;
@@ -345,8 +360,8 @@ class WelcomePage extends AbstractWelcomePage {
         };
 
         reactElement = (<div
-            className = 'left-logo'
-            style = { style } />);
+            className='left-logo'
+            style={style} />);
 
         return reactElement;
     }
@@ -357,12 +372,68 @@ class WelcomePage extends AbstractWelcomePage {
      * @private
      * @returns {ReactElement|null}
      */
-    _renderPrivacySection () {
+    _renderPrivacySection() {
         let reactElement = null;
 
         reactElement = (<TncPrivacy />);
 
         return reactElement;
+    }
+
+    handleRedirection(action) {
+        if (this.props._isUserSignedOut
+            && this.state.activeButton === 'create') {
+            this.setState({
+                hideLogin: false,
+                reasonForLogin: this.props.t('welcomepage.signinToCreateMeeting')
+            });
+
+            return;
+        }
+        this.setState({
+            showGoLoader: true,
+            formDisabled: true
+        });
+
+        this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
+            this.state.switchActiveIndex === 1));
+
+
+        const intervalId = setInterval(async () => {
+            // Done to fix the Redux persist store rehydration issue seen on Safari v13.x
+            // rehydration doesnt complete before we navigate to the prejoin page in _onJoin method below.
+
+            const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
+            console.log('hi', appAuth);
+
+            if ((appAuth.meetingDetails || {}).meetingName) {
+                clearInterval(intervalId);
+
+                // Check if the meeting exists
+                if (appAuth.meetingDetails.isMeetingCode) {
+                    const meetingExists = await getMeetingById(appAuth.meetingDetails.meetingId);
+                    console.log('hinnn', meetingExists);
+                    if (!meetingExists) {
+                        super._onRoomChange('');
+                        this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);
+
+                        this.setState({
+                            showGoLoader: false,
+                            formDisabled: false
+                        });
+
+                        return;
+                    }
+                }
+
+                this._onJoin(action);
+            }
+        }, 30);
+    }
+
+    handleClickMeetNow(action) {
+        super._onRoomChange('Meeting');
+        this.setState({ formDisabled: false }, () => { this.handleRedirection(action) })
     }
 
     /**
@@ -376,12 +447,12 @@ class WelcomePage extends AbstractWelcomePage {
                 name: 'Create',
                 disabled: !this._canCreateMeetings(),
                 noPrivilegeTip: showNoCreateMeetingPrivilegeTip && (<>
-                    <div className = 'tooltip show'>
+                    <div className='tooltip show'>
                         <div
-                            className = 'close-icon'
-                            onClick = { () => this.setState({ showNoCreateMeetingPrivilegeTip: false }) } />
-                        <div className = 'tooltip__icon'> <Icon src = { IconSadSmiley } /> </div>
-                        <div className = 'tooltip__message'>{t('welcomepage.noCreateMeetingRights')}</div>
+                            className='close-icon'
+                            onClick={() => this.setState({ showNoCreateMeetingPrivilegeTip: false })} />
+                        <div className='tooltip__icon'> <Icon src={IconSadSmiley} /> </div>
+                        <div className='tooltip__message'>{t('welcomepage.noCreateMeetingRights')}</div>
                     </div>
                 </>)
             },
@@ -392,59 +463,96 @@ class WelcomePage extends AbstractWelcomePage {
         };
 
         return (<>
-            <div className = 'entry-section right-bg'>
-                <div className = 'entry-section__label'>
-                    {
-                        t('welcomepage.enterRoomTitle')
-                    }
-                </div>
-                <div id = 'enter_room'>
-                    <ToggleSwitch
-                        activeIndex = { switchActiveIndex }
-                        containerStyle = {{ margin: '5px 0px 5px -7px' }}
-                        items = { toggleSwitchItems }
-                        toggleAction = { index => {
+            <div className='entry-section__label'>
+                {
+                    this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle') : t('welcomepage.enterCreateMeetingTitle')
+                }
+            </div>
+            <div className='entry-section right-bg'>
+
+                {this.state.activeButton === 'join' ? (
+                    <>
+                        <div className="label-content">
+                            {'Meeting ID*'}
+                        </div>
+                        <div id='enter_room'>
+                            {/* <ToggleSwitch
+                        activeIndex={switchActiveIndex}
+                        containerStyle={{ margin: '5px 0px 5px -7px' }}
+                        items={toggleSwitchItems}
+                        toggleAction={index => {
                             this.setSwitchActiveIndex(index);
-                        } } />
-                    <div className = 'enter-room-input-container'>
-                        <form onSubmit = { this._onFormSubmit }>
-                            <input
-                                autoFocus = { true }
-                                className = 'enter-room-input'
-                                id = 'enter_room_field'
-                                maxLength = { switchActiveIndex ? '20' : '-1' }
-                                onChange = { this._onRoomNameChanged }
-                                // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                placeholder = { switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
-                                    : t('welcomepage.placeholderEnterRoomName') } // this.state.roomPlaceholder
-                                ref = { this._setRoomInputRef }
-                                title = { t('welcomepage.roomNameAllowedChars') }
-                                type = 'text' />
-                        </form>
-                    </div>
-                    <div
-                        className = { `welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}` }
-                        onClick = { this._onFormSubmit }>
-                        <div className = 'chat-piece' />
-                        {
-                            t('welcomepage.go')
-                        }
-                        {
-                            this.state.showGoLoader
-                            && <div className = 'loader'>
-                                <BiLoaderCircle size = { 30 } />
+                        }} /> */}
+
+                            <div className='enter-room-input-container'>
+                                <form onSubmit={this._onFormSubmit}>
+                                    <input
+                                        autoFocus={true}
+                                        className='enter-room-input'
+                                        id='enter_room_field'
+                                        maxLength={switchActiveIndex ? '20' : '-1'}
+                                        onChange={this._onRoomNameChanged}
+                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                        placeholder={switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
+                                            : t('welcomepage.placeholderEnterRoomName')} // this.state.roomPlaceholder
+                                        ref={this._setRoomInputRef}
+                                        title={t('welcomepage.roomNameAllowedChars')}
+                                        type='text' />
+                                </form>
                             </div>
-                        }
-                        
-                    </div>
-                </div>
+                            <div
+                                className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
+                                onClick={this._onFormSubmit}>
+                                <div className='chat-piece' />
+                                {
+                                    t('welcomepage.go')
+                                }
+                                {
+                                    this.state.showGoLoader
+                                    && <div className='loader'>
+                                        <BiLoaderCircle size={30} />
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                        <div className="button-wrapper">
+                            <ButtonWithIcon
+                                labelText="MEET NOW"
+                                backGroundColor={"yellow"}
+                                onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
+                                IconComponent={{
+                                    component: FaCalendarAlt,
+                                    size: 25,
+                                    color: 'blue'
+                                }} />
+                            <div className="schedule--button">
+                                <ButtonWithIcon
+                                    labelText="SCHEDULE"
+                                    onButtonClick={() => { this.handleClickMeetNow('schedule') }}
+                                    backGroundColor={"red"}
+                                    IconComponent={{
+                                        component: FaCalendarAlt,
+                                        size: 25,
+                                        color: 'blue'
+                                    }} />
+                            </div>
+                        </div>
+                    )
+                }
                 {
                     switchActiveIndex === 1 && this._roomInputRef
                     && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
-            <div className = 'contacts-placeholder' />
-                </>);
+            <div className='contacts-placeholder' />
+        </>);
+    }
+
+    handleRouteChange(value) {
+        redirectOnButtonChange(value);
     }
 
     /**
@@ -459,35 +567,35 @@ class WelcomePage extends AbstractWelcomePage {
             {
                 _isUserSignedOut
                 && <LoginComponent
-                    closeAction = { this._closeLogin }
-                    errorMsg = { errorOnLoginPage }
-                    hideLogin = { hideLogin }
-                    isOverlay = { true }
-                    onSocialLoginFailed = { this._onSocialLoginFailed }
-                    reasonForLogin = { this.state.reasonForLogin }
-                    t = { t } />
+                    closeAction={this._closeLogin}
+                    errorMsg={errorOnLoginPage}
+                    hideLogin={hideLogin}
+                    isOverlay={true}
+                    onSocialLoginFailed={this._onSocialLoginFailed}
+                    reasonForLogin={this.state.reasonForLogin}
+                    t={t} />
             }
             {
                 _isUserSignedOut
                     ? <div
-                        className = { 'welcome-page-button signin' }
-                        onClick = { () => this.setState({
+                        className={'welcome-page-button signin'}
+                        onClick={() => this.setState({
                             reasonForLogin: '',
                             loginErrorMsg: '',
                             hideLogin: false
-                        }) }>
+                        })}>
                         {
                             t('welcomepage.signinLabel')
                         }
                     </div>
                     : <div
-                        className = { 'welcome-page-button profile' }
-                        onClick = { () => this.setState({
+                        className={'welcome-page-button profile'}
+                        onClick={() => this.setState({
                             hideLogin: true
-                        }) }>
+                        })}>
                         <Profile
-                            postLogout = { this._cleanupTooltip }
-                            showMenu = { true } />
+                            postLogout={this._cleanupTooltip}
+                            showMenu={true} />
                     </div>
             }
         </div>);
@@ -506,60 +614,65 @@ class WelcomePage extends AbstractWelcomePage {
             <div>
                 {
                     <div
-                        className = 'welcome without-content'
-                        id = 'welcome_page'>
+                        className='welcome without-content'
+                        id='welcome_page'>
 
                         {
                             isMobileBrowser() && this.links
-                                ? <div className = 'mobile-message'>
-                                    <div className = 'more-section-content'>
-                                        <p className = 'more-section-title'>{t('welcomepage.mobileMessageTitle')}</p>
-                                        <p className = 'more-section-text'>{t('welcomepage.mobileMessage')}</p>
-                                        <div className = 'app-link'>
+                                ? <div className='mobile-message'>
+                                    <div className='more-section-content'>
+                                        <p className='more-section-title'>{t('welcomepage.mobileMessageTitle')}</p>
+                                        <p className='more-section-text'>{t('welcomepage.mobileMessage')}</p>
+                                        <div className='app-link'>
                                             <a
-                                                href = { this.links[Platform.OS].storeLink }
-                                                target = '_top'>
+                                                href={this.links[Platform.OS].storeLink}
+                                                target='_top'>
                                                 {
                                                     Platform.OS === 'ios'
-                                                        ? <img src = 'images/appstore.svg' />
-                                                        : <img src = 'images/googleplay.png' />
+                                                        ? <img src='images/appstore.svg' />
+                                                        : <img src='images/googleplay.png' />
                                                 }
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                : <div className = 'show-flex'>
-                                    <div className = 'left-header'>
+                                : <div className='show-flex'>
+                                    <LeftPanel
+                                        interfaceConfig={interfaceConfig}
+                                        activeButton={this.state.activeButton}
+                                        setActiveButton={this.handleRouteChange}
+                                    />
+                                    {/* <div className='left-header'>
                                         {
                                             this._renderLogo()
                                         }
                                         {
                                             this._renderPrivacySection()
                                         }
-                                    </div>
-                                    <div className = 'right-section'>
-                                        <div className = 'content-header'>
+                                    </div> */}
+                                    <div className='right-section'>
+                                        <div className='content-header'>
                                             {
                                                 this._renderContentHeaderSection()
                                             }
                                         </div>
-                                        <div className = 'content-area'>
-                                            <div className = 'main-content'>
+                                        <div className='content-area'>
+                                            <div className='main-content'>
                                                 {
                                                     this._renderMainContentSection()
                                                 }
                                             </div>
-                                            <div className = 'right-content' >
+                                            <div className='right-content' >
                                                 {
                                                     _isUserSignedOut
                                                         ? <>
-                                                            <div className = 'calendar-placeholder' />
+                                                            <div className='calendar-placeholder' />
                                                         </>
                                                         : <>
                                                             {
                                                                 _isGoogleSigninUser
-                                                                ? <CalendarProfile />
-                                                                : <div className = 'calendar-placeholder' />
+                                                                    ? <CalendarProfile />
+                                                                    : <div className='calendar-placeholder' />
                                                             }
                                                         </>
                                                 }
@@ -574,7 +687,7 @@ class WelcomePage extends AbstractWelcomePage {
                 {
 
                     !isMobileBrowser()
-                    && <div className = 'legal-footer'>
+                    && <div className='legal-footer'>
                         <p>Copyright © 2020 · Jifmeet. All rights reserved</p>
 
                         {
@@ -590,7 +703,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                         }
                     </div>
-                    
+
 
                 }
 
@@ -605,10 +718,10 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _doRenderInsecureRoomNameWarning() {
         return (
-            <div className = 'insecure-room-name-warning'>
-                <Icon src = { IconWarning } />
+            <div className='insecure-room-name-warning'>
+                <Icon src={IconWarning} />
                 <span>
-                    { this.props.t('security.insecureRoomNameWarning') }
+                    {this.props.t('security.insecureRoomNameWarning')}
                 </span>
             </div>
         );
@@ -621,10 +734,10 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _doRenderInvalidCode() {
         return (
-            <div className = 'insecure-room-name-warning'>
-                <Icon src = { IconWarning } />
+            <div className='insecure-room-name-warning'>
+                <Icon src={IconWarning} />
                 <span>
-                    { this.props.t('security.insecureRoomCodeWarning') }
+                    {this.props.t('security.insecureRoomCodeWarning')}
                 </span>
             </div>
         );
@@ -763,9 +876,9 @@ class WelcomePage extends AbstractWelcomePage {
 
         return (
             <Tabs
-                onSelect = { this._onTabSelected }
-                selected = { this.state.selectedTab }
-                tabs = { tabs } />);
+                onSelect={this._onTabSelected}
+                selected={this.state.selectedTab}
+                tabs={tabs} />);
     }
 
     /**
