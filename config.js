@@ -12,10 +12,10 @@ var config = {
         // anonymousdomain: 'guest.example.com',
 
         // Domain for authenticated users. Defaults to <domain>.
-        // authdomain: 'meet.jitsi',
+        // authdomain: 'meet.jifmeet',
 
         // Focus component domain. Defaults to focus.<domain>.
-        // focus: 'focus.meet.jitsi',
+        // focus: 'focus.meet.jifmeet',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
         muc: 'muc.meet.jitsi',
@@ -25,15 +25,14 @@ var config = {
     bosh: '/http-bind',
 
     // Websocket URL
-    // websocket: 'wss://jitsi-meet.example.com/xmpp-websocket',
+    // websocket: 'wss://jifmeet-meet.example.com/xmpp-websocket',
 
     // The name of client node advertised in XEP-0115 'c' stanza
-    clientNode: 'http://jitsi.org/jitsimeet',
+    clientNode: 'http://jifmeet.com/meet',
 
     // The real JID of focus participant - can be overridden here
     // Do not change username - FIXME: Make focus username configurable
-    // https://github.com/jitsi/jitsi-meet/issues/7376
-    // focusUserJid: 'focus@auth.jitsi-meet.example.com',
+    // focusUserJid: 'focus@auth.jifmeet.example.com',
 
 
     // Testing / experimental features.
@@ -52,7 +51,7 @@ var config = {
             probability: 1
         },
 
-        // Enables the test specific features consumed by jitsi-meet-torture
+        // Enables the test specific features
         // testMode: false
 
         // Disables the auto-play behavior of *all* newly created video element.
@@ -90,7 +89,7 @@ var config = {
     // disableAudioLevels: false,
     // audioLevelsInterval: 200,
 
-    // Enabling this will run the lib-jitsi-meet no audio detection module which
+    // Enabling this will run the lib-jifmeet no audio detection module which
     // will notify the user if the current selected microphone has no audio
     // input and will suggest another valid device if one is present.
     enableNoAudioDetection: false,
@@ -100,7 +99,7 @@ var config = {
     // about the call.
     // enableSaveLogs: false,
 
-    // Enabling this will run the lib-jitsi-meet noise detection module which will
+    // Enabling this will run the lib-jifmeet noise detection module which will
     // notify the user if there is noise, other than voice, coming from the current
     // selected microphone. The purpose it to let the user know that the input could
     // be potentially unpleasant for other meeting participants.
@@ -139,7 +138,7 @@ var config = {
     // maxFullResolutionParticipants: 2,
 
     // w3c spec-compliant video constraints to use for video capture. Currently
-    // used by browsers that return true from lib-jitsi-meet's
+    // used by browsers that return true from lib-jifmeet's
     // util#browser#usesNewGumFlow. The constraints are independent from
     // this config's resolution value. Defaults to requesting an ideal
     // resolution of 720p.
@@ -194,15 +193,7 @@ var config = {
 
     // Whether to enable file recording or not.
     // fileRecordingsEnabled: false,
-    // Enable the dropbox integration.
-    // dropbox: {
-    //     appKey: '<APP_KEY>' // Specify your app key here.
-    //     // A URL to redirect the user to, after authenticating
-    //     // by default uses:
-    //     // 'https://meet.jitsi/static/oauth.html'
-    //     redirectURI:
-    //          'https://meet.jitsi/subfolder/static/oauth.html'
-    // },
+    
     // When integrations like dropbox are enabled only that will be shown,
     // by enabling fileRecordingsServiceEnabled, we show both the integrations
     // and the generic recording service (its configuration and storage type
@@ -322,7 +313,7 @@ var config = {
     // TCC sequence numbers starting from 0.
     // enableIceRestart: false,
 
-    // Use TURN/UDP servers for the jitsi-videobridge connection (by default
+    // Use TURN/UDP servers for the videobridge connection (by default
     // we filter out TURN/UDP because it is usually not needed since the
     // bridge itself is reachable via UDP)
     // useTurnUdp: false
@@ -393,7 +384,7 @@ var config = {
 
     // Whether to enable stats collection or not in the TraceablePeerConnection.
     // This can be useful for debugging purposes (post-processing/analysis of
-    // the webrtc stats) as it is done in the jitsi-meet-torture bandwidth
+    // the webrtc stats)
     // estimation tests.
     // gatherStats: false,
 
@@ -438,10 +429,6 @@ var config = {
         // The STUN servers that will be used in the peer to peer connections
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
-
-            // { urls: 'stun:meet.jifmeet.com:3478' },
-           // { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
-
     	    { urls: "stun:stun.l.google.com:19302" },
             { urls: "stun:stun1.l.google.com:19302" },
             { urls: "stun:stun2.l.google.com:19302" }
@@ -493,15 +480,12 @@ var config = {
         // interval.
         // rtcstatsEnabled: true,
 
-        // In order to enable rtcstats one needs to provide a endpoint url.
-        // rtcstatsEndpoint: wss://rtcstats-server-pilot.jitsi.net/,
-
         // The interval at which rtcstats will poll getStats, defaults to 1000ms.
         // If the value is set to 0 getStats won't be polled and the rtcstats client
         // will only send data related to RTCPeerConnection events.
         // rtcstatsPolIInterval: 1000
 
-        // Array of script URLs to load as lib-jitsi-meet "analytics handlers".
+        // Array of script URLs to load as lib-jifmeet "analytics handlers".
         scriptURLs: [
             "libs/analytics-ga.min.js", // google-analytics
         //      "https://example.com/my-custom-analytics.js"
@@ -511,7 +495,7 @@ var config = {
     // Logs that should go be passed through the 'log' event if a handler is defined for it
     // apiLogLevels: ['warn', 'log', 'error', 'info', 'debug'],
 
-    // Information about the jitsi-meet instance we are connecting to, including
+    // Information about the jifmeet instance we are connecting to, including
     // the user region as seen by the server.
     deploymentInfo: {
         // shard: "shard1",
@@ -525,13 +509,13 @@ var config = {
     // Information for the chrome extension banner
     // chromeExtensionBanner: {
     //     // The chrome extension to be installed address
-    //     url: 'https://chrome.google.com/webstore/detail/jitsi-meetings/kglhbbefdnlheedjiejgomgmfplipfeb',
+    //     url: 'https://chrome.google.com/webstore/detail/jifmeet-meetings/kglhbbefdnlheedjiejgomgmfplipfeb',
 
     //     // Extensions info which allows checking if they are installed or not
     //     chromeExtensionsInfo: [
     //         {
     //             id: 'kglhbbefdnlheedjiejgomgmfplipfeb',
-    //             path: 'jitsi-logo-48x48.png'
+    //             path: 'jifmeet-logo-48x48.png'
     //         }
     //     ]
     // },
@@ -631,7 +615,7 @@ var config = {
     // The URL of the moderated rooms microservice, if available. If it
     // is present, a link to the service will be rendered on the welcome page,
     // otherwise the app doesn't render it.
-    // moderatedRoomServiceUrl: 'https://moderated.jitsi-meet.example.com',
+    // moderatedRoomServiceUrl: 'https://moderated.jifmeet.example.com',
 
     // Hides the conference timer.
     // hideConferenceTimer: true,
@@ -639,7 +623,7 @@ var config = {
     // Sets the conference subject
     // subject: 'Conference Subject',
 
-    // List of undocumented settings used in jitsi-meet
+    // List of undocumented settings used in jifmeet
     /**
      _immediateReloadThreshold
      debug
@@ -666,14 +650,14 @@ var config = {
 
     /**
      * This property can be used to alter the generated meeting invite links (in combination with a branding domain
-     * which is retrieved internally by jitsi meet) (e.g. https://meet.jit.si/someMeeting
+     * which is retrieved internally by jifmeet) (e.g. https://meet.jifmeet.com/someMeeting
      * can become https://brandedDomain/roomAlias)
      */
     // brandingRoomAlias: null,
 
     googleApiApplicationClientID: '143401360954-91aq4dbaj70tj4q6demjgsj5odk1bppt.apps.googleusercontent.com',
 
-    // List of undocumented settings used in lib-jitsi-meet
+    // List of undocumented settings used in lib-jifmeet
     /**
      _peerConnStatusOutOfLastNTimeout
      _peerConnStatusRtcMuteTimeout
@@ -696,7 +680,7 @@ var config = {
     enableTalkWhileMuted: true,
 
     // This property should be always set to false, to avoid echo from speakers of other participants
-    disableAEC: false, //wasnt present in latest jitsi-meet code
+    disableAEC: false, //wasnt present in latest code
 
     // Allow all above example options to include a trailing comma and
     // prevent fear when commenting out the last value.
