@@ -3,7 +3,7 @@ const logLevel = process?.env?.REACT_APP_JIFMEET_LOG ? 'info' : 'error';
 
 // Logging configuration
 var loggingConfig = {
-    // default log level for the app and lib-jitsi-meet
+    // default log level for the app and lib-jifmeet
     defaultLogLevel: logLevel,
 
     // Option to disable LogCollector (which stores the logs on CallStats)
