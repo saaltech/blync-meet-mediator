@@ -78,6 +78,11 @@ function MeetingInfo(props) {
                     maxTime = { new Date().setHours(24) }
                     selected = { meetingFrom && new Date(meetingFrom) }
                     onChange = { value => {
+
+                        if(moment(value).isSameOrBefore(new Date())) {
+                            return false;
+                        }
+
                         setMeetingFrom(value);
                         const nd = new Date(value.getTime());
 
