@@ -93,7 +93,7 @@ deploy-css:
 	$(NODE_SASS) $(STYLES_MAIN) $(STYLES_BUNDLE) && \
 	$(CLEANCSS) --skip-rebase $(STYLES_BUNDLE) > $(STYLES_DESTINATION) ; \
 	rm $(STYLES_BUNDLE)
-	sed -i '.bak' 's/jitsi-icon/jifmeet-icon/g' $(STYLES_DESTINATION)
+	sed -i 's/jitsi-icon/jifmeet-icon/g' $(STYLES_DESTINATION)
 	rm $(STYLES_DESTINATION).bak
 
 deploy-local:
