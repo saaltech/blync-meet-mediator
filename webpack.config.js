@@ -151,7 +151,7 @@ const config = {
                 'css-loader'
             ]
         }, {
-            test: /[\.js|\.html]$/,
+            test: /\.(js|html)$/,
             loader: 'string-replace-loader',
             options: {
               search: 'JitsiMeetJS',
@@ -159,7 +159,7 @@ const config = {
               flags: 'gi'
             }
         }, {
-            test: /[\.js|\.scss]$/,
+            test: /\.(js|scss|css)$/,
             loader: 'string-replace-loader',
             options: {
               search: 'jitsi-icon',
