@@ -16,7 +16,7 @@ RUN apt-get update && apt install -y nodejs build-essential debhelper
 
 # Use the jifmeet package version as the version for our js and css files below
 RUN sed -i.bak  -e "s/app.bundle.min.js?v=[[:digit:]]*/app.bundle.min.js?v=${VERSIONMIN}v/" index.html
-RUN sed -i.bak  -e "s/lib-jitsi-meet.min.js?v=[[:digit:]]*/lib-jitsi-meet.min.js?v=${VERSIONMIN}v/" index.html
+RUN sed -i.bak  -e "s/lib-jifmeet.min.js?v=[[:digit:]]*/lib-jifmeet.min.js?v=${VERSIONMIN}v/" index.html
 RUN sed -i.bak  -e "s/all.css/all.css?v=${VERSIONMIN}v/" index.html
 RUN sed -i.bak  -e "s/interface_config.js?v=[[:digit:]]*/interface_config.js?v=${VERSIONMIN}v/" index.html
 

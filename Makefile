@@ -1,7 +1,7 @@
 BUILD_DIR = build
 CLEANCSS = ./node_modules/.bin/cleancss
 DEPLOY_DIR = libs
-LIBJITSIMEET_DIR = node_modules/lib-jitsi-meet/
+LIBJITSIMEET_DIR = node_modules/lib-jifmeet/
 LIBFLAC_DIR = node_modules/libflacjs/dist/min/
 OLM_DIR = node_modules/olm
 RNNOISE_WASM_DIR = node_modules/rnnoise-wasm/dist/
@@ -31,7 +31,7 @@ clean:
 	rm -fr $(BUILD_DIR)
 
 .NOTPARALLEL:
-deploy: deploy-init deploy-appbundle deploy-rnnoise-binary deploy-lib-jitsi-meet deploy-libflac deploy-olm deploy-css deploy-local
+deploy: deploy-init deploy-appbundle deploy-rnnoise-binary deploy-lib-jifmeet deploy-libflac deploy-olm deploy-css deploy-local
 
 deploy-init:
 	rm -fr $(DEPLOY_DIR)
@@ -64,11 +64,11 @@ deploy-appbundle:
 		$(BUILD_DIR)/close3.min.map \
 		$(DEPLOY_DIR)
 
-deploy-lib-jitsi-meet:
+deploy-lib-jifmeet:
 	cp \
-		$(LIBJITSIMEET_DIR)/lib-jitsi-meet.min.js \
-		$(LIBJITSIMEET_DIR)/lib-jitsi-meet.min.map \
-		$(LIBJITSIMEET_DIR)/lib-jitsi-meet.e2ee-worker.js \
+		$(LIBJITSIMEET_DIR)/lib-jifmeet.min.js \
+		$(LIBJITSIMEET_DIR)/lib-jifmeet.min.map \
+		$(LIBJITSIMEET_DIR)/lib-jifmeet.e2ee-worker.js \
 		$(LIBJITSIMEET_DIR)/connection_optimization/external_connect.js \
 		$(LIBJITSIMEET_DIR)/modules/browser/capabilities.json \
 		$(DEPLOY_DIR)
@@ -93,12 +93,14 @@ deploy-css:
 	$(NODE_SASS) $(STYLES_MAIN) $(STYLES_BUNDLE) && \
 	$(CLEANCSS) --skip-rebase $(STYLES_BUNDLE) > $(STYLES_DESTINATION) ; \
 	rm $(STYLES_BUNDLE)
+	sed -i'.bak' 's/jitsi-icon/jifmeet-icon/g' $(STYLES_DESTINATION)
+	rm $(STYLES_DESTINATION).bak
 
 deploy-local:
 	([ ! -x deploy-local.sh ] || ./deploy-local.sh)
 
 .NOTPARALLEL:
-dev: deploy-init deploy-css deploy-rnnoise-binary deploy-lib-jitsi-meet deploy-libflac deploy-olm
+dev: deploy-init deploy-css deploy-rnnoise-binary deploy-lib-jifmeet deploy-libflac deploy-olm
 	$(WEBPACK_DEV_SERVER) --detect-circular-deps
 
 source-package:

@@ -136,7 +136,7 @@
         }
 
         const gaEvent = {
-            'eventCategory': 'jitsi-meet',
+            'eventCategory': 'jifmeet',
             'eventAction': this._extractAction(event),
             'eventLabel': this._extractLabel(event)
         };
