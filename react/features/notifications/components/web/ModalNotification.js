@@ -26,7 +26,7 @@ const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography variant="h5">{children}</Typography>
       {onClose ? (
         <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
@@ -45,9 +45,21 @@ const DialogContent = withStyles((theme) => ({
 const DialogActions = withStyles((theme) => ({
   root: {
     margin: 0,
-    padding: theme.spacing(1),
+    padding: theme.spacing(1)
   },
 }))(MuiDialogActions);
+
+const ButtonActions = withStyles((theme) => ({
+  root: {
+    textTransform: "none",
+    background: "#ebebeb",
+    color: "#444",
+    display: "inline-flex",
+    borderRadius: "20px",
+    border: "1px solid #ebebeb",
+    marginRight: "10px"
+  },
+}))(Button);
 
 export default function ModalNotification(props) {
   const [open, setOpen] = React.useState(true);
@@ -77,9 +89,9 @@ export default function ModalNotification(props) {
           && <DialogActions>
             {
                 actions.map((action) => 
-                    <Button autoFocus onClick={action.onClick} color="primary">
+                    <ButtonActions autoFocus onClick={action.onClick} color="primary">
                         { action.content }
-                    </Button>
+                    </ButtonActions>
                 )
             }
           </DialogActions>
