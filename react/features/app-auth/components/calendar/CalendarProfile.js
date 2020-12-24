@@ -171,8 +171,9 @@ function CalendarProfile(props: Props) {
                                                 <div>
                                                     { `${moment(event.startDate).locale('en')
                                                         .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
-                                                        ${event.endDate ? ` - ${moment(event.endDate).locale('en')
-                                                        .format('hh:mm a')}` : ''}`
+                                                        ${event.endDate ? ` - ${moment(event.endDate).isSame(event.startDate, 'day') ?
+                                                        moment(event.endDate).locale('en').format('hh:mm a') :
+                                                        moment(event.endDate).locale('en').format('DD MMM, hh:mm a')}` : ''}`
                                                     }
                                                 </div>
                                                 

@@ -49,7 +49,10 @@ function MeetingInfo(props) {
                         moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
                     }
                     {
-                        meetingTo && (` - ${moment(meetingTo).locale('en').format('hh:mm a')}`)
+                        meetingTo && (
+                            ` - ${ moment(meetingTo).isSame(meetingFrom, 'day') ?
+                                moment(meetingTo).locale('en').format('hh:mm a') :
+                                moment(meetingTo).locale('en').format('DD MMM, hh:mm a')}`)
                     }
                 </div>
             }
@@ -75,6 +78,11 @@ function MeetingInfo(props) {
                     maxTime = { new Date().setHours(24) }
                     selected = { meetingFrom && new Date(meetingFrom) }
                     onChange = { value => {
+
+                        if(moment(value).isSameOrBefore(new Date())) {
+                            return false;
+                        }
+
                         setMeetingFrom(value);
                         const nd = new Date(value.getTime());
 
@@ -128,7 +136,15 @@ function MeetingInfo(props) {
                     //     return d;
                     // })() }
                     selected = { meetingTo && new Date(meetingTo) }
-                    onChange = { value => setMeetingTo(value) }
+                    onChange = { value => {
+                        if(moment(value).isSameOrBefore(meetingFrom)) {
+                            return false;
+                        }
+                        else {
+                            setMeetingTo(value) 
+                        }
+                        
+                    }}
                     showTimeSelect = { true }
                     timeFormat = 'HH:mm'
                     dateFormat = 'MMM d, yyyy h:mm aa' />
