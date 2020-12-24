@@ -323,7 +323,7 @@ module.exports = [
             fs: 'empty'
         },
         output: Object.assign({}, config.output, {
-            library: [ 'JitsiMeetJS', 'app', 'effects', 'rnnoise' ],
+            library: [ 'JifMeetJS', 'app', 'effects', 'rnnoise' ],
             libraryTarget: 'window',
             filename: '[name].min.js',
             sourceMapFilename: '[name].min.map'

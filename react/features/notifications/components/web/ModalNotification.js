@@ -88,8 +88,11 @@ export default function ModalNotification(props) {
         { actions && actions.length > 0 
           && <DialogActions>
             {
-                actions.map((action) => 
-                    <ButtonActions autoFocus onClick={action.onClick} color="primary">
+                actions.map((action, index) => 
+                    <ButtonActions autoFocus 
+                      onClick={action.onClick} 
+                      color="primary"
+                      key = {index}>
                         { action.content }
                     </ButtonActions>
                 )

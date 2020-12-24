@@ -42,7 +42,7 @@ export default class OverlayFrame extends Component<Props> {
         }*/
 
         return (<>
-            <div class="modal-overlay"></div>
+            <div className="modal-overlay"></div>
             <div
                 className = { containerClass }
                 id = 'overlay'>

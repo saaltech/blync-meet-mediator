@@ -113,15 +113,15 @@ export function getBaseUrl(w: Object = window) {
  * NOTE: After React-ifying everything this should be the only global.
  */
 export function getJitsiMeetGlobalNS() {
-    if (!window.JitsiMeetJS) {
-        window.JitsiMeetJS = {};
+    if (!window.JifMeetJS) {
+        window.JifMeetJS = {};
     }
 
-    if (!window.JitsiMeetJS.app) {
-        window.JitsiMeetJS.app = {};
+    if (!window.JifMeetJS.app) {
+        window.JifMeetJS.app = {};
     }
 
-    return window.JitsiMeetJS.app;
+    return window.JifMeetJS.app;
 }
 
 /**
