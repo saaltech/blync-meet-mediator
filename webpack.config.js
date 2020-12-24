@@ -151,6 +151,22 @@ const config = {
                 'css-loader'
             ]
         }, {
+            test: /[\.js|\.html]$/,
+            loader: 'string-replace-loader',
+            options: {
+              search: 'JitsiMeetJS',
+              replace: 'JifMeetJS',
+              flags: 'gi'
+            }
+        }, {
+            test: /[\.js|\.scss]$/,
+            loader: 'string-replace-loader',
+            options: {
+              search: 'jitsi-icon',
+              replace: 'jifmeet-icon',
+              flags: 'gi'
+            }
+        }, {
             test: /\/node_modules\/@atlaskit\/modal-dialog\/.*\.js$/,
             resolve: {
                 alias: {
@@ -173,7 +189,7 @@ const config = {
                     expandProps: 'start'
                 }
             } ]
-        } ]
+        }]
     },
     node: {
         // Allow the use of the real filename of the module being executed. By
