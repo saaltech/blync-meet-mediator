@@ -51,7 +51,13 @@ const DialogActions = withStyles((theme) => ({
 
 const ButtonActions = withStyles((theme) => ({
   root: {
-    textTransform: "none"
+    textTransform: "none",
+    background: "#ebebeb",
+    color: "#444",
+    display: "inline-flex",
+    borderRadius: "20px",
+    border: "1px solid #ebebeb",
+    marginRight: "10px"
   },
 }))(Button);
 
