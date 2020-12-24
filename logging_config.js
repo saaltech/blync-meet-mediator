@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars, no-var */
-const logLevel = process.env.REACT_APP_JIFMEET_LOG ? 'info' : 'error';
-
+const logLevel = (typeof process !== "undefined" && process?.env?.REACT_APP_JIFMEET_LOG) ? 
+                'info' : 'error';
+                
 // Logging configuration
 var loggingConfig = {
-    // default log level for the app and lib-jitsi-meet
+    // default log level for the app and lib-jifmeet
     defaultLogLevel: logLevel,
 
     // Option to disable LogCollector (which stores the logs on CallStats)
@@ -35,15 +36,12 @@ var loggingConfig = {
     'modules/xmpp/SDPUtil.js': logLevel,
     'modules/xmpp/strophe.jingle.js': logLevel,
     'modules/xmpp/SdpConsistency.js': logLevel,
-    'JitsiConferenceEventManager.js': logLevel,
     'features/base/tracks': logLevel,
     'features/video-quality': logLevel,
     'features/base/media': logLevel,
     'features/base/redux': logLevel,
     'features/analytics': logLevel,
     'conference.js': logLevel,
-    'JitsiConference.js': logLevel,
-    'JitsiParticipant.js': logLevel,
     'index.web': logLevel
 };
 

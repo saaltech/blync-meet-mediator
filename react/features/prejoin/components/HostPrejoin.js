@@ -281,7 +281,7 @@ function HostPrejoin(props) {
                         validation: {
                             message: 'Only alphabets and numbers are allowed.',
                             action: e => {
-                                const re = /[0-9a-fA-F]+/g;
+                                const re = /[0-9a-zA-Z]+/g;
                                 if (!re.test(e.key)) {
                                     e.preventDefault();
                                 }

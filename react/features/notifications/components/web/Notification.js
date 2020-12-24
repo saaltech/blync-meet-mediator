@@ -13,6 +13,8 @@ import AbstractNotification, {
     type Props
 } from '../AbstractNotification';
 
+import ModalNotification from './ModalNotification';
+
 declare var interfaceConfig: Object;
 
 /**
@@ -54,16 +56,33 @@ class Notification extends AbstractNotification<Props> {
         } = this.props;
 
         return (
-            <Flag
-                actions = { this._mapAppearanceToButtons(hideErrorSupportLink) }
-                appearance = { appearance }
-                description = { this._renderDescription() }
-                icon = { this._mapAppearanceToIcon() }
-                id = { uid }
-                isDismissAllowed = { isDismissAllowed }
-                onDismissed = { onDismissed }
-                testId = { titleKey }
-                title = { title || t(titleKey, titleArguments) } />
+            <>
+            {
+                this.props.modal &&
+                <ModalNotification 
+                    actions = { this._mapAppearanceToButtons(hideErrorSupportLink) }
+                    description = { this._getDescription() }
+                    onDismissed = { onDismissed }
+                    title = { title || t(titleKey, titleArguments) }
+                    />
+                
+                    /* Not Showing default atlasian toolkit notifications,
+                     as we have our own toast notification display
+                    <Flag
+                    actions = { this._mapAppearanceToButtons(hideErrorSupportLink) }
+                    appearance = { appearance }
+                    description = { this._renderDescription() }
+                    icon = { this._mapAppearanceToIcon() }
+                    id = { uid }
+                    isDismissAllowed = { isDismissAllowed }
+                    onDismissed = { onDismissed }
+                    testId = { titleKey }
+                    title = { title || t(titleKey, titleArguments) } />
+                    */
+                
+            }
+            </>
+            
         );
     }
 
