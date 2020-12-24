@@ -284,7 +284,8 @@ export default class LocalVideo extends SmallVideo {
         const video = this.container.querySelector('video');
 
         video && video.setAttribute('playsinline', 'true');
-        video && !config.testing?.noAutoPlayVideo && video.play().then(_ => {
+        video && !config.testing?.noAutoPlayVideo 
+            && video.play().then(_ => {
             // Video playback started ;)
           })
           .catch(e => {
