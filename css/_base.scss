@@ -379,6 +379,13 @@ form {
     }
 }
 
+/**
+ * Override Material design ripple effect
+ */
+.MuiTouchRipple-root {
+    display: none;
+}
+
 @media only screen and (max-width: 900px) {
     #dominantSpeakerNotifier {
         display: none;
