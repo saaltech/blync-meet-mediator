@@ -17,12 +17,12 @@
         // document.querySelector('#manifest-placeholder').setAttribute('href', window.location.origin + '/manifest.json');
 
         document.addEventListener('DOMContentLoaded', () => {
-            if (!JitsiMeetJS.app) {
+            if (!JifMeetJS.app) {
                 return;
             }
 
-            JitsiMeetJS.app.renderEntryPoint({
-                Component: JitsiMeetJS.app.entryPoints.APP
+            JifMeetJS.app.renderEntryPoint({
+                Component: JifMeetJS.app.entryPoints.APP
             })
 
             const isElectron = navigator.userAgent.includes('Electron');
