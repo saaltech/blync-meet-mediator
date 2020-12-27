@@ -37,16 +37,92 @@ function MeetingInfo(props) {
 
     return (
         <div className='meetingInfo'>
-            <div
-                className='meeting-title'
-                title={meetingName ? meetingName : meetingId}
-                style={!meetingName ? { color: '#969696' } : {}}>{meetingName ? meetingName : meetingId}</div>
-            <div className='meeting-id'>{meetingId}</div>
+            {
+                (isPureJoinFlow || shareable) ? (
+                    <>
+                        <div
+                            className='shareable-meeting-title'
+                            style={!meetingName ? { color: '#969696' } : {}}>{'Your meeting has been successfully created'}
+                        </div>
+                        <div>
+                            <div className="meeting-detail-info  detail-heading-margin">
+                                <div className="detail-heading">
+                                    Topic
+                            </div>
+                                <div className="detail-heading-value">
+                                    {meetingName}
+                                </div>
+                            </div>
+                            <div className="meeting-detail-info detail-heading-margin">
+                                <div className="detail-heading">
+                                    Meeting ID
+                            </div>
+                                <div className="detail-heading-value">
+                                    {meetingId}
+                                </div>
+                            </div>
+                            {meetingFrom && (
+                                <div className="meeting-detail-info detail-heading-margin">
+                                    <div className="detail-heading">
+                                        From
+                            </div>
+                                    <div className="detail-heading-value">
+                                        {
+                                            moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                                        }
+                                    </div>
+                                </div>
+                            )}
+                            {meetingTo && (
+                                <div className="meeting-detail-info">
+                                    <div className="detail-heading">
+                                        To
+                            </div>
+                                    <div className="detail-heading-value">
+                                        {
+                                            moment(meetingTo).locale('en').format('DD MMM, hh:mm a')
+                                        }
+                                    </div>
+                                </div>
+                            )}
+                            {enableWaitingRoom && (
+                                <div className="meeting-detail-info detail-heading-margin">
+                                    <div className="detail-heading">
+                                        Waiting Room
+                            </div>
+                                    <div className="detail-heading-value">
+                                        {enableWaitingRoom ? 'Enabled' : 'Disabled'}
+                                    </div>
+                                </div>
+                            )}
+                            {isPrivate && (
+                                <div className="meeting-detail-info detail-heading-margin">
+                                    <div className="detail-heading">
+                                        Password
+                            </div>
+                                    <div className="detail-heading-value">
+                                        {pass}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                        <>
+                            <div
+                                className='meeting-title'
+                                title={meetingName ? meetingName : meetingId}
+                                style={!meetingName ? { color: '#969696' } : {}}>{meetingName ? meetingName : meetingId}</div>
+                            <div className='meeting-id'>{meetingId}</div>
+                        </>
+                    )
+            }
+
             {
                 (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost))
                 && <div className='you-are-host'> You are the host of this meeting</div>
             }
-            {
+            {/* {
                 (isPureJoinFlow || shareable) && meetingFrom &&
                 <div className={'date-info'}>
                     {
@@ -54,30 +130,32 @@ function MeetingInfo(props) {
                     }
                     {
                         meetingTo && (
-                            ` - ${ moment(meetingTo).isSame(meetingFrom, 'day') ?
+                            ` - ${moment(meetingTo).isSame(meetingFrom, 'day') ?
                                 moment(meetingTo).locale('en').format('hh:mm a') :
                                 moment(meetingTo).locale('en').format('DD MMM, hh:mm a')}`)
                     }
                 </div>
-            }
+            } */}
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 {
                     !meetNow && !isPureJoinFlow && !shareable
-                    && <div className='date-field-container' style={{ marginRight: '20px' }}>
+                    && <div className='date-field-container' style={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}>
                         <div
                             className='form-label mandatory'
                             style={{
                                 textAlign: 'left',
+                                marginTop: '10px',
                                 marginBottom: '10px',
+                                marginRight: '10px',
                                 position: 'relative'
                             }}>
-                            {'From Time '}
+                            <div style={{ display: 'inline-block' }}>{'From '}</div>
                             <span>*</span>
                             <IconContext.Provider value={{ style: { color: 'blue' } }}>
                                 <div style={{
                                     position: 'absolute',
-                                    top: '38px',
-                                    left: '-5px',
+                                    top: '1px',
+                                    left: '60px',
                                     zIndex: 1
                                 }}>
                                     <FaCalendarAlt size={20} />
@@ -103,25 +181,27 @@ function MeetingInfo(props) {
                             }}
                             showTimeSelect={true}
                             timeFormat='HH:mm'
-                            dateFormat='MMM d, yyyy h:mm aa' />
+                            dateFormat='MMM d, h:mm aa' />
                     </div>
                 }
                 {
                     !meetNow && !isPureJoinFlow && !shareable
-                    && <div className='date-field-container'>
+                    && <div className='date-field-container' style={{ display: 'flex' }}>
                         <div
                             className='form-label mandatory'
                             style={{
                                 textAlign: 'left',
+                                marginTop: '10px',
                                 marginBottom: '10px',
+                                marginRight: '10px',
                                 position: 'relative'
                             }}>
-                            {'To Time'}
+                            {'To'}
                             <IconContext.Provider value={{ style: { color: 'blue' } }}>
                                 <div style={{
                                     position: 'absolute',
-                                    top: '38px',
-                                    left: '-5px',
+                                    top: '-2px',
+                                    left: '33px',
                                     zIndex: 1
                                 }}>
                                     <FaCalendarAlt size={20} />
@@ -161,14 +241,14 @@ function MeetingInfo(props) {
                             onChange={value => setMeetingTo(value)}
                             showTimeSelect={true}
                             timeFormat='HH:mm'
-                            dateFormat='MMM d, yyyy h:mm aa' />
+                            dateFormat='MMM d, h:mm aa' />
                     </div>
                 }
             </div>
 
             {
                 !isPureJoinFlow && (!shareable || enableWaitingRoom) &&
-                <div className='form-field make-private' style={{ display: 'flex' }}>
+                <div className='form-field make-private enable-meeting-wrap' style={{ display: 'flex' }}>
                     {/* <Switch
                             onChange={() => {
                                 setEnableWaitingRoom(!enableWaitingRoom);
@@ -177,7 +257,7 @@ function MeetingInfo(props) {
                             // id='enableWaitingRoom'
                             disabled={shareable} /> */}
                     <label
-                        className='form-label'
+                        className='form-label enable-room'
                         htmlFor='enableWaitingRoom'>
                         {'Enable waiting room'}
                     </label>
@@ -205,7 +285,7 @@ function MeetingInfo(props) {
                         value={isPrivate}
                         id='makePrivate'
                         disabled={shareable} /> */}
-                    <div style={{ display: 'flex' }}>
+                    <div className="make-private-room">
                         <label
                             className='form-label'
                             htmlFor='makePrivate'>
@@ -222,13 +302,13 @@ function MeetingInfo(props) {
                             <span className="slider round"></span>
                         </label>
                     </div>
-                    <div className='form-label sub-label'>{'(Participants require password to enter this meeting)'}</div>
+                    {/* <div className='form-label sub-label'>{'(Participants require password to enter this meeting)'}</div> */}
                 </div>
             }
 
             {
                 !isPureJoinFlow && (!shareable || (shareable && isPrivate))
-                && <div className='form-field meeting-password' style={{ margin: '0px' }}>
+                && <div className='form-field meeting-password'>
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
                         placeHolder={'Meeting password'}

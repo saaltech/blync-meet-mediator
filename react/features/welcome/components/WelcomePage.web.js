@@ -521,22 +521,22 @@ class WelcomePage extends AbstractWelcomePage {
                         <div className="button-wrapper">
                             <ButtonWithIcon
                                 labelText="MEET NOW"
-                                backGroundColor={"yellow"}
+                                backGroundColor={"#005C85"}
                                 onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
                                 IconComponent={{
                                     component: FaCalendarAlt,
                                     size: 25,
-                                    color: 'blue'
+                                    color: '#005C85'
                                 }} />
                             <div className="schedule--button">
                                 <ButtonWithIcon
                                     labelText="SCHEDULE"
                                     onButtonClick={() => { this.handleClickMeetNow('schedule') }}
-                                    backGroundColor={"red"}
+                                    backGroundColor={"#FEA729"}
                                     IconComponent={{
                                         component: FaCalendarAlt,
                                         size: 25,
-                                        color: 'blue'
+                                        color: '#FEA729'
                                     }} />
                             </div>
                         </div>

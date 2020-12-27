@@ -1,6 +1,31 @@
 .meetingInfo {
     color: #393939;
-    padding: 20px 40px;
+    // padding: 20px 40px;
+    width: 80%;
+    margin: 0 auto;
+    .meeting-detail-info{
+        display: flex;
+        justify-content: center;
+    }
+    .detail-heading{
+        flex: 0 0 100px;
+        color: #9A9A9A;
+        text-align: left;
+        font-size: 18px;
+    }
+    .detail-heading-margin {
+        margin-top: 20px;
+    }
+    .detail-heading-value::before{
+        content: ':\00a0 \00a0';
+    }
+    .detail-heading-value{
+    margin-left: 10px;
+    flex: 0 0 210px;
+    text-align: left;
+    color: #0a5694;
+    font-size: 18px;
+    }
 
     .divider {
         border-bottom: 1px solid #70707057;
@@ -8,11 +33,12 @@
     }
     
     .picker-field {
-        text-align: center;
+       text-align: center;
         height: 35px;
-        border-color: #70707057;
-        border-width: 0px;
-        border-bottom: 1px solid gray;
+        // border-color: #70707057;
+        border-width: 0;
+        border-radius: 25px;
+        border: 1px solid #D1D1D1;
     }
 
     .date-time-popper {
@@ -26,22 +52,38 @@
     .mandatory span {
         color: #FF0000;
     }
-
-    .meeting-title {
+    .shareable-meeting-title {
         font-size: 25px;
-        padding: 20px 0 5px;
+        color:#005694;
+        padding: 35px 0 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .meeting-id, .date-info {
+    .meeting-title {
+        font-size: 30px;
+        color:#005694;
+        padding: 35px 0 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .meeting-id{
+        color: #005694;
+        font-size: 21px;
+    }
+    .date-info {
         color: #969696;
         font-size: 14px;
     }
 
     .you-are-host {
-        color: #4D4D4D;
+        color: #393939;
+        font-size: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
         // padding: 20px 0px 20px;
     }
 
@@ -58,8 +100,31 @@
 
     .make-private {
         text-align: left;
+        margin-top: 15px; 
 
+        &.enable-meeting-wrap {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin: 10 auto;
+        }
 
+        .make-private-room {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: bold;
+            width: 80%;
+            margin: 10 auto;
+            color: #393939;
+        }
+
+        .enable-room {
+            font-size: 15px;
+            font-weight: bold;
+            color: #393939;
+        }
         input.field {
             height: 20px;
             width: 20px;
@@ -136,7 +201,8 @@
     }
 
     .meeting-password {
-        margin: 15px 30px;
+        margin: 0 auto;
+    width: 68%;
 
         input.field:disabled {
             border-color: #70707057;

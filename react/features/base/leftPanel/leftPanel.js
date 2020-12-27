@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconContext } from 'react-icons';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { RiContactsBookFill, RiVideoChatFill, RiVideoAddLine } from 'react-icons/ri';
 import TncPrivacy from '../../welcome/components/TncPrivacy';
 
 
@@ -39,7 +39,7 @@ export default function LeftPanel(props) {
                 }}>
                     <div onClick={() => { handleClickIcon('contacts') }}
                         style={{ textAlign: 'center', marginBottom: '10px' }}>
-                        <FaCalendarAlt size={40} />
+                        <RiContactsBookFill size={40} />
                         <div style={{ color: activeButton === 'contacts' ? 'green' : 'blue' }}>
                             Contacts
                         </div>
@@ -54,7 +54,7 @@ export default function LeftPanel(props) {
                     <div
                         onClick={() => { handleClickIcon('join') }}
                         style={{ textAlign: 'center', marginBottom: '10px' }}>
-                        <FaCalendarAlt size={40} />
+                        <RiVideoChatFill size={40} />
                         <div style={{ color: activeButton === 'join' ? 'green' : 'blue' }}>
                             Join
                         </div>
@@ -69,7 +69,7 @@ export default function LeftPanel(props) {
                     <div
                         onClick={() => { handleClickIcon('create') }}
                         style={{ textAlign: 'center' }}>
-                        <FaCalendarAlt size={40} />
+                        <RiVideoAddLine size={40} />
                         <div style={{ color: activeButton === 'create' ? 'green' : 'blue' }}>
                             Create
                         </div>

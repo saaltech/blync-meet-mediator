@@ -145,7 +145,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     id='lobby-screen'>
                     {/* <Background backgroundColor='black'/> */}
 
-                    <div style={{ border: '1px solid black', borderRadius: '40px', height: '100%' }}>
+                    <div style={{ height: '100%' }}>
                         {/* {
                         showTrackPreviews || meetNow ?
                             <Preview
@@ -164,7 +164,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     }
  */}
 
-                        <div className='content' style={{ height: '100%' }}>
+                        <div className='content'>
                             {
                                 navigatedFromHome &&
                                 <HostPrejoin

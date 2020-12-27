@@ -5,14 +5,15 @@
    cursor: pointer;
    padding: 20;
    width: max-content;
-   border-radius: 20px; 
+   border-radius: 12px; 
+   box-shadow: 0px 5px 5px #0000001A;
     .button-with-icon__icon {
         border-radius: 50%;
         background-color: white;
         padding: 8;
    }
    .button--label{
-       font-size: 20px;
+       font-size: 18px;
        margin-left: 15px;
        margin-right: 15px;
    }

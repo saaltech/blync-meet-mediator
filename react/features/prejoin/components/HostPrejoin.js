@@ -1,7 +1,8 @@
 /* @flow */
 
 import React, { useState, useEffect } from 'react';
-
+import { IconContext } from 'react-icons';
+import { FaCalendarAlt } from 'react-icons/fa';
 
 import { config } from '../../../config';
 import Loading from '../../always-on-top/Loading';
@@ -54,7 +55,7 @@ function HostPrejoin(props) {
         setClearErrors(true);
         setMeetNow(actions === 'meetNow');
         isMeetNow(actions === 'meetNow');
-    },[]);
+    }, []);
     const formRequestBody = () => {
         return {
             'conferenceId': meetingId,
@@ -209,33 +210,45 @@ function HostPrejoin(props) {
     const scheduleDisabled = !meetNow && !meetingFrom;
 
     return (
-        <div className={'hostPrejoin'}>
-            {
-                exiting && <Loading />
-            }
-            <div
-                onClick={props.onClickClose}
-                className="close-icon"></div>
+        <div className="hostPrejoinWrap">
 
-            {
-                shareable
-                && <Icon
-                    className='backArrow'
-                    src={IconArrowBack}
-                    onClick={() => setShareableAction(!shareable)} />
-            }
+            <div className="meet-now">
+                <IconContext.Provider value={{
+                    style: {
+                        color: 'blue'
+                    }
+                }}>
+                    <FaCalendarAlt size={40} />
+                </IconContext.Provider>
+                <span className="meet-now-label">Meet Now</span>
+            </div>
+            <div className={'hostPrejoin'}>
+                {
+                    exiting && <Loading />
+                }
+                <div
+                    onClick={props.onClickClose}
+                    className="close-icon"></div>
 
-            {/* {
+                {
+                    shareable
+                    && <Icon
+                        className='backArrow'
+                        src={IconArrowBack}
+                        onClick={() => setShareableAction(!shareable)} />
+                }
+
+                {/* {
                 shareable && meetNow
                 && <div className='page-title'> Join Now </div>
             } */}
 
-            {/* <div className = 'profileSection'>
+                {/* <div className = 'profileSection'>
                 <Profile />
             </div> */}
 
-            <div className='modesSection'>
-                {/* {
+                <div className='modesSection'>
+                    {/* {
                     !shareable
                     && <div className="meetNow">
                         {actions === 'schedule' ? 'Schedule' : 'MeetNow'}
@@ -254,99 +267,100 @@ function HostPrejoin(props) {
                 //     </ul>
                 } */}
 
-                <MeetingInfo
-                    shareable={shareable}
-                    meetNow={meetNow}
-                    videoMuted={props.videoMuted}
-                    videoTrack={props.videoTrack}
-                    previewFooter={props.previewFooter}
-                    meetingId={{
-                        meetingId
-                    }}
-                    meetingName={{
-                        meetingName,
-                        setMeetingName
-                    }}
-                    enableWaitingRoom={{
-                        enableWaitingRoom,
-                        setEnableWaitingRoom
-                    }}
-                    isPrivate={{
-                        isPrivate,
-                        setIsPrivate
-                    }}
-                    meetingPassword={{
-                        meetingPassword,
-                        setMeetingPassword,
-                        validation: {
-                            message: 'Only alphabets and numbers are allowed.',
-                            action: e => {
-                                const re = /[0-9a-zA-Z]+/g;
-                                if (!re.test(e.key)) {
-                                    e.preventDefault();
+                    <MeetingInfo
+                        shareable={shareable}
+                        meetNow={meetNow}
+                        videoMuted={props.videoMuted}
+                        videoTrack={props.videoTrack}
+                        previewFooter={props.previewFooter}
+                        meetingId={{
+                            meetingId
+                        }}
+                        meetingName={{
+                            meetingName,
+                            setMeetingName
+                        }}
+                        enableWaitingRoom={{
+                            enableWaitingRoom,
+                            setEnableWaitingRoom
+                        }}
+                        isPrivate={{
+                            isPrivate,
+                            setIsPrivate
+                        }}
+                        meetingPassword={{
+                            meetingPassword,
+                            setMeetingPassword,
+                            validation: {
+                                message: 'Only alphabets and numbers are allowed.',
+                                action: e => {
+                                    const re = /[0-9a-zA-Z]+/g;
+                                    if (!re.test(e.key)) {
+                                        e.preventDefault();
+                                    }
                                 }
                             }
-                        }
-                    }}
-                    meetingFrom={{
-                        meetingFrom,
-                        setMeetingFrom
-                    }}
-                    meetingTo={{
-                        meetingTo,
-                        setMeetingTo
-                    }} />
+                        }}
+                        meetingFrom={{
+                            meetingFrom,
+                            setMeetingFrom
+                        }}
+                        meetingTo={{
+                            meetingTo,
+                            setMeetingTo
+                        }} />
 
-                {
-                    !shareable
-                    && <div
-                        className={`prejoin-page-button next 
+                    {
+                        !shareable
+                        && <div
+                            className={`prejoin-page-button next 
                         ${scheduleDisabled ? 'disabled' : ''} 
                         ${isPrivate && !meetingPassword ? 'disabled' : ''} 
                         ` }
-                        onClick={saveConferenceAction}>
-                        Next
+                            onClick={saveConferenceAction}>
+                            Next
                 </div>
-                }
-                {
-                    shareable && meetNow
-                    && <div
-                        className='prejoin-page-button join'
-                        onClick={() => {
-                            // Make the join now audit call
-                            participantJoin().then().catch(err => {
-                                console.error('Unable to audit the host participant join event', err);
-                            });
-                            APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
-                            joinConference();
-                        }}>
-                        Join Now
+                    }
+                    {
+                        shareable && meetNow
+                        && <div
+                            className='prejoin-page-button join'
+                            onClick={() => {
+                                // Make the join now audit call
+                                participantJoin().then().catch(err => {
+                                    console.error('Unable to audit the host participant join event', err);
+                                });
+                                APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
+                                joinConference();
+                            }}>
+                            Join Now
                 </div>
-                }
-                <div style={{ marginTop: '10px', borderBottom: '1px solid gray' }} />
+                    }
+                    {/* <div style={{ marginTop: '10px', borderBottom: '1px solid gray' }} /> */}
 
-                {
-                    shareable && !meetNow
-                    && <div
-                        className='prejoin-page-button next'
-                        onClick={goToHome}>Close</div>
-                }
+                    {
+                        shareable && !meetNow
+                        && <div
+                            className='prejoin-page-button next'
+                            onClick={goToHome}>Close</div>
+                    }
 
-                {/* {
+                     {
                     !(shareable && !meetNow)
                     && <div
                         className='cancel'
                         onClick={goToHome}>Cancel</div>
-                } */}
-
-                {
-                    saveErrors && !clearErrors
-                    && <div className={'error-block'}> {'Unable to process your new meeting request right now. Please try again after some time.'}</div>
                 }
 
+                    {
+                        saveErrors && !clearErrors
+                        && <div className={'error-block'}> {'Unable to process your new meeting request right now. Please try again after some time.'}</div>
+                    }
 
+
+                </div>
             </div>
-        </div >
+        </div>
     );
 }
 
