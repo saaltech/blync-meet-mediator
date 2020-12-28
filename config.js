@@ -18,7 +18,7 @@ var config = {
         // focus: 'focus.meet.jifmeet',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'muc.meet.jifmeet',
+        muc: 'muc.meet.jifmeet'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
@@ -32,7 +32,7 @@ var config = {
 
     // The real JID of focus participant - can be overridden here
     // Do not change username - FIXME: Make focus username configurable
-    // focusUserJid: 'focus@auth.jifmeet.example.com',
+    focusUserJid: 'focus@auth.meet.jifmeet',
 
 
     // Testing / experimental features.
