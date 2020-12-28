@@ -32,7 +32,7 @@ var config = {
 
     // The real JID of focus participant - can be overridden here
     // Do not change username - FIXME: Make focus username configurable
-    focusUserJid: 'focus@auth.meet.jifmeet',
+    // focusUserJid: 'focus@auth.jifmeet.example.com',
 
 
     // Testing / experimental features.
