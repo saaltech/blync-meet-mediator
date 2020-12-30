@@ -110,11 +110,15 @@ class PreMeetingScreen extends PureComponent<Props> {
         })
     }
 
+    // setIsVideoMuted(value){
+    //     APP.store.dispatch(setVideoMuted(value))
+    // }
+
     showTrackPreviews(value) {
         this.setState({
             showTrackPreviews: value
         }, () => {
-            // APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
+            // APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews)))
         })
     }
 
@@ -125,7 +129,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
         let guestFlow = navigatedFromHome !== undefined && navigatedFromHome == false
         if (guestFlow) {
-            window.sessionStorage.removeItem('isJWTSet')
+            window.sessionStorage.removeItem('isJWTSet');
         }
 
         // This is needed to turn the prejoin video track camera light, 
@@ -188,6 +192,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                             {
                                 guestFlow &&
                                 <GuestPrejoin
+                                    // setIsVideoMuted={this.setIsVideoMuted}
                                     joinMeeting={joinMeeting}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}

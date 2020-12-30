@@ -44,10 +44,10 @@ export default function LeftPanel(props) {
                             // handleClickIcon('contacts')
                         }}
                             style={{ textAlign: 'center' }}>
-                            <RiContactsBookFill size={40} />
+                            <RiContactsBookFill size={35} />
 
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'contacts' ? 'green' : '#D1D1D1' }}>
+                        <div style={{ textAlign: 'center', color: activeButton === 'contacts' ? '#00C062' : '#D1D1D1' }}>
                             Contacts
                         </div>
                     </div>
@@ -55,7 +55,7 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'join' ? 'white' : 'blue'
+                        color: activeButton === 'join' ? 'white' : '#005C85'
                     }
                 }}>
                     <div className="left-panel-options">
@@ -63,9 +63,9 @@ export default function LeftPanel(props) {
                             className={`icon-wrapper ${activeButton === 'join' ? 'selected' : ''}`}
                             onClick={() => { handleClickIcon('join') }}
                             style={{ textAlign: 'center' }}>
-                            <RiVideoChatFill size={40} />
+                            <RiVideoChatFill size={35} />
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'join' ? 'green' : 'blue' }}>
+                        <div style={{ textAlign: 'center', color: activeButton === 'join' ? '#00C062' : '#005C85' }}>
                             Join
                         </div>
                     </div>
@@ -73,7 +73,7 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'create' ? 'white' : 'blue'
+                        color: activeButton === 'create' ? 'white' : '#005C85'
                     }
                 }}>
                     <div className="left-panel-options">
@@ -81,9 +81,9 @@ export default function LeftPanel(props) {
                             className={`icon-wrapper ${activeButton === 'create' ? 'selected' : ''}`}
                             onClick={() => { handleClickIcon('create') }}
                             style={{ textAlign: 'center' }}>
-                            <RiVideoAddLine size={40} />
+                            <RiVideoAddLine size={35} />
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'create' ? 'green' : 'blue' }}>
+                        <div style={{ textAlign: 'center', color: activeButton === 'create' ? '#00C062' : '#005C85' }}>
                             Create
                         </div>
                     </div>

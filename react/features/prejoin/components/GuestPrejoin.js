@@ -375,6 +375,10 @@ function GuestPrejoin(props) {
         }
     });
 
+    // useEffect(() => {
+    //     setIsVideoMuted(true);
+    // }, []);
+
     const closeSocketConnection = () => {
         if (clientRef && clientRef.client.connected) {
             clientRef.disconnect();
@@ -413,7 +417,7 @@ function GuestPrejoin(props) {
                 <div
                     onClick={props.onClickClose}
                     className="close-icon"></div>
-                <div style={{ width: '70%', margin: '0 auto' }}>
+                <div style={{ width: '80%', margin: '0 auto' }}>
                     {
                         exiting && <Loading />
                     }
@@ -459,6 +463,7 @@ function GuestPrejoin(props) {
                             setMeetingTo
                         }}
                         isFromGuest={true}
+                        isMeetingHost={isMeetingHost}
                         shareable={false} />
 
                     {
@@ -491,12 +496,12 @@ function GuestPrejoin(props) {
                                             </Preview>
                                             <div className="waiting-content">
                                                 <div className="request-content">
-                                                {
-                                                    meetingWaiting
-                                                        ? 'Please wait, the meeting host will let you in soon.'
-                                                        : 'Please wait for the host to join the meeting...'
-                                                }
-                                            </div>
+                                                    {
+                                                        meetingWaiting
+                                                            ? 'Please wait, the meeting host will let you in soon.'
+                                                            : 'Please wait for the host to join the meeting...'
+                                                    }
+                                                </div>
                                                 <Icon
                                                     size={40}
                                                     src={IconLogo} />
@@ -547,15 +552,17 @@ function GuestPrejoin(props) {
                                         || (!_isUserSignedOut && !isMeetingHost)
                                         || continueAsGuest)
                                     && (<>
-                                        <Preview
-                                            videoMuted={props.videoMuted}
-                                            videoTrack={props.videoTrack} >
-                                            <div className='media-btn-container'>
-                                                <AudioSettingsButton visible={true} />
-                                                <VideoSettingsButton visible={true} />
-                                            </div>
-                                            {props.previewFooter}
-                                        </Preview>
+                                        {isMeetingHost && (
+                                            <Preview
+                                                videoMuted={props.videoMuted}
+                                                videoTrack={props.videoTrack} >
+                                                <div className='media-btn-container'>
+                                                    <AudioSettingsButton visible={true} />
+                                                    <VideoSettingsButton visible={true} />
+                                                </div>
+                                                {props.previewFooter}
+                                            </Preview>
+                                        )}
                                         <JoinMeetingForm
                                             guestEmail={{
                                                 guestEmail,
@@ -572,6 +579,9 @@ function GuestPrejoin(props) {
                                                 meetingPassword,
                                                 setMeetingPassword
                                             }}
+                                            videoMuted={props.videoMuted}
+                                            videoTrack={props.videoTrack}
+                                            previewFooter={props.previewFooter}
                                             passwordError={showPasswordError} />
                                     </>)
                                 }

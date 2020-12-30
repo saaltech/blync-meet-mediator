@@ -234,13 +234,9 @@ function HostPrejoin(props) {
                     </div>
                 </>) : (
                         <>
-                            <IconContext.Provider value={{
-                                style: {
-                                    color: 'blue'
-                                }
-                            }}>
-                                <FaCalendarAlt size={40} />
-                            </IconContext.Provider>
+                            <div className="schedule-image-wrapper">
+                                <img className="schedule-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
+                            </div>
                             <span className="meet-now-label">Schedule a meeting</span>
                             <div className='profileSection'>
                                 <Profile

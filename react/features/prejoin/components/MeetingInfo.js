@@ -26,6 +26,7 @@ function MeetingInfo(props) {
     const meetNow = props.meetNow;
     const shareable = props.shareable;
     const isFromGuest = props.isFromGuest || false;
+    const isMeetingHost = props.isMeetingHost || false;
     const { meetingId, setMeetingId } = props.meetingId;
     const { meetingName, setMeetingName } = props.meetingName;
     const { meetingPassword, setMeetingPassword, validation } = props.meetingPassword;
@@ -46,7 +47,6 @@ function MeetingInfo(props) {
     }
 
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
-    console.log('jijij', !isPureJoinFlow, (!shareable || enableWaitingRoom));
 
     return (
         <div className='meetingInfo'>
@@ -383,7 +383,7 @@ function MeetingInfo(props) {
               }
                 </div>
             }
-            {((shareable && meetNow) || isFromGuest) && (
+            {((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
                 <Preview
                     videoMuted={props.videoMuted}
                     videoTrack={props.videoTrack} >

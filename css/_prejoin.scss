@@ -62,9 +62,18 @@
                 width: 35px;
             }
         }
+        .schedule-image-wrapper{
+            background-color: #FEA729;
+            padding: 15px;
+            border-radius: 50%;
+            .schedule-image{
+                width: 35px;
+            }
+        }
         .meet-now-label {
             margin-left: 15px;
-            font-size: 30px;
+            font-size: 25px;
+            font-weight: bold;
             color: #0A5694;
         }
     }

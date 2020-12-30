@@ -52,20 +52,20 @@ function Profile(props) {
         <div
             className = { 'userProfile' }
             onClick = { () => showMenu && setMenuExpanded(!menuExpanded) }>
+            <div className = { 'userName' }>{ user.name }</div>
             <Avatar
                 className = 'avatarProfile'
                 displayName = { user.name }
                 size = { '54' }
                 url = { user.avatar } />
-            <div className = { 'userName' }>{ user.name }</div>
             {
                 showMenu
             && <div className = 'menuIcon'>
-                {
+                {/* {
                     !menuExpanded
                         ? <Icon src = { IconMenuDown } />
                         : <Icon src = { IconMenuUp } />
-                }
+                } */}
                 {
                     menuExpanded
                     && <ul
