@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { IconContext } from 'react-icons';
+
 import { BsInfo } from 'react-icons/bs';
 
 /**
@@ -6,7 +8,7 @@ import { BsInfo } from 'react-icons/bs';
  */
 function TncPrivacy() {
 
-    const [ menuExpanded, setMenuExpanded ] = useState(false);
+    const [menuExpanded, setMenuExpanded] = useState(false);
     const wrapperRef = React.createRef();
 
     /**
@@ -24,25 +26,30 @@ function TncPrivacy() {
     });
 
     return (<div
-        className = 'tnc-privacy'
-        onClick = { () => setMenuExpanded(!menuExpanded) } >
-        <div><BsInfo size = { 30 } /></div>
+        className='tnc-privacy'
+        onClick={() => setMenuExpanded(!menuExpanded)} >
+        <IconContext.Provider value={{
+            style: {
+                color: 'white'
+            }
+        }}><div><BsInfo size={30} /></div>
+        </IconContext.Provider>
         {
             menuExpanded
             && <ul
-                className = 'tnc-privacy__menu'
-                ref = { wrapperRef }>
+                className='tnc-privacy__menu'
+                ref={wrapperRef}>
                 <li>
                     <a
-                        className = 'menuLabel'
-                        href = '/privacy-policy'
-                        target = '_blank'>Privacy Policy</a>
+                        className='menuLabel'
+                        href='/privacy-policy'
+                        target='_blank'>Privacy Policy</a>
                 </li>
                 <li>
                     <a
-                        className = 'menuLabel'
-                        href = '/TnC'
-                        target = '_blank'>Terms and Conditions</a>
+                        className='menuLabel'
+                        href='/TnC'
+                        target='_blank'>Terms and Conditions</a>
                 </li>
             </ul>
         }

@@ -106,7 +106,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         this.setState({
             meetNow: value
         }, () => {
-            APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
+            APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews)))
         })
     }
 
@@ -191,6 +191,12 @@ class PreMeetingScreen extends PureComponent<Props> {
                                     joinMeeting={joinMeeting}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}
+                                    onClickClose={() => {
+                                        this.setState({ exiting: true },
+                                            () => {
+                                                goHome()
+                                            })
+                                    }}
                                     previewFooter={this.props.footer}
                                     meetingId={urlToShow}
                                     showTrackPreviews={this.showTrackPreviews}

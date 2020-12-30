@@ -16,6 +16,7 @@ export default function LeftPanel(props) {
         const style = {
             position: 'fixed',
             top: '10px',
+            left: '-5px',
             backgroundImage: `url(${interfaceConfig.LOGO_WITH_BOTTOM_LABEL_URL || '../images/logo_bottom_label.png'})`
         };
 
@@ -34,13 +35,19 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'contacts' ? 'green' : 'blue'
+                        color: activeButton === 'contacts' ? 'white' : '#D1D1D1'
                     }
                 }}>
-                    <div onClick={() => { handleClickIcon('contacts') }}
-                        style={{ textAlign: 'center', marginBottom: '10px' }}>
-                        <RiContactsBookFill size={40} />
-                        <div style={{ color: activeButton === 'contacts' ? 'green' : 'blue' }}>
+                    <div className="left-panel-options">
+                        <div className={`icon-wrapper disabled ${activeButton === 'contacts' ? 'selected' : ''}`}
+                        onClick={() => {
+                            // handleClickIcon('contacts')
+                        }}
+                            style={{ textAlign: 'center' }}>
+                            <RiContactsBookFill size={40} />
+
+                        </div>
+                        <div style={{ textAlign: 'center', color: activeButton === 'contacts' ? 'green' : '#D1D1D1' }}>
                             Contacts
                         </div>
                     </div>
@@ -48,14 +55,17 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'join' ? 'green' : 'blue'
+                        color: activeButton === 'join' ? 'white' : 'blue'
                     }
                 }}>
-                    <div
-                        onClick={() => { handleClickIcon('join') }}
-                        style={{ textAlign: 'center', marginBottom: '10px' }}>
-                        <RiVideoChatFill size={40} />
-                        <div style={{ color: activeButton === 'join' ? 'green' : 'blue' }}>
+                    <div className="left-panel-options">
+                        <div
+                            className={`icon-wrapper ${activeButton === 'join' ? 'selected' : ''}`}
+                            onClick={() => { handleClickIcon('join') }}
+                            style={{ textAlign: 'center' }}>
+                            <RiVideoChatFill size={40} />
+                        </div>
+                        <div style={{ textAlign: 'center', color: activeButton === 'join' ? 'green' : 'blue' }}>
                             Join
                         </div>
                     </div>
@@ -63,14 +73,17 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'create' ? 'green' : 'blue'
+                        color: activeButton === 'create' ? 'white' : 'blue'
                     }
                 }}>
-                    <div
-                        onClick={() => { handleClickIcon('create') }}
-                        style={{ textAlign: 'center' }}>
-                        <RiVideoAddLine size={40} />
-                        <div style={{ color: activeButton === 'create' ? 'green' : 'blue' }}>
+                    <div className="left-panel-options">
+                        <div
+                            className={`icon-wrapper ${activeButton === 'create' ? 'selected' : ''}`}
+                            onClick={() => { handleClickIcon('create') }}
+                            style={{ textAlign: 'center' }}>
+                            <RiVideoAddLine size={40} />
+                        </div>
+                        <div style={{ textAlign: 'center', color: activeButton === 'create' ? 'green' : 'blue' }}>
                             Create
                         </div>
                     </div>

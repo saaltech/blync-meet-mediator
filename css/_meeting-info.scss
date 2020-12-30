@@ -49,6 +49,22 @@
         }
     }
 
+    .form-field-guest {
+        margin-top: 15px; 
+        display: flex;
+        align-items: center;
+        .form-label-guest {
+            flex: 0 0 150px;
+            text-align: left;
+            color: #393939;
+            font-size: 15px;
+        }
+        .field{
+            border: 0 !important;
+            border-bottom: 1px solid #70707057 !important;
+            border-radius: 0px !important;
+        }
+    }
     .mandatory span {
         color: #FF0000;
     }
@@ -68,22 +84,52 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        .input-meeting{
+            border: 0;
+            color: #005694;
+            text-align: center;
+            width: 200px;
+        }
+        .edit-icon-wrap{
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .input-meeting:focus{
+            border-radius: 10px;
+            border: 1px solid lightgray;
+        }
     }
 
     .meeting-id{
         color: #005694;
-        font-size: 21px;
+        font-size: 18px;
+        margin-bottom: 10px;
     }
     .date-info {
         color: #969696;
         font-size: 14px;
     }
 
-    .you-are-host {
+    .you-are-host-wrapper {
         color: #393939;
-        font-size: 15px;
+        font-size: 14px;
         margin-top: 20px;
         margin-bottom: 20px;
+        display: flex;
+        justify-content: space-around;
+        .password-wrapper{
+            display: flex;
+            align-content: center;
+            .password-meeting{
+                margin-left: 10px;
+                line-height: 1;
+            }
+        }
+       
+    }
+
+    .you-are-host {
+      
         // padding: 20px 0px 20px;
     }
 
@@ -167,9 +213,9 @@
           .slider:before {
             position: absolute;
             content: "";
-            height: 15px;
-            width: 15px;
-            left: 0px;
+            height: 16px;
+            width: 17px;
+            left: 4px;
             bottom: 4px;
             background-color: white;
             -webkit-transition: .4s;
@@ -177,22 +223,22 @@
           }
           
           input:checked + .slider {
-            background-color: lightgreen;
+            background-color: #00C062;
           }
           
           input:focus + .slider {
-            box-shadow: 0 0 1px lightgreen;
+            box-shadow: 0 0 1px #00C062;
           }
           
           input:checked + .slider:before {
-            -webkit-transform: translateX(26px);
-            -ms-transform: translateX(26px);
-            transform: translateX(26px);
+            -webkit-transform: translateX(17px);
+            -ms-transform: translateX(17px);
+            transform: translateX(17px);
           }
           
           /* Rounded sliders */
           .slider.round {
-            border-radius: 34px;
+            border-radius: 22px;
           }
           
           .slider.round:before {

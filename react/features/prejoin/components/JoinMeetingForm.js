@@ -18,16 +18,16 @@ function JoinMeetingForm(props) {
       {
           isUserSignedOut &&
           <>
-            <div className="form-field">
-                <div className = 'form-label mandatory'>{'Your Name'} <span>*</span></div>
+            <div className="form-field-guest">
+                <div className = 'form-label-guest mandatory'>{'Your Name'} <span>*</span></div>
                 <InputField
                     onChange = {value => setGuestName(value.trim())}
                     placeHolder = { 'Type here' }
                 />
             </div>
 
-            <div className="form-field">
-                <div className = 'form-label'>{'Email (optional)'}</div>
+            <div className="form-field-guest">
+                <div className = 'form-label-guest'>{'Email (optional)'}</div>
                 <InputField
                     onChange = {value => setGuestEmail(value.trim())}
                     placeHolder = { 'Type here' }
@@ -37,8 +37,8 @@ function JoinMeetingForm(props) {
       }
 
 
-          <div className="form-field">
-              <div className = 'form-label'>{'Meeting ID'}</div>
+          <div className="form-field-guest">
+              <div className = 'form-label-guest'>{'Meeting ID'}</div>
               <InputField
                   placeHolder = { 'Meeting ID' }
                   value = { meetingId } 

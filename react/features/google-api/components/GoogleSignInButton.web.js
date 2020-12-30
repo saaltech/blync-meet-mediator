@@ -3,6 +3,9 @@
 import React from 'react';
 
 import { translate } from '../../base/i18n';
+import { IconContext } from 'react-icons';
+import { FaGoogle } from 'react-icons/fa';
+
 
 import AbstractGoogleSignInButton from './AbstractGoogleSignInButton';
 import { showEnableCookieTip } from '../functions';
@@ -26,12 +29,21 @@ class GoogleSignInButton extends AbstractGoogleSignInButton {
         return (
             <>
                 <div
-                    className = 'google-sign-in'
-                    onClick = { this.props.onClick }>
-                    <img
+                    className='google-sign-in'
+                    onClick={this.props.onClick}>
+                    <IconContext.Provider value={{
+                        style: {
+                            color: 'white'
+                        }
+                    }}>
+                        <div className="google-icon">
+                            <FaGoogle size={20} />
+                        </div>
+                    </IconContext.Provider>
+                    {/* <img
                         className = 'google-logo'
-                        src = 'images/googleLogo.svg' />
-                    <div className = 'google-cta'>
+                        src = 'images/googleLogo.svg' /> */}
+                    <div className='google-cta'>
                         {
                             t(this.props.signedIn
                                 ? 'liveStreaming.signOut'
@@ -40,19 +52,19 @@ class GoogleSignInButton extends AbstractGoogleSignInButton {
                     </div>
                 </div>
                 {
-                    <div id="enableCookieTooltip" className="hide"> 
+                    <div id="enableCookieTooltip" className="hide">
                         <div
-                            onClick = { () => showEnableCookieTip(false) }
-                            className = 'close-icon' />
-                        Please enable third-party cookies and reload to use this feature. 
-                        Click <a 
-                            onClick= {() => showEnableCookieTip(false) } 
+                            onClick={() => showEnableCookieTip(false)}
+                            className='close-icon' />
+                        Please enable third-party cookies and reload to use this feature.
+                        Click <a
+                            onClick={() => showEnableCookieTip(false)}
                             href="https://developers.google.com/identity/sign-in/web/troubleshooting#known_issues" target="_blank">
                             here
                         </a> for more info.
                     </div>
                 }
-                
+
             </>
         );
     }

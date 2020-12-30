@@ -211,21 +211,47 @@ function HostPrejoin(props) {
 
     return (
         <div className="hostPrejoinWrap">
-
+            {
+                exiting && <Loading />
+            }
             <div className="meet-now">
-                <IconContext.Provider value={{
-                    style: {
-                        color: 'blue'
-                    }
-                }}>
-                    <FaCalendarAlt size={40} />
-                </IconContext.Provider>
-                <span className="meet-now-label">Meet Now</span>
+                {meetNow ? (<>
+                    <div className="meet-now-image-wrapper">
+                        <img className="meet-now-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
+                    </div>
+                    {/* <IconContext.Provider value={{
+                        style: {
+                            color: 'blue'
+                        }
+                    }}>
+                        <FaCalendarAlt size={40} />
+                    </IconContext.Provider> */}
+                    <span className="meet-now-label">Meet Now</span>
+                    <div className='profileSection'>
+                        <Profile
+                            postLogout={goToHome}
+                            showMenu={true} />
+                    </div>
+                </>) : (
+                        <>
+                            <IconContext.Provider value={{
+                                style: {
+                                    color: 'blue'
+                                }
+                            }}>
+                                <FaCalendarAlt size={40} />
+                            </IconContext.Provider>
+                            <span className="meet-now-label">Schedule a meeting</span>
+                            <div className='profileSection'>
+                                <Profile
+                                    postLogout={goToHome}
+                                    showMenu={true} />
+                            </div>
+                        </>
+                    )
+                }
             </div>
             <div className={'hostPrejoin'}>
-                {
-                    exiting && <Loading />
-                }
                 <div
                     onClick={props.onClickClose}
                     className="close-icon"></div>
@@ -243,9 +269,6 @@ function HostPrejoin(props) {
                 && <div className='page-title'> Join Now </div>
             } */}
 
-                {/* <div className = 'profileSection'>
-                <Profile />
-            </div> */}
 
                 <div className='modesSection'>
                     {/* {
@@ -316,6 +339,7 @@ function HostPrejoin(props) {
                             className={`prejoin-page-button next 
                         ${scheduleDisabled ? 'disabled' : ''} 
                         ${isPrivate && !meetingPassword ? 'disabled' : ''} 
+                        ${!meetingName ? 'disabled' : ''}
                         ` }
                             onClick={saveConferenceAction}>
                             Next
@@ -345,12 +369,12 @@ function HostPrejoin(props) {
                             onClick={goToHome}>Close</div>
                     }
 
-                     {
-                    !(shareable && !meetNow)
-                    && <div
-                        className='cancel'
-                        onClick={goToHome}>Cancel</div>
-                }
+                    {
+                        !(shareable && !meetNow)
+                        && <div
+                            className='cancel'
+                            onClick={goToHome}>Cancel</div>
+                    }
 
                     {
                         saveErrors && !clearErrors

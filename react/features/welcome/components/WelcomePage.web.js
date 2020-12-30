@@ -406,7 +406,7 @@ class WelcomePage extends AbstractWelcomePage {
             const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
             console.log('hi', appAuth);
 
-            if ((appAuth.meetingDetails || {}).meetingName) {
+            if ((appAuth.meetingDetails || {}).meetingId) {
                 clearInterval(intervalId);
 
                 // Check if the meeting exists
@@ -432,7 +432,7 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     handleClickMeetNow(action) {
-        super._onRoomChange('Meeting');
+        // super._onRoomChange('');
         this.setState({ formDisabled: false }, () => { this.handleRedirection(action) })
     }
 
@@ -523,21 +523,15 @@ class WelcomePage extends AbstractWelcomePage {
                                 labelText="MEET NOW"
                                 backGroundColor={"#005C85"}
                                 onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
-                                IconComponent={{
-                                    component: FaCalendarAlt,
-                                    size: 25,
-                                    color: '#005C85'
-                                }} />
+                                source={'meet-now-group.svg'}
+                            />
                             <div className="schedule--button">
                                 <ButtonWithIcon
                                     labelText="SCHEDULE"
                                     onButtonClick={() => { this.handleClickMeetNow('schedule') }}
                                     backGroundColor={"#FEA729"}
-                                    IconComponent={{
-                                        component: FaCalendarAlt,
-                                        size: 25,
-                                        color: '#FEA729'
-                                    }} />
+                                    source={'schedule-image.svg'}
+                                />
                             </div>
                         </div>
                     )

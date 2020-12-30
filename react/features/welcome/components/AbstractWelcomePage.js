@@ -197,7 +197,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @protected
      * @returns {void}
      */
-    _onJoin(action = 'meetNow') {
+    _onJoin(action = '') {
         const room = this.state.room || this.state.generatedRoomname;
 
         sendAnalytics(
@@ -206,7 +206,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 room
             }));
 
-        if (room) {
+        // if (room) {
             this.setState({ joining: true });
 
             // By the time the Promise of appNavigate settles, this component
@@ -217,7 +217,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
             //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
             this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}` : `?home=true&actions=${action}`)))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
-        }
+        // }
     }
 
     _onRoomChange: (string) => void;

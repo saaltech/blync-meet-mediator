@@ -1,9 +1,12 @@
 
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import { IconContext } from 'react-icons';
 import { FaCalendarAlt } from 'react-icons/fa';
+import { BsPencil } from 'react-icons/bs';
+import { GiCombinationLock } from 'react-icons/gi';
+import { AiFillCheckCircle } from 'react-icons/ai';
 
 import { translate } from '../../base/i18n';
 import { InputField } from '../../base/premeeting';
@@ -19,8 +22,10 @@ import {
 
 
 function MeetingInfo(props) {
+    const [isMeetingNameEdit, setIsMeetingNameEdit] = useState(false);
     const meetNow = props.meetNow;
     const shareable = props.shareable;
+    const isFromGuest = props.isFromGuest || false;
     const { meetingId, setMeetingId } = props.meetingId;
     const { meetingName, setMeetingName } = props.meetingName;
     const { meetingPassword, setMeetingPassword, validation } = props.meetingPassword;
@@ -32,13 +37,21 @@ function MeetingInfo(props) {
 
     const isMeetingBeingCreated = meetNow || shareable;
 
+    function onClickEdit() {
+        setIsMeetingNameEdit(true);
+    }
+
+    function handleMeetingNameBlur() {
+        setIsMeetingNameEdit(false);
+    }
 
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
+    console.log('jijij', !isPureJoinFlow, (!shareable || enableWaitingRoom));
 
     return (
         <div className='meetingInfo'>
             {
-                (isPureJoinFlow || shareable) ? (
+                (!isPureJoinFlow && !meetNow && shareable) ? (
                     <>
                         <div
                             className='shareable-meeting-title'
@@ -101,7 +114,7 @@ function MeetingInfo(props) {
                                         Password
                             </div>
                                     <div className="detail-heading-value">
-                                        {pass}
+                                        {meetingPassword}
                                     </div>
                                 </div>
                             )}
@@ -112,7 +125,32 @@ function MeetingInfo(props) {
                             <div
                                 className='meeting-title'
                                 title={meetingName ? meetingName : meetingId}
-                                style={!meetingName ? { color: '#969696' } : {}}>{meetingName ? meetingName : meetingId}</div>
+                                style={!meetingName ? { color: '#969696' } : {}}>
+                                {(shareable || isFromGuest) ? <>{meetingName ? meetingName : 'Enter Meeting Name'}</> : (
+                                    <>
+                                        {isMeetingNameEdit ? (
+                                            <input
+                                                className="input-meeting"
+                                                type="text"
+                                                autoFocus
+                                                onBlur={handleMeetingNameBlur}
+                                                onChange={(event) => { setMeetingName(event.target.value) }}
+                                                value={meetingName ? meetingName : ''}
+                                            />
+                                        ) : (
+                                                <>{meetingName ? meetingName : 'Enter Meeting Name'}</>
+                                            )}
+                                        {!isMeetingNameEdit && (
+                                            <IconContext.Provider value={{ style: { color: 'black' } }}>
+                                                <span className="edit-icon-wrap" onClick={onClickEdit}>
+                                                    <BsPencil size={20} />
+                                                </span>
+                                            </IconContext.Provider>
+                                        )}
+                                    </>
+                                )}
+
+                            </div>
                             <div className='meeting-id'>{meetingId}</div>
                         </>
                     )
@@ -120,7 +158,25 @@ function MeetingInfo(props) {
 
             {
                 (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost))
-                && <div className='you-are-host'> You are the host of this meeting</div>
+                && (
+                    <div className='you-are-host-wrapper'>
+                        <div className='you-are-host'> You are the host of this meeting</div>
+                        {meetNow && shareable && isPrivate && (<div className="password-wrapper">
+                            <IconContext.Provider value={{ style: { color: 'green' } }}>
+
+                                <GiCombinationLock size={15} />
+                            </IconContext.Provider>
+                            <div className="password-meeting">Password: {meetingPassword}</div>
+                        </div>
+                        )}
+                        {meetNow && shareable && enableWaitingRoom && (<div className="password-wrapper">
+                            <IconContext.Provider value={{ style: { color: 'green' } }}>
+                                <AiFillCheckCircle size={15} />
+                            </IconContext.Provider>
+                            <div className="password-meeting">Waiting Room</div>
+                        </div>
+                        )}
+                    </div>)
             }
             {/* {
                 (isPureJoinFlow || shareable) && meetingFrom &&
@@ -247,7 +303,7 @@ function MeetingInfo(props) {
             </div>
 
             {
-                !isPureJoinFlow && (!shareable || enableWaitingRoom) &&
+                !isPureJoinFlow && (!shareable) &&
                 <div className='form-field make-private enable-meeting-wrap' style={{ display: 'flex' }}>
                     {/* <Switch
                             onChange={() => {
@@ -263,7 +319,7 @@ function MeetingInfo(props) {
                     </label>
                     <label className="switch" style={{ marginLeft: '83px' }}>
                         <input type="checkbox"
-                            value={enableWaitingRoom}
+                            checked={enableWaitingRoom}
                             onChange={() => {
                                 setEnableWaitingRoom(!enableWaitingRoom);
                             }}
@@ -274,7 +330,7 @@ function MeetingInfo(props) {
             }
 
             {
-                !isPureJoinFlow && (!shareable || (isPrivate && shareable))
+                !isPureJoinFlow && (!shareable)
                 && <div className='form-field make-private' style={{ display: 'flex', flexDirection: 'column' }}>
                     {/* <InputField
                         type='checkbox'
@@ -293,7 +349,7 @@ function MeetingInfo(props) {
                         </label>
                         <label className="switch" style={{ marginLeft: '40px' }}>
                             <input type="checkbox"
-                                value={isPrivate}
+                                checked={isPrivate}
                                 onChange={() => {
                                     setIsPrivate(!isPrivate);
                                     isPrivate && setMeetingPassword('');
@@ -307,7 +363,7 @@ function MeetingInfo(props) {
             }
 
             {
-                !isPureJoinFlow && (!shareable || (shareable && isPrivate))
+                !isPureJoinFlow && (!shareable) && isPrivate
                 && <div className='form-field meeting-password'>
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
@@ -327,7 +383,7 @@ function MeetingInfo(props) {
               }
                 </div>
             }
-            {shareable && meetNow && (
+            {((shareable && meetNow) || isFromGuest) && (
                 <Preview
                     videoMuted={props.videoMuted}
                     videoTrack={props.videoTrack} >
@@ -342,7 +398,7 @@ function MeetingInfo(props) {
             {
                 shareable
                 && <>
-                    <div className='divider' />
+                    {!meetNow && (<div className='divider' />)}
                     <ShareMeeting
                         meetingId={meetingId}
                         meetingUrl={meetingUrl}

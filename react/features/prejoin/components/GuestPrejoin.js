@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import SockJsClient from 'react-stomp';
+import { IconContext } from 'react-icons';
+import { FaCalendarAlt } from 'react-icons/fa';
 
 import { setPrejoinPageErrorMessageKey } from '../';
 import { openConnection } from '../../../../connection';
@@ -33,6 +35,10 @@ import {
 import {
     // setPrejoinVideoTrackMuted
 } from '../functions';
+
+import { AudioSettingsButton, VideoSettingsButton } from '../../toolbox/components';
+import Preview from '../../../features/base/premeeting/components/web/Preview';
+
 
 import JoinMeetingForm from './JoinMeetingForm';
 import MeetingInfo from './MeetingInfo';
@@ -382,163 +388,210 @@ function GuestPrejoin(props) {
         redirectOnInvalidMeeting(meetingId);
     }
 
-    return fetchUnauthErrors || fetchErrors
-        ? <div className={'hostPrejoin'}> <div className='invalid-meeting-code'>{'Invalid Meeting ID'} </div></div>
-        : <div className={'hostPrejoin'}>
-            <div style={{ width: '70%', margin: '0 auto' }}>
-                {
-                    exiting && <Loading />
+    return <div className="hostPrejoinWrap">
+        <div className="meet-now">
+            <IconContext.Provider value={{
+                style: {
+                    color: 'blue'
                 }
-                {
-                    !_isUserSignedOut
-                        ? <div className='profileSection'>
-                            <Profile />
-                        </div>
-                        : <>
-                            {
-                                !continueAsGuest
-                                && <div
-                                    className='login-message'>
-                                    <span>Please</span>
-                                    <span className='sign-in-link'> sign in </span>
-                                    <span>if you are the host.</span>
-                                </div>
-                            }
-                        </>
-                }
-
-                <MeetingInfo
-                    isPureJoinFlow={{
-                        isMeetingHost
-                    }}
-                    meetingFrom={{
-                        meetingFrom,
-                        setMeetingFrom
-                    }}
-                    meetingId={{
-                        meetingId
-                    }}
-                    meetingName={{
-                        meetingName,
-                        setMeetingName
-                    }}
-                    meetingPassword={{
-                        meetingPassword,
-                        setMeetingPassword
-                    }}
-                    meetingTo={{
-                        meetingTo,
-                        setMeetingTo
-                    }}
-                    shareable={false} />
-
-                {
-                    enableWaitingRoom && _jid
-                    && <SockJsClient
-                        onMessage={participant => {
-                            updateWaitingStatus(participant);
-                        }}
-                        ref={client => {
-                            clientRef = client;
-                        }}
-                        topics={[`${props._participantsSocketTopic}/${_jid.split('/')[0]}`]}
-                        url={props._socketLink} />
-                }
-
-                {
-                    meetingConnected !== null && meetingConnected === false
-                        ? <div className='waiting-display'>
-                            {
-                                !participantRejected && !meetingEnded
-                                    ? <>
-                                        <h2>
-                                            {
-                                                meetingWaiting
-                                                    ? 'Please wait, the meeting host will let you in soon.'
-                                                    : 'Please wait for the host to join the meeting...'
-                                            }
-                                        </h2>
-                                        <Icon
-                                            size={120}
-                                            src={IconLogo} />
-                                    </>
-                                    : <>
-                                        <h2>
-                                            {
-                                                meetingEnded
-                                                    ? 'The meeting has ended'
-                                                    : 'The host apparently hasn\'t approved your request to join in. Please contact the meeting host.'
-                                            }
-                                        </h2>
-
-                                        <div
-                                            className={'prejoin-page-button next'}
-                                            onClick={goToHome}>
-                                            Exit
-                                    </div>
-                                    </>
-                            }
-                        </div>
-                        : <>
-                            {
-                                (_isUserSignedOut && !continueAsGuest)
-                                && <>
-                                    <div className='no-account'>
-                                        <div
-                                            className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`}
-                                            onClick={() => !disableJoin && setContinueAsGuest(true)}>
-                                            Continue without login
-                                </div>
-                                    </div>
-                                    <div className='option-text-or'>Or</div>
-                                    <LoginComponent
-                                        closeAction={() => {
-                                            // Fetch the conference details for the logged in user
-                                            setDisableJoin(true);
-                                            refreshTokenAndFetchConference(true);
-
-                                        }}
-                                        noSignInIcon={true} />
-                                </>
-                            }
-
-                            {
-                                ((!_isUserSignedOut && showJoinMeetingForm)
-                                    || (!_isUserSignedOut && !isMeetingHost)
-                                    || continueAsGuest)
-                                && <JoinMeetingForm
-                                    guestEmail={{
-                                        guestEmail,
-                                        setGuestEmail
-                                    }}
-                                    guestName={{
-                                        guestName,
-                                        setGuestName
-                                    }}
-                                    isSecretEnabled={isSecretEnabled}
-                                    isUserSignedOut={_isUserSignedOut}
-                                    meetingId={meetingId}
-                                    meetingPassword={{
-                                        meetingPassword,
-                                        setMeetingPassword
-                                    }}
-                                    passwordError={showPasswordError} />
-                            }
-
-                            {
-                                (!_isUserSignedOut || continueAsGuest)
-                                && <div
-                                    className={`prejoin-page-button next 
-                            ${disableJoin || joinNowDisabled ? 'disabled' : ''} `}
-                                    onClick={async () => (!disableJoin && !joinNowDisabled) && handleJoinNow()}>
-                                    Join Now
-                        </div>
-                            }
-                        </>
-                }
-
-            </div>
+            }}>
+                <FaCalendarAlt size={40} />
+            </IconContext.Provider>
+            <span className="meet-now-label">Join a meeting</span>
+            {
+                !_isUserSignedOut
+                    ? (<div className='profileSection'>
+                        <Profile
+                            postLogout={goToHome}
+                            showMenu={true} />
+                    </div>) : <></>
+            }
         </div>
+        {fetchUnauthErrors || fetchErrors
+            ? <div className={'hostPrejoin'}> <div className='invalid-meeting-code'>{'Invalid Meeting ID'} </div></div>
+            : <div className={'hostPrejoin'}>
+                <div
+                    onClick={props.onClickClose}
+                    className="close-icon"></div>
+                <div style={{ width: '70%', margin: '0 auto' }}>
+                    {
+                        exiting && <Loading />
+                    }
+                    {/* {
+                        !_isUserSignedOut
+                            ? <div className='profileSection'>
+                                <Profile />
+                            </div>
+                            : <>
+                                {
+                                    !continueAsGuest
+                                    && <div
+                                        className='login-message'>
+                                        <span>Please</span>
+                                        <span className='sign-in-link'> sign in </span>
+                                        <span>if you are the host.</span>
+                                    </div>
+                                }
+                            </>
+                    } */}
+
+                    <MeetingInfo
+                        isPureJoinFlow={{
+                            isMeetingHost
+                        }}
+                        meetingFrom={{
+                            meetingFrom,
+                            setMeetingFrom
+                        }}
+                        meetingId={{
+                            meetingId
+                        }}
+                        meetingName={{
+                            meetingName,
+                            setMeetingName
+                        }}
+                        meetingPassword={{
+                            meetingPassword,
+                            setMeetingPassword
+                        }}
+                        meetingTo={{
+                            meetingTo,
+                            setMeetingTo
+                        }}
+                        isFromGuest={true}
+                        shareable={false} />
+
+                    {
+                        enableWaitingRoom && _jid
+                        && <SockJsClient
+                            onMessage={participant => {
+                                updateWaitingStatus(participant);
+                            }}
+                            ref={client => {
+                                clientRef = client;
+                            }}
+                            topics={[`${props._participantsSocketTopic}/${_jid.split('/')[0]}`]}
+                            url={props._socketLink} />
+                    }
+
+                    {
+                        meetingConnected !== null && meetingConnected === false
+                            ? <div className='waiting-display'>
+                                {
+                                    !participantRejected && !meetingEnded
+                                        ? <>
+                                            <Preview
+                                                videoMuted={props.videoMuted}
+                                                videoTrack={props.videoTrack} >
+                                                <div className='media-btn-container'>
+                                                    <AudioSettingsButton visible={true} />
+                                                    <VideoSettingsButton visible={true} />
+                                                </div>
+                                                {props.previewFooter}
+                                            </Preview>
+                                            <div className="waiting-content">
+                                                <div className="request-content">
+                                                {
+                                                    meetingWaiting
+                                                        ? 'Please wait, the meeting host will let you in soon.'
+                                                        : 'Please wait for the host to join the meeting...'
+                                                }
+                                            </div>
+                                                <Icon
+                                                    size={40}
+                                                    src={IconLogo} />
+                                            </div>
+                                        </>
+                                        : <>
+                                            <h2>
+                                                {
+                                                    meetingEnded
+                                                        ? 'The meeting has ended'
+                                                        : 'The host apparently hasn\'t approved your request to join in. Please contact the meeting host.'
+                                                }
+                                            </h2>
+
+                                            <div
+                                                className={'prejoin-page-button next'}
+                                                onClick={goToHome}>
+                                                Exit
+                                    </div>
+                                        </>
+                                }
+                            </div>
+                            : <>
+                                {
+                                    (_isUserSignedOut && !continueAsGuest)
+                                    && <>
+                                        <LoginComponent
+                                            closeAction={() => {
+                                                // Fetch the conference details for the logged in user
+                                                setDisableJoin(true);
+                                                refreshTokenAndFetchConference(true);
+
+                                            }}
+                                            noSignInIcon={true} />
+                                        <div className='no-account'>
+                                            <div
+                                                className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`}
+                                                onClick={() => !disableJoin && setContinueAsGuest(true)}>
+                                                Continue without login
+                                </div>
+                                        </div>
+
+                                    </>
+                                }
+
+                                {
+                                    ((!_isUserSignedOut && showJoinMeetingForm)
+                                        || (!_isUserSignedOut && !isMeetingHost)
+                                        || continueAsGuest)
+                                    && (<>
+                                        <Preview
+                                            videoMuted={props.videoMuted}
+                                            videoTrack={props.videoTrack} >
+                                            <div className='media-btn-container'>
+                                                <AudioSettingsButton visible={true} />
+                                                <VideoSettingsButton visible={true} />
+                                            </div>
+                                            {props.previewFooter}
+                                        </Preview>
+                                        <JoinMeetingForm
+                                            guestEmail={{
+                                                guestEmail,
+                                                setGuestEmail
+                                            }}
+                                            guestName={{
+                                                guestName,
+                                                setGuestName
+                                            }}
+                                            isSecretEnabled={isSecretEnabled}
+                                            isUserSignedOut={_isUserSignedOut}
+                                            meetingId={meetingId}
+                                            meetingPassword={{
+                                                meetingPassword,
+                                                setMeetingPassword
+                                            }}
+                                            passwordError={showPasswordError} />
+                                    </>)
+                                }
+
+                                {
+                                    (!_isUserSignedOut || continueAsGuest)
+                                    && <div
+                                        className={`prejoin-page-button next 
+                            ${disableJoin || joinNowDisabled ? 'disabled' : ''} `}
+                                        onClick={async () => (!disableJoin && !joinNowDisabled) && handleJoinNow()}>
+                                        Join Now
+                        </div>
+                                }
+                            </>
+                    }
+
+                </div>
+            </div>
+        }
+    </div>
         ;
 }
 
