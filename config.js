@@ -6,7 +6,7 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'meet.jitsi',
+        domain: 'meet.jifmeet',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
@@ -18,7 +18,7 @@ var config = {
         // focus: 'focus.meet.jifmeet',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'muc.meet.jitsi',
+        muc: 'muc.meet.jifmeet'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
@@ -690,3 +690,4 @@ var config = {
 };
 
 /* eslint-enable no-unused-vars, no-var */
+
