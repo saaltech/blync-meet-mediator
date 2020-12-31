@@ -78,12 +78,18 @@
     }
 
     .meeting-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 30px;
         color:#005694;
         padding: 35px 0 5px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .input-meeting-wrapper{
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .input-meeting{
             border: 0;
             color: #005694;

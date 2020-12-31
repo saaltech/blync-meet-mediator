@@ -126,19 +126,19 @@ function MeetingInfo(props) {
                                 className='meeting-title'
                                 title={meetingName ? meetingName : meetingId}
                                 style={!meetingName ? { color: '#969696' } : {}}>
-                                {(shareable || isFromGuest) ? <>{meetingName ? meetingName : 'Enter Meeting Name'}</> : (
+                                {(shareable || isFromGuest) ? <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div> : (
                                     <>
                                         {isMeetingNameEdit ? (
-                                            <input
-                                                className="input-meeting"
-                                                type="text"
-                                                autoFocus
-                                                onBlur={handleMeetingNameBlur}
-                                                onChange={(event) => { setMeetingName(event.target.value) }}
-                                                value={meetingName ? meetingName : ''}
-                                            />
+                                                <input
+                                                    className="input-meeting"
+                                                    type="text"
+                                                    autoFocus
+                                                    onBlur={handleMeetingNameBlur}
+                                                    onChange={(event) => { setMeetingName(event.target.value) }}
+                                                    value={meetingName ? meetingName : ''}
+                                                />
                                         ) : (
-                                                <>{meetingName ? meetingName : 'Enter Meeting Name'}</>
+                                                <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div>
                                             )}
                                         {!isMeetingNameEdit && (
                                             <IconContext.Provider value={{ style: { color: 'black' } }}>

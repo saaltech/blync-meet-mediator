@@ -32,11 +32,11 @@ function HostPrejoin(props) {
     const [meetNow, setMeetNow] = useState(true);
     const [meetingId, setMeetingId] = useState((props.meetingDetails || {}).meetingId);
     const [meetingName, setMeetingName] = useState((props.meetingDetails || {}).meetingName);
-    const [isPrivate, setIsPrivate] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(true);
     const [meetingPassword, setMeetingPassword] = useState('');
     const [meetingFrom, setMeetingFrom] = useState('');
     const [meetingTo, setMeetingTo] = useState(null);
-    const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
+    const [enableWaitingRoom, setEnableWaitingRoom] = useState(true);
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [shareable, setShareable] = useState(false);
     const { joinConference, actions } = props;

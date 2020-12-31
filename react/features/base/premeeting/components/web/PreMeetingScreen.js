@@ -110,9 +110,9 @@ class PreMeetingScreen extends PureComponent<Props> {
         })
     }
 
-    // setIsVideoMuted(value){
-    //     APP.store.dispatch(setVideoMuted(value))
-    // }
+    setIsVideoMuted(value){
+        APP.store.dispatch(setVideoMuted(value))
+    }
 
     showTrackPreviews(value) {
         this.setState({
@@ -192,7 +192,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                             {
                                 guestFlow &&
                                 <GuestPrejoin
-                                    // setIsVideoMuted={this.setIsVideoMuted}
+                                    setIsVideoMuted={this.setIsVideoMuted}
                                     joinMeeting={joinMeeting}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}

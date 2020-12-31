@@ -375,9 +375,9 @@ function GuestPrejoin(props) {
         }
     });
 
-    // useEffect(() => {
-    //     setIsVideoMuted(true);
-    // }, []);
+    useEffect(() => {
+        props.setIsVideoMuted(true);
+    }, []);
 
     const closeSocketConnection = () => {
         if (clientRef && clientRef.client.connected) {
