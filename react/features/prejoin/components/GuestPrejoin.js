@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import SockJsClient from 'react-stomp';
 import { IconContext } from 'react-icons';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { RiVideoChatFill } from 'react-icons/ri';
 
 import { setPrejoinPageErrorMessageKey } from '../';
 import { openConnection } from '../../../../connection';
@@ -396,10 +396,12 @@ function GuestPrejoin(props) {
         <div className="meet-now">
             <IconContext.Provider value={{
                 style: {
-                    color: 'blue'
+                    color: 'white'
                 }
             }}>
-                <FaCalendarAlt size={40} />
+                <div className="guest-icon-wrapper">
+                    <RiVideoChatFill size={40} />
+                </div>
             </IconContext.Provider>
             <span className="meet-now-label">Join a meeting</span>
             {

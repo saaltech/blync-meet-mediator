@@ -75,6 +75,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             navigatedFromHome: undefined,
             joinMeeting: false,
             exiting: false,
+            showNoCreateMeetingPrivilegeTip: false,
             activeButton: 'join',
             actions: 'meetNow'
         };
@@ -98,8 +99,19 @@ class PreMeetingScreen extends PureComponent<Props> {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps && prevProps._user !== this.props._user) {
+            this.setState({ showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
+        }
+    }
     handleRouteChange(value) {
         redirectOnButtonChange(value);
+    }
+
+    _canCreateMeetings() {
+        const { _user } = this.props;
+
+        return !_user || (_user.isPartOfTheCircle && _user.role == 'manager');
     }
 
     setMeetNow(value) {
@@ -110,7 +122,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         })
     }
 
-    setIsVideoMuted(value){
+    setIsVideoMuted(value) {
         APP.store.dispatch(setVideoMuted(value))
     }
 
@@ -143,6 +155,9 @@ class PreMeetingScreen extends PureComponent<Props> {
                 }
                 <LeftPanel
                     activeButton={this.state.activeButton}
+                    showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
+                    isNotCreatePermission={!this._canCreateMeetings()}
+                    toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
                     setActiveButton={this.handleRouteChange} />
                 <div
                     className='premeeting-screen'
@@ -224,6 +239,7 @@ class PreMeetingScreen extends PureComponent<Props> {
 function mapStateToProps(state) {
     return {
         url: getCurrentConferenceUrl(state),
+        _user: state['features/app-auth'].user,
         meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails
             && APP.store.getState()['features/app-auth'].meetingDetails.meetNow
     };

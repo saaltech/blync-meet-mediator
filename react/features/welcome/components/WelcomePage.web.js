@@ -192,11 +192,11 @@ class WelcomePage extends AbstractWelcomePage {
         }
 
         if (activeButtonAction) {
-            this.setState({ activeButton: activeButtonAction });
+            this.setState({ activeButton: activeButtonAction, showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
             this.setSwitchActiveIndex(activeButtonAction === 'create' ? 0 : 1);
         } else {
             this.setSwitchActiveIndex(1);
-            this.setState({ activeButton: 'join' });
+            this.setState({ activeButton: 'join', showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
         }
         this.props.dispatch(decideAppLogin());
 
@@ -272,10 +272,10 @@ class WelcomePage extends AbstractWelcomePage {
         this.setState({
             switchActiveIndex: index === null ? (this._canCreateMeetings() ? 0 : 1) : parseInt(index, 10)
         }, () => {
-            this._decideFormDisability();
-            if (this.state.switchActiveIndex === 1) {
-                this.setValueInRoomInputBox(this._roomInputRef.value.substring(0, 20));
-            }
+            // this._decideFormDisability();
+            // if (this.state.switchActiveIndex === 1) {
+            //     this.handleRouteChange('join');
+            // }
         });
     }
 
@@ -319,14 +319,17 @@ class WelcomePage extends AbstractWelcomePage {
             hideLogin: true,
             loginErrorMsg: ''
         });
-
+        console.log('hello', this.state.switchActiveIndex, this._canCreateMeetings());
         if (this.state.switchActiveIndex === 0) {
             this.setSwitchActiveIndex();
             if (!this._canCreateMeetings()) {
-                this.setState({
-                    showNoCreateMeetingPrivilegeTip: true
-                });
+                this.handleRouteChange('join');
+                // this.setState({
+                //     showNoCreateMeetingPrivilegeTip: true
+                // });
             }
+        } else {
+            this.setState({ showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() })
         }
     }
 
@@ -439,7 +442,7 @@ class WelcomePage extends AbstractWelcomePage {
     /**
      */
     _renderMainContentSection() {
-        const { t } = this.props;
+        const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
         const { switchActiveIndex, showNoCreateMeetingPrivilegeTip } = this.state;
 
         const toggleSwitchItems = {
@@ -468,7 +471,8 @@ class WelcomePage extends AbstractWelcomePage {
                     this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle') : t('welcomepage.enterCreateMeetingTitle')
                 }
             </div>
-            <div className='entry-section right-bg'>
+            <div className={`entry-section right-bg`}>
+            {/* <div className={`entry-section ${_isGoogleSigninUser? 'right-bg': ''}`}> */}
 
                 {this.state.activeButton === 'join' ? (
                     <>
@@ -541,7 +545,11 @@ class WelcomePage extends AbstractWelcomePage {
                     && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
-            <div className='contacts-placeholder' />
+            <div className='contacts-placeholder' >
+                {
+                    !_isUserSignedOut && _isGoogleSigninUser ? <CalendarProfile /> : <> </>
+                }
+            </div>
         </>);
     }
 
@@ -633,7 +641,10 @@ class WelcomePage extends AbstractWelcomePage {
                                 : <div className='show-flex'>
                                     <LeftPanel
                                         interfaceConfig={interfaceConfig}
+                                        showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
                                         activeButton={this.state.activeButton}
+                                        isNotCreatePermission={!this._canCreateMeetings()}
+                                        toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
                                         setActiveButton={this.handleRouteChange}
                                     />
                                     {/* <div className='left-header'>
@@ -658,17 +669,10 @@ class WelcomePage extends AbstractWelcomePage {
                                             </div>
                                             <div className='right-content' >
                                                 {
-                                                    _isUserSignedOut
-                                                        ? <>
-                                                            <div className='calendar-placeholder' />
-                                                        </>
-                                                        : <>
-                                                            {
-                                                                _isGoogleSigninUser
-                                                                    ? <CalendarProfile />
-                                                                    : <div className='calendar-placeholder' />
-                                                            }
-                                                        </>
+                                                    // _isUserSignedOut
+                                                    //     ? <>
+                                                    <div className='calendar-placeholder' />
+
                                                 }
                                             </div>
                                         </div>

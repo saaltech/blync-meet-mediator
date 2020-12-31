@@ -51,10 +51,15 @@ function HostPrejoin(props) {
         onSuccess: data => updateConferenceState(data)
     });
 
+    function generatePassword(){
+        return Math.random().toString(36).slice(2,7);
+    }
+
     useEffect(() => {
         setClearErrors(true);
         setMeetNow(actions === 'meetNow');
         isMeetNow(actions === 'meetNow');
+        setMeetingPassword(generatePassword());
     }, []);
     const formRequestBody = () => {
         return {

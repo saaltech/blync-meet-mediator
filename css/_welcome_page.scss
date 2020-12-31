@@ -425,14 +425,18 @@ body.welcome-page {
 @media only screen and (max-width: 1080px) {
     .welcome {
         .content-area {
-            flex: 1;
-            flex-direction: column;
-            justify-content: flex-end;
-            display: block !important;
+            // flex: 1;
+            // flex-direction: column;
+            // justify-content: flex-end;
+            // display: block !important;
 
             .main-content {
                 flex: 1;
+                flex-direction: column;
                 margin-top: 85px;
+            }
+            .calendar-placeholder{
+                display: none;
             }
         
             .right-content {

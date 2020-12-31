@@ -1,11 +1,13 @@
 import React from 'react';
 import { IconContext } from 'react-icons';
+import { translate } from '../i18n';
+import { Icon, IconWarning, IconSadSmiley } from '../icons';
+
 import { RiContactsBookFill, RiVideoChatFill, RiVideoAddLine } from 'react-icons/ri';
 import TncPrivacy from '../../welcome/components/TncPrivacy';
 
-
-export default function LeftPanel(props) {
-    const { interfaceConfig = {}, activeButton = 'join', setActiveButton } = props;
+function LeftPanel(props) {
+    const { interfaceConfig = {}, isNotCreatePermission = false, toolTipClose, showNoCreateMeetingPrivilegeTip = false, activeButton = 'join', setActiveButton } = props;
 
     function handleClickIcon(value) {
         setActiveButton(value);
@@ -27,6 +29,9 @@ export default function LeftPanel(props) {
         return reactElement;
     }
 
+    const createButtonColor = isNotCreatePermission ? '#D1D1D1' : activeButton === 'create' ? 'white' : '#005C85'
+    const createTextColor = isNotCreatePermission ? '#D1D1D1' : activeButton === 'create' ? '#00C062' : '#005C85'
+    console.log(createButtonColor, createTextColor);
     function renderButton() {
         let reactElement = null;
 
@@ -40,9 +45,9 @@ export default function LeftPanel(props) {
                 }}>
                     <div className="left-panel-options">
                         <div className={`icon-wrapper disabled ${activeButton === 'contacts' ? 'selected' : ''}`}
-                        onClick={() => {
-                            // handleClickIcon('contacts')
-                        }}
+                            onClick={() => {
+                                // handleClickIcon('contacts')
+                            }}
                             style={{ textAlign: 'center' }}>
                             <RiContactsBookFill size={35} />
 
@@ -73,17 +78,26 @@ export default function LeftPanel(props) {
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'create' ? 'white' : '#005C85'
+                        color: createButtonColor,
                     }
                 }}>
                     <div className="left-panel-options">
+                        {showNoCreateMeetingPrivilegeTip && (<><div className="active-cap"></div>
+                            <div className='tooltip show'>
+                                <div
+                                    className='close-icon'
+                                    onClick={toolTipClose} />
+                                <div className='tooltip__icon'> <Icon src={IconSadSmiley} /> </div>
+                                <div className='tooltip__message'>{props.t('welcomepage.noCreateMeetingRights')}</div>
+                            </div>
+                        </>)}
                         <div
-                            className={`icon-wrapper ${activeButton === 'create' ? 'selected' : ''}`}
+                            className={`icon-wrapper ${isNotCreatePermission ? 'disabled' : ''} ${activeButton === 'create' ? 'selected' : ''}`}
                             onClick={() => { handleClickIcon('create') }}
                             style={{ textAlign: 'center' }}>
                             <RiVideoAddLine size={35} />
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'create' ? '#00C062' : '#005C85' }}>
+                        <div style={{ textAlign: 'center', color: createTextColor }}>
                             Create
                         </div>
                     </div>
@@ -122,3 +136,5 @@ export default function LeftPanel(props) {
         </div>
     )
 }
+
+export default translate(LeftPanel);

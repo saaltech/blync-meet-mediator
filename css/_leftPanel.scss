@@ -8,6 +8,35 @@
     z-index: $toolbarZ + 2;
     .left-panel-options{
         margin-bottom: 10px; 
+        position: relative;
+    }
+    .active-cap {
+        position: absolute;
+        left: 20px;
+        top: 60px;
+        width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
+    }
+    .tooltip {
+        position: absolute;
+    top: 65px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 200px;
+    box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
+    .close-icon {
+        width: 10px;
+        height: 10px;
+        top: 10px;
+        right: 10px;
+    }
+    .tooltip__message{
+        color: black;
+    }
     }
     .icon-wrapper {
         padding: 5px;
