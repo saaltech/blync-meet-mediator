@@ -7,7 +7,7 @@
     justify-content: center;
     z-index: $toolbarZ + 2;
     .left-panel-options{
-        margin-bottom: 10px; 
+        margin-bottom: 20px; 
         position: relative;
     }
     .active-cap {
@@ -15,7 +15,7 @@
         left: 20px;
         top: 60px;
         width: 0; 
-  height: 0; 
+    height: 0; 
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: 5px solid rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
     }
     }
     .icon-wrapper {
-        padding: 5px;
+        padding: 10px;
         border-radius: 5px;
         background-color: #E7EFF4;
         &.selected{
@@ -51,9 +51,9 @@
         }
     }
     .left-logo {
-        width: 80px;
+        width: 60px;
         height: 100px;
-        margin: 30px 10px 10px;
+        margin: 22px;
         background-size: contain;
         background-repeat: no-repeat;
     }

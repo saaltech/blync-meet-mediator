@@ -3,7 +3,7 @@ import { IconContext } from 'react-icons';
 import { translate } from '../i18n';
 import { Icon, IconWarning, IconSadSmiley } from '../icons';
 
-import { RiContactsBookFill, RiVideoChatFill, RiVideoAddLine } from 'react-icons/ri';
+import { RiContactsBookFill, RiVideoChatFill, RiVideoAddFill } from 'react-icons/ri';
 import TncPrivacy from '../../welcome/components/TncPrivacy';
 
 function LeftPanel(props) {
@@ -49,10 +49,10 @@ function LeftPanel(props) {
                                 // handleClickIcon('contacts')
                             }}
                             style={{ textAlign: 'center' }}>
-                            <RiContactsBookFill size={35} />
+                            <RiContactsBookFill size={30} />
 
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'contacts' ? '#00C062' : '#D1D1D1' }}>
+                        <div style={{ textAlign: 'center', marginTop: '10px', color: activeButton === 'contacts' ? '#00C062' : '#D1D1D1' }}>
                             Contacts
                         </div>
                     </div>
@@ -68,9 +68,9 @@ function LeftPanel(props) {
                             className={`icon-wrapper ${activeButton === 'join' ? 'selected' : ''}`}
                             onClick={() => { handleClickIcon('join') }}
                             style={{ textAlign: 'center' }}>
-                            <RiVideoChatFill size={35} />
+                            <RiVideoChatFill size={30} />
                         </div>
-                        <div style={{ textAlign: 'center', color: activeButton === 'join' ? '#00C062' : '#005C85' }}>
+                        <div style={{ textAlign: 'center', marginTop: '10px', color: activeButton === 'join' ? '#00C062' : '#005C85' }}>
                             Join
                         </div>
                     </div>
@@ -95,9 +95,9 @@ function LeftPanel(props) {
                             className={`icon-wrapper ${isNotCreatePermission ? 'disabled' : ''} ${activeButton === 'create' ? 'selected' : ''}`}
                             onClick={() => { handleClickIcon('create') }}
                             style={{ textAlign: 'center' }}>
-                            <RiVideoAddLine size={35} />
+                            <RiVideoAddFill size={30} />
                         </div>
-                        <div style={{ textAlign: 'center', color: createTextColor }}>
+                        <div style={{ textAlign: 'center', marginTop: '10px', color: createTextColor }}>
                             Create
                         </div>
                     </div>
