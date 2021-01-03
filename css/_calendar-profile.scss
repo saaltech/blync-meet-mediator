@@ -426,9 +426,9 @@
     }
 
     .calendarProfile {
-        margin-top: 120px;
+        // margin-top: 120px;
         margin-left: 5px;
         margin-right: 5px;
-        height: 80vh;
+        height: calc(100% - 250px);
     }
 }

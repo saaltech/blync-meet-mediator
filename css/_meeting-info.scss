@@ -50,9 +50,11 @@
     }
 
     .form-field-guest {
-        margin-top: 15px; 
         display: flex;
         align-items: center;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 15px; 
         .form-label-guest {
             flex: 0 0 150px;
             text-align: left;

@@ -2,6 +2,10 @@
 
 import React from 'react';
 
+
+import { IconContext } from 'react-icons';
+import { RiVideoChatFill } from 'react-icons/ri';
+
 import { BiLoaderCircle } from 'react-icons/bi';
 import { FaCalendarAlt } from 'react-icons/fa';
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
@@ -466,16 +470,26 @@ class WelcomePage extends AbstractWelcomePage {
         };
 
         return (<>
-            <div className='entry-section__label'>
+            <div className={`entry-section__label ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'join-without-google-label' : ''}`}>
+                {(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) && (
+                    <IconContext.Provider value={{
+                        style: {
+                            color: 'white'
+                        }
+                    }}>
+                        <div className="join-without-google-icon-wrapper">
+                            <RiVideoChatFill size={40} />
+                        </div>
+                    </IconContext.Provider>
+                )}
                 {
                     this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle') : t('welcomepage.enterCreateMeetingTitle')
                 }
             </div>
-            <div className={`entry-section right-bg`}>
-            {/* <div className={`entry-section ${_isGoogleSigninUser? 'right-bg': ''}`}> */}
-
+            {/* <div className={`entry-section right-bg`}> */}
+            <div className={`entry-section ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section' : 'right-bg'}`}>
                 {this.state.activeButton === 'join' ? (
-                    <>
+                    <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section-container': '' }`}>
                         <div className="label-content">
                             {'Meeting ID*'}
                         </div>
@@ -520,7 +534,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                             </div>
                         </div>
-                    </>
+                    </div>
                 ) : (
                         <div className="button-wrapper">
                             <ButtonWithIcon
@@ -545,7 +559,7 @@ class WelcomePage extends AbstractWelcomePage {
                     && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
-            <div className='contacts-placeholder' >
+            <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? '' : 'contacts-placeholder'}`} >
                 {
                     !_isUserSignedOut && _isGoogleSigninUser ? <CalendarProfile /> : <> </>
                 }
@@ -661,20 +675,17 @@ class WelcomePage extends AbstractWelcomePage {
                                                 this._renderContentHeaderSection()
                                             }
                                         </div>
-                                        <div className='content-area'>
-                                            <div className='main-content'>
+                                        <div className={`content-area`}>
+                                            <div className={`main-content ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : ''}`}>
                                                 {
                                                     this._renderMainContentSection()
                                                 }
                                             </div>
-                                            <div className='right-content' >
-                                                {
-                                                    // _isUserSignedOut
-                                                    //     ? <>
-                                                    <div className='calendar-placeholder' />
-
-                                                }
-                                            </div>
+                                            {(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
+                                                <div className='right-content' >
+                                                            <div className='calendar-placeholder' />
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

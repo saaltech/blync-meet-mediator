@@ -358,7 +358,7 @@ function HostPrejoin(props) {
                                 APP.store.dispatch(setPrejoinPageErrorMessageKey('submitting'));
                                 joinConference();
                             }}>
-                            Join Now
+                            Meet Now
                 </div>
                     }
                     {/* <div style={{ marginTop: '10px', borderBottom: '1px solid gray' }} /> */}

@@ -60,8 +60,8 @@ function JoinMeetingForm(props) {
 
             {
                 isSecretEnabled &&
-                <div className={`form-field ${passwordError ? 'password-error' : ''}`}>
-                    {/* <div className='form-label mandatory'>{'Password'} <span>*</span></div> */}
+                <div className={`form-field-guest ${passwordError ? 'password-error' : ''}`}>
+                    <div className='form-label-guest mandatory'>{'Password'} <span>*</span></div>
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
                         placeHolder={'Meeting password'}
