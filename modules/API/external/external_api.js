@@ -116,7 +116,7 @@ function objectToStringPathParams (obj) {
     for (const key in obj) { // eslint-disable-line guard-for-in
         try {
             pathParamString +=
-                `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`;
+                `${key}=${obj[key]}`;
         } catch (e) {
             console.warn(`Error encoding ${key}: ${e}`);
         }
