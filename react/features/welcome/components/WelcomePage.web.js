@@ -561,7 +561,7 @@ class WelcomePage extends AbstractWelcomePage {
             </div>
             <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? '' : 'contacts-placeholder'}`} >
                 {
-                    !_isUserSignedOut && _isGoogleSigninUser ? <CalendarProfile /> : <> </>
+                    !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }
             </div>
         </>);
