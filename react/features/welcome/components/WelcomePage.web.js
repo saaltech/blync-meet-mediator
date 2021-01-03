@@ -468,7 +468,7 @@ class WelcomePage extends AbstractWelcomePage {
         return (<>
             <div className='entry-section__label'>
                 {
-                    this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle') : t('welcomepage.enterCreateMeetingTitle')
+                    this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' })
                 }
             </div>
             <div className={`entry-section right-bg`}>
