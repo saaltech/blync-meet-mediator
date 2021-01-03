@@ -129,7 +129,11 @@
             .password-meeting{
                 margin-left: 10px;
                 line-height: 1;
+                &.fade-color{
+                    color: #D1D1D1;
+                }
             }
+
         }
        
     }

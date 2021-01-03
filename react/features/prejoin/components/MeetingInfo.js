@@ -46,6 +46,10 @@ function MeetingInfo(props) {
         setIsMeetingNameEdit(false);
     }
 
+    function generatePassword(){
+        return Math.random().toString(36).slice(2,7);
+    }
+
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
 
     return (
@@ -129,14 +133,14 @@ function MeetingInfo(props) {
                                 {(shareable || isFromGuest) ? <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div> : (
                                     <>
                                         {isMeetingNameEdit ? (
-                                                <input
-                                                    className="input-meeting"
-                                                    type="text"
-                                                    autoFocus
-                                                    onBlur={handleMeetingNameBlur}
-                                                    onChange={(event) => { setMeetingName(event.target.value) }}
-                                                    value={meetingName ? meetingName : ''}
-                                                />
+                                            <input
+                                                className="input-meeting"
+                                                type="text"
+                                                autoFocus
+                                                onBlur={handleMeetingNameBlur}
+                                                onChange={(event) => { setMeetingName(event.target.value) }}
+                                                value={meetingName ? meetingName : ''}
+                                            />
                                         ) : (
                                                 <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div>
                                             )}
@@ -161,19 +165,19 @@ function MeetingInfo(props) {
                 && (
                     <div className='you-are-host-wrapper'>
                         <div className='you-are-host'> You are the host of this meeting</div>
-                        {meetNow && shareable && isPrivate && (<div className="password-wrapper">
-                            <IconContext.Provider value={{ style: { color: 'green' } }}>
+                        {meetNow && shareable && (<div className="password-wrapper">
+                            <IconContext.Provider value={{ style: { color: isPrivate ? '#00C062' : '#D1D1D1' } }}>
 
                                 <GiCombinationLock size={15} />
                             </IconContext.Provider>
-                            <div className="password-meeting">Password: {meetingPassword}</div>
+                            <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? `Password: ${meetingPassword}` : 'No Password'}</div>
                         </div>
                         )}
-                        {meetNow && shareable && enableWaitingRoom && (<div className="password-wrapper">
-                            <IconContext.Provider value={{ style: { color: 'green' } }}>
+                        {meetNow && shareable && (<div className="password-wrapper">
+                            <IconContext.Provider value={{ style: { color: enableWaitingRoom ? '#00C062' : '#D1D1D1' } }}>
                                 <AiFillCheckCircle size={15} />
                             </IconContext.Provider>
-                            <div className="password-meeting">Waiting Room</div>
+                            <div className={`password-meeting ${!enableWaitingRoom ? 'fade-color' : ''}`}>Waiting Room</div>
                         </div>
                         )}
                     </div>)
@@ -352,6 +356,7 @@ function MeetingInfo(props) {
                                 checked={isPrivate}
                                 onChange={() => {
                                     setIsPrivate(!isPrivate);
+                                    setMeetingPassword(generatePassword());
                                     isPrivate && setMeetingPassword('');
                                 }}
                                 disabled={shareable} />
