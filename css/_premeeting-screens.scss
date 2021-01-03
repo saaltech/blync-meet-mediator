@@ -10,7 +10,7 @@
     height: 100%;
     background: #F2F4FC;
     background-image: url('./../images/backgroundImage.svg');
-    background-size: 525px;
+    background-size: 60%;
     background-repeat: no-repeat;
     background-position: bottom right;
     bottom: 0;
@@ -43,11 +43,12 @@
     }
 
     .content {
-        align-items: center;
+        // align-items: center;
         //background-image: linear-gradient(transparent, black);
         display: flex;
         //flex: 1;
         right: 0;
+        width: 100%;
         flex-direction: column;
         justify-content: center;
         z-index: $toolbarZ + 2;
