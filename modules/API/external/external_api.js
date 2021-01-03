@@ -179,7 +179,7 @@ function parseArguments(args) {
             jwt,
             onload,
             home,
-            action
+            actions
         ] = args;
 
         return {
@@ -192,7 +192,7 @@ function parseArguments(args) {
             jwt,
             onload,
             home,
-            action
+            actions
         };
     }
     case 'object': // new arguments format
@@ -281,15 +281,15 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             userInfo,
             e2eeKey,
             home,
-            action
+            actions
         } = parseArguments(args);
         const localStorageContent = jitsiLocalStorage.getItem('jitsiLocalStorage');
 
         this._parentNode = parentNode;
-        if (home || action) {
+        if (home || actions) {
             pathParams = {
                 home,
-                action
+                actions
             }
         }
         this._url = generateURL(domain, {
