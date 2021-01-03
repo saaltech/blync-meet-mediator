@@ -38,6 +38,9 @@ const options = {
     backend: {
         loadPath: 'lang/{{ns}}-{{lng}}.json'
     },
+    cache: {
+        enabled: false
+    },
     defaultNS: 'main',
     fallbackLng: DEFAULT_LANGUAGE,
     interpolation: {
