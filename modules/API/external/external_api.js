@@ -111,6 +111,20 @@ function changeParticipantNumber(APIInstance, number) {
     APIInstance._numberOfParticipants += number;
 }
 
+function objectToStringPathParams (obj) {
+    let pathParamString = "?";
+    for (const key in obj) { // eslint-disable-line guard-for-in
+        try {
+            pathParamString +=
+                `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}`;
+        } catch (e) {
+            console.warn(`Error encoding ${key}: ${e}`);
+        }
+    }
+
+    return pathParamString === "?" ? "" : pathParamString;
+}
+
 /**
  * Generates the URL for the iframe.
  *
@@ -126,12 +140,15 @@ function changeParticipantNumber(APIInstance, number) {
  * @param {string} [options.roomName] - The name of the room to join.
  * @returns {string} The URL.
  */
-function generateURL(domain, options = {}) {
+function generateURL(domain, options = {}, pathParams = {}) {
+    let pathParamString = objectToStringPathParams(pathParams);
     return urlObjectToString({
         ...options,
-        url: `https://${domain}/#jitsi_meet_external_api_id=${id}`
+        url: `https://${domain}/${pathParamString}#jitsi_meet_external_api_id=${id}`
     });
 }
+
+
 
 /**
  * Parses the arguments passed to the constructor. If the old format is used
@@ -250,6 +267,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
      */
     constructor(domain, ...args) {
         super();
+        let pathParams;
         const {
             roomName = '',
             width = '100%',
@@ -269,6 +287,12 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
         const localStorageContent = jitsiLocalStorage.getItem('jitsiLocalStorage');
 
         this._parentNode = parentNode;
+        if (home || action) {
+            pathParams = {
+                home,
+                action
+            }
+        }
         this._url = generateURL(domain, {
             configOverwrite,
             interfaceConfigOverwrite,
@@ -278,10 +302,8 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             userInfo,
             appData: {
                 localStorageContent
-            },
-            home,
-            action
-        });
+            }
+        }, pathParams);
         this._createIFrame(height, width, onload);
         this._transport = new Transport({
             backend: new PostMessageTransportBackend({
