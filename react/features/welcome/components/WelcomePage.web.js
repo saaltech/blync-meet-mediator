@@ -559,7 +559,7 @@ class WelcomePage extends AbstractWelcomePage {
                     && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
-            <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? '' : 'contacts-placeholder'}`} >
+            <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (_isGoogleSigninUser))) ? '' : 'contacts-placeholder'}`} >
                 {
                     !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }

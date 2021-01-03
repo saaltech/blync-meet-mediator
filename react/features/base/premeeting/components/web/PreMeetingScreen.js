@@ -126,6 +126,10 @@ class PreMeetingScreen extends PureComponent<Props> {
         APP.store.dispatch(setVideoMuted(value))
     }
 
+    goToCreateHome() {
+        window.location.href = `${window.location.origin}?actions=create`
+      }
+
     showTrackPreviews(value) {
         this.setState({
             showTrackPreviews: value
@@ -191,7 +195,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                                     onClickClose={() => {
                                         this.setState({ exiting: true },
                                             () => {
-                                                goHome()
+                                                this.goToCreateHome()
                                             })
                                     }}
                                     //Show join now after page reload in case of `meet now` option

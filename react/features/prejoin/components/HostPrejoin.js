@@ -51,8 +51,8 @@ function HostPrejoin(props) {
         onSuccess: data => updateConferenceState(data)
     });
 
-    function generatePassword(){
-        return Math.random().toString(36).slice(2,7);
+    function generatePassword() {
+        return Math.random().toString(36).slice(2, 7);
     }
 
     useEffect(() => {
@@ -120,7 +120,8 @@ function HostPrejoin(props) {
 
     const goToHome = () => {
         setExiting(true);
-        window.location.href = window.location.origin;
+        console.log('ttt', `${window.location.origin}?actions=create`);
+        window.location.href = `${window.location.origin}?actions=create`;
     };
 
     const saveConferenceAction = async () => {
@@ -343,8 +344,8 @@ function HostPrejoin(props) {
                         ${!meetingName ? 'disabled' : ''}
                         ` }
                             onClick={saveConferenceAction}>
-                            Next
-                </div>
+                            {meetNow ? 'Next' : 'Schedule'}
+                        </div>
                     }
                     {
                         shareable && meetNow
@@ -366,7 +367,7 @@ function HostPrejoin(props) {
                     {
                         shareable && !meetNow
                         && <div
-                            className='prejoin-page-button next'
+                            className='prejoin-page-button close'
                             onClick={goToHome}>Close</div>
                     }
 

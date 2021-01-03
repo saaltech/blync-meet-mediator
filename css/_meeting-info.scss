@@ -8,7 +8,7 @@
         justify-content: center;
     }
     .detail-heading{
-        flex: 0 0 100px;
+        flex: 0 0 115px;
         color: #9A9A9A;
         text-align: left;
         font-size: 18px;
@@ -163,7 +163,7 @@
         &.enable-meeting-wrap {
             display: flex;
             justify-content: space-between;
-            width: 80%;
+            width: 55%;
             margin: 10 auto;
         }
 
@@ -173,7 +173,7 @@
             justify-content: space-between;
             font-size: 15px;
             font-weight: bold;
-            width: 80%;
+            width: 55%;
             margin: 10 auto;
             color: #393939;
         }
@@ -260,7 +260,7 @@
 
     .meeting-password {
         margin: 0 auto;
-    width: 68%;
+        width: 55%;
 
         input.field:disabled {
             border-color: #70707057;
