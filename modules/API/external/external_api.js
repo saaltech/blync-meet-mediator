@@ -112,17 +112,16 @@ function changeParticipantNumber(APIInstance, number) {
 }
 
 function objectToStringPathParams (obj) {
-    let pathParamString = "?";
+    let pathParamArr = [];
     for (const key in obj) { // eslint-disable-line guard-for-in
         try {
-            pathParamString +=
-                `${key}=${obj[key]}`;
+            pathParamArr.push(`${key}=${obj[key]}`);
         } catch (e) {
             console.warn(`Error encoding ${key}: ${e}`);
         }
     }
 
-    return pathParamString === "?" ? "" : pathParamString;
+    return pathParamArr.length > 0 ? `?${pathParamArr.join('&')}` : "";
 }
 
 /**
