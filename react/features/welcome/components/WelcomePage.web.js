@@ -489,7 +489,7 @@ class WelcomePage extends AbstractWelcomePage {
             {/* <div className={`entry-section right-bg`}> */}
             <div className={`entry-section ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section' : 'right-bg'}`}>
                 {this.state.activeButton === 'join' ? (
-                    <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section-container': '' }`}>
+                    <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section-container' : ''}`}>
                         <div className="label-content">
                             {'Meeting ID*'}
                         </div>
@@ -534,6 +534,10 @@ class WelcomePage extends AbstractWelcomePage {
 
                             </div>
                         </div>
+                        {
+                            switchActiveIndex === 1 && this._roomInputRef
+                            && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
+                        }
                     </div>
                 ) : (
                         <div className="button-wrapper">
@@ -553,10 +557,6 @@ class WelcomePage extends AbstractWelcomePage {
                             </div>
                         </div>
                     )
-                }
-                {
-                    switchActiveIndex === 1 && this._roomInputRef
-                    && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
                 }
             </div>
             <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} >
@@ -683,7 +683,7 @@ class WelcomePage extends AbstractWelcomePage {
                                             </div>
                                             {(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
                                                 <div className='right-content' >
-                                                            <div className='calendar-placeholder' />
+                                                    <div className='calendar-placeholder' />
                                                 </div>
                                             )}
                                         </div>
