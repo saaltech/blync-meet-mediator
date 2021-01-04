@@ -17,7 +17,7 @@ body.welcome-page {
         }
     
         &.right-bg {
-            background-image: url('./../images/backgroundImage.png');
+            background-image: url('./../images/home_meetnowandscheduleblock.png');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: bottom right;
@@ -40,7 +40,7 @@ body.welcome-page {
     
         &.right-bg {
             left: 50%;
-            background-image: url('./../images/backgroundImage.png');
+            background-image: url('./../images/home_meetnowandscheduleblock.png');
             background-size: 100%;
             background-repeat: no-repeat;
             background-position: bottom right;
@@ -464,7 +464,8 @@ body.welcome-page {
         }
 
         .entry-section {
-            width: 100%;
+            width: 90%;
+            margin: 0 auto !important;
         }
     }
 }
@@ -583,8 +584,8 @@ body.welcome-page {
 
                 &.right-bg {
                     left: 50%;
-                    background-image: url('./../images/backgroundImage.png');
-                    background-size: 200px;
+                    background-image: url('./../images/home_meetnowandscheduleblock.png');
+                    background-size: 300px 150px;
                     background-repeat: no-repeat;
                     background-position: bottom right;
                 }
