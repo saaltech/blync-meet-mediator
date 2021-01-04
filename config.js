@@ -6,7 +6,7 @@ var config = {
 
     hosts: {
         // XMPP domain.
-        domain: 'meet.jitsi',
+        domain: 'meet.jifmeet',
 
         // When using authentication, domain for guest users.
         // anonymousdomain: 'guest.example.com',
@@ -18,7 +18,7 @@ var config = {
         // focus: 'focus.meet.jifmeet',
 
         // XMPP MUC domain. FIXME: use XEP-0030 to discover it.
-        muc: 'muc.meet.jitsi',
+        muc: 'muc.meet.jifmeet'
     },
 
     // BOSH URL. FIXME: use XEP-0156 to discover it.
@@ -103,7 +103,7 @@ var config = {
     // notify the user if there is noise, other than voice, coming from the current
     // selected microphone. The purpose it to let the user know that the input could
     // be potentially unpleasant for other meeting participants.
-    enableNoisyMicDetection: true,
+    enableNoisyMicDetection: false,
 
     // Start the conference in audio only mode (no video is being received nor
     // sent).
@@ -677,7 +677,7 @@ var config = {
      ignoreStartMuted
      */
 
-    enableTalkWhileMuted: true,
+    enableTalkWhileMuted: false,
 
     // This property should be always set to false, to avoid echo from speakers of other participants
     disableAEC: false, //wasnt present in latest code
@@ -690,3 +690,4 @@ var config = {
 };
 
 /* eslint-enable no-unused-vars, no-var */
+

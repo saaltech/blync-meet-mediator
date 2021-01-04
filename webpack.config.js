@@ -151,6 +151,22 @@ const config = {
                 'css-loader'
             ]
         }, {
+            test: /\.(js|html)$/,
+            loader: 'string-replace-loader',
+            options: {
+              search: 'JitsiMeetJS',
+              replace: 'JifMeetJS',
+              flags: 'gi'
+            }
+        }, {
+            test: /\.(js|scss|css)$/,
+            loader: 'string-replace-loader',
+            options: {
+              search: 'jitsi-icon',
+              replace: 'jifmeet-icon',
+              flags: 'gi'
+            }
+        }, {
             test: /\/node_modules\/@atlaskit\/modal-dialog\/.*\.js$/,
             resolve: {
                 alias: {
@@ -173,7 +189,7 @@ const config = {
                     expandProps: 'start'
                 }
             } ]
-        } ]
+        }]
     },
     node: {
         // Allow the use of the real filename of the module being executed. By
@@ -307,7 +323,7 @@ module.exports = [
             fs: 'empty'
         },
         output: Object.assign({}, config.output, {
-            library: [ 'JitsiMeetJS', 'app', 'effects', 'rnnoise' ],
+            library: [ 'JifMeetJS', 'app', 'effects', 'rnnoise' ],
             libraryTarget: 'window',
             filename: '[name].min.js',
             sourceMapFilename: '[name].min.map'

@@ -14,6 +14,7 @@ import {
 import { setCurrentNotificationUid } from './actions';
 import { TALK_WHILE_MUTED_SOUND_ID } from './constants';
 import { TALK_WHILE_MUTED_SOUND_FILE } from './sounds';
+import { showToolbox } from '../toolbox/actions';
 
 MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
@@ -46,7 +47,10 @@ MiddlewareRegistry.register(store => next => action => {
                     titleKey: 'toolbar.talkWhileMutedPopup',
                     descriptionKey: 'toolbar.talkWhileMutedPopupDesc',
                     customActionNameKey: 'notify.unmute',
-                    customActionHandler: () => dispatch(setAudioMuted(false))
+                    customActionHandler: () => {
+                        dispatch(showToolbox());
+                        setTimeout(() => dispatch(setAudioMuted(false)), 10);
+                    }
                 });
 
                 dispatch(notification);
