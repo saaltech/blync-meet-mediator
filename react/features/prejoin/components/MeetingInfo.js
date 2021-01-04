@@ -236,6 +236,7 @@ function MeetingInfo(props) {
                             minTime={new Date()}
                             maxTime={new Date().setHours(24)}
                             selected={meetingFrom && new Date(meetingFrom)}
+                            timeIntervals={15}
                             onChange={value => {
                                 setMeetingFrom(value);
                                 const nd = new Date(value.getTime());
@@ -302,6 +303,7 @@ function MeetingInfo(props) {
                             //     return d;
                             // })() }
                             selected={meetingTo && new Date(meetingTo)}
+                            timeIntervals={15}
                             onChange={value => setMeetingTo(value)}
                             showTimeSelect={true}
                             timeFormat='HH:mm'
