@@ -168,7 +168,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                     id='lobby-screen'>
                     {/* <Background backgroundColor='black'/> */}
 
-                    <div style={{ height: '100%' }}>
+                    <div style={{ height: '100%', width: '100%' }}>
                         {/* {
                         showTrackPreviews || meetNow ?
                             <Preview

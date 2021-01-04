@@ -85,7 +85,7 @@
         align-items: center;
         font-size: 30px;
         color:#005694;
-        padding: 35px 0 5px;
+        padding: 35px 0 0.5%;
         .input-meeting-wrapper{
             max-width: 300px;
             white-space: nowrap;
@@ -111,7 +111,7 @@
     .meeting-id{
         color: #005694;
         font-size: 18px;
-        margin-bottom: 10px;
+        margin-bottom: 1%;
     }
     .date-info {
         color: #969696;
@@ -122,7 +122,7 @@
         color: #393939;
         font-size: 14px;
         margin-top: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 4%;
         display: flex;
         justify-content: space-around;
         .password-wrapper{
@@ -164,7 +164,7 @@
             display: flex;
             justify-content: space-between;
             width: 55%;
-            margin: 10 auto;
+            margin: 2% auto;
         }
 
         .make-private-room {
@@ -174,7 +174,7 @@
             font-size: 15px;
             font-weight: bold;
             width: 55%;
-            margin: 10 auto;
+            margin: 2% auto;
             color: #393939;
         }
 
@@ -260,7 +260,10 @@
 
     .meeting-password {
         margin: 0 auto;
-        width: 55%;
+        width: 48%;
+        input.field {
+            text-align: center;
+        }
 
         input.field:disabled {
             border-color: #70707057;

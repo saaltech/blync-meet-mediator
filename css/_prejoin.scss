@@ -17,7 +17,7 @@
         border-radius: $welcomePageButtonBorderRadius;
         font-size: 20px;
         font-weight: 400;
-        margin: 20px auto;
+        margin: 4% auto;
     }
     &.close{
         background: #0A5694;
@@ -25,7 +25,7 @@
         border-radius: $welcomePageButtonBorderRadius;
         font-size: 20px;
         font-weight: 400;
-        margin: 20px auto;
+        margin: 4% auto;
         margin-bottom: 40px;
     }
 
@@ -34,7 +34,7 @@
         cursor: not-allowed;
         pointer-events: none;
         opacity: 0.4;
-        margin: 20px auto;
+        margin: 4% auto;
     }
     &.guest {
         &.disabled {
@@ -105,8 +105,10 @@
     position: relative;
     z-index: 100;
     background-color: white;
+    width: 50%;
     // height: 100%;
-    width: 650px;
+    min-width: 650px;
+    max-width: 1005px;
     border-radius: 40px;
     overflow-y: auto;
     box-shadow: 0px 5px 5px #00000029;

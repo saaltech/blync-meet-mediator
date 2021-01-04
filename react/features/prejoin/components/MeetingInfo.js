@@ -349,7 +349,7 @@ function MeetingInfo(props) {
                         <label
                             className='form-label'
                             htmlFor='makePrivate'>
-                            {'Make this a private meeting'}
+                            {'Enable Password'}
                         </label>
                         <label className="switch" style={{ marginLeft: '40px' }}>
                             <input type="checkbox"
