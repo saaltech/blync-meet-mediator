@@ -17,7 +17,7 @@
         border-radius: $welcomePageButtonBorderRadius;
         font-size: 20px;
         font-weight: 400;
-        margin: 20px auto;
+        margin: 4% auto;
     }
     &.close{
         background: #0A5694;
@@ -25,7 +25,7 @@
         border-radius: $welcomePageButtonBorderRadius;
         font-size: 20px;
         font-weight: 400;
-        margin: 20px auto;
+        margin: 4% auto;
         margin-bottom: 40px;
     }
 
@@ -34,7 +34,7 @@
         cursor: not-allowed;
         pointer-events: none;
         opacity: 0.4;
-        margin: 20px auto;
+        margin: 4% auto;
     }
     &.guest {
         &.disabled {
