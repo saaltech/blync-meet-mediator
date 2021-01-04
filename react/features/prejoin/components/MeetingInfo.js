@@ -1,12 +1,12 @@
 
 import moment from 'moment';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { IconContext } from 'react-icons';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaLock, FaUnlock } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
-import { GiCombinationLock } from 'react-icons/gi';
-import { AiFillCheckCircle } from 'react-icons/ai';
+import { HiCheckCircle } from 'react-icons/hi';
+import { IoIosCloseCircle } from 'react-icons/io';
 
 import { translate } from '../../base/i18n';
 import { InputField } from '../../base/premeeting';
@@ -46,12 +46,22 @@ function MeetingInfo(props) {
         setIsMeetingNameEdit(false);
     }
 
-    function generatePassword(){
-        return Math.random().toString(36).slice(2,7);
+    function generatePassword() {
+        return Math.random().toString(36).slice(2, 7);
     }
+    useEffect(() => {
+        // if (!meetNow) {
+        //     let _current = moment();
+        //     let _min = _current.minutes();
+        //     let updated = (Math.floor(_min / 15) + 1) * 15;
+        //     let _from = _current.add(updated - _min, 'minutes');
+        //     let _to = moment(_current).add(60, 'minutes');
+        //     setMeetingFrom(_from);
+        //     setMeetingTo(_to);
+        // }
+    }, [meetNow]);
 
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
-
     return (
         <div className='meetingInfo'>
             {
@@ -138,11 +148,12 @@ function MeetingInfo(props) {
                                                 type="text"
                                                 autoFocus
                                                 onBlur={handleMeetingNameBlur}
+                                                onFocus={() => { setIsMeetingNameEdit(true); }}
                                                 onChange={(event) => { setMeetingName(event.target.value) }}
                                                 value={meetingName ? meetingName : ''}
                                             />
                                         ) : (
-                                                <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div>
+                                                <div className="input-meeting-wrapper" onClick={onClickEdit}>{meetingName ? meetingName : 'Enter Meeting Name'}</div>
                                             )}
                                         {!isMeetingNameEdit && (
                                             <IconContext.Provider value={{ style: { color: 'black' } }}>
@@ -164,18 +175,18 @@ function MeetingInfo(props) {
                 (meetNow || (isPureJoinFlow && isPureJoinFlow.isMeetingHost))
                 && (
                     <div className='you-are-host-wrapper'>
-                        <div className='you-are-host'> You are the host of this meeting</div>
+                        <div className='you-are-host'> <span className="you-text">You</span> are the host of this meeting</div>
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: isPrivate ? '#00C062' : '#D1D1D1' } }}>
 
-                                <GiCombinationLock size={15} />
+                                {isPrivate ? <FaLock size={15} /> : <FaUnlock size={15} />}
                             </IconContext.Provider>
                             <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? `Password: ${meetingPassword}` : 'No Password'}</div>
                         </div>
                         )}
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: enableWaitingRoom ? '#00C062' : '#D1D1D1' } }}>
-                                <AiFillCheckCircle size={15} />
+                                {enableWaitingRoom ? <HiCheckCircle size={15} /> : <IoIosCloseCircle size={15} />}
                             </IconContext.Provider>
                             <div className={`password-meeting ${!enableWaitingRoom ? 'fade-color' : ''}`}>Waiting Room</div>
                         </div>
@@ -196,7 +207,7 @@ function MeetingInfo(props) {
                     }
                 </div>
             } */}
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {
                     !meetNow && !isPureJoinFlow && !shareable
                     && <div className='date-field-container' style={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}>
@@ -231,13 +242,13 @@ function MeetingInfo(props) {
                             minTime={new Date()}
                             maxTime={new Date().setHours(24)}
                             selected={meetingFrom && new Date(meetingFrom)}
+                            timeIntervals={15}
                             onChange={value => {
                                 setMeetingFrom(value);
                                 const nd = new Date(value.getTime());
 
                                 nd.setHours(nd.getHours() + 1);
                                 setMeetingTo(nd);
-
                             }}
                             showTimeSelect={true}
                             timeFormat='HH:mm'
@@ -298,6 +309,7 @@ function MeetingInfo(props) {
                             //     return d;
                             // })() }
                             selected={meetingTo && new Date(meetingTo)}
+                            timeIntervals={15}
                             onChange={value => setMeetingTo(value)}
                             showTimeSelect={true}
                             timeFormat='HH:mm'

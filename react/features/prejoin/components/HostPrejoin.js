@@ -58,7 +58,9 @@ function HostPrejoin(props) {
     useEffect(() => {
         setClearErrors(true);
         setMeetNow(actions === 'meetNow');
-        isMeetNow(actions === 'meetNow');
+        const _name = props._user.name;
+        const _names = _name.split(' ');
+        setMeetingName(`${_names[0]}'s Meeting`);
         setMeetingPassword(generatePassword());
     }, []);
     const formRequestBody = () => {
@@ -83,7 +85,12 @@ function HostPrejoin(props) {
         url: config.conferenceManager + config.conferenceEP,
         method: 'post',
         body: formRequestBody,
-        onSuccess: data => updateConferenceState(data)
+        onSuccess: data => {
+            if (meetNow) {
+                props.setIsVideoMuted(true);
+            }
+            updateConferenceState(data)
+        }
     });
 
     const updateConferenceState = data => {
@@ -178,14 +185,16 @@ function HostPrejoin(props) {
 
     };
 
-    const setShareableAction = _shareable => {
+    const setShareableAction = (_shareable, isFromBack = false) => {
         /* if(joinNow) {
         window.location.href = window.location.origin + "?back=true";
         return;
       }*/
 
         setShareable(_shareable);
-
+        if (isFromBack) {
+            props.setIsVideoMuted(false);
+        }
         if (meetNow && _shareable) {
             props.showTrackPreviews(true);
         } else {
@@ -263,7 +272,7 @@ function HostPrejoin(props) {
                     && <Icon
                         className='backArrow'
                         src={IconArrowBack}
-                        onClick={() => setShareableAction(!shareable)} />
+                        onClick={() => setShareableAction(!shareable, true)} />
                 }
 
                 {/* {

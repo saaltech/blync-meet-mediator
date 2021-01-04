@@ -161,7 +161,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
 
     function renderCopyIcon(url) {
         return (<Tooltip
-            content={'Copy link'}
+            content={'Copy meeting details'}
             position='top'>
             <div className="Copy-Link" onClick={onClickCopy}>
                 <Icon src={IconCopy} />

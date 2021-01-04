@@ -103,6 +103,9 @@ class PreMeetingScreen extends PureComponent<Props> {
         if (prevProps && prevProps._user !== this.props._user) {
             this.setState({ showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
         }
+        if (prevProps && prevProps.videoTrack !== this.props.videoTrack) {
+            this.setMeetNow(this.state.actions === 'meetNow');
+        }
     }
     handleRouteChange(value) {
         redirectOnButtonChange(value);
@@ -115,6 +118,7 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     setMeetNow(value) {
+        console.log('in meet now', value);
         this.setState({
             meetNow: value
         }, () => {
@@ -123,12 +127,13 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     setIsVideoMuted(value) {
-        APP.store.dispatch(setVideoMuted(value))
+        console.log('ijijij', value, APP);
+        APP.store.dispatch(setVideoMuted(!value))
     }
 
     goToCreateHome() {
         window.location.href = `${window.location.origin}?actions=create`
-      }
+    }
 
     showTrackPreviews(value) {
         this.setState({
@@ -140,6 +145,7 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
+        console.log('jijijijijiji', videoMuted, videoTrack);
         const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
             joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
@@ -198,6 +204,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                                                 this.goToCreateHome()
                                             })
                                     }}
+                                    setIsVideoMuted={this.setIsVideoMuted}
                                     //Show join now after page reload in case of `meet now` option
                                     joinNow={meetNowSelected}
                                     meetingName={urlToShow}

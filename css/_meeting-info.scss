@@ -35,6 +35,7 @@
     .picker-field {
        text-align: center;
         height: 35px;
+        width: 210px;
         // border-color: #70707057;
         border-width: 0;
         border-radius: 25px;
@@ -141,7 +142,9 @@
     }
 
     .you-are-host {
-      
+      .you-text{
+          font-weight: bold;
+      }
         // padding: 20px 0px 20px;
     }
 
