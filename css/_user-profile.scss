@@ -7,6 +7,18 @@
     position: relative;
     line-height: 35px;
     font-size: 14px;
+    &:hover{
+        border-radius: 30px;
+        background-color: #f6f6f6;
+            .avatarProfile{
+                border: 3px solid #8FC3C3;
+                background: #3BA157 !important;
+            }
+            .userName{
+                color: #307A9C;
+            }
+        
+    }
 
     .avatarProfile {
         background: rgb(103, 174, 63) !important;
@@ -22,8 +34,10 @@
         text-align: right;
         float: left;
         // margin-left: 65px;
-        width: 95px;
+        width: 90px;
+        margin-top: 5px;
         white-space: nowrap;
+        font-weight: 500;
         overflow: hidden;
         text-overflow: ellipsis;
         padding: 5px 0 0;

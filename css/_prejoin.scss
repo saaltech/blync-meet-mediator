@@ -11,6 +11,7 @@
     cursor: pointer;
     padding: 5px;
     margin: 15px auto;
+   
     &.next {
         background: #0A5694;
         width: 200px;
@@ -18,6 +19,9 @@
         font-size: 20px;
         font-weight: 400;
         margin: 4% auto;
+        &:hover{
+            background: #004C6E;
+        }
     }
     &.close{
         background: #0A5694;
@@ -27,6 +31,9 @@
         font-weight: 400;
         margin: 4% auto;
         margin-bottom: 40px;
+        &:hover{
+            background: #004C6E;
+        }
     }
 
     &.disabled {
@@ -40,7 +47,7 @@
         &.disabled {
             color: #5497b4;
             cursor: not-allowed;
-            border: 1px solid #5497b4;
+            // border: 1px solid #5497b4;
         }
         font-weight: 200;
         background: #FFFFFF;
@@ -49,7 +56,7 @@
         font-size: 10px;
         margin: 0 auto;
         // border: 1px solid #005C85;
-        border-radius: $welcomePageButtonBorderRadius;
+        // border-radius: $welcomePageButtonBorderRadius;
     }
     &.join {
         font-size: 18px;
@@ -57,6 +64,9 @@
         font-weight: 400;
         width: 200px;
         border-radius: $welcomePageButtonBorderRadius;
+        &:hover{
+            background: #004C6E;
+        }
     }
 }
 
@@ -176,7 +186,7 @@
             margin: 25px auto;
 
             &:hover {
-                color: red;
+                color: #659CB5;
             }
         }
     }

@@ -13,8 +13,11 @@
 
     >div {
         margin: 15px;
-        background-color: #98BDCD;
+        background-color: #337D9D;
         border-radius: 20px;
+        &:hover{
+            background-color: #004C6E;
+        }
     }
 
     &__menu {

@@ -7,6 +7,20 @@
    width: max-content;
    border-radius: 12px; 
    box-shadow: 0px 5px 5px #0000001A;
+   &.meet-now {
+    background-color: #005C85;
+       &:hover {
+           background-color: #004C6E;
+           box-shadow: 6px 4px 5px #eee;
+       }
+   }
+   &.schedule-button {
+    background-color: #FEA73A;
+       &:hover {
+           background-color: #F09A36;
+           box-shadow: 6px 4px 5px #eee;
+       }
+   }
     .button-with-icon__icon {
         border-radius: 50%;
         background-color: white;
