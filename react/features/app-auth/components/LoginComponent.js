@@ -152,7 +152,7 @@ function LoginComponent(props) {
                     {
                         window.config.googleApiApplicationClientID
                         && window.config.enableCalendarIntegration
-                        && <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        && <div style={{ display: 'flex', marginBottom: '10px', alignItems: 'center', justifyContent: 'center' }}>
                             <span style={{ marginRight: '10px' }}>Login with</span>
                             <GoogleSignInButton
                                 onClick={_onClickGoogle}

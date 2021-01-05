@@ -50,15 +50,15 @@ function MeetingInfo(props) {
         return Math.random().toString(36).slice(2, 7);
     }
     useEffect(() => {
-        // if (!meetNow) {
-        //     let _current = moment();
-        //     let _min = _current.minutes();
-        //     let updated = (Math.floor(_min / 15) + 1) * 15;
-        //     let _from = _current.add(updated - _min, 'minutes');
-        //     let _to = moment(_current).add(60, 'minutes');
-        //     setMeetingFrom(_from);
-        //     setMeetingTo(_to);
-        // }
+        if (!meetNow) {
+            let _current = moment();
+            let _min = _current.minutes();
+            let updated = (Math.floor(_min / 15) + 1) * 15;
+            let _from = _current.add(updated - _min, 'minutes');
+            let _to = moment(_current).add(60, 'minutes');
+            setMeetingFrom(_from);
+            setMeetingTo(_to);
+        }
     }, [meetNow]);
 
     const meetingUrl = !meetNow && `${window.location.origin}/${meetingId}`;
