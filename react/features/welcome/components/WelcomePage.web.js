@@ -542,16 +542,18 @@ class WelcomePage extends AbstractWelcomePage {
                 ) : (
                         <div className="button-wrapper">
                             <ButtonWithIcon
+                                className="meet-now"
                                 labelText="MEET NOW"
-                                backGroundColor={"#005C85"}
+                                // backGroundColor={"#005C85"}
                                 onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
                                 source={'meet-now-group.svg'}
                             />
                             <div className="schedule--button">
                                 <ButtonWithIcon
+                                    className="schedule-button"
                                     labelText="SCHEDULE"
                                     onButtonClick={() => { this.handleClickMeetNow('schedule') }}
-                                    backGroundColor={"#FEA729"}
+                                    // backGroundColor={"#FEA729"}
                                     source={'schedule-image.svg'}
                                 />
                             </div>

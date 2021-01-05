@@ -43,12 +43,17 @@
         padding: 10px;
         border-radius: 5px;
         background-color: #E7EFF4;
+        &:hover:not(.selected):not(.disabled){
+            background-color: #005C85;
+            svg {
+                color: #e7eff4 !important;
+            }
+        }
         &.selected{
-            background-color: #00C062;
-          
+            background-color: #00C062 !important;
         }
         &.disabled{
-            background-color: #F6F6F6;
+            background-color: #F6F6F6 !important;
             pointer-events: none;
         }
     }
