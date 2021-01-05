@@ -259,6 +259,10 @@ function GuestPrejoin(props) {
 
     const goToHome = () => {
         setExiting(true);
+        
+        // notify external apps
+        APP.API.notifyReadyToClose();
+
         window.location.href = window.location.origin;
     };
 

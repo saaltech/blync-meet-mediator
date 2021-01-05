@@ -132,6 +132,8 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     goToCreateHome() {
+        // notify external apps
+        APP.API.notifyReadyToClose();
         window.location.href = `${window.location.origin}?actions=create`
     }
 

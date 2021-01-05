@@ -51,6 +51,9 @@ export function invalidateAndGoHome(skipRelogin = false) {
 }
 
 export function goHome() {
+    // notify external apps
+    APP.API.notifyReadyToClose();
+    
     window.location.href = window.location.origin
   }
 

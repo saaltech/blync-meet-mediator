@@ -52,6 +52,9 @@ export function isWelcomePageUserEnabled(stateful: Function | Object) {
 /**
  */
 export function redirectOnInvalidMeeting(meetingId) {
+    // notify external apps
+    APP.API.notifyReadyToClose();
+    
     window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
 }
 

@@ -127,6 +127,10 @@ function HostPrejoin(props) {
 
     const goToHome = () => {
         setExiting(true);
+
+        // notify external apps
+        APP.API.notifyReadyToClose();
+
         console.log('ttt', `${window.location.origin}?actions=create`);
         window.location.href = `${window.location.origin}?actions=create`;
     };
