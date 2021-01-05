@@ -244,6 +244,9 @@ function MeetingInfo(props) {
                             selected={meetingFrom && new Date(meetingFrom)}
                             timeIntervals={15}
                             onChange={value => {
+                                if(moment(value).isSameOrBefore(new Date())) {
+                                    return false;
+                                }
                                 setMeetingFrom(value);
                                 const nd = new Date(value.getTime());
 
@@ -310,7 +313,14 @@ function MeetingInfo(props) {
                             // })() }
                             selected={meetingTo && new Date(meetingTo)}
                             timeIntervals={15}
-                            onChange={value => setMeetingTo(value)}
+                            onChange={value => {
+                                if(moment(value).isSameOrBefore(meetingFrom)) {
+                                    return false;
+                                }
+                                else {
+                                    setMeetingTo(value) 
+                                }
+                            }}
                             showTimeSelect={true}
                             timeFormat='HH:mm'
                             dateFormat='MMM d, h:mm aa' />
