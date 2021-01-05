@@ -40,7 +40,6 @@ function HostPrejoin(props) {
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [shareable, setShareable] = useState(false);
     const { joinConference, actions } = props;
-    console.log('actions', actions);
     const [exiting, setExiting] = useState(false);
     const [clearErrors, setClearErrors] = useState(true);
     const userAgent = getUserAgentDetails();
@@ -127,7 +126,6 @@ function HostPrejoin(props) {
 
     const goToHome = () => {
         setExiting(true);
-        console.log('ttt', `${window.location.origin}?actions=create`);
         window.location.href = `${window.location.origin}?actions=create`;
     };
 

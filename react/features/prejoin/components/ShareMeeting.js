@@ -26,6 +26,7 @@ function ShareMeeting(props) {
     const {
         meetingUrl,
         t,
+        isShowLabel = true,
         meetingId: _meetingId,
         _conferenceName,
         _localParticipantName,
@@ -67,6 +68,7 @@ function ShareMeeting(props) {
                     custom={true} /> */}
                 <InviteByEmailSection
                     inviteSubject={inviteSubject}
+                    isShowLabel={isShowLabel}
                     inviteText={invite}
                     custom={true} />
 

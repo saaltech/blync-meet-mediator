@@ -1,11 +1,16 @@
 body.welcome-page {
     background: inherit;
     overflow: auto;
+  
     .leftwatermark {
         display: block;
     }
 }
 
+*{
+    box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
+}
 @media only screen and (max-width: 800px) {
     .welcome-page-background {
         position: absolute;
@@ -507,6 +512,8 @@ body.welcome-page {
 }
 
 .welcome {
+    box-sizing: content-box !important;
+    -webkit-box-sizing: content-box !important;
     .show-flex  {
         flex: 1;
     }

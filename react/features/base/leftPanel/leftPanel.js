@@ -31,7 +31,6 @@ function LeftPanel(props) {
 
     const createButtonColor = isNotCreatePermission ? '#D1D1D1' : activeButton === 'create' ? 'white' : '#005C85'
     const createTextColor = isNotCreatePermission ? '#D1D1D1' : activeButton === 'create' ? '#00C062' : '#005C85'
-    console.log(createButtonColor, createTextColor);
     function renderButton() {
         let reactElement = null;
 

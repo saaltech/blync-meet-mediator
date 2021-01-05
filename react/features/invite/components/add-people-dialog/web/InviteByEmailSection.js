@@ -44,7 +44,7 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: Props) {
+function InviteByEmailSection({ isShowLabel = true, inviteSubject, inviteText, t, custom = false }: Props) {
     const [isActive, setIsActive] = useState(false);
     const encodedInviteSubject = encodeURIComponent(inviteSubject);
     const encodedInviteText = encodeURIComponent(inviteText);
@@ -174,7 +174,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
             {
                 custom
                     ? <div className='share-meeting-details'>
-                        <div className='label'>{t('addPeople.shareInvite')}</div>
+                        {isShowLabel ? <div className='label'>{t('addPeople.shareInvite')}</div> : <></>}
                         <div className='modalities'>
                             {renderCopyIcon()}
                             {renderEmailIcons()}
