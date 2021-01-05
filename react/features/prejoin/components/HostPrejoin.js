@@ -30,8 +30,8 @@ import MeetingInfo from './MeetingInfo';
 
 function HostPrejoin(props) {
     const [meetNow, setMeetNow] = useState(true);
-    const [meetingId, setMeetingId] = useState((props.meetingDetails || {}).meetingId);
-    const [meetingName, setMeetingName] = useState((props.meetingDetails || {}).meetingName);
+    const [meetingId, setMeetingId] = useState((props.meetingId || ''));
+    const [meetingName, setMeetingName] = useState('');
     const [isPrivate, setIsPrivate] = useState(true);
     const [meetingPassword, setMeetingPassword] = useState('');
     const [meetingFrom, setMeetingFrom] = useState('');
@@ -39,7 +39,7 @@ function HostPrejoin(props) {
     const [enableWaitingRoom, setEnableWaitingRoom] = useState(true);
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [shareable, setShareable] = useState(false);
-    const { joinConference, actions } = props;
+    const { joinConference, actions, syncStoreFromParentWindowStore } = props;
     console.log('actions', actions);
     const [exiting, setExiting] = useState(false);
     const [clearErrors, setClearErrors] = useState(true);
@@ -56,6 +56,7 @@ function HostPrejoin(props) {
     }
 
     useEffect(() => {
+        syncStoreFromParentWindowStore();
         setClearErrors(true);
         setMeetNow(actions === 'meetNow');
         const _name = props._user.name;

@@ -57,7 +57,8 @@ function GuestPrejoin(props) {
     const [meetingFrom, setMeetingFrom] = useState(null);
     const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true,
-        joinMeeting, _jid, _user, _isGoogleSigninUser } = props;
+        joinMeeting, _jid, _user, _isGoogleSigninUser, 
+        syncStoreFromParentWindowStore } = props;
     const [isMeetingHost, setIsMeetingHost] = useState(false);
     const [continueAsGuest, setContinueAsGuest] = useState(false);
     const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
@@ -69,6 +70,7 @@ function GuestPrejoin(props) {
     const [meetingEnded, setMeetingEnded] = useState(false);
 
     useEffect(() => {
+        syncStoreFromParentWindowStore();
         setTimeout(async () => {
             if (_isUserSignedOut) {
                 await unauthGetConference();
@@ -259,7 +261,7 @@ function GuestPrejoin(props) {
 
     const goToHome = () => {
         setExiting(true);
-        
+
         // notify external apps
         APP.API.notifyReadyToClose();
 
