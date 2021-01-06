@@ -7,14 +7,12 @@
     position: relative;
     line-height: 35px;
     font-size: 14px;
-    &:hover{
-        border-radius: 30px;
-        background-color: #f6f6f6;
-            .avatarProfile{
+    &:hover {
+            .avatarProfile {
                 border: 3px solid #8FC3C3;
                 background: #3BA157 !important;
             }
-            .userName{
+            .userName {
                 color: #307A9C;
             }
         
@@ -32,16 +30,16 @@
 
     .userName {
         text-align: right;
-        float: left;
-        // margin-left: 65px;
-        width: 90px;
+        float: right;
+        max-width: 150px;
         margin-top: 5px;
         white-space: nowrap;
         font-weight: 500;
         overflow: hidden;
         text-overflow: ellipsis;
-        padding: 5px 0 0;
+        padding: 5px;
         color: #393939;
+        padding-right: 70px;
     }
 
     .menuIcon {
@@ -71,11 +69,11 @@
             box-shadow: 0 2px 15px #aeaeae;
             color: #393939;
             list-style: none;
-            right: 5px;
+            right: 12px;
             padding: 5px 20px;
             width: 100px;
             text-align: left;
-            top: 50px;
+            top: 60px;
             z-index: 200;
 
             li {
