@@ -72,7 +72,8 @@ class PreMeetingScreen extends PureComponent<Props> {
             showTrackPreviews: false,
             navigatedFromHome: undefined,
             joinMeeting: false,
-            exiting: false
+            exiting: false,
+            uuid: Math.random().toString(36).slice(2, 7)
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -168,6 +169,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                             joinMeeting={ joinMeeting }
                             meetingId={urlToShow}
                             showTrackPreviews={this.showTrackPreviews}
+                            uuid={this.state.uuid}
                         />
                     }
                 </div>
