@@ -168,6 +168,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                             joinMeeting={ joinMeeting }
                             meetingId={urlToShow}
                             showTrackPreviews={this.showTrackPreviews}
+                            uuid={Math.random().toString(36).slice(2, 7)}
                         />
                     }
                 </div>
