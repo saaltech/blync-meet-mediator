@@ -4,11 +4,13 @@ import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { RiVideoChatFill } from 'react-icons/ri';
 import { IconContext } from 'react-icons';
-import { FaRegCalendarAlt, FaRegAddressCard, FaLock, FaShareAlt } from 'react-icons/fa';
+import { FaRegCalendarAlt, FaRegAddressCard, FaLock, FaUnlock, FaShareAlt, FaRegCalendarTimes } from 'react-icons/fa';
 import { Menu, Dropdown } from 'antd';
 import { GoKebabVertical } from 'react-icons/go';
+import { config } from '../../../../config';
+import useRequest from '../../../hooks/use-request';
 
-import { BiTime } from 'react-icons/bi';
+import { IoIosCloseCircle } from 'react-icons/io';
 import { BsPersonLinesFill } from 'react-icons/bs';
 import { FaSyncAlt } from 'react-icons/fa';
 import { GiSandsOfTime } from 'react-icons/gi';
@@ -31,19 +33,33 @@ type Props = {
  *
  */
 function ManageMeetings(props: Props) {
-    const [showModal, setShowModal] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
     const [menuExpanded, setMenuExpanded] = useState(false);
 
+
+
     // selected calendar event
     const [selectedEvent, setSelectedEvent] = useState(null);
-    const [calendarEvents, setCalendarEvents] = useState([{ 'topic': 'anuj', id: '12', url: 'yes' }, { 'topic': 'anuj', id: '13', url: 'yes' }, { 'topic': 'anuj', id: '14', url: 'yes' }]);
+    const [calendarEvents, setCalendarEvents] = useState([]);
 
     const { t } = props;
 
     const wrapperRef = React.createRef();
 
+    const setData = data => {
+        if (data && data.length) {
+            setCalendarEvents(data.slice(data.length - 50, data.length));
+        } else {
+            setCalendarEvents([]);
+        }
+    }
+
+    const [getConferences, fetchErrors] = useRequest({
+        url: `${config.conferenceManager + config.conferenceEP}`,
+        method: 'get',
+        onSuccess: data => setData(data)
+    });
     /**
      * Collapse if clicked on outside of element.
      */
@@ -54,49 +70,20 @@ function ManageMeetings(props: Props) {
         }
     };
 
+    const handleClickStart = meetingId => {
+        window.location.href = `${window.location.origin}/${meetingId}`;
+    }
     /**
      * Collapse if clicked on outside of element.
      */
 
     useEffect(() => {
+        getConferences(true);
+    }, [])
+
+    useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
     });
-
-
-    const menu = (
-        <Menu>
-            <Menu.Item key="0">
-                <div style={{ display: 'flex' }}>
-                    <div style={{
-                        marginRight: '30px',
-                        marginTop: '5px'
-                    }}>
-                        <IconContext.Provider value={{
-                            style: {
-                                color: '#005C85'
-                            }
-                        }}>
-                            <FaShareAlt size={20} />
-
-                        </IconContext.Provider>
-
-                    </div>
-                    <div>
-                        <div>Share meeting Details
-                    </div>
-                        <div>
-                            <ShareMeeting isShowLabel={false} />
-                        </div>
-                    </div>
-                </div>
-            </Menu.Item>
-            <Menu.Item key="1">
-                <a href="http://www.taobao.com/">2nd menu item</a>
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item key="3">3rd menu item</Menu.Item>
-        </Menu>
-    );
 
     return (
         <div
@@ -118,20 +105,41 @@ function ManageMeetings(props: Props) {
                     }
                     {
                         calendarEvents.map((event, index) =>
-                            (<div className="meeting-wrapper">
+                            (<div className="meeting-wrapper" key={event.conferenceId}>
                                 <div className="meeting-topic-wrapper">
                                     <div className="topic-name">
-                                        {`Topic : ${event.topic}`}
+                                        {`Topic : ${event.conferenceName}`}
                                     </div>
                                     <div className="menu-details" onClick={() => { setMenuExpanded(true); setSelectedId(event.id) }}>
-                                        <Dropdown arrow={true} placement={'bottomCenter'} overlay={menu} trigger={['click']}>
-                                            <a><IconContext.Provider value={{
-                                                style: {
-                                                    color: '#005C85'
-                                                }
-                                            }}>
-                                                <GoKebabVertical size={20} />
-                                            </IconContext.Provider>
+                                        <Dropdown arrow={true} placement={'bottomRight'} overlayClassName="meeting-share-dropdown" overlay={<Menu>
+                                            <Menu.Item key="0">
+                                                <div style={{ display: 'flex' }}>
+                                                    <div>
+                                                        <div style={{ fontSize: '14px', color: '#393939' }}>
+                                                            Share meeting Details
+                                                            </div>
+                                                        <div>
+                                                            <ShareMeeting isShowLabel={false}
+                                                                meetingId={event.conferenceId}
+                                                                meetingUrl={`${window.location.origin}/${event.conferenceId}`}
+                                                                meetingName={event.conferenceName}
+                                                                meetingFrom={event.scheduledFrom}
+                                                                meetingTo={event.scheduledTo}
+                                                                meetingPassword={event.isSecretEnabled ? event.conferenceSecret : ''} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Menu.Item>
+                                        </Menu>}>
+                                            <a>
+                                                <IconContext.Provider value={{
+                                                    style: {
+                                                        color: '#005C85'
+                                                    }
+                                                }}>
+                                                    <FaShareAlt size={20} />
+
+                                                </IconContext.Provider>
                                             </a>
                                         </Dropdown>
                                         <div className='menuIcon'>
@@ -192,23 +200,49 @@ function ManageMeetings(props: Props) {
                                                     }
                                                 }}>
 
-                                                    <RiVideoChatFill size={20} />
+                                                    <RiVideoChatFill size={16} />
                                                 </IconContext.Provider>
                                             </div>
-                                            <div className="meeting-url-link"> anuj idhd hhdn shhs </div>
+                                            <div className="meeting-url-link" title={`${window.location.origin}/${event.conferenceId}`}>{`${window.location.origin}/${event.conferenceId}`}</div>
                                         </div>
                                         <div className="meeting-date">
                                             <div className="meeting-calendar-icon">
-                                                <IconContext.Provider value={{
-                                                    style: {
-                                                        color: '#00C062'
-                                                    }
-                                                }}>
+                                                {event.scheduledFrom && event.scheduledTo ? (
+                                                    <IconContext.Provider value={{
+                                                        style: {
+                                                            color: '#00C062'
+                                                        }
+                                                    }}>
 
-                                                    <FaRegCalendarAlt size={20} />
-                                                </IconContext.Provider>
+                                                        <FaRegCalendarAlt size={16} />
+                                                    </IconContext.Provider>
+                                                ) : (
+                                                        <IconContext.Provider value={{
+                                                            style: {
+                                                                color: '#D1D1D1'
+                                                            }
+                                                        }}>
+
+                                                            <FaRegCalendarTimes size={16} />
+                                                        </IconContext.Provider>
+                                                    )}
                                             </div>
-                                            <div className="meeting-calendar-date"> anuj idhd hhdn shhs </div>
+                                            {event.scheduledFrom && event.scheduledTo ? (
+                                                <div className="meeting-calendar-date">
+                                                    {'From: '}
+                                                    {
+                                                        moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm a')
+                                                    }
+                                                    {
+                                                        event.scheduledTo && (
+                                                            ` - ${moment(event.scheduledTo).isSame(event.scheduledFrom, 'day') ?
+                                                                moment(event.scheduledTo).locale('en').format('hh:mm a') :
+                                                                moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm a')}`)
+                                                    }
+                                                </div>
+                                            ) : (<div className="meeting-calendar-date no-schedule">
+                                                No Schedule
+                                                </div>)}
                                         </div>
                                     </div>
 
@@ -224,37 +258,63 @@ function ManageMeetings(props: Props) {
                                                     <FaRegAddressCard size={20} />
                                                 </IconContext.Provider>
                                             </div>
-                                            <div className="meeting-id">{'ID: anuj idhd hhdn shhs '}</div>
+                                            <div className="meeting-id" title={`ID: ${event.conferenceId}`}>{`ID: ${event.conferenceId}`}</div>
                                         </div>
                                         <div className="meeting-password-details">
                                             <div className="meeting-password-icon">
-                                                <IconContext.Provider value={{
-                                                    style: {
-                                                        color: '#00C062'
-                                                    }
-                                                }}>
+                                                {event.isSecretEnabled ? (
+                                                    <IconContext.Provider value={{
+                                                        style: {
+                                                            color: '#00C062'
+                                                        }
+                                                    }}>
 
-                                                    <FaLock size={15} />
-                                                </IconContext.Provider>
+                                                        <FaLock size={15} />
+                                                    </IconContext.Provider>
+                                                ) : (
+                                                        <IconContext.Provider value={{
+                                                            style: {
+                                                                color: '#D1D1D1'
+                                                            }
+                                                        }}>
+
+                                                            <FaUnlock size={15} />
+                                                        </IconContext.Provider>
+                                                    )}
                                             </div>
-                                            <div className="meeting-password"> anuj idhd hhdn shhs </div>
+                                            {event.isSecretEnabled ? (
+                                                <div className="meeting-password">{`Password : ${event.conferenceSecret}`}</div>
+                                            ) : (<div className="meeting-password no-password">{`No Password`}</div>)}
                                         </div>
                                         <div className="meeting-waiting-room-details">
                                             <div className="meeting-waiting-room-icon">
-                                                <IconContext.Provider value={{
-                                                    style: {
-                                                        color: '#00C062'
-                                                    }
-                                                }}>
+                                                {event.isWaitingEnabled ? (
+                                                    <IconContext.Provider value={{
+                                                        style: {
+                                                            color: '#00C062'
+                                                        }
+                                                    }}>
 
-                                                    <HiCheckCircle size={20} />
-                                                </IconContext.Provider>
+                                                        <HiCheckCircle size={20} />
+                                                    </IconContext.Provider>
+                                                ) : (
+                                                        <IconContext.Provider value={{
+                                                            style: {
+                                                                color: '#D1D1D1'
+                                                            }
+                                                        }}>
+
+                                                            <IoIosCloseCircle size={20} />
+                                                        </IconContext.Provider>
+                                                    )}
                                             </div>
-                                            <div className="meeting-waiting-room"> anuj idhd hhdn shhs </div>
+                                            {event.isWaitingEnabled ? (
+                                                <div className="meeting-waiting-room">Waiting Room</div>
+                                            ) : (<div className="meeting-waiting-room no-waiting">Waiting Room</div>)}
                                         </div>
-                                        <div className="meeting-start">
-                                            <div className="meeting-start-container">Start</div>
-                                        </div>
+                                    </div>
+                                    <div className="meeting-start">
+                                        <div className="meeting-start-container" onClick={() => { handleClickStart(event.conferenceId); }}>Start</div>
                                     </div>
                                 </div>
                             </div>

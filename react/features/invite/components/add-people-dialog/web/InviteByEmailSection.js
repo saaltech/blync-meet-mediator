@@ -149,7 +149,7 @@ function InviteByEmailSection({ isShowLabel = true, inviteSubject, inviteText, t
 
     function renderWhatsappShare(url) {
         return (<Tooltip
-            content={'Whatsapp message'}
+            content={isShowLabel ? 'Whatsapp message': ''}
             position='top'>
             <WhatsappShareButton
                 round={"true"}
@@ -161,7 +161,7 @@ function InviteByEmailSection({ isShowLabel = true, inviteSubject, inviteText, t
 
     function renderCopyIcon(url) {
         return (<Tooltip
-            content={'Copy meeting details'}
+            content={isShowLabel ? 'Copy meeting details' : ''}
             position='top'>
             <div className="Copy-Link" onClick={onClickCopy}>
                 <Icon src={IconCopy} />

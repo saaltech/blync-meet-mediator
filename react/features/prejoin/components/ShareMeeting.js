@@ -58,7 +58,7 @@ function ShareMeeting(props) {
     });
 
     return (
-        <div className="shareMeetingWrapper">
+        <div className="shareMeetingWrapper" style={{ marginTop: !isShowLabel ? '10px' : '25px' }}>
             <div className={'shareMeeting'}>
                 {/* <div className='label'>Share Meeting Details</div>
 

@@ -1,3 +1,11 @@
+.meeting-share-dropdown{
+    .ant-dropdown-arrow {
+        right: 0px;
+    }
+    .ant-dropdown-menu {
+        left: 10px;
+    }
+}
 .manageMeeting {
     display: flex;
     flex-direction: column;
@@ -7,11 +15,13 @@
     line-height: 35px;
     font-size: 14px;
     color: #393939;
+    
     .meeting-wrapper{
         background-color: white;
         border-radius: 20px;
         padding: 15px;
         margin-top: 20px;
+        position: relative;
         .meeting-topic-wrapper {
             display: flex;
             justify-content: space-between;
@@ -20,6 +30,10 @@
                 color: #393939;
                 font-weight: bold;
                 font-size: 14px;
+                width: 60%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
             }
             .menu-details {
                 position: relative;
@@ -79,12 +93,13 @@
             .meeting-url{
                 display: flex;
                 align-items: center;
-                flex: 0 1 200px;
+                flex: 1;
+                min-width: 200px;
                 .meeting-url-link {
                     margin-left: 10px;
                     color: #393939;
                     font-size: 14px;
-                    width: 150px;
+                    width: 80%;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
@@ -94,15 +109,19 @@
             .meeting-date{
                 display: flex;
                 align-items: center;
-                flex: 0 1 200px;
+                flex: 2;
+                min-width: 200px;
                 .meeting-calendar-date {
                     margin-left: 10px;
                     color: #393939;
                     font-size: 14px;
-                    width: 150px;
+                    width: 80%;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    &.no-schedule {
+                        color: #D1D1D1;
+                    }
                 }
             }
         }
@@ -112,12 +131,13 @@
             .meeting-id-details{
                 display: flex;
                 align-items: center;
-                flex: 0 1 200px;
+                flex: 1;
+                min-width: 200px;
                 .meeting-id {
                     margin-left: 10px;
                     color: #393939;
+                    width: 80%;
                     font-size: 14px;
-                    width: 150px;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
@@ -126,43 +146,52 @@
             .meeting-password-details{
                 display: flex;
                 align-items: center;
-                flex: 0 1 200px;
+                flex: 1;
+                min-width: 200px;
                 .meeting-password {
                     margin-left: 10px;
                     color: #393939;
                     font-size: 14px;
-                    width: 150px;
+                    width: 80%;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    &.no-password{
+                        color: #D1D1D1;
+                    }
                 }
             }
             .meeting-waiting-room-details{
                 display: flex;
                 align-items: center;
-                flex: 0 1 200px;
+                flex: 1;
+                min-width: 200px;
                 .meeting-waiting-room {
                     margin-left: 10px;
                     color: #393939;
                     font-size: 14px;
-                    width: 150px;
+                    width: 80%;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    &.no-waiting {
+                        color: #D1D1D1;
+                    }
                 }
             }
-            .meeting-start{
-                display: flex;
-                align-items: center;
-                flex: 0 1 100px;
-                .meeting-start-container {
-                    border-radius: 20px;
-                    border: 1px solid #005694;
-                    padding: 0 10px;
-                    color: #005694;
-                    text-align: center;
-                    width: 75px;
-                }
+        }
+        .meeting-start{
+            position: absolute;
+            bottom: 15px;
+            right: 10px;
+            cursor: pointer;
+            .meeting-start-container {
+                border-radius: 20px;
+                border: 1px solid #005694;
+                padding: 0 10px;
+                color: #005694;
+                text-align: center;
+                width: 75px;
             }
         }
     }
@@ -220,8 +249,8 @@
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0 30px;
-        height: 52vh;
-        flex: 1;
+        height: 40vh;
+        // flex: 1;
 
         .group-title {
             font-size: 16px;
