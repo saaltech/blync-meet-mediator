@@ -107,7 +107,7 @@ function ManageMeetings(props: Props) {
                         calendarEvents.map((event, index) =>
                             (<div className="meeting-wrapper" key={event.conferenceId}>
                                 <div className="meeting-topic-wrapper">
-                                    <div className="topic-name">
+                                    <div className="topic-name" title={event.conferenceName}>
                                         {`Topic : ${event.conferenceName}`}
                                     </div>
                                     <div className="menu-details" onClick={() => { setMenuExpanded(true); setSelectedId(event.id) }}>
@@ -228,7 +228,14 @@ function ManageMeetings(props: Props) {
                                                     )}
                                             </div>
                                             {event.scheduledFrom && event.scheduledTo ? (
-                                                <div className="meeting-calendar-date">
+                                                <div className="meeting-calendar-date" title={`${
+                                                    moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm a')
+                                                    }${
+                                                    event.scheduledTo && (
+                                                        ` - ${moment(event.scheduledTo).isSame(event.scheduledFrom, 'day') ?
+                                                            moment(event.scheduledTo).locale('en').format('hh:mm a') :
+                                                            moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm a')}`)
+                                                    }`}>
                                                     {'From: '}
                                                     {
                                                         moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm a')
@@ -258,7 +265,7 @@ function ManageMeetings(props: Props) {
                                                     <FaRegAddressCard size={20} />
                                                 </IconContext.Provider>
                                             </div>
-                                            <div className="meeting-id" title={`ID: ${event.conferenceId}`}>{`ID: ${event.conferenceId}`}</div>
+                                            <div className="meeting-id" title={event.conferenceId}>{`ID: ${event.conferenceId}`}</div>
                                         </div>
                                         <div className="meeting-password-details">
                                             <div className="meeting-password-icon">
@@ -283,7 +290,7 @@ function ManageMeetings(props: Props) {
                                                     )}
                                             </div>
                                             {event.isSecretEnabled ? (
-                                                <div className="meeting-password">{`Password : ${event.conferenceSecret}`}</div>
+                                                <div className="meeting-password" title={event.conferenceSecret}>{`Password : ${event.conferenceSecret}`}</div>
                                             ) : (<div className="meeting-password no-password">{`No Password`}</div>)}
                                         </div>
                                         <div className="meeting-waiting-room-details">
