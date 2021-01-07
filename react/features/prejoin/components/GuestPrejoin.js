@@ -57,16 +57,16 @@ function GuestPrejoin(props) {
     const [meetingFrom, setMeetingFrom] = useState(null);
     const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true,
-        joinMeeting, _jid, _user, _isGoogleSigninUser } = props;
-    const [isMeetingHost, setIsMeetingHost] = useState(false);
-    const [continueAsGuest, setContinueAsGuest] = useState(false);
-    const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
-    const [showPasswordError, setShowPasswordError] = useState('');
-    const [isSecretEnabled, setIsSecretEnabled] = useState(false);
-    const [conferenceStatus, setConferenceStatus] = useState('');
-    const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
-    const [participantRejected, setParticipantRejected] = useState(false);
-    const [meetingEnded, setMeetingEnded] = useState(false);
+        joinMeeting, _jid, _user, _isGoogleSigninUser, uuid } = props;
+    const [ isMeetingHost, setIsMeetingHost ] = useState(false);
+    const [ continueAsGuest, setContinueAsGuest ] = useState(false);
+    const [ showJoinMeetingForm, setShowJoinMeetingForm ] = useState(false);
+    const [ showPasswordError, setShowPasswordError ] = useState('');
+    const [ isSecretEnabled, setIsSecretEnabled ] = useState(false);
+    const [ conferenceStatus, setConferenceStatus ] = useState('');
+    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
+    const [ participantRejected, setParticipantRejected ] = useState(false);
+    const [ meetingEnded, setMeetingEnded ] = useState(false);
 
     useEffect(() => {
         setTimeout(async () => {
@@ -120,7 +120,7 @@ function GuestPrejoin(props) {
     const formWaitingParticipantRequestBody = () => {
         return {
             'conferenceId': meetingId,
-            'jid': _jid,
+            'jid': uuid,
             'email': guestEmail,
             'username': guestName
         };
@@ -479,7 +479,7 @@ function GuestPrejoin(props) {
                             shareable={false} />
 
                         {
-                            enableWaitingRoom && _jid
+                            enableWaitingRoom && uuid
                             && <SockJsClient
                                 onMessage={participant => {
                                     updateWaitingStatus(participant);
@@ -487,7 +487,7 @@ function GuestPrejoin(props) {
                                 ref={client => {
                                     clientRef = client;
                                 }}
-                                topics={[`${props._participantsSocketTopic}/${_jid.split('/')[0]}`]}
+                                topics={[`${props._participantsSocketTopic}/${ uuid }`]}
                                 url={props._socketLink} />
                         }
 
