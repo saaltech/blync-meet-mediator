@@ -9,7 +9,7 @@ import { RiVideoChatFill } from 'react-icons/ri';
 import { BiLoaderCircle } from 'react-icons/bi';
 import { FaCalendarAlt } from 'react-icons/fa';
 import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
-import { LoginComponent, decideAppLogin, Profile, CalendarProfile, validationFromNonComponents } from '../../../features/app-auth';
+import { LoginComponent, decideAppLogin, Profile, CalendarProfile, ManageMeetings, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
@@ -227,7 +227,6 @@ class WelcomePage extends AbstractWelcomePage {
     /**
      */
     setInvalidMeetingId(invalidMeetingId) {
-        console.log('hi invalid', invalidMeetingId);
         this.setValueInRoomInputBox(invalidMeetingId);
         this.setSwitchActiveIndex(1);
     }
@@ -323,7 +322,6 @@ class WelcomePage extends AbstractWelcomePage {
             hideLogin: true,
             loginErrorMsg: ''
         });
-        console.log('hello', this.state.switchActiveIndex, this._canCreateMeetings());
         if (this.state.switchActiveIndex === 0) {
             this.setSwitchActiveIndex();
             if (!this._canCreateMeetings()) {
@@ -411,7 +409,6 @@ class WelcomePage extends AbstractWelcomePage {
             // rehydration doesnt complete before we navigate to the prejoin page in _onJoin method below.
 
             const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
-            console.log('hi', appAuth);
 
             if ((appAuth.meetingDetails || {}).meetingId) {
                 clearInterval(intervalId);
@@ -419,7 +416,6 @@ class WelcomePage extends AbstractWelcomePage {
                 // Check if the meeting exists
                 if (appAuth.meetingDetails.isMeetingCode) {
                     const meetingExists = await getMeetingById(appAuth.meetingDetails.meetingId);
-                    console.log('hinnn', meetingExists);
                     if (!meetingExists) {
                         super._onRoomChange('');
                         this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);
@@ -561,11 +557,16 @@ class WelcomePage extends AbstractWelcomePage {
                     )
                 }
             </div>
-            <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} >
+            <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : ''}`} >
                 {
                     !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }
             </div>
+            {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
+            {
+                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
+                ) : <></>
+            }
         </>);
     }
 
@@ -798,7 +799,6 @@ class WelcomePage extends AbstractWelcomePage {
                 // rehydration doesnt complete before we navigate to the prejoin page in _onJoin method below.
 
                 const appAuth = JSON.parse(window.localStorage.getItem('features/app-auth'));
-                console.log('hi', appAuth);
 
                 if ((appAuth.meetingDetails || {}).meetingName) {
                     clearInterval(intervalId);
@@ -806,7 +806,6 @@ class WelcomePage extends AbstractWelcomePage {
                     // Check if the meeting exists
                     if (appAuth.meetingDetails.isMeetingCode) {
                         const meetingExists = await getMeetingById(appAuth.meetingDetails.meetingId);
-                        console.log('hinnn', meetingExists);
                         if (!meetingExists) {
                             super._onRoomChange('');
                             this.setInvalidMeetingId(`${appAuth.meetingDetails.meetingId}`);

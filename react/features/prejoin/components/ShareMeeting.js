@@ -26,6 +26,7 @@ function ShareMeeting(props) {
     const {
         meetingUrl,
         t,
+        isShowLabel = true,
         meetingId: _meetingId,
         _conferenceName,
         _localParticipantName,
@@ -57,7 +58,7 @@ function ShareMeeting(props) {
     });
 
     return (
-        <div className="shareMeetingWrapper">
+        <div className="shareMeetingWrapper" style={{ marginTop: !isShowLabel ? '10px' : '25px' }}>
             <div className={'shareMeeting'}>
                 {/* <div className='label'>Share Meeting Details</div>
 
@@ -67,6 +68,7 @@ function ShareMeeting(props) {
                     custom={true} /> */}
                 <InviteByEmailSection
                     inviteSubject={inviteSubject}
+                    isShowLabel={isShowLabel}
                     inviteText={invite}
                     custom={true} />
 
