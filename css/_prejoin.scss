@@ -73,6 +73,7 @@
 .hostPrejoinWrap {
     .meet-now{
         padding: 30px 0px;
+        padding-left: 30px;
         display: flex;
         align-items: center;
         .guest-icon-wrapper{
@@ -107,6 +108,26 @@
             right: 20px;
             position: fixed;
         }
+        .hostPrejoin-container{
+            display: flex;
+            height: 100%;
+            .background-width {
+                height: calc(100% - 123px);
+                flex: 1;
+            }
+            .left-background-image {
+                background-image: url('./../images/left-background-premeeting.png');
+                background-size: 95% 80%;
+                background-repeat: no-repeat;
+              
+                background-position: bottom right;
+            }
+            .right-background-image {
+                background-image: url('./../images/right-background-premeeting.png');
+                background-size: 95% 80%;
+                background-repeat: no-repeat;
+                background-position: bottom left;
+            }
 
 .hostPrejoin {
     margin-bottom: 25px;
@@ -114,7 +135,9 @@
     flex-direction: column;
     position: relative;
     z-index: 100;
+    flex: 1;
     background-color: white;
+    height: fit-content;
     width: 50%;
     // height: 100%;
     min-width: 700px;
@@ -247,8 +270,21 @@
     }
     
 }
+        }
 }
 
+@media only screen and (max-width: 1080px) {
+    .hostPrejoinWrap {
+        .hostPrejoin-container {
+       .left-background-image {
+            background-image: none;
+       }
+       .right-background-image {
+           background-image: none;
+       }
+    }
+    }
+}
 .shareMeetingWrapper {
     width: 100%;
     display: flex;
