@@ -135,7 +135,6 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     setMeetNow(value) {
-        console.log('in meet now', value);
         this.setState({
             meetNow: value
         }, () => {
@@ -144,7 +143,6 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     setIsVideoMuted(value) {
-        console.log('ijijij', value, APP);
         APP.store.dispatch(setVideoMuted(!value))
     }
 
@@ -164,7 +162,6 @@ class PreMeetingScreen extends PureComponent<Props> {
 
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
-        console.log('jijijijijiji', videoMuted, videoTrack);
         const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
             joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;

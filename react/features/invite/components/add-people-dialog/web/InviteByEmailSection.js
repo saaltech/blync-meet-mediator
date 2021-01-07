@@ -44,7 +44,7 @@ type Props = {
  *
  * @returns {React$Element<any>}
  */
-function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: Props) {
+function InviteByEmailSection({ isShowLabel = true, inviteSubject, inviteText, t, custom = false }: Props) {
     const [isActive, setIsActive] = useState(false);
     const encodedInviteSubject = encodeURIComponent(inviteSubject);
     const encodedInviteText = encodeURIComponent(inviteText);
@@ -149,7 +149,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
 
     function renderWhatsappShare(url) {
         return (<Tooltip
-            content={'Whatsapp message'}
+            content={isShowLabel ? 'Whatsapp message': ''}
             position='top'>
             <WhatsappShareButton
                 round={"true"}
@@ -161,7 +161,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
 
     function renderCopyIcon(url) {
         return (<Tooltip
-            content={'Copy meeting details'}
+            content={isShowLabel ? 'Copy meeting details' : ''}
             position='top'>
             <div className="Copy-Link" onClick={onClickCopy}>
                 <Icon src={IconCopy} />
@@ -174,7 +174,7 @@ function InviteByEmailSection({ inviteSubject, inviteText, t, custom = false }: 
             {
                 custom
                     ? <div className='share-meeting-details'>
-                        <div className='label'>{t('addPeople.shareInvite')}</div>
+                        {isShowLabel ? <div className='label'>{t('addPeople.shareInvite')}</div> : <></>}
                         <div className='modalities'>
                             {renderCopyIcon()}
                             {renderEmailIcons()}

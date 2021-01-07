@@ -40,7 +40,6 @@ function HostPrejoin(props) {
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
     const [shareable, setShareable] = useState(false);
     const { joinConference, actions, syncStoreFromParentWindowStore } = props;
-    console.log('actions', actions);
     const [exiting, setExiting] = useState(false);
     const [clearErrors, setClearErrors] = useState(true);
     const userAgent = getUserAgentDetails();
@@ -132,7 +131,6 @@ function HostPrejoin(props) {
         // notify external apps
         APP.API.notifyReadyToClose();
 
-        console.log('ttt', `${window.location.origin}?actions=create`);
         window.location.href = `${window.location.origin}?actions=create`;
     };
 

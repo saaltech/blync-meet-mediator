@@ -24,6 +24,7 @@ $flagsImagePath: "../images/";
 /* Flags END */
 
 /* Modules BEGIN */
+@import '../node_modules/antd/dist/antd.css';
 @import 'options-panel';
 @import 'aui_reset';
 @import 'atlaskit_overrides';
@@ -115,4 +116,5 @@ $flagsImagePath: "../images/";
 @import 'tnc-privacy';
 @import 'button-with-icon';
 @import 'leftPanel';
+@import 'manage-meeting';
 /* Modules END */
