@@ -117,16 +117,15 @@
             }
             .left-background-image {
                 background-image: url('./../images/left-background-premeeting.png');
-                background-size: 95% 80%;
+                background-size: 100%;
                 background-repeat: no-repeat;
-              
-                background-position: bottom right;
+                background-position: center 75%;
             }
             .right-background-image {
                 background-image: url('./../images/right-background-premeeting.png');
-                background-size: 95% 80%;
+                background-size: 100%;
                 background-repeat: no-repeat;
-                background-position: bottom left;
+                background-position: center 75%;
             }
 
 .hostPrejoin {
@@ -273,7 +272,7 @@
         }
 }
 
-@media only screen and (max-width: 1080px) {
+@media only screen and (max-width: 1200px) {
     .hostPrejoinWrap {
         .hostPrejoin-container {
        .left-background-image {
