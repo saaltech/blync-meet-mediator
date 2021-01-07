@@ -700,7 +700,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                     !isMobileBrowser()
                     && <div className='legal-footer'>
-                        <p>Copyright © 2020 · Jifmeet. All rights reserved</p>
+                        <p>Copyright © 2021 · Jifmeet. All rights reserved</p>
 
                         {
 

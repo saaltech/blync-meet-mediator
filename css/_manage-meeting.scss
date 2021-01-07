@@ -141,6 +141,8 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    -webkit-user-select: text;
+                    user-select: text;
                 }
             }
             .meeting-password-details{
@@ -156,6 +158,8 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    -webkit-user-select: text;
+                    user-select: text;
                     &.no-password{
                         color: #D1D1D1;
                     }
@@ -249,7 +253,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         padding: 0 30px;
-        height: 55vh;
+        height: 50vh;
         // flex: 1;
 
         .group-title {
