@@ -3,7 +3,14 @@
 /**
  * Style variables
  */
-$baseFontFamily: -apple-system, BlinkMacSystemFont, 'avenir','open_sanslight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+ @font-face {
+    font-family: 'avenir';
+    src: url('../fonts/Avenir.ttc') format('ttc'),
+        url('../fonts/AvenirLTProLight.woff') format('woff'),
+        url('../fonts/AvenirLTStd-Light.otf') format('otf');
+  }
+$baseFontFamily: 'avenir', -apple-system, BlinkMacSystemFont, 'open_sanslight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $hangupColor: #bf2117;
 $hangupFontSize: 2em;
 
