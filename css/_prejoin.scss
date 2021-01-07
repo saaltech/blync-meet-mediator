@@ -110,7 +110,7 @@
         }
         .hostPrejoin-container{
             display: flex;
-            height: 100%;
+            height: calc(100% - 123px);
             .background-width {
                 height: calc(100% - 123px);
                 flex: 1;
