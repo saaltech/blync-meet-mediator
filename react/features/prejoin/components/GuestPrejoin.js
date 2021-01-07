@@ -76,7 +76,15 @@ function GuestPrejoin(props) {
                 refreshTokenAndFetchConference();
             }
         }, 3000);
+        props.setIsVideoMuted(true);
     }, [meetingId]);
+
+    useEffect(()=> {
+        if(continueAsGuest) {
+            props.setIsVideoMuted(true);
+        }
+
+    }, [continueAsGuest])
 
     const [guestName, setGuestName] = useState('');
 
