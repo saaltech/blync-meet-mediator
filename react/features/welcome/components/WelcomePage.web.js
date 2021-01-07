@@ -557,11 +557,11 @@ class WelcomePage extends AbstractWelcomePage {
                     )
                 }
             </div>
-            {/* <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : ''}`} >
+            <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : ''}`} >
                 {
                     !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }
-            </div> */}
+            </div>
             {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
             {
                 (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
