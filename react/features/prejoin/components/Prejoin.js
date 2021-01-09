@@ -406,6 +406,7 @@ class Prejoin extends Component<Props, State> {
                 footer = { this._renderFooter() }
                 title = { t('prejoin.joinMeeting') }
                 videoMuted = { !showCameraPreview }
+                _start={this.props._start}
                 videoTrack = { videoTrack }
                 navigatedFromHome = { navigatedFromHome }>
                 <div className = 'prejoin-input-area-container'>
