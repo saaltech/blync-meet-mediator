@@ -138,6 +138,7 @@ class Conference extends AbstractConference<Props, *> {
      */
     constructor(props) {
         super(props);
+        this._start = this._start.bind(this);
         this.isLegalPage = (window.location.pathname === '/privacy-policy') || (window.location.pathname === '/TnC');
 
         if (!this.isLegalPage) {
@@ -180,7 +181,7 @@ class Conference extends AbstractConference<Props, *> {
         document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
         APP.store.dispatch(leavingMeeting(false));
 
-        this._start();
+        //this._start();
     }
 
     /**
@@ -415,7 +416,7 @@ class Conference extends AbstractConference<Props, *> {
                 <NotificationsToasts />
                 <ParticipantsList />
                 <InviteParticipants />
-                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin />}
+                { !filmstripOnly && _showPrejoin /* || _interimPrejoin*/ && <Prejoin _start={this._start}/>}
             </div>
         );
     }

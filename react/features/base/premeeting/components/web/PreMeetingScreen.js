@@ -78,7 +78,8 @@ class PreMeetingScreen extends PureComponent<Props> {
             showNoCreateMeetingPrivilegeTip: false,
             activeButton: 'join',
             actions: 'meetNow',
-            uuid: Math.random().toString(36).slice(2, 7)
+            uuid: Math.random().toString(36).slice(2, 7),
+            permissionAsked: false
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -153,6 +154,12 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     showTrackPreviews(value) {
+        if(!this.props.videoTrack && !this.state.permissionAsked) {
+            this.props._start();
+            this.setState({
+                permissionAsked: true
+            })
+        }
         this.setState({
             showTrackPreviews: value
         }, () => {
