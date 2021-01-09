@@ -482,7 +482,7 @@ body.welcome-page {
             flex: 1;
 
             background-size: 50%;
-            background-image: url('./../images/calendar_illustration_2x.png');
+            background-image: url('./../images/background.png');
             background-position: bottom right;
             background-repeat: no-repeat;
     
@@ -502,11 +502,6 @@ body.welcome-page {
             height: 100%;
             background-repeat: no-repeat;
             background-position: center;
-        }
-
-        .calendar-placeholder {
-            // background-size: 75%;
-            // background-image: url('./../images/calendar_illustration_2x.png');
         }
 
         .contacts-placeholder {
@@ -536,7 +531,6 @@ body.welcome-page {
             display: flex;
             // background-color: #F2F4FC;
             &.not-google-user {
-                // background-image: url('./../images/backgroundImage.png');
                 background-size: 500px;
                 background-repeat: no-repeat;
                 background-position: bottom right;
