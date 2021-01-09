@@ -427,9 +427,10 @@ body.welcome-page {
     }
 }
 
-@media only screen and (max-width: 1080px) {
+@media only screen and (max-width: 1200px) {
     .welcome {
         .content-area {
+            background-image: none;
             // flex: 1;
             // flex-direction: column;
             // justify-content: flex-end;
@@ -475,10 +476,15 @@ body.welcome-page {
     }
 }
 
-@media only screen and (min-width: 1081px) {
+@media only screen and (min-width: 1201px) {
     .welcome {
         .content-area {
             flex: 1;
+
+            background-size: 50%;
+            background-image: url('./../images/calendar_illustration_2x.png');
+            background-position: bottom right;
+            background-repeat: no-repeat;
     
             .main-content {
                 flex: 4;
@@ -492,15 +498,15 @@ body.welcome-page {
             }
         }
 
-        .calendar-placeholder, .contacts-placeholder {
+        .contacts-placeholder {
             height: 100%;
             background-repeat: no-repeat;
             background-position: center;
         }
 
         .calendar-placeholder {
-            background-size: 75%;
-            background-image: url('./../images/calendar_illustration_2x.png');
+            // background-size: 75%;
+            // background-image: url('./../images/calendar_illustration_2x.png');
         }
 
         .contacts-placeholder {
@@ -528,9 +534,9 @@ body.welcome-page {
 
         .main-content {
             display: flex;
-            background-color: #F2F4FC;
+            // background-color: #F2F4FC;
             &.not-google-user {
-                background-image: url('./../images/backgroundImage.png');
+                // background-image: url('./../images/backgroundImage.png');
                 background-size: 500px;
                 background-repeat: no-repeat;
                 background-position: bottom right;
@@ -604,7 +610,7 @@ body.welcome-page {
         }
 
         .right-content {
-            background-color: #F7F8FD;
+            // background-color: #F7F8FD;
             display: flex;
             flex-direction: column;
         }
