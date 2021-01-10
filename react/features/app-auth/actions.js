@@ -9,10 +9,10 @@ import {
     APP_LOGIN,
     EXPIRE_TOKEN,
     SET_POST_WELCOME_SCREEN_DETAILS,
-    SET_GOOGLE_OFFLINE_CODE
+    SET_GOOGLE_OFFLINE_CODE,
+    SET_APP_AUTH
 } from './actionTypes';
 import { LoginComponent } from './components';
-import logger from './logger';
 
 import { isTokenExpired, setToken, validateToken } from './functions'
 
@@ -155,5 +155,12 @@ export function setGoogleOfflineCode(googleOfflineCode = null) {
     return {
         type: SET_GOOGLE_OFFLINE_CODE,
         googleOfflineCode
+    }
+}
+
+export function setAppAuth(appAuth) {
+    return {
+        type: SET_APP_AUTH,
+        appAuth
     }
 }

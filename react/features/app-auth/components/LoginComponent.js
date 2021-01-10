@@ -92,6 +92,10 @@ function LoginComponent(props) {
     const onSuccess = data => {
         // implement appLogin
         APP.store.dispatch(resolveAppLogin(data));
+
+        // notify the external application of the resolveAppLogin action
+        APP.API.notifyResolveAppLogin(data);
+
         closeAction();
     };
 

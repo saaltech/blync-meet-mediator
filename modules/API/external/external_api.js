@@ -89,7 +89,8 @@ const events = {
     'dominant-speaker-changed': 'dominantSpeakerChanged',
     'subject-change': 'subjectChange',
     'suspend-detected': 'suspendDetected',
-    'tile-view-changed': 'tileViewChanged'
+    'tile-view-changed': 'tileViewChanged',
+    'resolve-app-login': 'resolveAppLogin'
 };
 
 /**
@@ -552,7 +553,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
                 break;
             case 'local-storage-changed':
                 jitsiLocalStorage.setItem('jitsiLocalStorage', data.localStorageContent);
-
+                
                 // Since this is internal event we don't need to emit it to the consumer of the API.
                 return true;
             }

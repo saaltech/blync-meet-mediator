@@ -472,7 +472,7 @@ box-sizing: content-box !important;
 
         .entry-section {
             width: 90%;
-            margin: 0 auto !important;
+            margin: 0px auto !important;
         }
     }
 }
@@ -547,14 +547,14 @@ box-sizing: content-box !important;
 
             .entry-section {
                 // width: 100%;
-                padding: 20;
+                padding: 20px;
                 display: flex;
                 flex-direction: column;
                 height: 130px;
                 background: white;
                 border-radius: 20px;
-                margin: 30;
-                margin-top: 10;
+                margin: 30px;
+                margin-top: 10px;
                 &.input-section {
                     width: 50%;
                     padding: 40px;

@@ -7,7 +7,8 @@ import {
     SET_USER_SIGNED_OUT,
     EXPIRE_TOKEN,
     SET_POST_WELCOME_SCREEN_DETAILS,
-    SET_GOOGLE_OFFLINE_CODE
+    SET_GOOGLE_OFFLINE_CODE,
+    SET_APP_AUTH
 } from './actionTypes';
 
 import { PersistenceRegistry, ReducerRegistry } from '../base/redux';
@@ -24,6 +25,10 @@ PersistenceRegistry.register(STORE_NAME);
 
 ReducerRegistry.register(STORE_NAME, (state =  {}, action) => {
     switch (action.type) {
+        case SET_APP_AUTH: {
+            return assign(state, action.appAuth);
+        }
+
         case APP_LOGIN: {
             return assign(state, {
                 meetingAccessToken: action.payload.meeting_access_token,

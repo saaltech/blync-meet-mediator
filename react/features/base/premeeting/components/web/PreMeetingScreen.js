@@ -19,7 +19,7 @@ import LeftPanel from '../../../leftPanel';
 import { redirectOnButtonChange } from '../../../../welcome/functions';
 
 import Loading from '../../../../always-on-top/Loading'
-import { goHome } from '../../../../app-auth'
+import { goHome, setAppAuth } from '../../../../app-auth'
 import {
     setVideoMuted
 } from '../../../../base/media';
@@ -122,6 +122,7 @@ class PreMeetingScreen extends PureComponent<Props> {
              if(evt.data.appAuth) {
                 // TODO: Receive the 'appAuth' data stored in external window, and,
                 // Apply/dispatch the data into the current window localStorage.
+                APP.store.dispatch(setAppAuth(evt.data.appAuth));
              }
          }
 

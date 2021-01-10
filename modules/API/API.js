@@ -1023,6 +1023,19 @@ class API {
     }
 
     /**
+     * Notify external application to resolveAppLogin.
+     *
+     * @param {Object} loginData - The login data.
+     * @returns {void}
+     */
+    notifyResolveAppLogin(loginData: Object) {
+        this._sendEvent({
+            name: 'resolve-app-login',
+            loginData
+        });
+    }
+
+    /**
      * Disposes the allocated resources.
      *
      * @returns {void}

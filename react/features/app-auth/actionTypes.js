@@ -29,3 +29,14 @@ export const SET_POST_WELCOME_SCREEN_DETAILS = 'SET_POST_WELCOME_SCREEN_DETAILS'
  * }
  */
 export const SET_GOOGLE_OFFLINE_CODE = 'SET_GOOGLE_OFFLINE_CODE';
+
+
+/**
+ * The type of (redux) action which signifies if the user is trying to sync with
+ * external app app-auth details
+ *
+ * {
+ *     type: SET_APP_AUTH
+ * }
+ */
+export const SET_APP_AUTH = 'SET_APP_AUTH'
