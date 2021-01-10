@@ -5,6 +5,10 @@
      display: flex;
      height: 100%;
      font-family: inherit;
+     *{
+        box-sizing: content-box !important;
+        -webkit-box-sizing: content-box !important;
+    }
  .premeeting-screen {
     //align-items: stretch;
     width: 100%;
