@@ -3,7 +3,7 @@
    display: flex;
    align-items: center;
    cursor: pointer;
-   padding: 20;
+   padding: 20px;
    width: max-content;
    border-radius: 12px; 
    box-shadow: 0px 5px 5px #0000001A;
@@ -24,7 +24,7 @@
     .button-with-icon__icon {
         border-radius: 50%;
         background-color: white;
-        padding: 8;
+        padding: 8px;
         .image-wrapper{
             width: 30px;
         }
