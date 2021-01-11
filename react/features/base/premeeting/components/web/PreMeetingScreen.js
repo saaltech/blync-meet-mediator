@@ -138,7 +138,7 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     showTrackPreviews(value) {
-        if(!this.props.videoTrack && !this.state.permissionAsked) {
+        if(!this.props.videoTrack && !this.state.permissionAsked && value) {
             this.props._start();
             this.setState({
                 permissionAsked: true
