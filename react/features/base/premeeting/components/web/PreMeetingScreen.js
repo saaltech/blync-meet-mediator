@@ -78,6 +78,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             showNoCreateMeetingPrivilegeTip: false,
             activeButton: 'join',
             actions: 'meetNow',
+            isSignedOut: false,
             uuid: Math.random().toString(36).slice(2, 7),
             permissionAsked: false
         };
@@ -91,6 +92,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             meetNow: true,
             navigatedFromHome: getQueryVariable('home') ? true : false,
             actions: getQueryVariable('actions') ? getQueryVariable('actions') : '',
+            isSignedOut: getQueryVariable('isSignedOut') ? getQueryVariable('isSignedOut') : false,
             joinMeeting: getQueryVariable('join') ? true : false
         });
         const activeButtonAction = getQueryVariable('actions');
@@ -224,6 +226,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                                 guestFlow &&
                                 <GuestPrejoin
                                     setIsVideoMuted={this.setIsVideoMuted}
+                                    isSignedOut={this.state.isSignedOut}
                                     joinMeeting={joinMeeting}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}
