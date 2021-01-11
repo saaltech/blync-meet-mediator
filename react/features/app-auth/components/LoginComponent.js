@@ -124,13 +124,13 @@ function LoginComponent(props) {
         isOverlay && closeAction();
         setIsSocialLogin(true);
 
-        const isElectron = navigator.userAgent.includes('Electron');
-        if(isElectron) {
-            // Send the 'googleLogin' request to the parent containing window (like electron app),
-            window.parent.postMessage({'googleLogin': true}, '*');
-        } else {
+        // const isElectron = navigator.userAgent.includes('Electron');
+        // if(isElectron) {
+        //     // Send the 'googleLogin' request to the parent containing window (like electron app),
+        //     window.parent.postMessage({'googleLogin': true}, '*');
+        // } else {
             APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
-        }
+        //}
         
     };
 
