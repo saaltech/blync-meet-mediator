@@ -691,9 +691,9 @@ box-sizing: content-box !important;
             background-repeat: no-repeat;
             }
             &.not-google-user {
-                background-size: 100% 80%;
+                background-size: 100%;
                 background-image: url('./../images/joinBackground.png');
-                background-position: bottom;
+                background-position: center 75%;
                 background-repeat: no-repeat;
             }
     
