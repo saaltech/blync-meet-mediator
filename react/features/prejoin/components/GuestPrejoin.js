@@ -85,8 +85,13 @@ function GuestPrejoin(props) {
         if(continueAsGuest) {
             props.setIsVideoMuted(true);
         }
+    }, [continueAsGuest]);
 
-    }, [continueAsGuest])
+    useEffect(() => {
+        if(props.isSignedOut) {
+            setContinueAsGuest(true);
+        }
+    }, []);
 
     const [guestName, setGuestName] = useState('');
 

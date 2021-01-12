@@ -628,6 +628,9 @@ class WelcomePage extends AbstractWelcomePage {
      */
     render() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
+        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
+
+        const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
 
         return (
             <div>
@@ -655,16 +658,105 @@ class WelcomePage extends AbstractWelcomePage {
                                         </div>
                                     </div>
                                 </div>
-                                : <div className='show-flex'>
-                                    <LeftPanel
-                                        interfaceConfig={interfaceConfig}
-                                        showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
-                                        activeButton={this.state.activeButton}
-                                        isNotCreatePermission={!this._canCreateMeetings()}
-                                        toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
-                                        setActiveButton={this.handleRouteChange}
-                                    />
-                                    {/* <div className='left-header'>
+                                : _isUserSignedOut ? (
+                                    <div className="without-login-wrapper">
+                                        <div className="jifmeet-logo" />
+                                        <div className="image-content-wrapper">
+                                            <div className="background-width-content no-user-left-background-image"></div>
+                                            <div className="join-content-wrapper">
+                                                <div className="join-content-container">
+                                                    <div className="you-can-join">You can join a meeting directly, all you need is a <span className="meeting-id-text">Meeting ID.</span></div>
+                                                    <div className="join-a-meeting-container"><IconContext.Provider value={{
+                                                        style: {
+                                                            color: '#0A5694'
+                                                        }
+                                                    }}>
+                                                        <div className="join-without-google-icon-wrapper">
+                                                            <RiVideoChatFill size={40} />
+                                                        </div>
+                                                    </IconContext.Provider>
+                                                        <div className="join-a-meeting-text">Join a meeting</div>
+                                                    </div>
+                                                    <div className="meeting-id-container">
+                                                        <div id='enter_room_no-user'>
+                                                            <div className='enter-room-input-container'>
+                                                                <form onSubmit={this._onFormSubmit}>
+                                                                    <input
+                                                                        autoFocus={true}
+                                                                        className='enter-room-input'
+                                                                        id='enter_room_field'
+                                                                        maxLength={'20'}
+                                                                        onChange={this._onRoomNameChanged}
+                                                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                                                        placeholder={t('welcomepage.placeholderEnterRoomCode')} // this.state.roomPlaceholder
+                                                                        ref={this._setRoomInputRef}
+                                                                        title={t('welcomepage.roomNameAllowedChars')}
+                                                                        type='text' />
+                                                                </form>
+                                                            </div>
+                                                            <div
+                                                                className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
+                                                                onClick={this._onFormSubmit}>
+                                                                <div className='chat-piece' />
+                                                                {
+                                                                    t('welcomepage.go')
+                                                                }
+                                                                {
+                                                                    this.state.showGoLoader
+                                                                    && <div className='loader'>
+                                                                        <BiLoaderCircle size={30} />
+                                                                    </div>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                        {
+                                                            this._roomInputRef
+                                                            && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
+                                                        }
+                                                    </div>
+                                                    <div className="or-container">
+                                                        <div className="divider-gray-line"></div>
+                                                        <div className='option-or-text'>OR</div>
+                                                        <div className="divider-gray-line"></div>
+                                                    </div>
+                                                    <div className="sign-in-to-text"><span className="sign-in-text">Sign in </span> to discover all the features and options.</div>
+                                                    <div className="sign-in-container">
+                                                        <div className="sign-in-button" onClick={() => this.setState({
+                                                                reasonForLogin: '',
+                                                                loginErrorMsg: '',
+                                                                hideLogin: false
+                                                            })
+                                                        }>Sign In</div>
+                                                        <LoginComponent
+                                                            closeAction={this._closeLogin}
+                                                            errorMsg={errorOnLoginPage}
+                                                            hideLogin={hideLogin}
+                                                            isOverlay={true}
+                                                            onSocialLoginFailed={this._onSocialLoginFailed}
+                                                            reasonForLogin={this.state.reasonForLogin}
+                                                            t={t} />
+                                                    </div>
+                                                </div>
+                                                <div className="footer-container">
+                                                    <div className="footer-details">To learn more on <span className="jifmeet-text">Jifmeet,</span> <span className="click-here">click here.</span></div>
+                                                    <div className="copy-rights-detail">Copyright © 2021 · Jifmeet. All rights reserved</div>
+
+                                                </div>
+                                            </div>
+                                            <div className="background-width-content no-user-right-background-image"></div>
+                                        </div>
+                                    </div>) : (
+                                        <div className='show-flex'>
+                                            <LeftPanel
+                                                interfaceConfig={interfaceConfig}
+                                                showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
+                                                activeButton={this.state.activeButton}
+                                                isNotCreatePermission={!this._canCreateMeetings()}
+                                                toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
+                                                setActiveButton={this.handleRouteChange}
+                                            />
+                                            {/* <div className='left-header'>
                                         {
                                             this._renderLogo()
                                         }
@@ -672,33 +764,33 @@ class WelcomePage extends AbstractWelcomePage {
                                             this._renderPrivacySection()
                                         }
                                     </div> */}
-                                    <div className='right-section'>
-                                        <div className='content-header'>
-                                            {
-                                                this._renderContentHeaderSection()
-                                            }
-                                        </div>
-                                        <div className={`content-area`}>
-                                            <div className={`main-content ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : ''}`}>
-                                                {
-                                                    this._renderMainContentSection()
-                                                }
-                                            </div>
-                                            {(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
-                                                <div className='right-content' >
-                                                    <div className='calendar-placeholder' />
+                                            <div className='right-section'>
+                                                <div className='content-header'>
+                                                    {
+                                                        this._renderContentHeaderSection()
+                                                    }
                                                 </div>
-                                            )}
+                                                <div className={`content-area ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : 'with-google-user'}`}>
+                                                    <div className={`main-content`}>
+                                                        {
+                                                            this._renderMainContentSection()
+                                                        }
+                                                    </div>
+                                                    {(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
+                                                        <div className='right-content' >
+                                                            <div className='calendar-placeholder' />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                        }
+                                    )}
                     </div>
                 }
 
                 {
 
-                    !isMobileBrowser()
+                    !isMobileBrowser() && !_isUserSignedOut
                     && <div className='legal-footer'>
                         <p>Copyright © 2021 · Jifmeet. All rights reserved</p>
 
@@ -719,7 +811,7 @@ class WelcomePage extends AbstractWelcomePage {
 
                 }
 
-            </div>
+            </div >
         );
     }
 
@@ -819,7 +911,7 @@ class WelcomePage extends AbstractWelcomePage {
                         }
                     }
 
-                    this._onJoin();
+                    this._onJoin('', this.props._isUserSignedOut);
                 }
             }, 30);
         }

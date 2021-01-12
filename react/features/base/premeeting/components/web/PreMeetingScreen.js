@@ -78,6 +78,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             showNoCreateMeetingPrivilegeTip: false,
             activeButton: 'join',
             actions: 'meetNow',
+            isSignedOut: false,
             uuid: Math.random().toString(36).slice(2, 7),
             permissionAsked: false
         };
@@ -91,6 +92,7 @@ class PreMeetingScreen extends PureComponent<Props> {
             meetNow: true,
             navigatedFromHome: getQueryVariable('home') ? true : false,
             actions: getQueryVariable('actions') ? getQueryVariable('actions') : '',
+            isSignedOut: getQueryVariable('isSignedOut') ? getQueryVariable('isSignedOut') : false,
             joinMeeting: getQueryVariable('join') ? true : false
         });
         const activeButtonAction = getQueryVariable('actions');
@@ -155,7 +157,7 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     showTrackPreviews(value) {
-        if(!this.props.videoTrack && !this.state.permissionAsked && value) {
+        if (!this.props.videoTrack && !this.state.permissionAsked && value) {
             this.props._start();
             this.setState({
                 permissionAsked: true
@@ -169,7 +171,7 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     render() {
-        const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
+        const { title, videoMuted, videoTrack, url, meetNowSelected, _isUserSignedOut } = this.props;
         const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
             joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
@@ -187,12 +189,14 @@ class PreMeetingScreen extends PureComponent<Props> {
                 {
                     exiting && <Loading />
                 }
-                <LeftPanel
+                {!_isUserSignedOut ? (<LeftPanel
                     activeButton={this.state.activeButton}
                     showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
                     isNotCreatePermission={!this._canCreateMeetings()}
                     toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
                     setActiveButton={this.handleRouteChange} />
+                ) : <></>
+                }
                 <div
                     className='premeeting-screen'
                     id='lobby-screen'>
@@ -246,6 +250,7 @@ class PreMeetingScreen extends PureComponent<Props> {
                                 guestFlow &&
                                 <GuestPrejoin
                                     setIsVideoMuted={this.setIsVideoMuted}
+                                    isSignedOut={this.state.isSignedOut}
                                     joinMeeting={joinMeeting}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}
@@ -282,6 +287,7 @@ function mapStateToProps(state) {
     return {
         url: getCurrentConferenceUrl(state),
         _user: state['features/app-auth'].user,
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails
             && APP.store.getState()['features/app-auth'].meetingDetails.meetNow
     };

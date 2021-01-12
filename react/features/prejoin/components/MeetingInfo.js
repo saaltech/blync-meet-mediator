@@ -24,6 +24,7 @@ import {
 function MeetingInfo(props) {
     const [isMeetingNameEdit, setIsMeetingNameEdit] = useState(false);
     const meetNow = props.meetNow;
+    const isBackPressed = props.isBackPressed || false;
     const shareable = props.shareable;
     const isFromGuest = props.isFromGuest || false;
     const isMeetingHost = props.isMeetingHost || false;
@@ -69,25 +70,16 @@ function MeetingInfo(props) {
                     <>
                         <div
                             className='shareable-meeting-title'
-                            style={!meetingName ? { color: '#969696' } : {}}>{'Your meeting has been successfully created'}
+                            style={!meetingName ? { color: '#969696' } : {}}>
+                            {isBackPressed ? 'Your meeting has been successfully updated' : 'Your meeting has been successfully created'}
+                            <div className="meeting-name-schedule">
+                                {meetingName}
+                            </div>
+                            <div className="meeting-id-schedule">
+                                {meetingId}
+                            </div>
                         </div>
                         <div>
-                            <div className="meeting-detail-info  detail-heading-margin">
-                                <div className="detail-heading">
-                                    Topic
-                            </div>
-                                <div className="detail-heading-value">
-                                    {meetingName}
-                                </div>
-                            </div>
-                            <div className="meeting-detail-info detail-heading-margin">
-                                <div className="detail-heading">
-                                    Meeting ID
-                            </div>
-                                <div className="detail-heading-value">
-                                    {meetingId}
-                                </div>
-                            </div>
                             {meetingFrom && (
                                 <div className="meeting-detail-info detail-heading-margin">
                                     <div className="detail-heading">
@@ -136,8 +128,9 @@ function MeetingInfo(props) {
                     </>
                 ) : (
                         <>
+                            {shareable ? <div className="meeting-created-updated-info">{isBackPressed ? 'Your meeting has been successfully updated' : 'Your meeting has been successfully created'}</div> : <></>}
                             <div
-                                className='meeting-title'
+                                className={`meeting-title ${!shareable ? 'meeting-padding' : ''}`}
                                 title={meetingName ? meetingName : meetingId}
                                 style={!meetingName ? { color: '#969696' } : {}}>
                                 {(shareable || isFromGuest) ? <div className="input-meeting-wrapper">{meetingName ? meetingName : 'Enter Meeting Name'}</div> : (
@@ -146,6 +139,7 @@ function MeetingInfo(props) {
                                             <input
                                                 className="input-meeting"
                                                 type="text"
+                                                maxLength={'50'}
                                                 autoFocus
                                                 onBlur={handleMeetingNameBlur}
                                                 onFocus={() => { setIsMeetingNameEdit(true); }}
@@ -244,7 +238,7 @@ function MeetingInfo(props) {
                             selected={meetingFrom && new Date(meetingFrom)}
                             timeIntervals={15}
                             onChange={value => {
-                                if(moment(value).isSameOrBefore(new Date())) {
+                                if (moment(value).isSameOrBefore(new Date())) {
                                     return false;
                                 }
                                 setMeetingFrom(value);
@@ -314,11 +308,11 @@ function MeetingInfo(props) {
                             selected={meetingTo && new Date(meetingTo)}
                             timeIntervals={15}
                             onChange={value => {
-                                if(moment(value).isSameOrBefore(meetingFrom)) {
+                                if (moment(value).isSameOrBefore(meetingFrom)) {
                                     return false;
                                 }
                                 else {
-                                    setMeetingTo(value) 
+                                    setMeetingTo(value)
                                 }
                             }}
                             showTimeSelect={true}
@@ -395,6 +389,7 @@ function MeetingInfo(props) {
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
                         placeHolder={'Meeting password'}
+                        maxLength={'15'}
                         value={meetingPassword}
                         disablePaste={isMeetingBeingCreated}
                         disabled={shareable || !isPrivate}

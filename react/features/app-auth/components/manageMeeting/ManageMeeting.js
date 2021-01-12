@@ -98,9 +98,9 @@ function ManageMeetings(props: Props) {
                     {
                         calendarEvents.length === 0
                         && <div
-                            className={'calendar__event calendar__event__disabled last no-meetings'}
+                            className={'meeting__event calendar__event__disabled last no-meetings'}
                             key={-1} >
-                            <div>{`No meetings`}</div>
+                            <div><img width={120} height={120} src="../../../../../images/meeting-manager-no-meetings.svg" /></div>
                         </div>
                     }
                     {
