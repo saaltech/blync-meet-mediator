@@ -21,7 +21,7 @@
     }
     .detail-heading-value{
     margin-left: 10px;
-    flex: 0 0 210px;
+    flex: 0 0 160px;
     text-align: left;
     color: #0a5694;
     font-size: 18px;
@@ -72,12 +72,30 @@
         color: #FF0000;
     }
     .shareable-meeting-title {
-        font-size: 25px;
-        color:#005694;
+        font-size: 14px;
+        // color:#005694;
         padding: 35px 0 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        .meeting-name-schedule {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 30px;
+                color: #005694;
+        }
+        .meeting-id-schedule {
+            color: #005694;
+            font-size: 18px;
+            margin-bottom: 1%;
+        }
+    }
+
+    .meeting-created-updated-info {
+        padding: 35px 0 0.5%;
+        // font-weight: bold;
+        font-size: 14px
     }
 
     .meeting-title {
@@ -86,7 +104,9 @@
         align-items: center;
         font-size: 30px;
         color:#005694;
-        padding: 35px 0 0.5%;
+        &.meeting-padding {
+            padding: 35px 0 0.5%;
+        }
         .input-meeting-wrapper{
             max-width: 300px;
             white-space: nowrap;
@@ -266,6 +286,7 @@
         width: 48%;
         input.field {
             text-align: center;
+            width: 90% !important;
         }
 
         input.field:disabled {

@@ -83,7 +83,6 @@ function GuestPrejoin(props) {
         if(continueAsGuest) {
             props.setIsVideoMuted(true);
         }
-
     }, [continueAsGuest]);
 
     useEffect(() => {

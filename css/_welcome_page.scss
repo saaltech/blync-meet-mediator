@@ -684,11 +684,18 @@ box-sizing: content-box !important;
     .welcome {
         .content-area {
             flex: 1;
-
+            &.with-google-user {
             background-size: 50%;
             background-image: url('./../images/background.png');
             background-position: bottom right;
             background-repeat: no-repeat;
+            }
+            &.not-google-user {
+                background-size: 100% 80%;
+                background-image: url('./../images/joinBackground.png');
+                background-position: bottom;
+                background-repeat: no-repeat;
+            }
     
             .main-content {
                 flex: 4;
@@ -760,6 +767,7 @@ box-sizing: content-box !important;
                 margin-top: 10;
                 &.input-section {
                     width: 50%;
+                    margin: 0 auto;
                     padding: 40px;
                     border-radius: 45px;
                     .input-section-container{

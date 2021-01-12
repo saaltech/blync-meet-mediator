@@ -301,7 +301,7 @@
         cursor: pointer;
     }
 
-    .calendar__event {
+    .meeting__event {
         background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
         background: #FFFFFF 0% 0% no-repeat padding-box;
         border: 1px solid #E7EFF4;
@@ -318,11 +318,14 @@
 
         &.no-meetings {
             display: flex;
-            >div {
-                margin: 25px auto;
-                /* height: 30px; */
-                color: #9A9A9A;
-            }
+            height: 30vh;
+            justify-content: center;
+            align-items: center;
+            // >div {
+            //     margin: 25px auto;
+            //     /* height: 30px; */
+            //     color: #9A9A9A;
+            // }
             
         }
 

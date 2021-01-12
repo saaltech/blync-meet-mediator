@@ -35,6 +35,7 @@ function HostPrejoin(props) {
     const [isPrivate, setIsPrivate] = useState(true);
     const [meetingPassword, setMeetingPassword] = useState('');
     const [meetingFrom, setMeetingFrom] = useState('');
+    const [isBackPressed, setBackPressed] = useState(false);
     const [meetingTo, setMeetingTo] = useState(null);
     const [enableWaitingRoom, setEnableWaitingRoom] = useState(true);
     const { isMeetNow, _isGoogleSigninUser, _user, _jid } = props;
@@ -192,6 +193,7 @@ function HostPrejoin(props) {
         setShareable(_shareable);
         if (isFromBack) {
             props.setIsVideoMuted(false);
+            setBackPressed(true);
         }
         if (meetNow && _shareable) {
             props.showTrackPreviews(true);
@@ -307,6 +309,7 @@ function HostPrejoin(props) {
                             videoMuted={props.videoMuted}
                             videoTrack={props.videoTrack}
                             previewFooter={props.previewFooter}
+                            isBackPressed={isBackPressed}
                             meetingId={{
                                 meetingId
                             }}
@@ -326,7 +329,7 @@ function HostPrejoin(props) {
                                 meetingPassword,
                                 setMeetingPassword,
                                 validation: {
-                                    message: 'Only alphabets and numbers are allowed.',
+                                    message: '5 - 15 characters (A-Z, a-z, 0-9 only)',
                                     action: e => {
                                         const re = /[0-9a-zA-Z]+/g;
                                         if (!re.test(e.key)) {
@@ -349,11 +352,13 @@ function HostPrejoin(props) {
                             && <div
                                 className={`prejoin-page-button next 
                         ${scheduleDisabled ? 'disabled' : ''} 
-                        ${isPrivate && !meetingPassword ? 'disabled' : ''} 
+                        ${isPrivate && !(meetingPassword && meetingPassword.length >= 5) ? 'disabled' : ''} 
                         ${!meetingName ? 'disabled' : ''}
                         ` }
                                 onClick={saveConferenceAction}>
-                                {meetNow ? 'Next' : 'Schedule'}
+                                {meetNow && !isBackPressed? 'Create' : ''}
+                                {!meetNow && !isBackPressed? 'Schedule' : ''}
+                                {isBackPressed ? 'Update' : ''}
                             </div>
                         }
                         {

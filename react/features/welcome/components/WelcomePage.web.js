@@ -770,8 +770,8 @@ class WelcomePage extends AbstractWelcomePage {
                                                         this._renderContentHeaderSection()
                                                     }
                                                 </div>
-                                                <div className={`content-area`}>
-                                                    <div className={`main-content ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : ''}`}>
+                                                <div className={`content-area ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : 'with-google-user'}`}>
+                                                    <div className={`main-content`}>
                                                         {
                                                             this._renderMainContentSection()
                                                         }
