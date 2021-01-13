@@ -385,7 +385,7 @@ function MeetingInfo(props) {
 
             {
                 !isPureJoinFlow && (!shareable) && isPrivate
-                && <div className='form-field meeting-password'>
+                && <div className={`form-field meeting-password ${isPrivate && !(meetingPassword && meetingPassword.length >= 5) ? 'error-password': ''}`}>
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
                         placeHolder={'Meeting password'}

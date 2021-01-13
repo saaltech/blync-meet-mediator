@@ -338,6 +338,7 @@
     }
 
     .details-overlay {
+        z-index: 1;
         display: flex;
         flex-direction: column;
         cursor: default;
@@ -351,7 +352,7 @@
         border-radius: 10px;
 
         margin: auto 5%;
-        width: 75%;
+        width: 80%;
         top: 15%;
 
         .join-section {

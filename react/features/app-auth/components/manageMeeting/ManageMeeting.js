@@ -89,7 +89,7 @@ function ManageMeetings(props: Props) {
         <div
             className={'manageMeeting'} >
             <div className='upcoming-meetings'>
-                <div>{'Manage Meetings'}</div>
+                <div>{'My Meetings'}</div>
             </div>
 
             {
