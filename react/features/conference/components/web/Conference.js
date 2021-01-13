@@ -55,6 +55,7 @@ import { default as Notice } from './Notice';
 import ParticipantsList from './ParticipantsList';
 import PrivacyPage from './privacy/privacy';
 import TermsPage from './terms/terms';
+import GoogleLoginRedirectionPage from './googleLoginRedirection'
 
 
 declare var APP: Object;
@@ -139,7 +140,9 @@ class Conference extends AbstractConference<Props, *> {
     constructor(props) {
         super(props);
         this._start = this._start.bind(this);
-        this.isLegalPage = (window.location.pathname === '/privacy-policy') || (window.location.pathname === '/TnC');
+        this.isLegalPage = (window.location.pathname === '/privacy-policy') 
+            || (window.location.pathname === '/TnC')
+            || (window.location.pathname === '/googleAuth');
 
         if (!this.isLegalPage) {
             // Throttle and bind this component's mousemove handler to prevent it
@@ -309,6 +312,10 @@ class Conference extends AbstractConference<Props, *> {
 
         if (window.location.pathname === '/TnC') {
             return <TermsPage />;
+        }
+
+        if (window.location.pathname === '/googleAuth') {
+            return <GoogleLoginRedirectionPage />
         }
 
 
