@@ -284,6 +284,11 @@
     .meeting-password {
         margin: 0 auto;
         width: 48%;
+        &.error-password {
+            input.field {
+            // border: 1px solid red;
+            }
+        }
         input.field {
             text-align: center;
             width: 90% !important;
