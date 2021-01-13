@@ -1044,7 +1044,7 @@ class API {
     notifyExplicitIframeReload(data: string) {
         this._sendEvent({
             name: 'explicit-iframe-reload',
-            config
+            config: data
         });
     }
 
