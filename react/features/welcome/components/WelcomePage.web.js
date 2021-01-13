@@ -557,9 +557,10 @@ class WelcomePage extends AbstractWelcomePage {
                     )
                 }
             </div>
-            <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : ''}`} >
+            <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : 'calender-wrapper'}`} >
                 {
                     !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
+                    // !_isUserSignedOut && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }
             </div>
             {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}

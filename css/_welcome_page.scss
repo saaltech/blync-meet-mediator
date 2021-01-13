@@ -517,12 +517,12 @@ box-sizing: content-box !important;
 
         &.profile {
             position: absolute;
-            margin: 30px 20px 30px auto;
+            margin: 35px 0px 30px auto;
             background: transparent;
             display: flex;
-            min-width: 200px;
-            width: 200px;
-            right: 0px;
+            // min-width: 200px;
+            // width: 200px;
+            right: 20px;
         }
 
         &.go-button {
@@ -633,8 +633,19 @@ box-sizing: content-box !important;
 
 @media only screen and (max-width: 1200px) {
     .welcome {
+        .without-login-wrapper{
+            .image-content-wrapper {
+                .no-user-left-background-image {
+                    background-image: none;
+                }
+                .no-user-right-background-image {
+                    background-image: none;
+                }
+            }
+
+        }
         .content-area {
-            background-image: none;
+            // background-image: none;
             // flex: 1;
             // flex-direction: column;
             // justify-content: flex-end;
@@ -684,6 +695,7 @@ box-sizing: content-box !important;
     .welcome {
         .content-area {
             flex: 1;
+            // background: #F2F4FC;
             &.with-google-user {
             background-size: 50%;
             background-image: url('./../images/background.png');
@@ -707,6 +719,10 @@ box-sizing: content-box !important;
                 min-width: 400px;
                 flex: 2;
             }
+        }
+        .calender-wrapper {
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         .contacts-placeholder {
@@ -733,6 +749,10 @@ box-sizing: content-box !important;
         flex: 1;
         flex-direction: column;
         background-color: #F2F4FC;
+        background-image: url('./../images/top-right-premeeting-image.png');
+        background-size: 30%;
+        background-repeat: no-repeat;
+        background-position: top right;
     }
 
     .content-area {
@@ -768,8 +788,10 @@ box-sizing: content-box !important;
                 &.input-section {
                     width: 50%;
                     margin: 0 auto;
+                    margin-top: 5%; 
                     padding: 40px;
                     border-radius: 45px;
+                    box-shadow: 0 5px 5px #00000029;
                     .input-section-container{
                         margin: 0 auto;
                         width: 80%;
