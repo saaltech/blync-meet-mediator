@@ -1036,6 +1036,19 @@ class API {
     }
 
     /**
+     * Notify external application to resolveAppLogin.
+     *
+     * @param {Object} data - object containing room, or options
+     * @returns {void}
+     */
+    notifyExplicitIframeReload(data: string) {
+        this._sendEvent({
+            name: 'explicit-iframe-reload',
+            config
+        });
+    }
+
+    /**
      * Disposes the allocated resources.
      *
      * @returns {void}

@@ -59,7 +59,14 @@ export function redirectOnInvalidMeeting(meetingId) {
 }
 
 export function redirectOnButtonChange(buttonType) {
-    window.location.href = `${window.location.origin}?actions=${buttonType}`;
+            
+    const isElectron = navigator.userAgent.includes('Electron');
+    if(isElectron) {
+        APP.API.notifyExplicitIframeReload({options: {actions: buttonType}});
+    }
+    else {
+        window.location.href = `${window.location.origin}?actions=${buttonType}`;
+    }
 }
 
 /**

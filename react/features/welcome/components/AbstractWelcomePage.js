@@ -215,8 +215,17 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 = () => this._mounted && this.setState({ joining: false });
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
             //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
-            this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)))
-                .then(onAppNavigateSettled, onAppNavigateSettled);
+            let roomPathURL = meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)
+            
+            const isElectron = navigator.userAgent.includes('Electron');
+            if(isElectron) {
+                APP.API.notifyExplicitIframeReload({room: roomPathURL});
+            }
+            else {
+                this.props.dispatch(appNavigate(roomPathURL))
+                    .then(onAppNavigateSettled, onAppNavigateSettled);
+            }
+            
         // }
     }
 
