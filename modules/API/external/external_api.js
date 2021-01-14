@@ -80,6 +80,7 @@ const events = {
     'password-required': 'passwordRequired',
     'proxy-connection-event': 'proxyConnectionEvent',
     'video-ready-to-close': 'readyToClose',
+    'explicit-iframe-reload': 'explicitIframeReload',
     'video-conference-joined': 'videoConferenceJoined',
     'video-conference-left': 'videoConferenceLeft',
     'video-availability-changed': 'videoAvailabilityChanged',
@@ -141,10 +142,9 @@ function objectToStringPathParams (obj) {
  * @returns {string} The URL.
  */
 function generateURL(domain, options = {}, pathParams = {}) {
-    let pathParamString = objectToStringPathParams(pathParams);
     return urlObjectToString({
         ...options,
-        url: `https://${domain}/${pathParamString}#jitsi_meet_external_api_id=${id}`
+        url: `https://${domain}/${objectToStringPathParams(pathParams)}#jitsi_meet_external_api_id=${id}`
     });
 }
 
