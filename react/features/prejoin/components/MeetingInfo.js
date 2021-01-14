@@ -25,6 +25,7 @@ function MeetingInfo(props) {
     const [isMeetingNameEdit, setIsMeetingNameEdit] = useState(false);
     const meetNow = props.meetNow;
     const isBackPressed = props.isBackPressed || false;
+    const isFromConference = props.isFromConference || false;
     const shareable = props.shareable;
     const isFromGuest = props.isFromGuest || false;
     const isMeetingHost = props.isMeetingHost || false;
@@ -71,7 +72,8 @@ function MeetingInfo(props) {
                         <div
                             className='shareable-meeting-title'
                             style={!meetingName ? { color: '#969696' } : {}}>
-                            {isBackPressed ? 'Your meeting has been successfully updated' : 'Your meeting has been successfully created'}
+                            {isBackPressed && !isFromConference ? 'Your meeting has been successfully updated' : ''}
+                            {!isBackPressed && !isFromConference ? 'Your meeting has been successfully created' : ''}
                             <div className="meeting-name-schedule">
                                 {meetingName}
                             </div>
@@ -385,7 +387,7 @@ function MeetingInfo(props) {
 
             {
                 !isPureJoinFlow && (!shareable) && isPrivate
-                && <div className={`form-field meeting-password ${isPrivate && !(meetingPassword && meetingPassword.length >= 5) ? 'error-password': ''}`}>
+                && <div className={`form-field meeting-password ${isPrivate && !(meetingPassword && meetingPassword.length >= 5) ? 'error-password' : ''}`}>
                     <InputField
                         onChange={value => setMeetingPassword(value.trim())}
                         placeHolder={'Meeting password'}

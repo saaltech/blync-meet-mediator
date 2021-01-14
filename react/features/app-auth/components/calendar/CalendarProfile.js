@@ -29,7 +29,7 @@ function CalendarProfile(props: Props) {
     const [showModal, setShowModal] = useState(false);
 
     // selected calendar event
-    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [selectedEvents, setSelectedEvents] = useState([]);
 
     const { t, calendarEvents, calendarEventsGroup } = props;
 
@@ -86,17 +86,27 @@ function CalendarProfile(props: Props) {
         )
     });
 
-    const _eventSelected = calEvent => {
+    const _eventSelected = eventId => {
+        const _selectedEvents = [...selectedEvents];
+        const _selectedIndex = _selectedEvents.indexOf(eventId);
+        if (_selectedIndex > -1) {
+            const __selectedEvents = [
+                ..._selectedEvents.splice(0, _selectedIndex),
+                ..._selectedEvents.splice(_selectedIndex + 1)
+            ];
+            setSelectedEvents(__selectedEvents);
+
+        } else {
+            _selectedEvents.push(eventId);
+            setSelectedEvents(_selectedEvents);
+        }
         /* if (calEvent.description) {
             calEvent.description
                 = `<div class='jifmeet'
                     style='font-family: open_sanslight,"Helvetica Neue",Helvetica,Arial,sans-serif!important; 
                         font-size: 15px;'>${calEvent.description}</div>`;
         } */
-        setSelectedEvent(calEvent);
-        setShowModal(true);
     };
-
     return (
         <div
             className={'calendarProfile'} >
@@ -110,256 +120,119 @@ function CalendarProfile(props: Props) {
                         .format('DD MMM, hh:mm a')}`} </div>
                 </div>
             </div>
-            {<div style={{ display: 'flex', height: 'calc(55vh - 35px)' }}>
+            <div
+                className='calendar-list' >
                 {
-                    showModal && selectedEvent && selectedEvent.description
-                    && <div
-                        className='details-overlay'
-                        ref={wrapperRef} >
-                        <div
-                            className='close-icon'
-                            onClick={() => setShowModal(!showModal)} />
-                        <div
-                            className='calendar__event__title __modal'
-                            title={selectedEvent.title} >
-                            {selectedEvent.title}
+                    Object.keys(calendarEventsGroup).map(key => (<div key={key} >
+                        <div className='group-title'>
+                            {
+                                key === 'today' ? 'Today' : 'Tomorrow'
+                            }
                         </div>
+
                         {
-                            selectedEvent.startDate
-                            && <div className='calendar__event__timing __modal'>
-                                {`${moment(selectedEvent.startDate).locale('en')
-                                    .format('DD MMM, hh:mm a')}
-                                        ${selectedEvent.endDate ? ` - ${moment(selectedEvent.endDate).locale('en')
-                                        .format('hh:mm a')}` : ''}`
-                                }
+                            calendarEventsGroup[key].length === 0
+                            && <div
+                                className={'calendar__event calendar__event__disabled last no-meetings'}
+                                key={-1} >
+                                <div>{`No meetings for ${key === 'today' ? key : 'tomorrow'}`}</div>
                             </div>
                         }
-
-                        <div
-                            className={`calendar__event__description__modal 
-                                                ${selectedEvent.description ? '' : 'no-content'}`} >
-                            { /* <IFrame> */}
-                            <div dangerouslySetInnerHTML={
-                                sanitize(selectedEvent.description ? selectedEvent.description : 'No content')} />
-                            { /* </IFrame> */}
-                        </div>
-
                         {
-                            selectedEvent.url
-                            && <div className='join-section'>
-                                <a
-                                    href={selectedEvent.url}
-                                    rel='noopener noreferrer' >
+                            calendarEventsGroup[key].map((event, index) =>
+                                (<div
+                                    className={`calendar__event ${event.description ? '' : 'calendar__event__disabled'} 
+                                        ${index === calendarEventsGroup.today.length - 1 ? 'last' : ''}`}
+                                    key={event.id} >
                                     <div
-                                        className={'calendar__event__join __modal'}>
-                                        {'Join'}
+                                        className='calendar__event__title'
+                                        title={event.title} >
+                                        <div> {event.title} </div>
+                                        {
+                                            event.url
+                                            && <div className="Join-wrapper"><a
+                                                href={event.url}
+                                                rel='noopener noreferrer' >
+                                                {'Join'}
+                                            </a></div>
+                                        }
                                     </div>
-                                </a>
-                            </div>
-                        }
-                    </div>
-                }
-                <div
-                    className='calendar-list' >
-                    {
-                        Object.keys(calendarEventsGroup).map(key => (<div key={key} >
-                            {key === 'today' && (<div className='group-title'>
-                                {
-                                    'Today'
-                                }
-                            </div>
-                            )}
-                            {
-                                key === 'today' && calendarEventsGroup[key].length === 0
-                                && <div
-                                    className={'calendar__event calendar__event__disabled last no-meetings'}
-                                    key={-1} >
-                                    <div>{`No meetings for ${key === 'today' ? key : 'tomorrow'}`}</div>
-                                </div>
-                            }
-                            {
-                                key === 'today' && calendarEventsGroup[key].map((event, index) =>
-                                    (<div
-                                        className={`calendar__event ${event.description ? '' : 'calendar__event__disabled'} 
-                                        ${index === calendarEventsGroup.today.length - 1 ? 'last' : ''}`}
-                                        key={event.id} >
-                                        <div
-                                            className='calendar__event__title'
-                                            title={event.title} >
-                                            <div> {event.title} </div>
-                                            {
-                                                event.url
-                                                && <div><a
-                                                    href={event.url}
-                                                    rel='noopener noreferrer' >
-                                                    {'Join'}
-                                                </a></div>
-                                            }
-                                        </div>
 
-                                        {
-                                            event.startDate && event.endDate
-                                            && <div className='calendar__event__time-container'>
-                                                <div className='calendar__event__duration'>
-                                                    <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
-                                                        <div>
-                                                            <GiSandsOfTime size={20} />
-                                                        </div>
-                                                    </IconContext.Provider>
-                                                    <div>
-                                                        {`${moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()} minutes`}
-                                                    </div>
-
-                                                </div>
-                                                <div className='calendar__event__timing'>
-                                                    <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
-                                                        <div>
-                                                            <BiTime size={20} />
-                                                        </div>
-                                                    </IconContext.Provider>
-                                                    <div>
-                                                        {`${moment(event.startDate).locale('en')
-                                                            .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
-                                                        ${event.endDate ? ` - ${moment(event.endDate).isSame(event.startDate, 'day') ?
-                                                                moment(event.endDate).locale('en').format('hh:mm a') :
-                                                                moment(event.endDate).locale('en').format('DD MMM, hh:mm a')}` : ''}`
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        }
-                                        <div
-                                            className={'calendar__event__host-info'} >
-                                            <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
-                                                <div>
-                                                    <BsPersonLinesFill size={20} />
-                                                </div>
-                                            </IconContext.Provider>
-                                            <div>
-                                                {
-                                                    event.organizer
-                                                    && `Hosted By: ${event.organizer.displayName || event.organizer.email}
-                                                    ${event.organizer.self ? '(You)' : ''}`
-                                                }
-                                            </div>
-                                        </div>
-
-                                        {
-                                            event.description
-                                            && <div
-                                                className='calendar__event__details'
-                                                onClick={() => _eventSelected(event)} >
-                                                {'Details'}
-                                            </div>
-                                        }
-                                    </div>))
-                            }
-                        </div>))
-                    }
-                </div>
-                <div
-                    className='calendar-list' >
-                    {
-                        Object.keys(calendarEventsGroup).map(key => (<div key={key} >
-                            {key !== 'today' && (
-                                <div className='group-title'>
                                     {
-                                        'Tomorrow'
-                                    }
-                                </div>
-                            )}
-                            {
-                                key !== 'today' && calendarEventsGroup[key].length === 0
-                                && <div
-                                    className={'calendar__event calendar__event__disabled last no-meetings'}
-                                    key={-1} >
-                                    <div>{`No meetings for ${key === 'today' ? key : 'tomorrow'}`}</div>
-                                </div>
-                            }
-                            {
-                                key !== 'today' && calendarEventsGroup[key].map((event, index) =>
-                                    (<div
-                                        className={`calendar__event ${event.description ? '' : 'calendar__event__disabled'} 
-                                        ${index === calendarEventsGroup.today.length - 1 ? 'last' : ''}`}
-                                        key={event.id} >
-                                        <div
-                                            className='calendar__event__title'
-                                            title={event.title} >
-                                            <div> {event.title} </div>
-                                            {
-                                                event.url
-                                                && <div><a
-                                                    href={event.url}
-                                                    rel='noopener noreferrer' >
-                                                    {'Join'}
-                                                </a></div>
-                                            }
-                                        </div>
-
-                                        {
-                                            event.startDate && event.endDate
-                                            && <div className='calendar__event__time-container'>
-                                                <div className='calendar__event__duration'>
-                                                    <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
-                                                        <div>
-                                                            <GiSandsOfTime size={20} />
-                                                        </div>
-                                                    </IconContext.Provider>
+                                        event.startDate && event.endDate
+                                        && <div className='calendar__event__time-container'>
+                                            <div className='calendar__event__timing'>
+                                                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
                                                     <div>
-                                                        {`${moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()} minutes`}
+                                                        <BiTime size={20} />
                                                     </div>
-
-                                                </div>
-                                                <div className='calendar__event__timing'>
-                                                    <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
-                                                        <div>
-                                                            <BiTime size={20} />
-                                                        </div>
-                                                    </IconContext.Provider>
-                                                    <div>
-                                                        {`${moment(event.startDate).locale('en')
-                                                            .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
-                                                        ${event.endDate ? ` - ${moment(event.endDate).isSame(event.startDate, 'day') ?
-                                                                moment(event.endDate).locale('en').format('hh:mm a') :
-                                                                moment(event.endDate).locale('en').format('DD MMM, hh:mm a')}` : ''}`
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        }
-                                        <div
-                                            className={'calendar__event__host-info'} >
-                                            <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
+                                                </IconContext.Provider>
                                                 <div>
-                                                    <BsPersonLinesFill size={20} />
+                                                    {`${moment(event.startDate).locale('en')
+                                                        .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
+                                                        ${event.endDate ? ` - ${moment(event.endDate).isSame(event.startDate, 'day') ?
+                                                            moment(event.endDate).locale('en').format('hh:mm a') :
+                                                            moment(event.endDate).locale('en').format('DD MMM, hh:mm a')}` : ''}`
+                                                    }
                                                 </div>
-                                            </IconContext.Provider>
-                                            <div>
-                                                {
-                                                    event.organizer
-                                                    && `Hosted By: ${event.organizer.displayName || event.organizer.email}
+
+                                            </div>
+
+                                            <div className='calendar__event__duration'>
+                                                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
+                                                    <div>
+                                                        <GiSandsOfTime size={20} />
+                                                    </div>
+                                                </IconContext.Provider>
+                                                <div>
+                                                    {`${moment.duration(moment(event.endDate).diff(moment(event.startDate))).asMinutes()} minutes`}
+                                                </div>
+
+                                            </div>
+                                            <div
+                                                className={'calendar__event__host-info'} >
+                                                <IconContext.Provider value={{ style: { verticalAlign: 'middle' } }}>
+                                                    <div>
+                                                        <BsPersonLinesFill size={20} />
+                                                    </div>
+                                                </IconContext.Provider>
+                                                <div>
+                                                    {
+                                                        event.organizer
+                                                        && `Hosted By: ${event.organizer.displayName || event.organizer.email}
                                                     ${event.organizer.self ? '(You)' : ''}`
-                                                }
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
+                                    }
 
-                                        {
-                                            event.description
-                                            && <div
-                                                className='calendar__event__details'
-                                                onClick={() => _eventSelected(event)} >
-                                                {'Details'}
+
+                                    {
+                                        event.description
+                                        && <>
+                                            {selectedEvents.includes(event.id) && (<div
+                                                className={`calendar__event__description__modal 
+                                                ${event.description ? '' : 'no-content'}`} >
+                                                <div dangerouslySetInnerHTML={
+                                                    sanitize(event.description ? event.description : 'No content')} />
                                             </div>
-                                        }
-                                    </div>))
-                            }
-                        </div>))
-                    }
-                </div>
+                                            )}
+                                            <div
+                                                className='calendar__event__details'
+                                                onClick={() => _eventSelected(event.id)} >
+                                                 {selectedEvents.includes(event.id) ? 'View Less': 'View More'}
+                                            </div>
+                                        </>
+
+                                    }
+                                </div>))
+                        }
+                    </div>))
+                }
             </div>
-            }
+
+
             <div className='coming-from-google'>
                 <div> {'Integrated with '} </div>
                 <img src='./../images/google_calendar.png' />
@@ -373,7 +246,6 @@ function CalendarProfile(props: Props) {
  */
 function _mapStateToProps(state: Object) {
     const calendarEvents = state['features/calendar-sync'].events;
-    // const calendarEvents = [];
     const calendarEventsGroup = {
         'today': [],
         'others': []

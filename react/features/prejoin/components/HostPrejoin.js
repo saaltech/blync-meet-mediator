@@ -234,7 +234,7 @@ function HostPrejoin(props) {
             {
                 exiting && <Loading />
             }
-            <div className="meet-now">
+            <div className="meet-now meet-now-padding">
                 {meetNow ? (<>
                     <div className="meet-now-image-wrapper">
                         <img className="meet-now-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
