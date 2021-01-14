@@ -183,9 +183,14 @@ export function getQueryVariable(variable)
     for (var i=0;i<vars.length;i++) {
         var pair = vars[i].split("=");
         if(pair[0] == variable){
-            return pair[1] !== "undefined" 
-                && pair[1] !== "null"
-                && pair[1] !== "";
+            if(pair[1] !== "undefined" 
+            && pair[1] !== "null"
+            && pair[1] !== "") {
+                return pair [1];
+            }
+            else {
+                return false;
+            }
         }
     }
     return(false);
