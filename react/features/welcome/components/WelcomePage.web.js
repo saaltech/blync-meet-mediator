@@ -227,6 +227,9 @@ class WelcomePage extends AbstractWelcomePage {
     /**
      */
     setInvalidMeetingId(invalidMeetingId) {
+        if(!invalidMeetingId) {
+            return;
+        }
         this.setValueInRoomInputBox(invalidMeetingId);
         this.setSwitchActiveIndex(1);
     }

@@ -46,7 +46,13 @@ export function resolveAppLogin(details, refreshCall = false) {
 export function invalidateAndGoHome(skipRelogin = false) {
     APP.store.dispatch(resolveAppLogout());
     if(!skipRelogin) {
-        window.location.href = window.location.origin + "?sessionExpired=true";
+        const isElectron = navigator.userAgent.includes('Electron');
+        if(isElectron) {
+            APP.API.notifyExplicitIframeReload({options: {sessionExpired: true}});
+        }
+        else {
+            window.location.href = window.location.origin + "?sessionExpired=true";
+        }
     }
 }
 

@@ -180,7 +180,10 @@ function parseArguments(args) {
             jwt,
             onload,
             home,
-            actions
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         ] = args;
 
         return {
@@ -193,7 +196,10 @@ function parseArguments(args) {
             jwt,
             onload,
             home,
-            actions
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         };
     }
     case 'object': // new arguments format
@@ -282,15 +288,21 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             userInfo,
             e2eeKey,
             home,
-            actions
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         } = parseArguments(args);
         const localStorageContent = jitsiLocalStorage.getItem('jitsiLocalStorage');
 
         this._parentNode = parentNode;
-        if (home || actions) {
+        if (home || actions || sessionExpired || invalidMeetingId || isSignedOut) {
             pathParams = {
                 home,
-                actions
+                actions,
+                sessionExpired,
+                invalidMeetingId,
+                isSignedOut
             }
         }
         this._url = generateURL(domain, {

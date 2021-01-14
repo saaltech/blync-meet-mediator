@@ -54,8 +54,14 @@ export function isWelcomePageUserEnabled(stateful: Function | Object) {
 export function redirectOnInvalidMeeting(meetingId) {
     // notify external apps
     APP.API.notifyReadyToClose();
-    
-    window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
+
+    const isElectron = navigator.userAgent.includes('Electron');
+    if(isElectron) {
+        APP.API.notifyExplicitIframeReload({options: {invalidMeetingId: meetingId}});
+    }
+    else {
+        window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
+    }
 }
 
 export function redirectOnButtonChange(buttonType) {
