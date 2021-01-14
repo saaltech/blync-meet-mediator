@@ -50,10 +50,10 @@
             // border: 1px solid #5497b4;
         }
         font-weight: 200;
-        background: #FFFFFF;
-        color: #0A5694;
+        // background: #FFFFFF;
+        color: #ffffff;
         width: 330px;
-        font-size: 10px;
+        font-size: 15px;
         margin: 0 auto;
         // border: 1px solid #005C85;
         // border-radius: $welcomePageButtonBorderRadius;
@@ -73,10 +73,20 @@
 .hostPrejoinWrap {
     height: 100%;
     .meet-now{
-        padding: 30px 0px;
-        padding-left: 30px;
         display: flex;
         align-items: center;
+        &.meet-now-padding {
+            padding: 30px 0px;
+            padding-left: 30px;
+        }
+        .jifmeet-logo {
+            width: 250px;
+            height: 100px;
+            margin: 20px auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('../../images/without-user-logo.png')
+        }
         .guest-icon-wrapper{
             background-color: #0A5694;
             padding: 15px;
@@ -147,6 +157,9 @@
     overflow-x: hidden;
     text-align: center;
     color: #393939;
+    .no-account {
+        background: #005C85;
+    }
 
     .error-block {
         color: #FF0000;

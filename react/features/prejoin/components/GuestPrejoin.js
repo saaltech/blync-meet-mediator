@@ -58,15 +58,15 @@ function GuestPrejoin(props) {
     const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true,
         joinMeeting, _jid, _user, _isGoogleSigninUser, uuid } = props;
-    const [ isMeetingHost, setIsMeetingHost ] = useState(false);
-    const [ continueAsGuest, setContinueAsGuest ] = useState(false);
-    const [ showJoinMeetingForm, setShowJoinMeetingForm ] = useState(false);
-    const [ showPasswordError, setShowPasswordError ] = useState('');
-    const [ isSecretEnabled, setIsSecretEnabled ] = useState(false);
-    const [ conferenceStatus, setConferenceStatus ] = useState('');
-    const [ enableWaitingRoom, setEnableWaitingRoom ] = useState(false);
-    const [ participantRejected, setParticipantRejected ] = useState(false);
-    const [ meetingEnded, setMeetingEnded ] = useState(false);
+    const [isMeetingHost, setIsMeetingHost] = useState(false);
+    const [continueAsGuest, setContinueAsGuest] = useState(false);
+    const [showJoinMeetingForm, setShowJoinMeetingForm] = useState(false);
+    const [showPasswordError, setShowPasswordError] = useState('');
+    const [isSecretEnabled, setIsSecretEnabled] = useState(false);
+    const [conferenceStatus, setConferenceStatus] = useState('');
+    const [enableWaitingRoom, setEnableWaitingRoom] = useState(false);
+    const [participantRejected, setParticipantRejected] = useState(false);
+    const [meetingEnded, setMeetingEnded] = useState(false);
 
     useEffect(() => {
         setTimeout(async () => {
@@ -79,14 +79,14 @@ function GuestPrejoin(props) {
         props.setIsVideoMuted(true);
     }, [meetingId]);
 
-    useEffect(()=> {
-        if(continueAsGuest) {
+    useEffect(() => {
+        if (continueAsGuest) {
             props.setIsVideoMuted(true);
         }
     }, [continueAsGuest]);
 
     useEffect(() => {
-        if(props.isSignedOut) {
+        if (props.isSignedOut) {
             setContinueAsGuest(true);
         }
     }, []);
@@ -406,17 +406,20 @@ function GuestPrejoin(props) {
     }
 
     return <div className="hostPrejoinWrap">
-        <div className="meet-now">
-            <IconContext.Provider value={{
-                style: {
-                    color: 'white'
-                }
-            }}>
-                <div className="guest-icon-wrapper">
-                    <RiVideoChatFill size={40} />
-                </div>
-            </IconContext.Provider>
-            <span className="meet-now-label">Join a meeting</span>
+        <div className={`meet-now ${!_isUserSignedOut ? 'meet-now-padding' : ''}`}>
+            {_isUserSignedOut ? <div className="jifmeet-logo" /> : (<>
+                <IconContext.Provider value={{
+                    style: {
+                        color: 'white'
+                    }
+                }}>
+                    <div className="guest-icon-wrapper">
+                        <RiVideoChatFill size={40} />
+                    </div>
+                </IconContext.Provider>
+                <span className="meet-now-label">Join a meeting</span>
+            </>
+            )}
             {
                 !_isUserSignedOut
                     ? (<div className='profileSection'>
@@ -492,7 +495,7 @@ function GuestPrejoin(props) {
                                 ref={client => {
                                     clientRef = client;
                                 }}
-                                topics={[`${props._participantsSocketTopic}/${ uuid }`]}
+                                topics={[`${props._participantsSocketTopic}/${uuid}`]}
                                 url={props._socketLink} />
                         }
 
@@ -553,13 +556,13 @@ function GuestPrejoin(props) {
 
                                                 }}
                                                 noSignInIcon={true} />
-                                            <div className='no-account'>
+                                            {/* <div className='no-account'>
                                                 <div
                                                     className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`}
                                                     onClick={() => !disableJoin && setContinueAsGuest(true)}>
                                                     Continue without login
                                 </div>
-                                            </div>
+                                            </div> */}
 
                                         </>
                                     }
@@ -616,6 +619,15 @@ function GuestPrejoin(props) {
                         }
 
                     </div>
+                    {
+                        (_isUserSignedOut && !continueAsGuest) && (
+                            <div className='no-account'>
+                                <div
+                                    className={`prejoin-page-button guest ${disableJoin ? 'disabled' : ''}`}
+                                    onClick={() => !disableJoin && setContinueAsGuest(true)}>
+                                    Continue without login
+                                </div>
+                            </div>)}
                 </div>
             }
             <div className=" background-width right-background-image"></div>

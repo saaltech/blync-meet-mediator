@@ -189,6 +189,12 @@
             bottom: 15px;
             right: 10px;
             cursor: pointer;
+            &:hover {
+                .meeting-start-container {
+                    background-color: #005694;
+                    color: #fff;
+                }
+            }
             .meeting-start-container {
                 border-radius: 20px;
                 border: 1px solid #005694;

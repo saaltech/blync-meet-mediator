@@ -16,7 +16,7 @@ import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { redirectOnButtonChange } from '../../welcome/functions';
 import { translate } from '../../base/i18n';
-import { Icon, IconWarning, IconSadSmiley } from '../../base/icons';
+import { Icon, IconWarning, IconSadSmiley, IconArrowBack } from '../../base/icons';
 import LeftPanel from '../../base/leftPanel';
 import { connect } from '../../base/redux';
 
@@ -666,78 +666,90 @@ class WelcomePage extends AbstractWelcomePage {
                                             <div className="background-width-content no-user-left-background-image"></div>
                                             <div className="join-content-wrapper">
                                                 <div className="join-content-container">
-                                                    <div className="you-can-join">You can join a meeting directly, all you need is a <span className="meeting-id-text">Meeting ID.</span></div>
-                                                    <div className="join-a-meeting-container"><IconContext.Provider value={{
-                                                        style: {
-                                                            color: '#0A5694'
-                                                        }
-                                                    }}>
-                                                        <div className="join-without-google-icon-wrapper">
-                                                            <RiVideoChatFill size={40} />
+                                                    {!hideLogin ? (
+                                                        <div className="login-join-wrapper">
+                                                            <div className="login-signin-wrapper">SignIn</div>
+                                                            <Icon
+                                                                className='backArrow-login'
+                                                                src={IconArrowBack}
+                                                                onClick={() => this.setState({ hideLogin: !this.state.hideLogin })} />
+                                                            <LoginComponent
+                                                                closeAction={this._closeLogin}
+                                                                errorMsg={errorOnLoginPage}
+                                                                hideLogin={hideLogin}
+                                                                // isOverlay={true}
+                                                                onSocialLoginFailed={this._onSocialLoginFailed}
+                                                                reasonForLogin={this.state.reasonForLogin}
+                                                                t={t} />
                                                         </div>
-                                                    </IconContext.Provider>
-                                                        <div className="join-a-meeting-text">Join a meeting</div>
-                                                    </div>
-                                                    <div className="meeting-id-container">
-                                                        <div id='enter_room_no-user'>
-                                                            <div className='enter-room-input-container'>
-                                                                <form onSubmit={this._onFormSubmit}>
-                                                                    <input
-                                                                        autoFocus={true}
-                                                                        className='enter-room-input'
-                                                                        id='enter_room_field'
-                                                                        maxLength={'20'}
-                                                                        onChange={this._onRoomNameChanged}
-                                                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                                                        placeholder={t('welcomepage.placeholderEnterRoomCode')} // this.state.roomPlaceholder
-                                                                        ref={this._setRoomInputRef}
-                                                                        title={t('welcomepage.roomNameAllowedChars')}
-                                                                        type='text' />
-                                                                </form>
-                                                            </div>
-                                                            <div
-                                                                className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
-                                                                onClick={this._onFormSubmit}>
-                                                                <div className='chat-piece' />
-                                                                {
-                                                                    t('welcomepage.go')
-                                                                }
-                                                                {
-                                                                    this.state.showGoLoader
-                                                                    && <div className='loader'>
-                                                                        <BiLoaderCircle size={30} />
+                                                    ) : (
+                                                            <>
+                                                                <div className="you-can-join">You can join a meeting directly, all you need is a <span className="meeting-id-text">Meeting ID.</span></div>
+                                                                <div className="join-a-meeting-container"><IconContext.Provider value={{
+                                                                    style: {
+                                                                        color: '#0A5694'
+                                                                    }
+                                                                }}>
+                                                                    <div className="join-without-google-icon-wrapper">
+                                                                        <RiVideoChatFill size={40} />
                                                                     </div>
-                                                                }
+                                                                </IconContext.Provider>
+                                                                    <div className="join-a-meeting-text">Join a meeting</div>
+                                                                </div>
+                                                                <div className="meeting-id-container">
+                                                                    <div id='enter_room_no-user'>
+                                                                        <div className='enter-room-input-container'>
+                                                                            <form onSubmit={this._onFormSubmit}>
+                                                                                <input
+                                                                                    autoFocus={true}
+                                                                                    className='enter-room-input'
+                                                                                    id='enter_room_field'
+                                                                                    maxLength={'20'}
+                                                                                    onChange={this._onRoomNameChanged}
+                                                                                    // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                                                                    placeholder={t('welcomepage.placeholderEnterRoomCode')} // this.state.roomPlaceholder
+                                                                                    ref={this._setRoomInputRef}
+                                                                                    title={t('welcomepage.roomNameAllowedChars')}
+                                                                                    type='text' />
+                                                                            </form>
+                                                                        </div>
+                                                                        <div
+                                                                            className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
+                                                                            onClick={this._onFormSubmit}>
+                                                                            <div className='chat-piece' />
+                                                                            {
+                                                                                t('welcomepage.go')
+                                                                            }
+                                                                            {
+                                                                                this.state.showGoLoader
+                                                                                && <div className='loader'>
+                                                                                    <BiLoaderCircle size={30} />
+                                                                                </div>
+                                                                            }
 
-                                                            </div>
-                                                        </div>
-                                                        {
-                                                            this._roomInputRef
-                                                            && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
-                                                        }
-                                                    </div>
-                                                    <div className="or-container">
-                                                        <div className="divider-gray-line"></div>
-                                                        <div className='option-or-text'>OR</div>
-                                                        <div className="divider-gray-line"></div>
-                                                    </div>
-                                                    <div className="sign-in-to-text"><span className="sign-in-text">Sign in </span> to discover all the features and options.</div>
-                                                    <div className="sign-in-container">
-                                                        <div className="sign-in-button" onClick={() => this.setState({
-                                                                reasonForLogin: '',
-                                                                loginErrorMsg: '',
-                                                                hideLogin: false
-                                                            })
-                                                        }>Sign In</div>
-                                                        <LoginComponent
-                                                            closeAction={this._closeLogin}
-                                                            errorMsg={errorOnLoginPage}
-                                                            hideLogin={hideLogin}
-                                                            isOverlay={true}
-                                                            onSocialLoginFailed={this._onSocialLoginFailed}
-                                                            reasonForLogin={this.state.reasonForLogin}
-                                                            t={t} />
-                                                    </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {
+                                                                        this._roomInputRef
+                                                                        && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
+                                                                    }
+                                                                </div>
+                                                                <div className="or-container">
+                                                                    <div className="divider-gray-line"></div>
+                                                                    <div className='option-or-text'>OR</div>
+                                                                    <div className="divider-gray-line"></div>
+                                                                </div>
+                                                                <div className="sign-in-to-text"><span className="sign-in-text">Sign in </span> to discover all the features and options.</div>
+                                                                <div className="sign-in-container">
+                                                                    <div className="sign-in-button" onClick={() => this.setState({
+                                                                        reasonForLogin: '',
+                                                                        loginErrorMsg: '',
+                                                                        hideLogin: false
+                                                                    })
+                                                                    }>Sign In</div>
+                                                                </div>
+                                                            </>
+                                                        )}
                                                 </div>
                                                 <div className="footer-container">
                                                     <div className="footer-details">To learn more on <span className="jifmeet-text">Jifmeet,</span> <span className="click-here">click here.</span></div>
