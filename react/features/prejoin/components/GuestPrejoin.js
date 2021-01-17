@@ -572,17 +572,17 @@ function GuestPrejoin(props) {
                                             || (!_isUserSignedOut && !isMeetingHost)
                                             || continueAsGuest)
                                         && (<>
-                                            {isMeetingHost && (
-                                                <Preview
-                                                    videoMuted={props.videoMuted}
-                                                    videoTrack={props.videoTrack} >
-                                                    <div className='media-btn-container'>
-                                                        <AudioSettingsButton visible={true} />
-                                                        <VideoSettingsButton visible={true} />
-                                                    </div>
-                                                    {props.previewFooter}
-                                                </Preview>
-                                            )}
+                                            {/* {isMeetingHost && ( */}
+                                            <Preview
+                                                videoMuted={props.videoMuted}
+                                                videoTrack={props.videoTrack} >
+                                                <div className='media-btn-container'>
+                                                    <AudioSettingsButton visible={true} />
+                                                    <VideoSettingsButton visible={true} />
+                                                </div>
+                                                {props.previewFooter}
+                                            </Preview>
+                                            {/* )} */}
                                             <JoinMeetingForm
                                                 guestEmail={{
                                                     guestEmail,
