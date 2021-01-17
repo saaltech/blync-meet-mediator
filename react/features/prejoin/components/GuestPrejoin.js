@@ -7,6 +7,7 @@ import { RiVideoChatFill } from 'react-icons/ri';
 
 import { setPrejoinPageErrorMessageKey } from '../';
 import { openConnection } from '../../../../connection';
+import HeaderSection from '../../base/headerSection';
 import { config } from '../../../config';
 import Loading from '../../always-on-top/Loading';
 import { LoginComponent, Profile } from '../../app-auth';
@@ -406,29 +407,31 @@ function GuestPrejoin(props) {
     }
 
     return <div className="hostPrejoinWrap">
-        <div className={`meet-now ${!_isUserSignedOut ? 'meet-now-padding' : ''}`}>
-            {_isUserSignedOut ? <div className="jifmeet-logo" /> : (<>
-                <IconContext.Provider value={{
-                    style: {
-                        color: 'white'
-                    }
-                }}>
-                    <div className="guest-icon-wrapper">
-                        <RiVideoChatFill size={40} />
-                    </div>
-                </IconContext.Provider>
-                <span className="meet-now-label">Join a meeting</span>
-            </>
-            )}
-            {
-                !_isUserSignedOut
-                    ? (<div className='profileSection'>
-                        <Profile
-                            postLogout={goToHome}
-                            showMenu={true} />
-                    </div>) : <></>
-            }
+
+        {_isUserSignedOut ? (<div className={`meet-now ${!_isUserSignedOut ? 'meet-now-padding' : ''}`}>
+            <div className="jifmeet-logo" />
+        </div>) : (<div className="meet-now-margin-bottom">
+            <HeaderSection>
+                {/* <div className="schedule-image-wrapper">
+                 <img className="schedule-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
+             </div> */}
+                <span>Join a meeting</span>
+                <div className='profileSection'>
+                    <Profile
+                        postLogout={goToHome}
+                        showMenu={true} />
+                </div>
+            </HeaderSection>
         </div>
+            )}
+        {/* {
+            !_isUserSignedOut
+                ? (<div className='profileSection'>
+                    <Profile
+                        postLogout={goToHome}
+                        showMenu={true} />
+                </div>) : <></>
+        } */}
         <div className="hostPrejoin-container">
             <div className="background-width left-background-image"></div>
             {fetchUnauthErrors || fetchErrors
@@ -632,7 +635,7 @@ function GuestPrejoin(props) {
             }
             <div className=" background-width right-background-image"></div>
         </div>
-    </div>
+    </div >
         ;
 }
 

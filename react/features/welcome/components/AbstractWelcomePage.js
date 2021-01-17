@@ -197,7 +197,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @protected
      * @returns {void}
      */
-    _onJoin(action = '', isSignedOut= false) {
+    _onJoin(action = '', isSignedOut = false) {
         const room = this.state.room || this.state.generatedRoomname;
 
         sendAnalytics(
@@ -207,16 +207,21 @@ export class AbstractWelcomePage extends Component<Props, *> {
             }));
 
         // if (room) {
-            this.setState({ joining: true });
+        this.setState({ joining: true });
 
-            // By the time the Promise of appNavigate settles, this component
-            // may have already been unmounted.
-            const onAppNavigateSettled
-                = () => this._mounted && this.setState({ joining: false });
-            const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
-            //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
+        // By the time the Promise of appNavigate settles, this component
+        // may have already been unmounted.
+        const onAppNavigateSettled
+            = () => this._mounted && this.setState({ joining: false });
+        const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
+        //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
+        if (isSignedOut) {
+            this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?isSignedOut=${isSignedOut}` : `?isSignedOut=${isSignedOut}`)))
+                .then(onAppNavigateSettled, onAppNavigateSettled);
+        } else {
             this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)))
                 .then(onAppNavigateSettled, onAppNavigateSettled);
+        }
         // }
     }
 

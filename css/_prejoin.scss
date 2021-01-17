@@ -72,6 +72,9 @@
 
 .hostPrejoinWrap {
     height: 100%;
+    .meet-now-margin-bottom {
+        margin-bottom: 30px;
+    }
     .meet-now{
         display: flex;
         align-items: center;
@@ -117,6 +120,7 @@
     }
         .profileSection {
             right: 20px;
+            top: 10px;
             position: fixed;
         }
         .hostPrejoin-container{
