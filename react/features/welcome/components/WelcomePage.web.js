@@ -905,7 +905,7 @@ class WelcomePage extends AbstractWelcomePage {
             });
 
             this.props.dispatch(setPostWelcomePageScreen(this.state.room, null,
-                this.state.switchActiveIndex === 1));
+                this.props._isUserSignedOut ? true : this.state.switchActiveIndex === 1));
 
 
             const intervalId = setInterval(async () => {
