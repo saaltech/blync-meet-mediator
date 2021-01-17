@@ -18,6 +18,8 @@ import { redirectOnButtonChange } from '../../welcome/functions';
 import { translate } from '../../base/i18n';
 import { Icon, IconWarning, IconSadSmiley, IconArrowBack } from '../../base/icons';
 import LeftPanel from '../../base/leftPanel';
+import HeaderSection from '../../base/headerSection';
+
 import { connect } from '../../base/redux';
 
 import { CalendarList, bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
@@ -470,7 +472,7 @@ class WelcomePage extends AbstractWelcomePage {
 
         return (<>
             <div className={`entry-section__label ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'join-without-google-label' : ''}`}>
-                {(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) && (
+                {/* {(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) && (
                     <IconContext.Provider value={{
                         style: {
                             color: 'white'
@@ -480,10 +482,10 @@ class WelcomePage extends AbstractWelcomePage {
                             <RiVideoChatFill size={40} />
                         </div>
                     </IconContext.Provider>
-                )}
-                {
+                )} */}
+                {/* {
                     this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' })
-                }
+                } */}
             </div>
             {/* <div className={`entry-section right-bg`}> */}
             <div className={`entry-section ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section' : 'right-bg'}`}>
@@ -672,10 +674,13 @@ class WelcomePage extends AbstractWelcomePage {
                                                     {!hideLogin ? (
                                                         <div className="login-join-wrapper">
                                                             <div className="login-signin-wrapper">Sign In</div>
-                                                            <Icon
+                                                            <div
+                                                                className='close-icon'
+                                                                onClick={() => this.setState({ hideLogin: !this.state.hideLogin })} />
+                                                            {/* <Icon
                                                                 className='backArrow-login'
                                                                 src={IconArrowBack}
-                                                                onClick={() => this.setState({ hideLogin: !this.state.hideLogin })} />
+                                                                onClick={() => this.setState({ hideLogin: !this.state.hideLogin })} /> */}
                                                             <LoginComponent
                                                                 closeAction={this._closeLogin}
                                                                 errorMsg={errorOnLoginPage}
@@ -781,6 +786,11 @@ class WelcomePage extends AbstractWelcomePage {
                                         }
                                     </div> */}
                                             <div className='right-section'>
+                                                <HeaderSection>
+                                                    {
+                                                        this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' })
+                                                    }
+                                                </HeaderSection>
                                                 <div className='content-header'>
                                                     {
                                                         this._renderContentHeaderSection()

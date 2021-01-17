@@ -15,6 +15,7 @@ import {
     IconArrowBack
 } from '../../base/icons';
 import { InputField } from '../../base/premeeting';
+import HeaderSection from '../../base/headerSection';
 import { connect } from '../../base/redux';
 import useRequest from '../../hooks/use-request';
 import { setPrejoinPageErrorMessageKey } from '../../prejoin';
@@ -234,11 +235,11 @@ function HostPrejoin(props) {
             {
                 exiting && <Loading />
             }
-            <div className="meet-now meet-now-padding">
-                {meetNow ? (<>
-                    <div className="meet-now-image-wrapper">
+            <div className="meet-now-margin-bottom">
+                {meetNow ? (<HeaderSection>
+                    {/* <div className="meet-now-image-wrapper">
                         <img className="meet-now-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
-                    </div>
+                    </div> */}
                     {/* <IconContext.Provider value={{
                         style: {
                             color: 'blue'
@@ -246,24 +247,28 @@ function HostPrejoin(props) {
                     }}>
                         <FaCalendarAlt size={40} />
                     </IconContext.Provider> */}
-                    <span className="meet-now-label">Meet Now</span>
+                    <span className="clickable-content" onClick={props.onClickClose}>Create a meeting</span>
+                    <span style={{ marginLeft: '10px', marginRight: '10px' }}>{'>'}</span>
+                    <span>Meet Now</span>
                     <div className='profileSection'>
                         <Profile
                             postLogout={goToHome}
                             showMenu={true} />
                     </div>
-                </>) : (
-                        <>
-                            <div className="schedule-image-wrapper">
+                </HeaderSection>) : (
+                        <HeaderSection>
+                            {/* <div className="schedule-image-wrapper">
                                 <img className="schedule-image" src="../../../../images/prejoin-meet-now.svg" alt='' />
-                            </div>
-                            <span className="meet-now-label">Schedule a meeting</span>
+                            </div> */}
+                            <span className="clickable-content" onClick={props.onClickClose}>Create a meeting</span>
+                            <span style={{ marginLeft: '10px', marginRight: '10px' }}>{'>'}</span>
+                            <span>Schedule a meeting</span>
                             <div className='profileSection'>
                                 <Profile
                                     postLogout={goToHome}
                                     showMenu={true} />
                             </div>
-                        </>
+                        </HeaderSection>
                     )
                 }
             </div>
@@ -361,8 +366,8 @@ function HostPrejoin(props) {
                         ${!meetingName ? 'disabled' : ''}
                         ` }
                                 onClick={saveConferenceAction}>
-                                {meetNow && !isBackPressed? 'Create' : ''}
-                                {!meetNow && !isBackPressed? 'Schedule' : ''}
+                                {meetNow && !isBackPressed ? 'Create' : ''}
+                                {!meetNow && !isBackPressed ? 'Schedule' : ''}
                                 {isBackPressed ? 'Update' : ''}
                             </div>
                         }

@@ -197,7 +197,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @protected
      * @returns {void}
      */
-    _onJoin(action = '', isSignedOut= false) {
+    _onJoin(action = '', isSignedOut = false) {
         const room = this.state.room || this.state.generatedRoomname;
 
         sendAnalytics(
@@ -215,8 +215,11 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 = () => this._mounted && this.setState({ joining: false });
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
             //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
-            let roomPathURL = meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)
-            
+            let roomPathURL = !isSignedOut ?
+                meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)
+                :
+                meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?isSignedOut=${isSignedOut}` : `?isSignedOut=${isSignedOut}`)
+
             const isElectron = navigator.userAgent.includes('Electron');
             if(isElectron) {
                 APP.API.notifyExplicitIframeReload({room: roomPathURL});

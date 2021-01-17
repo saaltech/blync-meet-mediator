@@ -103,8 +103,9 @@ box-sizing: content-box !important;
     .without-login-wrapper{
         width: 100%;
         height: 100%;
+        overflow-y: auto;
         background: #F2F4FC;
-        background-image: url('../../images/top-right-premeeting-image.png');
+        // background-image: url('../../images/top-right-premeeting-image.png');
         background-size: 30%;
         background-repeat: no-repeat;
         background-position: top right;
@@ -118,7 +119,7 @@ box-sizing: content-box !important;
         }
         .image-content-wrapper {
             display: flex;
-            height: calc(100% - 100px);
+            height: calc(100% - 140px);
             .footer-container {
                 text-align: center;
                 .footer-details {
@@ -179,6 +180,10 @@ box-sizing: content-box !important;
                         margin: 0 auto;
                         margin-bottom: 35px;
                         position: relative;
+                        .close-icon {
+                            top: 50px;
+                            right: -50px;
+                        }
                         .jitsi-icon svg {
                             fill: black;
                         }
@@ -548,11 +553,12 @@ box-sizing: content-box !important;
 
         &.profile {
             position: absolute;
-            margin: 35px 0px 30px auto;
+            // margin: 35px 0px 30px auto;
             background: transparent;
             display: flex;
             // min-width: 200px;
             // width: 200px;
+            top: 10px;
             right: 20px;
         }
 
@@ -780,7 +786,7 @@ box-sizing: content-box !important;
         flex: 1;
         flex-direction: column;
         background-color: #F2F4FC;
-        background-image: url('./../images/top-right-premeeting-image.png');
+        // background-image: url('./../images/top-right-premeeting-image.png');
         background-size: 30%;
         background-repeat: no-repeat;
         background-position: top right;

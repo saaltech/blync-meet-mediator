@@ -17,9 +17,9 @@ function LeftPanel(props) {
 
         const style = {
             position: 'fixed',
-            top: '10px',
+            top: '6px',
             left: '0px',
-            backgroundImage: `url(${interfaceConfig.LOGO_WITH_BOTTOM_LABEL_URL || '../images/logo_bottom_label.png'})`
+            backgroundImage: `url('../images/jifmeetLogo_square.png')`
         };
 
         reactElement = (<div

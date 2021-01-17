@@ -1,0 +1,15 @@
+.header-section {
+    font-size: 22px;
+    padding: 20px 30px;
+    font-weight: 700;
+    min-height: 32px;
+    color: #005c85;
+    background: #F5F7FF;
+    box-shadow: 0px 1px 6px #00000029;
+    .clickable-content {
+        cursor: pointer;
+        &:hover {
+        color: #004c6e;
+        }
+    }
+}
