@@ -175,7 +175,7 @@ function GuestPrejoin(props) {
                 _joinConference();
             }
         } else {
-            setShowPasswordError('Incorrect room password');
+            setShowPasswordError('Incorrect password');
         }
     };
 
