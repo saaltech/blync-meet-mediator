@@ -107,6 +107,20 @@ function CalendarProfile(props: Props) {
                         font-size: 15px;'>${calEvent.description}</div>`;
         } */
     };
+
+    const _handleJoin = url => {
+        let meetingId = url.match(/\d{2}-\d{13}-\d{3}/); // find meetingId
+        if(meetingId && meetingId.length > 0) {
+            const isElectron = navigator.userAgent.includes('Electron');
+            if(isElectron) {
+                    APP.API.notifyExplicitIframeReload({room: meetingId[0]});
+            }
+            else {
+                window.location.href = `${window.location.origin}/${meetingId[0]}`;
+            }
+        }
+    };
+
     return (
         <div
             className={'calendarProfile'} >
@@ -150,11 +164,9 @@ function CalendarProfile(props: Props) {
                                         <div> {event.title} </div>
                                         {
                                             event.url
-                                            && <div className="Join-wrapper"><a
-                                                href={event.url}
-                                                rel='noopener noreferrer' >
-                                                {'Join'}
-                                            </a></div>
+                                            && <div className="Join-wrapper"
+                                                onClick={() => _handleJoin(event.url)}>
+                                                {'Join'}</div>
                                         }
                                     </div>
 
