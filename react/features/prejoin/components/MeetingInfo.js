@@ -407,7 +407,7 @@ function MeetingInfo(props) {
               }
                 </div>
             }
-            {((shareable && meetNow)) && (
+            {((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
                 <Preview
                     videoMuted={props.videoMuted}
                     videoTrack={props.videoTrack} >
