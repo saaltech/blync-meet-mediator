@@ -668,7 +668,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                 <div className="join-content-container">
                                                     {!hideLogin ? (
                                                         <div className="login-join-wrapper">
-                                                            <div className="login-signin-wrapper">SignIn</div>
+                                                            <div className="login-signin-wrapper">Sign In</div>
                                                             <Icon
                                                                 className='backArrow-login'
                                                                 src={IconArrowBack}
