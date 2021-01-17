@@ -878,15 +878,15 @@ class WelcomePage extends AbstractWelcomePage {
             return;
         }
 
-        if (this.props._isUserSignedOut
-            && this.state.switchActiveIndex === 0) {
-            this.setState({
-                hideLogin: false,
-                reasonForLogin: this.props.t('welcomepage.signinToCreateMeeting')
-            });
+        // if (this.props._isUserSignedOut
+        //     && this.state.switchActiveIndex === 0) {
+        //     this.setState({
+        //         hideLogin: false,
+        //         reasonForLogin: this.props.t('welcomepage.signinToCreateMeeting')
+        //     });
 
-            return;
-        }
+        //     return;
+        // }
         this.setState({
             reasonForLogin: ''
         });

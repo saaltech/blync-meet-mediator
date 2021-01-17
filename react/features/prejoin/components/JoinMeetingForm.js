@@ -17,7 +17,7 @@ function JoinMeetingForm(props) {
 
     return (
         <div className="meetingInfo">
-            <Preview
+            {/* <Preview
                 videoMuted={props.videoMuted}
                 videoTrack={props.videoTrack} >
                 <div className='media-btn-container'>
@@ -25,7 +25,7 @@ function JoinMeetingForm(props) {
                     <VideoSettingsButton visible={true} />
                 </div>
                 {props.previewFooter}
-            </Preview>
+            </Preview> */}
 
             {
                 isUserSignedOut &&

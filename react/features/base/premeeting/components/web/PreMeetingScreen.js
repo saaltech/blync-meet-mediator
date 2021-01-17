@@ -90,9 +90,9 @@ class PreMeetingScreen extends PureComponent<Props> {
     componentDidMount() {
         this.setState({
             meetNow: true,
-            navigatedFromHome: getQueryVariable('home') ? true : false,
+            navigatedFromHome: getQueryVariable('home') ? (getQueryVariable('home') === 'true' ? true : false) : false,
             actions: getQueryVariable('actions') ? getQueryVariable('actions') : '',
-            isSignedOut: getQueryVariable('isSignedOut') ? getQueryVariable('isSignedOut') : false,
+            isSignedOut: getQueryVariable('isSignedOut') ? (getQueryVariable('isSignedOut') === 'true' ? true : false) : false,
             joinMeeting: getQueryVariable('join') ? true : false
         });
         const activeButtonAction = getQueryVariable('actions');

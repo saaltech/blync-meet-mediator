@@ -578,7 +578,7 @@ function GuestPrejoin(props) {
                                             || (!_isUserSignedOut && !isMeetingHost)
                                             || continueAsGuest)
                                         && (<>
-                                            {isMeetingHost && (
+                                            {!isMeetingHost && (
                                                 <Preview
                                                     videoMuted={props.videoMuted}
                                                     videoTrack={props.videoTrack} >
