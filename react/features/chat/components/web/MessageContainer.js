@@ -100,10 +100,7 @@ export default class MessageContainer extends AbstractMessageContainer<Props> {
      * @returns {void}
      */
     scrollToBottom(withAnimation: boolean) {
-        this._messagesListEndRef.current.scrollIntoView({
-            behavior: withAnimation ? 'smooth' : 'auto',
-            block: 'nearest'
-        });
+        this._messagesListEndRef.current.scrollIntoView();
     }
 
     _getMessagesGroupedBySender: () => Array<Array<Object>>;

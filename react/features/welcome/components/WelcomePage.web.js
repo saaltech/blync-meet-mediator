@@ -756,7 +756,7 @@ class WelcomePage extends AbstractWelcomePage {
                                                         )}
                                                 </div>
                                                 <div className="footer-container">
-                                                    <div className="footer-details">To learn more on <span className="jifmeet-text">Jifmeet,</span> <span className="click-here">click here.</span></div>
+                                                    <div className="footer-details">To learn more on <span className="jifmeet-text">Jifmeet,</span> <a href="https://www.jifmeet.com" target="_blank" className="click-here">click here.</a></div>
                                                     <div className="copy-rights-detail">Copyright © 2021 · Jifmeet. All rights reserved</div>
 
                                                 </div>

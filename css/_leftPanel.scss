@@ -43,6 +43,7 @@
         padding: 10px;
         border-radius: 5px;
         background-color: #E7EFF4;
+        cursor: pointer;
         &:hover:not(.selected):not(.disabled){
             background-color: #005C85;
             svg {

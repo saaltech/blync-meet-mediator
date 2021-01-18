@@ -97,7 +97,7 @@ class Chat extends AbstractChat<Props, State> {
      * @inheritdoc
      */
     componentDidUpdate(prevProps) {
-        if (this.props._messages !== prevProps._messages) {
+        if (prevProps._messages !== undefined && this.props._messages.length !== prevProps._messages.length) {
             this._scrollMessageContainerToBottom(true);
         } else if (this.props._isOpen && !prevProps._isOpen) {
             this._scrollMessageContainerToBottom(false);

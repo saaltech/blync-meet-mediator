@@ -34,6 +34,7 @@ function ShareMeeting(props) {
         _locationUrl,
         meetingName,
         meetingFrom,
+        isFromConference,
         meetingTo,
         meetingPassword } = props;
 
@@ -60,14 +61,17 @@ function ShareMeeting(props) {
     return (
         <div className="shareMeetingWrapper" style={{ marginTop: !isShowLabel ? '10px' : '25px' }}>
             <div className={'shareMeeting'}>
-                {/* <div className='label'>Share Meeting Details</div>
+                {isFromConference ? (<>
+                    <div className='label'>Share Meeting Details</div>
 
-                <CopyMeetingLinkSection
-                    url={_inviteUrl}
-                    inviteText={invite}
-                    custom={true} /> */}
+                    <CopyMeetingLinkSection
+                        url={_inviteUrl}
+                        inviteText={invite}
+                        custom={true} />
+                </>) : <></>}
                 <InviteByEmailSection
                     inviteSubject={inviteSubject}
+                    isFromConference={isFromConference}
                     isShowLabel={isShowLabel}
                     inviteText={invite}
                     custom={true} />

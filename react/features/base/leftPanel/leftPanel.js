@@ -19,7 +19,7 @@ function LeftPanel(props) {
             position: 'fixed',
             top: '6px',
             left: '0px',
-            backgroundImage: `url('../images/jifmeetLogo_square.png')`
+            backgroundImage: `url('../images/jifmeetLogo_leftPanel.png')`
         };
 
         reactElement = (<div
