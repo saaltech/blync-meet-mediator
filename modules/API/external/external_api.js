@@ -80,6 +80,7 @@ const events = {
     'password-required': 'passwordRequired',
     'proxy-connection-event': 'proxyConnectionEvent',
     'video-ready-to-close': 'readyToClose',
+    'explicit-iframe-reload': 'explicitIframeReload',
     'video-conference-joined': 'videoConferenceJoined',
     'video-conference-left': 'videoConferenceLeft',
     'video-availability-changed': 'videoAvailabilityChanged',
@@ -89,7 +90,8 @@ const events = {
     'dominant-speaker-changed': 'dominantSpeakerChanged',
     'subject-change': 'subjectChange',
     'suspend-detected': 'suspendDetected',
-    'tile-view-changed': 'tileViewChanged'
+    'tile-view-changed': 'tileViewChanged',
+    'resolve-app-login': 'resolveAppLogin'
 };
 
 /**
@@ -111,6 +113,19 @@ function changeParticipantNumber(APIInstance, number) {
     APIInstance._numberOfParticipants += number;
 }
 
+function objectToStringPathParams (obj) {
+    let pathParamArr = [];
+    for (const key in obj) { // eslint-disable-line guard-for-in
+        try {
+            pathParamArr.push(`${key}=${obj[key]}`);
+        } catch (e) {
+            console.warn(`Error encoding ${key}: ${e}`);
+        }
+    }
+
+    return pathParamArr.length > 0 ? `?${pathParamArr.join('&')}` : "";
+}
+
 /**
  * Generates the URL for the iframe.
  *
@@ -126,12 +141,14 @@ function changeParticipantNumber(APIInstance, number) {
  * @param {string} [options.roomName] - The name of the room to join.
  * @returns {string} The URL.
  */
-function generateURL(domain, options = {}) {
+function generateURL(domain, options = {}, pathParams = {}) {
     return urlObjectToString({
         ...options,
-        url: `https://${domain}/#jitsi_meet_external_api_id=${id}`
+        url: `https://${domain}/${objectToStringPathParams(pathParams)}#jitsi_meet_external_api_id=${id}`
     });
 }
+
+
 
 /**
  * Parses the arguments passed to the constructor. If the old format is used
@@ -161,7 +178,12 @@ function parseArguments(args) {
             configOverwrite,
             interfaceConfigOverwrite,
             jwt,
-            onload
+            onload,
+            home,
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         ] = args;
 
         return {
@@ -172,7 +194,12 @@ function parseArguments(args) {
             configOverwrite,
             interfaceConfigOverwrite,
             jwt,
-            onload
+            onload,
+            home,
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         };
     }
     case 'object': // new arguments format
@@ -246,6 +273,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
      */
     constructor(domain, ...args) {
         super();
+        let pathParams;
         const {
             roomName = '',
             width = '100%',
@@ -258,11 +286,25 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             invitees,
             devices,
             userInfo,
-            e2eeKey
+            e2eeKey,
+            home,
+            actions,
+            sessionExpired,
+            invalidMeetingId,
+            isSignedOut
         } = parseArguments(args);
         const localStorageContent = jitsiLocalStorage.getItem('jitsiLocalStorage');
 
         this._parentNode = parentNode;
+        if (home || actions || sessionExpired || invalidMeetingId || isSignedOut) {
+            pathParams = {
+                home,
+                actions,
+                sessionExpired,
+                invalidMeetingId,
+                isSignedOut
+            }
+        }
         this._url = generateURL(domain, {
             configOverwrite,
             interfaceConfigOverwrite,
@@ -273,7 +315,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
             appData: {
                 localStorageContent
             }
-        });
+        }, pathParams);
         this._createIFrame(height, width, onload);
         this._transport = new Transport({
             backend: new PostMessageTransportBackend({
@@ -523,7 +565,7 @@ export default class JitsiMeetExternalAPI extends EventEmitter {
                 break;
             case 'local-storage-changed':
                 jitsiLocalStorage.setItem('jitsiLocalStorage', data.localStorageContent);
-
+                
                 // Since this is internal event we don't need to emit it to the consumer of the API.
                 return true;
             }

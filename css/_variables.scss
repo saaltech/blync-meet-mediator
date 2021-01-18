@@ -3,6 +3,14 @@
 /**
  * Style variables
  */
+
+
+ @font-face {
+    font-family: 'avenir';
+    src: url('../fonts/Avenir.ttc') format('ttc'),
+        url('../fonts/AvenirLTProMedium.woff') format('woff'),
+        url('../fonts/AvenirLTStd-Medium.otf') format('otf');
+  }
 $baseFontFamily: -apple-system, BlinkMacSystemFont, 'open_sanslight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $hangupColor: #bf2117;
 $hangupFontSize: 2em;
@@ -231,7 +239,8 @@ $welcomePageButtonLineHeight: 35px;
 /**
  * Pre-join page variables
  */
- $prejoinContentWidth: 350px;
+ $prejoinContentWidth: 500px;
+ $meetNowButtonFontSize: 30px;
 
 /**
  * Deep-linking page variables.

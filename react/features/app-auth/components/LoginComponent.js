@@ -22,10 +22,10 @@ import { resolveAppLogin } from '../actions';
 /**
  */
 function LoginComponent(props) {
-    const [ email, setEmail ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ isSocialLogin, setIsSocialLogin ] = useState(false);
-    const [ formDisabled, setFormDisabled ] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSocialLogin, setIsSocialLogin] = useState(false);
+    const [formDisabled, setFormDisabled] = useState(true);
     const { errorMsg, noSignInIcon = false, googleOfflineCode, reasonForLogin = '',
         closeAction, isOverlay = false, hideLogin = false, t, onSocialLoginFailed } = props;
 
@@ -47,7 +47,7 @@ function LoginComponent(props) {
             socialLogin();
             setIsSocialLogin(false);
         }
-    }, [ props.googleOfflineCode ]);
+    }, [props.googleOfflineCode]);
 
     useEffect(() => {
         if (email !== '' && password !== '') {
@@ -57,7 +57,7 @@ function LoginComponent(props) {
         }
     });
 
-    const [ doRequest, errors ] = useRequest({
+    const [doRequest, errors] = useRequest({
         url: config.unauthenticatedIRP + config.signInEP,
         method: 'post',
         body: {
@@ -67,7 +67,7 @@ function LoginComponent(props) {
         onSuccess: data => onSuccess(data)
     });
 
-    const [ doSocialSignIn, errorsSocialSignIn ] = useRequest({
+    const [doSocialSignIn, errorsSocialSignIn] = useRequest({
         url: config.unauthenticatedIRP + config.socialSignInEP,
         method: 'post',
         body: {
@@ -92,6 +92,10 @@ function LoginComponent(props) {
     const onSuccess = data => {
         // implement appLogin
         APP.store.dispatch(resolveAppLogin(data));
+
+        // notify the external application of the resolveAppLogin action
+        APP.API.notifyResolveAppLogin(data);
+
         closeAction();
     };
 
@@ -119,80 +123,97 @@ function LoginComponent(props) {
         clearForm();
         isOverlay && closeAction();
         setIsSocialLogin(true);
-        APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
+
+        // const isElectron = navigator.userAgent.includes('Electron');
+        // if(isElectron) {
+        //     // Send the 'googleLogin' request to the parent containing window (like electron app),
+        //     window.parent.postMessage({'googleLogin': true}, '*');
+        // } else {
+            APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
+        //}
+        
     };
 
     const loginErrorMsg = (errors && errors.indexOf('server_error') > -1)
-                            || (errorsSocialSignIn && errorsSocialSignIn.indexOf('server_error') > -1)
+        || (errorsSocialSignIn && errorsSocialSignIn.indexOf('server_error') > -1)
         ? 'Login failed. Please try again sometime later.'
         : errors || errorsSocialSignIn || errorMsg;
 
     return (
         <div
-            className = { `appLoginComponent ${isOverlay ? 'overlay' : ''}` }
-            style = {{
+            className={`appLoginComponent ${isOverlay ? 'overlay' : ''}`}
+            style={{
                 visibility: hideLogin ? 'hidden' : 'visible'
             }}>
             {
                 isOverlay && <div
-                    className = 'modal-overlay'
-                    id = 'modal-overlay' />
+                    className='modal-overlay'
+                    id='modal-overlay' />
             }
-            <div className = { `${isOverlay ? 'modal' : 'inlineComponent'}` }>
+            <div className={`${isOverlay ? 'modal' : 'inlineComponent'}`}>
                 {
                     isOverlay && <div
-                        className = 'close-icon'
-                        onClick = { closeAction } />
+                        className='close-icon'
+                        onClick={closeAction} />
                 }
-                <div className = { `${isOverlay ? 'content' : 'inline-content'}` }>
+                <div className={`${isOverlay ? 'content' : 'inline-content'}`}>
                     {
-                        reasonForLogin && <div className = 'reasonForLogin'>{reasonForLogin}</div>
+                        reasonForLogin && <div className='reasonForLogin'>{reasonForLogin}</div>
                     }
-                    { !noSignInIcon && <Icon src = { IconSignInLock } /> }
-                    <h2>{ t('loginPage.signinLabel') }</h2>
-                    <form onSubmit = { onSubmit }>
-                        <div className = 'form-field'>
-                            <div className = 'form-label'>{t('loginPage.fieldUsername')}</div>
-                            <InputField
-                                focused = { true }
-                                onChange = { value => setEmail(value.trim()) }
-                                placeHolder = { t('loginPage.placeholderUsername') }
-                                value = { email } />
+                    {/* {!noSignInIcon && <Icon src={IconSignInLock} />} */}
+                    {
+                        window.config.googleApiApplicationClientID
+                        && window.config.enableCalendarIntegration
+                        && <div style={{ display: 'flex', marginBottom: '10px', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ marginRight: '10px' }}>Login with</span>
+                            <GoogleSignInButton
+                                onClick={_onClickGoogle}
+                                text={t('liveStreaming.signIn')} />
                         </div>
-                        <div className = 'form-field'>
-                            <div className = 'form-label'>{t('loginPage.fieldPassword')}</div>
+                    }
+                    <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div className="divider-line"></div>
+                        <div className='option-text-or'>OR</div>
+                        <div className="divider-line"></div>
+                    </div>
+                    {/* <h2>{t('loginPage.signinLabel')}</h2> */}
+                    <form onSubmit={onSubmit}>
+                        <div className='form-field'>
+                            <div className='form-label'>{t('loginPage.fieldUsername')}</div>
                             <InputField
-                                onChange = { value => setPassword(value.trim()) }
-                                placeHolder = { t('loginPage.placeholderPassword') }
-                                type = 'password'
-                                value = { password } />
+                                focused={true}
+                                onChange={value => setEmail(value.trim())}
+                                placeHolder={t('loginPage.placeholderUsername')}
+                                value={email} />
+                        </div>
+                        <div className='form-field'>
+                            <div className='form-label'>{t('loginPage.fieldPassword')}</div>
+                            <InputField
+                                onChange={value => setPassword(value.trim())}
+                                placeHolder={t('loginPage.placeholderPassword')}
+                                type='password'
+                                value={password} />
                         </div>
 
                         <div
-                            className = { `login-page-button ${formDisabled ? 'disabled' : ''}` }
-                            onClick = { onSubmit }>
+                            className={`login-page-button ${formDisabled ? 'disabled' : ''}`}
+                            onClick={onSubmit}>
                             {
                                 t('loginPage.loginLabel')
                             }
                         </div>
 
                         <button
-                            style = {{
+                            style={{
                                 height: '0px',
                                 width: '0px',
-                                visibility: 'hidden' }}
-                            type = 'submit' />
+                                visibility: 'hidden'
+                            }}
+                            type='submit' />
                     </form>
-                    {
-                        window.config.googleApiApplicationClientID
-                        && window.config.enableCalendarIntegration
-                        && <GoogleSignInButton
-                            onClick = { _onClickGoogle }
-                            text = { t('liveStreaming.signIn') } />
-                    }
 
 
-                    <div className = 'error'> { loginErrorMsg } </div>
+                    <div className='error'> {loginErrorMsg} </div>
                 </div>
             </div>
         </div>

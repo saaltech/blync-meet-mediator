@@ -158,7 +158,7 @@ export function redirectWithStoredParams(pathname: string) {
         const newLocationURL = new URL(locationURL.href);
 
         newLocationURL.pathname = pathname;
-        window.location.assign(newLocationURL.toString());
+        window.location.assign(newLocationURL.origin);
     };
 }
 

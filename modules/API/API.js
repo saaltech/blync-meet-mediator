@@ -1023,6 +1023,32 @@ class API {
     }
 
     /**
+     * Notify external application to resolveAppLogin.
+     *
+     * @param {Object} loginData - The login data.
+     * @returns {void}
+     */
+    notifyResolveAppLogin(loginData: Object) {
+        this._sendEvent({
+            name: 'resolve-app-login',
+            loginData
+        });
+    }
+
+    /**
+     * Notify external application to resolveAppLogin.
+     *
+     * @param {Object} data - object containing room, or options
+     * @returns {void}
+     */
+    notifyExplicitIframeReload(data: string) {
+        this._sendEvent({
+            name: 'explicit-iframe-reload',
+            config: data
+        });
+    }
+
+    /**
      * Disposes the allocated resources.
      *
      * @returns {void}

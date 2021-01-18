@@ -2,4 +2,21 @@
     .meetingInfo {
         text-align: center;
     }
+    .shareMeetingWrapper {
+        .shareMeeting {
+            .share-meeting-details {
+                flex-direction: column;
+                .label {
+                    margin: 0px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #393939;
+                    margin-bottom: 20px;
+                }
+                .modalities {
+                    width: 316px;
+                }
+            }
+        }
+    }
 }

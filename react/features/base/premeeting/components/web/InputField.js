@@ -40,6 +40,7 @@ type Props = {
      * The field type (e.g. text, password...etc).
      */
     type: string,
+    maxLength: string,
 
     /**
      * Externally provided value.
@@ -136,28 +137,29 @@ export default class InputField extends PureComponent<Props, State> {
     render() {
         return (
             <input
-                autoFocus = { this.props.autoFocus }
-                className = { `field ${this.state.focused ? 'focused' : ''} ${this.props.className || ''}` }
-                data-testid = { this.props.testId ? this.props.testId : undefined }
-                disabled = { this.props.disabled }
-                id = { this.props.id }
-                onBlur = { this._onBlur }
-                onChange = { this._onChange }
-                onFocus = { this._onFocus }
-                onKeyDown = { this._onKeyDown }
-                onPaste = { e => {
-                    if(this.props.disablePaste) {
+                autoFocus={this.props.autoFocus}
+                className={`field ${this.state.focused ? 'focused' : ''} ${this.props.className || ''}`}
+                data-testid={this.props.testId ? this.props.testId : undefined}
+                disabled={this.props.disabled}
+                id={this.props.id}
+                maxLength={this.props.maxLength ? this.props.maxLength : '-1'}
+                onBlur={this._onBlur}
+                onChange={this._onChange}
+                onFocus={this._onFocus}
+                onKeyDown={this._onKeyDown}
+                onPaste={e => {
+                    if (this.props.disablePaste) {
                         e.preventDefault();
-                        return false; 
-                    } 
+                        return false;
+                    }
                 }}
-                onKeyPress = { this.props.onKeyPress }
-                placeholder = { this.props.placeHolder }
-                ref = { input => {
+                onKeyPress={this.props.onKeyPress}
+                placeholder={this.props.placeHolder}
+                ref={input => {
                     this.nameInput = input;
-                } }
-                type = { this.props.type }
-                value = { this.state.value } />
+                }}
+                type={this.props.type}
+                value={this.state.value} />
         );
     }
 

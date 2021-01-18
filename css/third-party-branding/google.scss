@@ -3,20 +3,24 @@
  * See: https://developers.google.com/identity/branding-guidelines
  */
 .google-sign-in {
-    background-color: #fff;
-    border: 1px solid #eee;
+    background-color: #E0584B;
+    // border: 1px solid #eee;
     border-radius: 20px;
     cursor: pointer;
     display: inline-flex;
     font-family: Roboto, arial, sans-serif;
     font-size: 14px;
     padding: 1px;
-    margin-bottom: 10px;
-    box-shadow: 1px 2px 2px 1px #ccc;
+    //margin-bottom: 10px;
+    box-shadow: 1px 2px 2px 1px #E0584B;
     height: 30px;
 
+    .google-icon{
+        margin-top: 6px;
+    margin-left: 10px;
+    }
     .google-cta {
-        color: #6a6a6a;
+        color: white;
         display: inline-block;
         /**
          * Hack the line height for vertical centering of text.

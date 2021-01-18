@@ -31,24 +31,26 @@ function Preview(props: Props) {
 
     if (!videoMuted && videoTrack) {
         return (
-            <div id = 'preview'>
+            <div id='preview'>
                 <Video
-                    className = 'flipVideoX'
-                    videoTrack = {{ jitsiTrack: videoTrack }} />
-                { children }
+                    className='flipVideoX'
+                    videoTrack={{ jitsiTrack: videoTrack }} />
+                {children}
             </div>
         );
     }
 
     return (
         <div
-            className = 'no-video'
-            id = 'preview'>
-            <Avatar
-                className = 'preview-avatar'
-                displayName = { name }
-                size = { 200 } />
-            { children }
+            className='no-video'
+            id='preview'>
+            <div className='avatar-image'>
+                <Avatar
+                    className='preview-avatar'
+                    displayName={name}
+                    size={150} />
+                {children}
+            </div>
         </div>
     );
 }

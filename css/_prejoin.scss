@@ -1,33 +1,8 @@
 .prejoin-page-button {
-
-    &.next {
-        background: #005C85;
-        width: 100px;
-        border-radius: $welcomePageButtonBorderRadius;
-    }
-
-    &.disabled {
-        background: #5497b4;
-        cursor: not-allowed;
-    }
-
-    &.guest {
-        &.disabled {
-            color: #5497b4;
-            cursor: not-allowed;
-            border: 1px solid #5497b4;
-        }
-        font-weight: 600;
-        background: #FFFFFF;
-        color: #005C85;
-        width: 190px;
-        border: 1px solid #005C85;
-        border-radius: $welcomePageButtonBorderRadius;
-    }
     
     min-width: $welcomePageButtonMinWidth;
     height: $welcomePageButtonHeight;
-    font-size: $welcomePageButtonFontSize;
+    font-size: $meetNowButtonFontSize;
     font-weight: $welcomePageButtonFontWeight;
     color: #FFFFFF;
     text-align: center;
@@ -36,24 +11,166 @@
     cursor: pointer;
     padding: 5px;
     margin: 15px auto;
+   
+    &.next {
+        background: #0A5694;
+        width: 200px;
+        border-radius: $welcomePageButtonBorderRadius;
+        font-size: 20px;
+        font-weight: 400;
+        margin: 4% auto;
+        &:hover{
+            background: #004C6E;
+        }
+    }
+    &.close{
+        background: #0A5694;
+        width: 200px;
+        border-radius: $welcomePageButtonBorderRadius;
+        font-size: 20px;
+        font-weight: 400;
+        margin: 4% auto;
+        margin-bottom: 40px;
+        &:hover{
+            background: #004C6E;
+        }
+    }
+
+    &.disabled {
+        background: #0A5694;
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.4;
+        margin: 4% auto;
+    }
+    &.guest {
+        &.disabled {
+            color: #5497b4;
+            cursor: not-allowed;
+            // border: 1px solid #5497b4;
+        }
+        font-weight: 700;
+        // background: #FFFFFF;
+        color: #ffffff;
+        width: 330px;
+        font-size: 15px;
+        margin: 0 auto;
+        // border: 1px solid #005C85;
+        // border-radius: $welcomePageButtonBorderRadius;
+    }
+    &.join {
+        font-size: 18px;
+        background: #0A5694;
+        font-weight: 400;
+        width: 200px;
+        border-radius: $welcomePageButtonBorderRadius;
+        &:hover{
+            background: #004C6E;
+        }
+    }
 }
 
+.hostPrejoinWrap {
+    height: 100%;
+    .meet-now-margin-bottom {
+        margin-bottom: 30px;
+    }
+    .meet-now{
+        display: flex;
+        align-items: center;
+        &.meet-now-padding {
+            padding: 30px 0px;
+            padding-left: 30px;
+        }
+        .jifmeet-logo {
+            width: 250px;
+            height: 100px;
+            margin: 20px auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('../../images/without-user-logo.png')
+        }
+        .guest-icon-wrapper{
+            background-color: #0A5694;
+            padding: 15px;
+            border-radius: 50%;
+        }
+        .meet-now-image-wrapper {
+            background-color: #0A5694;
+            padding: 15px;
+            border-radius: 50%;
+            .meet-now-image{
+                width: 35px;
+            }
+        }
+        .schedule-image-wrapper{
+            background-color: #FEA729;
+            padding: 15px;
+            border-radius: 50%;
+            .schedule-image{
+                width: 35px;
+            }
+        }
+        .meet-now-label {
+            margin-left: 15px;
+            font-size: 25px;
+            font-weight: bold;
+            color: #0A5694;
+        }
+    }
+        .profileSection {
+            right: 20px;
+            top: 10px;
+            position: fixed;
+        }
+        .hostPrejoin-container{
+            display: flex;
+            height: calc(100% - 123px);
+            .background-width {
+                flex: 1;
+            }
+            .left-background-image {
+                background-image: url('./../images/left-background-premeeting.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+                background-position: center 75%;
+            }
+            .right-background-image {
+                background-image: url('./../images/right-background-premeeting.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+                background-position: center 75%;
+            }
+
 .hostPrejoin {
+    margin-bottom: 25px;
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: relative;
     z-index: 100;
+    flex: 1;
     background-color: white;
-    height: 100%;
-    width: 100%;
-    overflow-y: scroll;
+    height: fit-content;
+    width: 50%;
+    // height: 100%;
+    min-width: 700px;
+    max-width: 1005px;
+    border-radius: 40px;
+    overflow-y: auto;
+    box-shadow: 0px 5px 5px #00000029;
     overflow-x: hidden;
     text-align: center;
     color: #393939;
+    .no-account {
+        background: #005C85;
+        margin-top: 15px;
+    }
 
     .error-block {
         color: #FF0000;
         margin: 0px auto 30px;
+        width: 80%;
+        margin-left: 80px;
     }
 
     .invalid-meeting-code {
@@ -77,17 +194,14 @@
         left: 40%;
     }
 
-    .profileSection {
-        margin: 70 auto 0;
-    }
-
     .modesSection {
-        width: 350px;
+        margin-left: 10px;
+        margin-right: 10px; 
 
         ul {
             border-bottom: 2px solid #C7C7C7 !important;
             height: 35px;
-            margin-top: 70px;
+            margin-top: 20px;
             display: flex;
             list-style: none;
             padding: 20px 20px 0;
@@ -96,7 +210,7 @@
 
         li {
             flex: 1;
-            margin: 0 5px 0 0;
+            margin: 0px;
             color: #9A9A9A;
             cursor: pointer;
 
@@ -109,10 +223,12 @@
         .cancel {
             cursor: pointer;
             width: 50px;
-            margin: 40px auto;
+            color: #393939;
+            font-size: 12px;
+            margin: 25px auto;
 
             &:hover {
-                color: red;
+                color: #659CB5;
             }
         }
     }
@@ -120,11 +236,11 @@
     .jitsi-icon {
 
         &.backArrow {
-            top: 10px;
+            top: 36px;
             display: block;
             box-sizing: border-box;
-            position: fixed;
-            right: 305px;
+            position: absolute;
+            left: 30px;
             cursor: pointer;
 
             svg {
@@ -144,9 +260,11 @@
     }
 
     .waiting-display {
-        margin: 30px;
         color: #393939;
-        h2 {
+        .waiting-content{
+            margin: 30px;
+            .request-content {
+                font-size: 24px;
             color: #393939;
         }
         .jitsi-icon svg {
@@ -168,34 +286,66 @@
             }
         }
     }
+    }
     
 }
+        }
+}
 
+@media only screen and (max-width: 1200px) {
+    .hostPrejoinWrap {
+        .hostPrejoin-container {
+       .left-background-image {
+            background-image: none;
+       }
+       .right-background-image {
+           background-image: none;
+       }
+    }
+    }
+}
+.shareMeetingWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
 .shareMeeting {
-
     .label {
         font-size: 20px;
-        padding: 0 0 15px;
+        // padding: 0 0 15px;
     }
 
     .share-meeting-details {
-        padding: 20px 0px;
+        // padding: 20px 0px;
+        display: flex;
+        margin-bottom: 15px;
+        align-items: center;
 
         .label {
             font-size: 16px;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-right: 30px;
+            color: #9A9A9A;
         }
 
         .modalities {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            width: 220px;
+
+            .Copy-Link {
+                cursor: pointer;
+            }
+            // div {
+            //     margin-right: 20px;
+            // }
         }
     }
     
     
 }
-
+}
 .prejoin {
 
     &-input-area {
@@ -254,7 +404,6 @@
 .prejoin-preview {
     height: 100%;
     position: absolute;
-    width: 100%;
 
     &--no-video {
         background: radial-gradient(50% 50% at 50% 50%, #5B6F80 0%, #365067 100%), #FFFFFF;

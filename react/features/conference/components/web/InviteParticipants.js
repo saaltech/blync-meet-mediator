@@ -104,6 +104,7 @@ class InviteParticipants extends Component<Props, State> {
                                 meetingTo,
                                 setMeetingTo: () => {}
                             }}
+                            isFromConference= { true }
                             shareable = { true } />
                     </MeetingDetails>
                 </div>

@@ -5,6 +5,11 @@
         position: absolute;
     }
 
+    .divider-line {
+            width: 50%;
+            border-bottom: 1px solid #9A9A9A;
+    }
+
     .modal {
         // position: absolute;
         z-index: 1010;
@@ -16,7 +21,7 @@
         width: 350px;
         max-width: 100%;
 
-        height: 530px;
+        height: 430px;
         max-height: 100%;
 
         background: #FFFFFF 0% 0% no-repeat padding-box;
@@ -24,7 +29,10 @@
         border: 1px solid #E7EFF4;
         border-radius: 6px;
         opacity: 1;
-
+        .close-icon {
+            top: 16px;
+            right: 30px;
+        }
         .close-button {
             position: absolute;
             
@@ -42,7 +50,13 @@
             padding: 5px 10px;
             font-size: 1.3rem;
           }
+       
           
+    }
+    .option-text-or {
+        color: #707070;
+        padding: 0 5px;
+        font-size: 15px;
     }
 
     .jitsi-icon svg {
@@ -63,8 +77,9 @@
             margin: 10px 0 15px;
 
             .form-label {
-                color: #393939;
+                color: #D1D1D1;
                 margin-bottom: 10px;
+                font-size: 15px;
                 text-align: left;
             }
 
@@ -72,7 +87,9 @@
                 color: #393939;
                 outline-width: 0;
                 background: no-repeat padding-box #FFF;
-                border: 1px solid;
+                border: 0px !important;
+                border-bottom: 1px solid #70707057 !important;
+                border-radius: 0px !important;
                 border-radius: 30px;
                 opacity: 1;
                 height: 35px;
@@ -84,8 +101,9 @@
             color: #393939;
             outline-width: 0;
             background: no-repeat padding-box #FFF;
-            border: 1px solid;
-            border-radius: 30px;
+            border: 0px;
+            border-bottom: 1px solid #70707057;
+            border-radius: 0px;
             opacity: 1;
             height: 35px;
             padding: 0 10px;
@@ -112,7 +130,8 @@
             background: #5497b4;
             cursor: not-allowed;
         }
-
+        width: max-content;
+        padding: 0 70px;
         background: #005C85;
         border-radius: $welcomePageButtonBorderRadius;
         color: #FFFFFF;
@@ -120,7 +139,7 @@
         vertical-align: middle;
         line-height: $welcomePageButtonLineHeight;
         cursor: pointer;
-        margin: 30px 40px 20px;
+        margin: 30px auto 0px auto;
     }
 }
 

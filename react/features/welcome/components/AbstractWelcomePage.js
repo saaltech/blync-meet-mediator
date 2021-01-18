@@ -197,7 +197,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
      * @protected
      * @returns {void}
      */
-    _onJoin() {
+    _onJoin(action = '', isSignedOut = false) {
         const room = this.state.room || this.state.generatedRoomname;
 
         sendAnalytics(
@@ -206,7 +206,7 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 room
             }));
 
-        if (room) {
+        // if (room) {
             this.setState({ joining: true });
 
             // By the time the Promise of appNavigate settles, this component
@@ -215,9 +215,21 @@ export class AbstractWelcomePage extends Component<Props, *> {
                 = () => this._mounted && this.setState({ joining: false });
             const meetingDetails = APP.store.getState()['features/app-auth'].meetingDetails;
             //this.props.dispatch(appNavigate(meetingDetails.meetingId + "?home=true&jwt="+APP.store.getState()['features/app-auth'].meetingAccessToken))
-            this.props.dispatch(appNavigate(meetingDetails.meetingId + (meetingDetails.isMeetingCode ? "" : "?home=true")))
-                .then(onAppNavigateSettled, onAppNavigateSettled);
-        }
+            let roomPathURL = !isSignedOut ?
+                meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?actions=${action}&isSignedOut=${isSignedOut}` : `?home=true&actions=${action}&isSignedOut=${isSignedOut}`)
+                :
+                meetingDetails.meetingId + (meetingDetails.isMeetingCode ? `?isSignedOut=${isSignedOut}` : `?isSignedOut=${isSignedOut}`)
+
+            const isElectron = navigator.userAgent.includes('Electron');
+            if(isElectron) {
+                APP.API.notifyExplicitIframeReload({room: roomPathURL});
+            }
+            else {
+                this.props.dispatch(appNavigate(roomPathURL))
+                    .then(onAppNavigateSettled, onAppNavigateSettled);
+            }
+            
+        // }
     }
 
     _onRoomChange: (string) => void;

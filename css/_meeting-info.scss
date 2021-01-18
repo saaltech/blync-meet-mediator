@@ -1,6 +1,31 @@
 .meetingInfo {
     color: #393939;
-    padding: 20px 40px;
+    // padding: 20px 40px;
+    width: 80%;
+    margin: 0 auto;
+    .meeting-detail-info{
+        display: flex;
+        justify-content: center;
+    }
+    .detail-heading{
+        flex: 0 0 115px;
+        color: #9A9A9A;
+        text-align: left;
+        font-size: 16px;
+    }
+    .detail-heading-margin {
+        margin-top: 20px;
+    }
+    .detail-heading-value::before{
+        content: ':\00a0 \00a0';
+    }
+    .detail-heading-value{
+    margin-left: 10px;
+    flex: 0 0 160px;
+    text-align: left;
+    color: #0a5694;
+    font-size: 16px;
+    }
 
     .divider {
         border-bottom: 1px solid #70707057;
@@ -8,12 +33,13 @@
     }
     
     .picker-field {
-        text-align: center;
-        width: 265px;
-        border-radius: 20px;
+       text-align: center;
         height: 35px;
-        border-color: #70707057;
-        border-width: 1px;
+        width: 210px;
+        // border-color: #70707057;
+        border-width: 0;
+        border-radius: 25px;
+        border: 1px solid #D1D1D1;
     }
 
     .date-time-popper {
@@ -24,26 +50,122 @@
         }
     }
 
+    .form-field-guest {
+        display: flex;
+        align-items: center;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 15px; 
+        .form-label-guest {
+            flex: 0 0 150px;
+            text-align: left;
+            color: #393939;
+            font-size: 15px;
+        }
+        .field{
+            border: 0 !important;
+            border-bottom: 1px solid #70707057 !important;
+            border-radius: 0px !important;
+        }
+    }
     .mandatory span {
         color: #FF0000;
     }
-
-    .meeting-title {
-        font-size: 35px;
-        padding: 20px 0 5px;
+    .shareable-meeting-title {
+        font-size: 14px;
+        // color:#005694;
+        padding: 35px 0 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        .meeting-name-schedule {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 30px;
+                color: #005694;
+        }
+        .meeting-id-schedule {
+            color: #005694;
+            font-size: 18px;
+            margin-bottom: 1%;
+        }
     }
 
-    .meeting-id, .date-info {
+    .meeting-created-updated-info {
+        padding: 35px 0 0.5%;
+        // font-weight: bold;
+        font-size: 14px
+    }
+
+    .meeting-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        color:#005694;
+        &.meeting-padding {
+            padding: 35px 0 0.5%;
+        }
+        .input-meeting-wrapper{
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .input-meeting{
+            border: 0;
+            color: #005694;
+            text-align: center;
+            width: 200px;
+        }
+        .edit-icon-wrap{
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .input-meeting:focus{
+            border-radius: 10px;
+            border: 1px solid lightgray;
+        }
+    }
+
+    .meeting-id{
+        color: #005694;
+        font-size: 18px;
+        margin-bottom: 1%;
+    }
+    .date-info {
         color: #969696;
         font-size: 14px;
     }
 
+    .you-are-host-wrapper {
+        color: #393939;
+        font-size: 14px;
+        margin-top: 20px;
+        margin-bottom: 4%;
+        display: flex;
+        justify-content: space-around;
+        .password-wrapper{
+            display: flex;
+            align-content: center;
+            .password-meeting{
+                margin-left: 10px;
+                line-height: 1;
+                &.fade-color{
+                    color: #D1D1D1;
+                }
+            }
+
+        }
+       
+    }
+
     .you-are-host {
-        color: #4D4D4D;
-        padding: 20px 0px 20px;
+      .you-text{
+          font-weight: bold;
+      }
+        // padding: 20px 0px 20px;
     }
 
     .date-field-container {
@@ -59,7 +181,31 @@
 
     .make-private {
         text-align: left;
+        margin-top: 15px; 
 
+        &.enable-meeting-wrap {
+            display: flex;
+            justify-content: space-between;
+            width: 55%;
+            margin: 2% auto;
+        }
+
+        .make-private-room {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-size: 15px;
+            font-weight: bold;
+            width: 55%;
+            margin: 2% auto;
+            color: #393939;
+        }
+
+        .enable-room {
+            font-size: 15px;
+            font-weight: bold;
+            color: #393939;
+        }
         input.field {
             height: 20px;
             width: 20px;
@@ -70,14 +216,83 @@
 
         .sub-label {
             color: #4D4D4D;
-            margin-left: 30px;
             font-size: 14px;
             opacity: 0.5;
         }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 23px;
+          }
+          
+          .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+          
+          .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 17px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+          
+          input:checked + .slider {
+            background-color: #00C062;
+          }
+          
+          input:focus + .slider {
+            box-shadow: 0 0 1px #00C062;
+          }
+          
+          input:checked + .slider:before {
+            -webkit-transform: translateX(17px);
+            -ms-transform: translateX(17px);
+            transform: translateX(17px);
+          }
+          
+          /* Rounded sliders */
+          .slider.round {
+            border-radius: 22px;
+          }
+          
+          .slider.round:before {
+            border-radius: 50%;
+          }
     }
 
     .meeting-password {
-        margin: 15px 30px;
+        margin: 0 auto;
+        width: 48%;
+        &.error-password {
+            input.field {
+                border: 1px solid red;
+            }
+        }
+        input.field {
+            text-align: center;
+            width: 90% !important;
+        }
 
         input.field:disabled {
             border-color: #70707057;
@@ -88,7 +303,7 @@
         .input-message {
             font-style: italic;
             color: #4D4D4D;
-            text-align: left;
+            text-align: center;
             padding: 5px;
             font-size: 12px;
         }
@@ -104,8 +319,8 @@
         .error-block {
             color: #FF0000;
             text-align: left;
-            position: absolute;
-            top: 70px;
+            // position: absolute;
+            // top: 70px;
         }
     }
 

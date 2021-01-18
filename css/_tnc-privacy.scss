@@ -1,20 +1,23 @@
 
 .tnc-privacy {
     position: fixed;
-    bottom: 20;
-    left: 20px;
+    bottom: 20px;
+    left: 10px;
     height: 60px;
     width: 60px;
-    background-color: #00C062;
+    // background-color: #00C062;
     border-radius: 15px;
-    color: #00C062;
+    // color: #00C062;
     z-index: 1;
     cursor: pointer;
 
     >div {
         margin: 15px;
-        background-color: #fff;
+        background-color: #337D9D;
         border-radius: 20px;
+        &:hover{
+            background-color: #004C6E;
+        }
     }
 
     &__menu {

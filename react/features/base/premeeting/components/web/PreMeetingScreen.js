@@ -15,9 +15,11 @@ import {
     getQueryVariable,
     // setPrejoinVideoTrackMuted
 } from '../../../../prejoin/functions';
+import LeftPanel from '../../../leftPanel';
+import { redirectOnButtonChange } from '../../../../welcome/functions';
 
 import Loading from '../../../../always-on-top/Loading'
-import { goHome } from '../../../../app-auth'
+import { goHome, setAppAuth } from '../../../../app-auth'
 import {
     setVideoMuted
 } from '../../../../base/media';
@@ -48,7 +50,7 @@ type Props = {
      * The video track to render as preview (if omitted, the default local track will be rendered).
      */
     videoTrack?: Object,
-    
+
     navigatedFromHome?: boolean,
 
     meetNowSelected?: boolean
@@ -73,7 +75,12 @@ class PreMeetingScreen extends PureComponent<Props> {
             navigatedFromHome: undefined,
             joinMeeting: false,
             exiting: false,
-            uuid: Math.random().toString(36).slice(2, 7)
+            showNoCreateMeetingPrivilegeTip: false,
+            activeButton: 'join',
+            actions: 'meetNow',
+            isSignedOut: false,
+            uuid: Math.random().toString(36).slice(2, 7),
+            permissionAsked: false
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
@@ -83,35 +90,94 @@ class PreMeetingScreen extends PureComponent<Props> {
     componentDidMount() {
         this.setState({
             meetNow: true,
-            navigatedFromHome: getQueryVariable('home') ? true: false,
+            navigatedFromHome: getQueryVariable('home') ? (getQueryVariable('home') === 'true' ? true : false) : false,
+            actions: getQueryVariable('actions') ? getQueryVariable('actions') : '',
+            isSignedOut: getQueryVariable('isSignedOut') ? (getQueryVariable('isSignedOut') === 'true' ? true : false) : false,
             joinMeeting: getQueryVariable('join') ? true : false
         });
+        const activeButtonAction = getQueryVariable('actions');
+        if (activeButtonAction) {
+            this.setState({ activeButton: 'create' });
+        } else {
+            this.setState({ activeButton: 'join' });
+        }
     }
 
-    setMeetNow(value){
+    componentDidUpdate(prevProps) {
+        if (prevProps && prevProps._user !== this.props._user) {
+            this.setState({ showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
+        }
+        if (prevProps && prevProps.videoTrack !== this.props.videoTrack) {
+            this.setMeetNow(this.state.actions === 'meetNow');
+        }
+    }
+    handleRouteChange(value) {
+        redirectOnButtonChange(value);
+    }
+
+    syncStoreFromParentWindowStore() {
+        
+        window.addEventListener('message', receiveMessage, false);
+
+        function receiveMessage(evt)
+         {
+             if(evt.data.appAuth) {
+                // TODO: Receive the 'appAuth' data stored in external window, and,
+                // Apply/dispatch the data into the current window localStorage.
+                APP.store.dispatch(setAppAuth(evt.data.appAuth));
+             }
+         }
+
+         // Send the 'syncStoreReq' request to the parent containing window (like electron app),
+         window.parent.postMessage({'syncStoreReq': true}, '*');
+    }
+
+    _canCreateMeetings() {
+        const { _user } = this.props;
+
+        return !_user || (_user.isPartOfTheCircle && _user.role == 'manager');
+    }
+
+    setMeetNow(value) {
         this.setState({
             meetNow: value
         }, () => {
-            APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
+            APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews)))
         })
     }
 
+    setIsVideoMuted(value) {
+        APP.store.dispatch(setVideoMuted(!value))
+    }
+
+    goToCreateHome() {
+        // notify external apps
+        APP.API.notifyReadyToClose();
+        window.location.href = `${window.location.origin}?actions=create`
+    }
+
     showTrackPreviews(value) {
+        if (!this.props.videoTrack && !this.state.permissionAsked && value) {
+            this.props._start();
+            this.setState({
+                permissionAsked: true
+            })
+        }
         this.setState({
             showTrackPreviews: value
         }, () => {
-            // APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews || this.state.meetNow)))
+            // APP.store.dispatch(setVideoMuted(!(this.state.showTrackPreviews)))
         })
     }
 
     render() {
-        const { title, videoMuted, videoTrack, url, meetNowSelected } = this.props;
-        const { meetNow, showTrackPreviews, navigatedFromHome, exiting, 
+        const { title, videoMuted, videoTrack, url, meetNowSelected, _isUserSignedOut } = this.props;
+        const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
             joinMeeting } = this.state;
         let urlToShow = url.split('/').length > 3 ? url.split('/')[3] : title;
-        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome  == false
-        if(guestFlow) {
-            window.sessionStorage.removeItem('isJWTSet')
+        let guestFlow = navigatedFromHome !== undefined && navigatedFromHome == false
+        if (guestFlow) {
+            window.sessionStorage.removeItem('isJWTSet');
         }
 
         // This is needed to turn the prejoin video track camera light, 
@@ -119,59 +185,92 @@ class PreMeetingScreen extends PureComponent<Props> {
         // setTimeout(() => setPrejoinVideoTrackMuted(!meetNow || videoMuted), 500);
 
         return (
-            <div
-                className = 'premeeting-screen'
-                id = 'lobby-screen'>
-                <Background backgroundColor='black'/>
+            <div className="premeeting-wrapper">
                 {
                     exiting && <Loading />
                 }
-                {
-                    showTrackPreviews || meetNow ?
-                    <Preview
-                            videoMuted = { videoMuted }
-                            videoTrack = { videoTrack } >
-                        <div className = 'media-btn-container'>
-                            <AudioSettingsButton visible = { true } />
-                            <VideoSettingsButton visible = { true } />
-                        </div>
-                        { this.props.footer }
-                    </Preview>
-                    :
-                    <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
-
-                    </div>
+                {!_isUserSignedOut ? (<LeftPanel
+                    activeButton={this.state.activeButton}
+                    showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
+                    isNotCreatePermission={!this._canCreateMeetings()}
+                    toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
+                    setActiveButton={this.handleRouteChange} />
+                ) : <></>
                 }
-                
+                <div
+                    className='premeeting-screen'
+                    id='lobby-screen'>
+                    {/* <Background backgroundColor='black'/> */}
 
-                <div className = 'content'>
-                    <div 
-                        onClick={() => {
-                            this.setState({exiting: true},
-                            () => {
-                                goHome()
-                            })
-                        }} 
-                        className="close-icon"></div>
-                    {
-                        navigatedFromHome && 
-                        <HostPrejoin 
-                            isMeetNow={this.setMeetNow} 
-                            //Show join now after page reload in case of `meet now` option
-                            joinNow={meetNowSelected}
-                            meetingName={urlToShow}
-                            showTrackPreviews={this.showTrackPreviews}
-                        />
+                    <div style={{ height: '100%', width: '100%' }}>
+                        {/* {
+                        showTrackPreviews || meetNow ?
+                            <Preview
+                                videoMuted={videoMuted}
+                                videoTrack={videoTrack} >
+                                <div className='media-btn-container'>
+                                    <AudioSettingsButton visible={true} />
+                                    <VideoSettingsButton visible={true} />
+                                </div>
+                                {this.props.footer}
+                            </Preview>
+                            :
+                            <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
+
+                            </div>
                     }
-                    {
-                        guestFlow && 
-                        <GuestPrejoin 
-                            joinMeeting={ joinMeeting }
-                            meetingId={urlToShow}
-                            showTrackPreviews={this.showTrackPreviews}
-                            uuid={this.state.uuid}
-                        />
-                    }
+ */}
+
+                        <div className='content'>
+                            {
+                                navigatedFromHome &&
+                                <HostPrejoin
+                                    isMeetNow={this.setMeetNow}
+                                    onClickClose={() => {
+                                        this.setState({ exiting: true },
+                                            () => {
+                                                this.goToCreateHome()
+                                            })
+                                    }}
+                                    syncStoreFromParentWindowStore={() => {
+                                        this.syncStoreFromParentWindowStore()
+                                    }}
+                                    setIsVideoMuted={this.setIsVideoMuted}
+                                    //Show join now after page reload in case of `meet now` option
+                                    joinNow={meetNowSelected}
+                                    meetingId={urlToShow}
+                                    videoMuted={videoMuted}
+                                    videoTrack={videoTrack}
+                                    actions={this.state.actions}
+                                    previewFooter={this.props.footer}
+                                    showTrackPreviews={this.showTrackPreviews}
+                                />
+                            }
+                            {
+                                guestFlow &&
+                                <GuestPrejoin
+                                    setIsVideoMuted={this.setIsVideoMuted}
+                                    isSignedOut={this.state.isSignedOut}
+                                    joinMeeting={joinMeeting}
+                                    videoMuted={videoMuted}
+                                    videoTrack={videoTrack}
+                                    onClickClose={() => {
+                                        this.setState({ exiting: true },
+                                            () => {
+                                                goHome()
+                                            })
+                                    }}
+                                    syncStoreFromParentWindowStore={() => {
+                                        this.syncStoreFromParentWindowStore()
+                                    }}
+                                    previewFooter={this.props.footer}
+                                    meetingId={urlToShow}
+                                    showTrackPreviews={this.showTrackPreviews}
+                                    uuid={this.state.uuid}
+                                />
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -187,6 +286,8 @@ class PreMeetingScreen extends PureComponent<Props> {
 function mapStateToProps(state) {
     return {
         url: getCurrentConferenceUrl(state),
+        _user: state['features/app-auth'].user,
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
         meetNowSelected: APP.store.getState()['features/app-auth'].meetingDetails
             && APP.store.getState()['features/app-auth'].meetingDetails.meetNow
     };

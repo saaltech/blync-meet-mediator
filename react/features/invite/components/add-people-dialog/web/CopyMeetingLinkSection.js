@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 import { translate } from '../../../../base/i18n';
-import { Icon, IconCheck, IconCopy } from '../../../../base/icons';
+import { Icon, IconCheck, IconCopyDetail } from '../../../../base/icons';
 
 import { copyText } from './utils';
 
@@ -91,7 +91,7 @@ function CopyMeetingLinkSection({ t, url, inviteText, custom = false }: Props) {
                 <div className = 'invite-more-dialog invite-more-dialog-conference-url copy-link-text'>
                     {isHovered ? 'Copy meeting details' : displayUrl }
                 </div>
-                <Icon src = { IconCopy } />
+                <Icon src = { IconCopyDetail } />
             </>
         );
     }
