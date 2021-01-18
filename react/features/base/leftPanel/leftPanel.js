@@ -17,7 +17,7 @@ function LeftPanel(props) {
 
         const style = {
             position: 'fixed',
-            top: '6px',
+            top: '10px',
             left: '0px',
             backgroundImage: `url('../images/jifmeetLogo_leftPanel.png')`
         };
