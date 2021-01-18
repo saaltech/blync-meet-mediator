@@ -72,9 +72,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 8px 8px 16px;
-            margin-top: 8px;
+            margin: 25px auto;
             width: calc(100% - 24px);
-            height: 24px;
+            // height: 24px;
 
             background: #0376DA;
             border-radius: 4px;
@@ -89,7 +89,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                max-width: 292px;
+                width: 292px;
 
                 &.selected {
                     font-weight: 600;

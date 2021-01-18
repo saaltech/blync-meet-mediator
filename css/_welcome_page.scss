@@ -179,6 +179,7 @@ box-sizing: content-box !important;
                         width: 70%;
                         margin: 0 auto;
                         margin-bottom: 35px;
+                        font-size: 1.3em;
                         position: relative;
                         .close-icon {
                             top: 50px;
@@ -466,8 +467,8 @@ box-sizing: content-box !important;
         // margin-left: 32px;
         // max-width: calc(100% - 40px);
         // width: $welcomePageEnterRoomWidth;
-        max-width: 300px;
-        width: 75%;
+        // max-width: 300px;
+        width: 50%;
         z-index: $zindex2;
         background-color: #E7EFF4;
         padding: $welcomePageEnterRoomPadding;
@@ -835,6 +836,7 @@ box-sizing: content-box !important;
                     }
                     #enter_room{
                         max-width: 500px;
+                        width: 75%;
                     }
                 }
                 &__label {

@@ -49,7 +49,7 @@
             cursor: not-allowed;
             // border: 1px solid #5497b4;
         }
-        font-weight: 200;
+        font-weight: 700;
         // background: #FFFFFF;
         color: #ffffff;
         width: 330px;
@@ -163,11 +163,14 @@
     color: #393939;
     .no-account {
         background: #005C85;
+        margin-top: 15px;
     }
 
     .error-block {
         color: #FF0000;
         margin: 0px auto 30px;
+        width: 80%;
+        margin-left: 80px;
     }
 
     .invalid-meeting-code {

@@ -425,6 +425,7 @@ function MeetingInfo(props) {
                     {!meetNow && (<div className='divider' />)}
                     <ShareMeeting
                         meetingId={meetingId}
+                        isFromConference={isFromConference}
                         meetingUrl={meetingUrl}
                         meetingName={meetingName}
                         meetingFrom={meetingFrom}
