@@ -569,7 +569,7 @@ class WelcomePage extends AbstractWelcomePage {
             </div>
             {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
             {
-                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<CalendarProfile />
+                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
                 ) : <></>
             }
         </>);

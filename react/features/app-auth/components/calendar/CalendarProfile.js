@@ -270,67 +270,7 @@ function CalendarProfile(props: Props) {
 /**
  */
 function _mapStateToProps(state: Object) {
-    // const calendarEvents = state['features/calendar-sync'].events;
-    const calendarEvents = [{
-        "calendarId": "primary",
-        "endDate": 1611036000000,
-        "id": "4604f3tkehegkah6am92qdosu3_20210119T053000Z",
-        "startDate": 1611034200000,
-        "title": "Jifmeet standup (on meet.jifmeet.com)",
-        "url": null,
-        "description": "Neehal Shaikh is inviting you to a meeting.\n\nTopic: Jifmeet standup\n\nJoin the meeting:\nhttps://meet.jifmeet.com/42-1610449875315-756?join=true\n\nMeeting ID: 42-1610449875315-756\nPassword: xyz789",
-        "organizer": {
-            "email": "neehal@saal.ai",
-            "self": true
-        }
-    }, {
-        "calendarId": "primary",
-        "endDate": 1611041400000,
-        "id": "205k81ob0ars2887bu208n946s",
-        "startDate": 1611037800000,
-        "title": "Desktop app deployment/upload process",
-        "url": null,
-        "description": "Hi,\nI would like to discuss the possibilities of deployment/upload options of our JifMeet Desktop app installers (mac, windows) to facilitate download and install and auto updates fro with the app.\n\nPlease suggest an alternate timing if this doesn't work out.\n\nIn case if anyone want to read more about what we are going to discuss,\nhttps://www.electron.build/configuration/publish\nhttps://www.electron.build/auto-update\n\nRegards,\nNeehal Shaikh",
-        "organizer": {
-            "email": "neehal@saal.ai",
-            "self": true
-        }
-    }, {
-        "calendarId": "primary",
-        "endDate": 1611075600000,
-        "id": "6pd7gsfcb6og4ri2o07og7skua",
-        "startDate": 1611072000000,
-        "title": "dev test",
-        "url": "https://dev-jifmeet.saal.ai/71-1610895512512-782?join=true",
-        "description": "Neehal Shaikh is inviting you to a meeting.\n\nTopic: Neehal's Meeting\n\nJoin the meeting:\nhttps://dev-jifmeet.saal.ai/71-1610895512512-782?join=true\n\nMeeting ID: 71-1610895512512-782",
-        "organizer": {
-            "email": "neehal@saal.ai",
-            "self": true
-        }
-    }, {
-        "calendarId": "primary",
-        "endDate": 1611122400000,
-        "id": "mn9be1oqlu4dj4gr751bbslqp2_20210120T053000Z",
-        "startDate": 1611120600000,
-        "title": "Jifmeet standup (on meet.jifmeet.com)",
-        "url": null,
-        "description": "Neehal Shaikh is inviting you to a meeting.\n\nTopic: Jifmeet standup\n\nJoin the meeting:\nhttps://meet.jifmeet.com/42-1610449875315-756?join=true\n\nMeeting ID: 42-1610449875315-756\nPassword: xyz789",
-        "organizer": {
-            "email": "neehal@saal.ai",
-            "self": true
-        }
-    }, {
-        "calendarId": "primary",
-        "endDate": 1611144000000,
-        "id": "0ivrsc2cj503fq5kqe4b98h9rb_20210120T113000Z",
-        "startDate": 1611142200000,
-        "title": "HealthShield Reporting",
-        "url": null,
-        "organizer": {
-            "email": "neehal@saal.ai",
-            "self": true
-        }
-    }];
+    const calendarEvents = state['features/calendar-sync'].events;
     const calendarEventsGroup = {
         'today': [],
         'others': []
