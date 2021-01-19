@@ -527,7 +527,7 @@ function MeetingInfo(props) {
 
 
 function _mapStateToProps(state: Object) {
-    const calendarEvents = state['features/calendar-sync'].events;
+    const calendarEvents = state['features/calendar-sync']?.events;
     // const calendarEvents = [{
     //     allDay: undefined,
     //     attendees: undefined,
