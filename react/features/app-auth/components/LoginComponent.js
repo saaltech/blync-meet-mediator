@@ -92,6 +92,10 @@ function LoginComponent(props) {
     const onSuccess = data => {
         // implement appLogin
         APP.store.dispatch(resolveAppLogin(data));
+
+        // notify the external application of the resolveAppLogin action
+        APP.API.notifyResolveAppLogin(data);
+
         closeAction();
     };
 
@@ -119,7 +123,15 @@ function LoginComponent(props) {
         clearForm();
         isOverlay && closeAction();
         setIsSocialLogin(true);
-        APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
+
+        // const isElectron = navigator.userAgent.includes('Electron');
+        // if(isElectron) {
+        //     // Send the 'googleLogin' request to the parent containing window (like electron app),
+        //     window.parent.postMessage({'googleLogin': true}, '*');
+        // } else {
+            APP.store.dispatch(signIn(CALENDAR_TYPE.GOOGLE));
+        //}
+        
     };
 
     const loginErrorMsg = (errors && errors.indexOf('server_error') > -1)

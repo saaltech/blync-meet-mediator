@@ -9,10 +9,10 @@ import {
     APP_LOGIN,
     EXPIRE_TOKEN,
     SET_POST_WELCOME_SCREEN_DETAILS,
-    SET_GOOGLE_OFFLINE_CODE
+    SET_GOOGLE_OFFLINE_CODE,
+    SET_APP_AUTH
 } from './actionTypes';
 import { LoginComponent } from './components';
-import logger from './logger';
 
 import { isTokenExpired, setToken, validateToken } from './functions'
 
@@ -46,11 +46,20 @@ export function resolveAppLogin(details, refreshCall = false) {
 export function invalidateAndGoHome(skipRelogin = false) {
     APP.store.dispatch(resolveAppLogout());
     if(!skipRelogin) {
-        window.location.href = window.location.origin + "?sessionExpired=true";
+        const isElectron = navigator.userAgent.includes('Electron');
+        if(isElectron) {
+            APP.API.notifyExplicitIframeReload({options: {sessionExpired: true}});
+        }
+        else {
+            window.location.href = window.location.origin + "?sessionExpired=true";
+        }
     }
 }
 
 export function goHome() {
+    // notify external apps
+    APP.API.notifyReadyToClose();
+    
     window.location.href = window.location.origin
   }
 
@@ -152,5 +161,12 @@ export function setGoogleOfflineCode(googleOfflineCode = null) {
     return {
         type: SET_GOOGLE_OFFLINE_CODE,
         googleOfflineCode
+    }
+}
+
+export function setAppAuth(appAuth) {
+    return {
+        type: SET_APP_AUTH,
+        appAuth
     }
 }

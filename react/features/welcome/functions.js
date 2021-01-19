@@ -52,11 +52,27 @@ export function isWelcomePageUserEnabled(stateful: Function | Object) {
 /**
  */
 export function redirectOnInvalidMeeting(meetingId) {
-    window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
+    // notify external apps
+    APP.API.notifyReadyToClose();
+
+    const isElectron = navigator.userAgent.includes('Electron');
+    if(isElectron) {
+        APP.API.notifyExplicitIframeReload({options: {invalidMeetingId: meetingId}});
+    }
+    else {
+        window.location.href = `${window.location.origin}?invalidMeetingId=${meetingId}`;
+    }
 }
 
 export function redirectOnButtonChange(buttonType) {
-    window.location.href = `${window.location.origin}?actions=${buttonType}`;
+            
+    const isElectron = navigator.userAgent.includes('Electron');
+    if(isElectron) {
+        APP.API.notifyExplicitIframeReload({options: {actions: buttonType}});
+    }
+    else {
+        window.location.href = `${window.location.origin}?actions=${buttonType}`;
+    }
 }
 
 /**

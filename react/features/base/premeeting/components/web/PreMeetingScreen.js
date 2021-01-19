@@ -19,7 +19,7 @@ import LeftPanel from '../../../leftPanel';
 import { redirectOnButtonChange } from '../../../../welcome/functions';
 
 import Loading from '../../../../always-on-top/Loading'
-import { goHome } from '../../../../app-auth'
+import { goHome, setAppAuth } from '../../../../app-auth'
 import {
     setVideoMuted
 } from '../../../../base/media';
@@ -115,6 +115,23 @@ class PreMeetingScreen extends PureComponent<Props> {
         redirectOnButtonChange(value);
     }
 
+    syncStoreFromParentWindowStore() {
+        
+        window.addEventListener('message', receiveMessage, false);
+
+        function receiveMessage(evt)
+         {
+             if(evt.data.appAuth) {
+                // TODO: Receive the 'appAuth' data stored in external window, and,
+                // Apply/dispatch the data into the current window localStorage.
+                APP.store.dispatch(setAppAuth(evt.data.appAuth));
+             }
+         }
+
+         // Send the 'syncStoreReq' request to the parent containing window (like electron app),
+         window.parent.postMessage({'syncStoreReq': true}, '*');
+    }
+
     _canCreateMeetings() {
         const { _user } = this.props;
 
@@ -134,6 +151,8 @@ class PreMeetingScreen extends PureComponent<Props> {
     }
 
     goToCreateHome() {
+        // notify external apps
+        APP.API.notifyReadyToClose();
         window.location.href = `${window.location.origin}?actions=create`
     }
 
@@ -213,10 +232,13 @@ class PreMeetingScreen extends PureComponent<Props> {
                                                 this.goToCreateHome()
                                             })
                                     }}
+                                    syncStoreFromParentWindowStore={() => {
+                                        this.syncStoreFromParentWindowStore()
+                                    }}
                                     setIsVideoMuted={this.setIsVideoMuted}
                                     //Show join now after page reload in case of `meet now` option
                                     joinNow={meetNowSelected}
-                                    meetingName={urlToShow}
+                                    meetingId={urlToShow}
                                     videoMuted={videoMuted}
                                     videoTrack={videoTrack}
                                     actions={this.state.actions}
@@ -237,6 +259,9 @@ class PreMeetingScreen extends PureComponent<Props> {
                                             () => {
                                                 goHome()
                                             })
+                                    }}
+                                    syncStoreFromParentWindowStore={() => {
+                                        this.syncStoreFromParentWindowStore()
                                     }}
                                     previewFooter={this.props.footer}
                                     meetingId={urlToShow}
