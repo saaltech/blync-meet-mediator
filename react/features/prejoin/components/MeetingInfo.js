@@ -100,7 +100,7 @@ function MeetingInfo(props) {
     }, []);
 
     useEffect(() => {
-        if (meetingId) {
+        if (meetingId && props.calendarEvents) {
             const _calenderEvent = props.calendarEvents.length ? [...props.calendarEvents] : [];
             for (let index = 0; index < _calenderEvent.length; index++) {
                 if (_calenderEvent[index].url && _calenderEvent[index].url.includes(meetingId)) {
