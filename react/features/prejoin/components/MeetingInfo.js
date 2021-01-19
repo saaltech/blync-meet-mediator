@@ -5,11 +5,17 @@ import DatePicker from 'react-datepicker';
 import { IconContext } from 'react-icons';
 import { FaCalendarAlt, FaLock, FaUnlock } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
+import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
 import { HiCheckCircle } from 'react-icons/hi';
 import { IoIosCloseCircle } from 'react-icons/io';
+import sanitizeHtml from 'sanitize-html';
+import { validationFromNonComponents } from '../../../features/app-auth';
+import { bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
 
 import { translate } from '../../base/i18n';
+import { connect } from '../../base/redux';
 import { InputField } from '../../base/premeeting';
+import logger from '../../settings/logger';
 import { AudioSettingsButton, VideoSettingsButton } from '../../toolbox/components';
 import Preview from '../../../features/base/premeeting/components/web/Preview';
 
@@ -23,6 +29,8 @@ import {
 
 function MeetingInfo(props) {
     const [isMeetingNameEdit, setIsMeetingNameEdit] = useState(false);
+    const [isMeetingDetailsOpen, setIsMeetingDetailsOpen] = useState(false);
+    const [selectedMeetingDetails, setSelectedMeetingDetails] = useState(null);
     const meetNow = props.meetNow;
     const isBackPressed = props.isBackPressed || false;
     const isFromConference = props.isFromConference || false;
@@ -44,6 +52,29 @@ function MeetingInfo(props) {
         setIsMeetingNameEdit(true);
     }
 
+    const defaultOptions = {
+        // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
+        allowedAttributes: {
+            'a': ['href', 'name', 'target'] //,
+            // 'div': [ 'style' ]
+        }
+    };
+
+    function onClickDetailsArrow() {
+        setIsMeetingDetailsOpen(!isMeetingDetailsOpen);
+    }
+
+    function sanitize(dirty, options) {
+        return ({
+            __html: sanitizeHtml(
+                dirty,
+                {
+                    ...defaultOptions,
+                    ...options
+                }
+            )
+        })
+    }
     function handleMeetingNameBlur() {
         setIsMeetingNameEdit(false);
     }
@@ -51,6 +82,36 @@ function MeetingInfo(props) {
     function generatePassword() {
         return Math.random().toString(36).slice(2, 7);
     }
+
+    useEffect(() => {
+        async function calenderData() {
+            if (isFromGuest && props._isGoogleSigninUser) {
+                const refreshTokenResponse = await validationFromNonComponents(true, true);
+
+                refreshTokenResponse
+                    && APP.store.dispatch(bootstrapCalendarIntegration())
+                        .catch(err => {
+                            logger.error('Meeting Info Google oauth bootstrapping failed', err)
+                        });
+
+            }
+        }
+        calenderData();
+    }, []);
+
+    useEffect(() => {
+        if (meetingId) {
+            const _calenderEvent = props.calendarEvents.length ? [...props.calendarEvents] : [];
+            for (let index = 0; index < _calenderEvent.length; index++) {
+                if (_calenderEvent[index].url && _calenderEvent[index].url.includes(meetingId)) {
+                    setSelectedMeetingDetails({ ..._calenderEvent[index] });
+                    break;
+                }
+            }
+
+        }
+    }, [props.calendarEvents]);
+
     useEffect(() => {
         if (!meetNow) {
             let _current = moment();
@@ -162,7 +223,32 @@ function MeetingInfo(props) {
                                 )}
 
                             </div>
-                            <div className='meeting-id'>{meetingId}</div>
+                            <div className='meeting-id'>{meetingId}
+                                {selectedMeetingDetails && selectedMeetingDetails.description ? (<div className="meeting-details" style={{ marginLeft: '10px' }}>Details
+                                    <IconContext.Provider value={{ style: { color: '#00C062' } }}>
+                                        <span className="meeting-details-arrow" onClick={onClickDetailsArrow}>
+                                            {isMeetingDetailsOpen ? <RiArrowUpSLine size={25} /> : <RiArrowDownSLine size={25} />}
+                                        </span>
+                                    </IconContext.Provider>
+                                </div>
+                                ) : <></>
+                                }
+                                {isMeetingDetailsOpen ? (
+                                    <div className="meeting-details-container">
+                                        <div
+                                            className={`description__modal 
+                                                ${selectedMeetingDetails.description ? '' : 'no-content'}`} >
+                                            <div dangerouslySetInnerHTML={
+                                                sanitize(selectedMeetingDetails.description ? selectedMeetingDetails.description : 'No content')} />
+                                        </div>
+                                        <div className='coming-from-google-content'>
+                                            <div> {'Meeting Details from '} </div>
+                                            <img src='./../images/google_calendar.png' />
+                                        </div>
+                                    </div>
+                                ) : <></>
+                                }
+                            </div>
                         </>
                     )
             }
@@ -407,17 +493,19 @@ function MeetingInfo(props) {
               }
                 </div>
             }
-            {((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
-                <Preview
-                    videoMuted={props.videoMuted}
-                    videoTrack={props.videoTrack} >
-                    <div className='media-btn-container'>
-                        <AudioSettingsButton visible={true} />
-                        <VideoSettingsButton visible={true} />
-                    </div>
-                    {props.previewFooter}
-                </Preview>
-            )}
+            {
+                ((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
+                    <Preview
+                        videoMuted={props.videoMuted}
+                        videoTrack={props.videoTrack} >
+                        <div className='media-btn-container'>
+                            <AudioSettingsButton visible={true} />
+                            <VideoSettingsButton visible={true} />
+                        </div>
+                        {props.previewFooter}
+                    </Preview>
+                )
+            }
 
             {
                 shareable
@@ -437,4 +525,57 @@ function MeetingInfo(props) {
     );
 }
 
-export default translate(MeetingInfo);
+
+function _mapStateToProps(state: Object) {
+    const calendarEvents = state['features/calendar-sync'].events;
+    // const calendarEvents = [{
+    //     allDay: undefined,
+    //     attendees: undefined,
+    //     calendarId: "primary",
+    //     description: "Neehal Shaikh is inviting you to a meeting.↵↵Topic: Jifmeet standup↵↵Join the meeting:↵https://meet.jifmeet.com/42-1610449875315-756?join=true↵↵Meeting ID: 42-1610449875315-756↵Password: xyz789",
+    //     endDate: 1610517600000,
+    //     id: "6aflr7nc81g7co650cvmtcejlp_20210113T053000Z",
+    //     organizer: {
+    //         email: "neehal@saal.ai",
+    //         self: true
+    //     },
+    //     startDate: 1610515800000,
+    //     title: "Jifmeet standup (on meet.jifmeet.com)",
+    //     url: "https://localhost:8080/42-1610449875315-756?join=true"
+    // }, {
+    //     allDay: undefined,
+    //     attendees: undefined,
+    //     calendarId: "primary",
+    //     description: undefined,
+    //     endDate: 1610539200000,
+    //     id: "0ivrsc2cj503fq5kqe4b98h9rb_20210113T113000Z",
+    //     organizer: {
+    //         email: "neehal@saal.ai",
+    //         self: true
+    //     },
+    //     startDate: 1610537400000,
+    //     title: "HealthShield Reporting",
+    //     url: null
+    // }, {
+    //     allDay: undefined,
+    //     attendees: undefined,
+    //     calendarId: "primary",
+    //     description: "Neehal Shaikh is inviting you to a meeting.↵↵Topic: Jifmeet standup↵↵Join the meeting:↵https://meet.jifmeet.com/42-1610449875315-756?join=true↵↵Meeting ID: 42-1610449875315-756↵Password: xyz789",
+    //     endDate: 1610604000000,
+    //     id: "6aflr7nc81g7co650cvmtcejlp_20210114T053000Z",
+    //     organizer: {
+    //         email: "neehal@saal.ai",
+    //         self: true
+    //     },
+    //     startDate: 1610602200000,
+    //     title: "Jifmeet standup (on meet.jifmeet.com)",
+    //     url: "https://localhost:8080/48-1611044650993-393?join=true"
+    // }];
+    return {
+        calendarEvents,
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
+        _isGoogleSigninUser: Boolean(state['features/app-auth'].googleOfflineCode)
+    };
+}
+
+export default translate(connect(_mapStateToProps)(MeetingInfo));
