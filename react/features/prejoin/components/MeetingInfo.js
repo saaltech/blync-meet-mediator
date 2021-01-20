@@ -93,7 +93,6 @@ function MeetingInfo(props) {
                         .catch(err => {
                             logger.error('Meeting Info Google oauth bootstrapping failed', err)
                         });
-
             }
         }
         calenderData();
@@ -224,7 +223,7 @@ function MeetingInfo(props) {
 
                             </div>
                             <div className='meeting-id'>{meetingId}
-                                {selectedMeetingDetails && selectedMeetingDetails.description ? (<div className="meeting-details" style={{ marginLeft: '10px' }}>Details
+                                {selectedMeetingDetails && selectedMeetingDetails.description ? (<div onClick={onClickDetailsArrow} className="meeting-details" style={{ marginLeft: '10px' }}>Details
                                     <IconContext.Provider value={{ style: { color: '#00C062' } }}>
                                         <span className="meeting-details-arrow" onClick={onClickDetailsArrow}>
                                             {isMeetingDetailsOpen ? <RiArrowUpSLine size={25} /> : <RiArrowDownSLine size={25} />}
@@ -528,49 +527,6 @@ function MeetingInfo(props) {
 
 function _mapStateToProps(state: Object) {
     const calendarEvents = state['features/calendar-sync']?.events;
-    // const calendarEvents = [{
-    //     allDay: undefined,
-    //     attendees: undefined,
-    //     calendarId: "primary",
-    //     description: "Neehal Shaikh is inviting you to a meeting.↵↵Topic: Jifmeet standup↵↵Join the meeting:↵https://meet.jifmeet.com/42-1610449875315-756?join=true↵↵Meeting ID: 42-1610449875315-756↵Password: xyz789",
-    //     endDate: 1610517600000,
-    //     id: "6aflr7nc81g7co650cvmtcejlp_20210113T053000Z",
-    //     organizer: {
-    //         email: "neehal@saal.ai",
-    //         self: true
-    //     },
-    //     startDate: 1610515800000,
-    //     title: "Jifmeet standup (on meet.jifmeet.com)",
-    //     url: "https://localhost:8080/42-1610449875315-756?join=true"
-    // }, {
-    //     allDay: undefined,
-    //     attendees: undefined,
-    //     calendarId: "primary",
-    //     description: undefined,
-    //     endDate: 1610539200000,
-    //     id: "0ivrsc2cj503fq5kqe4b98h9rb_20210113T113000Z",
-    //     organizer: {
-    //         email: "neehal@saal.ai",
-    //         self: true
-    //     },
-    //     startDate: 1610537400000,
-    //     title: "HealthShield Reporting",
-    //     url: null
-    // }, {
-    //     allDay: undefined,
-    //     attendees: undefined,
-    //     calendarId: "primary",
-    //     description: "Neehal Shaikh is inviting you to a meeting.↵↵Topic: Jifmeet standup↵↵Join the meeting:↵https://meet.jifmeet.com/42-1610449875315-756?join=true↵↵Meeting ID: 42-1610449875315-756↵Password: xyz789",
-    //     endDate: 1610604000000,
-    //     id: "6aflr7nc81g7co650cvmtcejlp_20210114T053000Z",
-    //     organizer: {
-    //         email: "neehal@saal.ai",
-    //         self: true
-    //     },
-    //     startDate: 1610602200000,
-    //     title: "Jifmeet standup (on meet.jifmeet.com)",
-    //     url: "https://localhost:8080/48-1611044650993-393?join=true"
-    // }];
     return {
         calendarEvents,
         _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,

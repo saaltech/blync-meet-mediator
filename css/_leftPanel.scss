@@ -7,10 +7,14 @@
     align-items: center;
     justify-content: center;
     z-index: $toolbarZ + 2;
+    .icons-container {
+        position: fixed;
+        top: 33%;
     .left-panel-options{
         margin-bottom: 20px; 
         position: relative;
     }
+}
     .active-cap {
         position: absolute;
         left: 20px;

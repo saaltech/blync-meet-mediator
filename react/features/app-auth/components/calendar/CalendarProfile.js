@@ -57,11 +57,12 @@ function CalendarProfile(props: Props) {
             for (let index = 0; index < calendarEventsGroup.today.length; index++) {
                 if(new Date() < new Date(calendarEventsGroup.today[index].endDate)) {
                     topScrollBy = ((index) * 124) + 45;
+                    break;
                 }
             }
             listRef.current.scrollTop = topScrollBy;
         }
-    }, []);
+    }, [calendarEvents]);
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
