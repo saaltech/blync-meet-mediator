@@ -1,7 +1,7 @@
 /* @flow */
 
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IconContext } from 'react-icons';
 import { BiTime } from 'react-icons/bi';
 import { BsPersonLinesFill } from 'react-icons/bs';
@@ -27,6 +27,7 @@ type Props = {
  */
 function CalendarProfile(props: Props) {
     const [showModal, setShowModal] = useState(false);
+    const listRef = useRef(null);
 
     // selected calendar event
     const [selectedEvents, setSelectedEvents] = useState([]);
@@ -49,6 +50,19 @@ function CalendarProfile(props: Props) {
             _closeModal();
         }
     };
+
+    useEffect(() => {
+        if (listRef && listRef.current && calendarEventsGroup.today.length) {
+            let topScrollBy = 0;
+            for (let index = 0; index < calendarEventsGroup.today.length; index++) {
+                if(new Date() < new Date(calendarEventsGroup.today[index].endDate)) {
+                    topScrollBy = ((index) * 124) + 45;
+                    break;
+                }
+            }
+            listRef.current.scrollTop = topScrollBy;
+        }
+    }, [calendarEvents]);
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -110,10 +124,10 @@ function CalendarProfile(props: Props) {
 
     const _handleJoin = url => {
         let meetingId = url.match(/\d{2}-\d{13}-\d{3}/); // find meetingId
-        if(meetingId && meetingId.length > 0) {
+        if (meetingId && meetingId.length > 0) {
             const isElectron = navigator.userAgent.includes('Electron');
-            if(isElectron) {
-                    APP.API.notifyExplicitIframeReload({room: meetingId[0]});
+            if (isElectron) {
+                APP.API.notifyExplicitIframeReload({ room: meetingId[0] });
             }
             else {
                 window.location.href = `${window.location.origin}/${meetingId[0]}`;
@@ -135,7 +149,7 @@ function CalendarProfile(props: Props) {
                 </div>
             </div>
             <div
-                className='calendar-list' >
+                className='calendar-list' ref={listRef} >
                 {
                     Object.keys(calendarEventsGroup).map(key => (<div key={key} >
                         <div className='group-title'>
@@ -233,7 +247,7 @@ function CalendarProfile(props: Props) {
                                             <div
                                                 className='calendar__event__details'
                                                 onClick={() => _eventSelected(event.id)} >
-                                                 {selectedEvents.includes(event.id) ? 'View Less': 'View More'}
+                                                {selectedEvents.includes(event.id) ? 'View Less' : 'View More'}
                                             </div>
                                         </>
 

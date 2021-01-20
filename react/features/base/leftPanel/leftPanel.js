@@ -35,7 +35,7 @@ function LeftPanel(props) {
         let reactElement = null;
 
         reactElement = (
-            <div>
+            <div className="icons-container">
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',

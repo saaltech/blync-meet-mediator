@@ -692,7 +692,7 @@ box-sizing: content-box !important;
             .main-content {
                 flex: 1;
                 flex-direction: column;
-                margin-top: 85px;
+                // margin-top: 85px;
             }
             .calendar-placeholder{
                 display: none;
@@ -706,7 +706,7 @@ box-sizing: content-box !important;
         }
 
         .welcome-page-button.profile, .welcome-page-button.signin {
-            position: initial;
+            // position: initial;
             right: 0;
             z-index: 100;
             margin-right: 30px;

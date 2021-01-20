@@ -5,11 +5,17 @@ import DatePicker from 'react-datepicker';
 import { IconContext } from 'react-icons';
 import { FaCalendarAlt, FaLock, FaUnlock } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
+import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
 import { HiCheckCircle } from 'react-icons/hi';
 import { IoIosCloseCircle } from 'react-icons/io';
+import sanitizeHtml from 'sanitize-html';
+import { validationFromNonComponents } from '../../../features/app-auth';
+import { bootstrapCalendarIntegration, ERRORS } from '../../calendar-sync';
 
 import { translate } from '../../base/i18n';
+import { connect } from '../../base/redux';
 import { InputField } from '../../base/premeeting';
+import logger from '../../settings/logger';
 import { AudioSettingsButton, VideoSettingsButton } from '../../toolbox/components';
 import Preview from '../../../features/base/premeeting/components/web/Preview';
 
@@ -23,6 +29,8 @@ import {
 
 function MeetingInfo(props) {
     const [isMeetingNameEdit, setIsMeetingNameEdit] = useState(false);
+    const [isMeetingDetailsOpen, setIsMeetingDetailsOpen] = useState(false);
+    const [selectedMeetingDetails, setSelectedMeetingDetails] = useState(null);
     const meetNow = props.meetNow;
     const isBackPressed = props.isBackPressed || false;
     const isFromConference = props.isFromConference || false;
@@ -44,6 +52,29 @@ function MeetingInfo(props) {
         setIsMeetingNameEdit(true);
     }
 
+    const defaultOptions = {
+        // allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'br' ],
+        allowedAttributes: {
+            'a': ['href', 'name', 'target'] //,
+            // 'div': [ 'style' ]
+        }
+    };
+
+    function onClickDetailsArrow() {
+        setIsMeetingDetailsOpen(!isMeetingDetailsOpen);
+    }
+
+    function sanitize(dirty, options) {
+        return ({
+            __html: sanitizeHtml(
+                dirty,
+                {
+                    ...defaultOptions,
+                    ...options
+                }
+            )
+        })
+    }
     function handleMeetingNameBlur() {
         setIsMeetingNameEdit(false);
     }
@@ -51,6 +82,35 @@ function MeetingInfo(props) {
     function generatePassword() {
         return Math.random().toString(36).slice(2, 7);
     }
+
+    useEffect(() => {
+        async function calenderData() {
+            if (isFromGuest && props._isGoogleSigninUser) {
+                const refreshTokenResponse = await validationFromNonComponents(true, true);
+
+                refreshTokenResponse
+                    && APP.store.dispatch(bootstrapCalendarIntegration())
+                        .catch(err => {
+                            logger.error('Meeting Info Google oauth bootstrapping failed', err)
+                        });
+            }
+        }
+        calenderData();
+    }, []);
+
+    useEffect(() => {
+        if (meetingId && props.calendarEvents) {
+            const _calenderEvent = props.calendarEvents.length ? [...props.calendarEvents] : [];
+            for (let index = 0; index < _calenderEvent.length; index++) {
+                if (_calenderEvent[index].url && _calenderEvent[index].url.includes(meetingId)) {
+                    setSelectedMeetingDetails({ ..._calenderEvent[index] });
+                    break;
+                }
+            }
+
+        }
+    }, [props.calendarEvents]);
+
     useEffect(() => {
         if (!meetNow) {
             let _current = moment();
@@ -162,7 +222,32 @@ function MeetingInfo(props) {
                                 )}
 
                             </div>
-                            <div className='meeting-id'>{meetingId}</div>
+                            <div className='meeting-id'>{meetingId}
+                                {selectedMeetingDetails && selectedMeetingDetails.description ? (<div onClick={onClickDetailsArrow} className="meeting-details" style={{ marginLeft: '10px' }}>Details
+                                    <IconContext.Provider value={{ style: { color: '#00C062' } }}>
+                                        <span className="meeting-details-arrow" onClick={onClickDetailsArrow}>
+                                            {isMeetingDetailsOpen ? <RiArrowUpSLine size={25} /> : <RiArrowDownSLine size={25} />}
+                                        </span>
+                                    </IconContext.Provider>
+                                </div>
+                                ) : <></>
+                                }
+                                {isMeetingDetailsOpen ? (
+                                    <div className="meeting-details-container">
+                                        <div
+                                            className={`description__modal 
+                                                ${selectedMeetingDetails.description ? '' : 'no-content'}`} >
+                                            <div dangerouslySetInnerHTML={
+                                                sanitize(selectedMeetingDetails.description ? selectedMeetingDetails.description : 'No content')} />
+                                        </div>
+                                        <div className='coming-from-google-content'>
+                                            <div> {'Meeting Details from '} </div>
+                                            <img src='./../images/google_calendar.png' />
+                                        </div>
+                                    </div>
+                                ) : <></>
+                                }
+                            </div>
                         </>
                     )
             }
@@ -407,17 +492,19 @@ function MeetingInfo(props) {
               }
                 </div>
             }
-            {((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
-                <Preview
-                    videoMuted={props.videoMuted}
-                    videoTrack={props.videoTrack} >
-                    <div className='media-btn-container'>
-                        <AudioSettingsButton visible={true} />
-                        <VideoSettingsButton visible={true} />
-                    </div>
-                    {props.previewFooter}
-                </Preview>
-            )}
+            {
+                ((shareable && meetNow) || (isFromGuest && isMeetingHost)) && (
+                    <Preview
+                        videoMuted={props.videoMuted}
+                        videoTrack={props.videoTrack} >
+                        <div className='media-btn-container'>
+                            <AudioSettingsButton visible={true} />
+                            <VideoSettingsButton visible={true} />
+                        </div>
+                        {props.previewFooter}
+                    </Preview>
+                )
+            }
 
             {
                 shareable
@@ -437,4 +524,14 @@ function MeetingInfo(props) {
     );
 }
 
-export default translate(MeetingInfo);
+
+function _mapStateToProps(state: Object) {
+    const calendarEvents = state['features/calendar-sync']?.events;
+    return {
+        calendarEvents,
+        _isUserSignedOut: !state['features/app-auth'].user || state['features/app-auth'].isUserSignedOut,
+        _isGoogleSigninUser: Boolean(state['features/app-auth'].googleOfflineCode)
+    };
+}
+
+export default translate(connect(_mapStateToProps)(MeetingInfo));
