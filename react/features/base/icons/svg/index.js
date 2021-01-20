@@ -126,3 +126,4 @@ export { default as IconRejectAll } from './reject-all.svg';
 export { default as IconWaiting } from './waiting.svg';
 export { default as IconSadSmiley } from './sad.svg';
 export { default as IconCopyDetail } from './copyDetail.svg';
+export { default as IconCallConnect } from './call-connect.svg';

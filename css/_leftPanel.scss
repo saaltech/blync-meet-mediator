@@ -60,6 +60,13 @@
         &.disabled{
             background-color: #F6F6F6 !important;
             pointer-events: none;
+            svg {
+                height: 30px;
+                width: 30px;
+            }
+            svg path, svg {
+                fill: #D1D1D1;
+            }
         }
     }
     .left-logo {

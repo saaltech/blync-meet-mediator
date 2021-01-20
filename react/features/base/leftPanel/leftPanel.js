@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconContext } from 'react-icons';
 import { translate } from '../i18n';
-import { Icon, IconWarning, IconSadSmiley } from '../icons';
+import { Icon, IconWarning, IconSadSmiley, IconCallConnect } from '../icons';
 
 import { RiContactsBookFill, RiVideoChatFill, RiVideoAddFill } from 'react-icons/ri';
 import TncPrivacy from '../../welcome/components/TncPrivacy';
@@ -36,26 +36,27 @@ function LeftPanel(props) {
 
         reactElement = (
             <div className="icons-container">
-                <IconContext.Provider value={{
+                {/* <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
                         color: activeButton === 'contacts' ? 'white' : '#D1D1D1'
                     }
-                }}>
+                }}> */}
                     <div className="left-panel-options">
                         <div className={`icon-wrapper disabled ${activeButton === 'contacts' ? 'selected' : ''}`}
                             onClick={() => {
                                 // handleClickIcon('contacts')
                             }}
                             style={{ textAlign: 'center' }}>
-                            <RiContactsBookFill size={30} />
+                            
+                            <Icon src={IconCallConnect} />
 
                         </div>
                         <div style={{ textAlign: 'center', marginTop: '10px', color: activeButton === 'contacts' ? '#00C062' : '#D1D1D1' }}>
-                            Contacts
+                            Connect
                         </div>
                     </div>
-                </IconContext.Provider>
+                {/* </IconContext.Provider> */}
                 <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
