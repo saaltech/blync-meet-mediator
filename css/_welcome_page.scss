@@ -553,7 +553,7 @@ box-sizing: content-box !important;
         }
 
         &.profile {
-            position: absolute;
+            position: fixed;
             // margin: 35px 0px 30px auto;
             background: transparent;
             display: flex;
@@ -798,6 +798,7 @@ box-sizing: content-box !important;
 
         .main-content {
             display: flex;
+            margin-top: 72px;
             // background-color: #F2F4FC;
             &.not-google-user {
                 background-size: 500px;
