@@ -17,7 +17,8 @@ import { getUserAgentDetails } from '../../base/environment/utils';
 import { translate } from '../../base/i18n';
 import {
     Icon,
-    IconLogo
+    IconLogo,
+    IconWarning,
 } from '../../base/icons';
 import { connect } from '../../base/redux';
 import { updateSettings } from '../../base/settings';
@@ -58,7 +59,7 @@ function GuestPrejoin(props) {
     const [meetingFrom, setMeetingFrom] = useState(null);
     const [meetingTo, setMeetingTo] = useState(null);
     const { joinConference, _isUserSignedOut = true,
-        joinMeeting, _jid, _user, _isGoogleSigninUser, 
+        joinMeeting, _jid, _user, _isGoogleSigninUser,
         syncStoreFromParentWindowStore, uuid } = props;
     const [isMeetingHost, setIsMeetingHost] = useState(false);
     const [continueAsGuest, setContinueAsGuest] = useState(false);
@@ -441,7 +442,15 @@ function GuestPrejoin(props) {
         <div className="hostPrejoin-container">
             <div className="background-width left-background-image"></div>
             {fetchUnauthErrors || fetchErrors
-                ? <div className={'hostPrejoin'}> <div className='invalid-meeting-code'>{'Invalid Meeting ID'} </div></div>
+                ? <div className={'hostPrejoin'}>
+                    <div className="invalid-container">
+                        <div className='invalid-icon'>
+                            <Icon src={IconWarning} />
+                        </div>
+                        <div className='invalid-meeting-code'>{'Invalid Meeting ID'} </div>
+                        <div className='redirecting-content'>{'Redirecting...'} </div>
+                        </div>
+                </div>
                 : <div className={'hostPrejoin'}>
                     <div
                         onClick={props.onClickClose}
