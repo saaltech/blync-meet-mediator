@@ -12,6 +12,7 @@ import ToggleSwitch from '../../../../modules/UI/toggleSwitch/ToggleSwitch';
 import { LoginComponent, decideAppLogin, Profile, CalendarProfile, ManageMeetings, validationFromNonComponents } from '../../../features/app-auth';
 import { validateMeetingCode } from '../../../features/app-auth/functions';
 import { Platform } from '../../../features/base/react';
+import ConnectCall from './ConnectCall.js';
 import { setPostWelcomePageScreen } from '../../app-auth/actions';
 import { isMobileBrowser } from '../../base/environment/utils';
 import { redirectOnButtonChange } from '../../welcome/functions';
@@ -229,7 +230,7 @@ class WelcomePage extends AbstractWelcomePage {
     /**
      */
     setInvalidMeetingId(invalidMeetingId) {
-        if(!invalidMeetingId || !validateMeetingCode(invalidMeetingId)) {
+        if (!invalidMeetingId || !validateMeetingCode(invalidMeetingId)) {
             return;
         }
         this.setValueInRoomInputBox(invalidMeetingId);
@@ -447,7 +448,7 @@ class WelcomePage extends AbstractWelcomePage {
      */
     _renderMainContentSection() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
-        const { switchActiveIndex, showNoCreateMeetingPrivilegeTip } = this.state;
+        const { switchActiveIndex, showNoCreateMeetingPrivilegeTip, activeButton } = this.state;
 
         const toggleSwitchItems = {
             0: {
@@ -470,8 +471,9 @@ class WelcomePage extends AbstractWelcomePage {
         };
 
         return (<>
-            <div className={`entry-section__label ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'join-without-google-label' : ''}`}>
-                {/* {(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) && (
+            {activeButton == 'connect' ? <div style={{ marginLeft: '30px', marginTop: '30px' }}><ConnectCall /></div> : (<>
+                <div className={`entry-section__label ${(activeButton == 'join' && switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'join-without-google-label' : ''}`}>
+                    {/* {(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) && (
                     <IconContext.Provider value={{
                         style: {
                             color: 'white'
@@ -482,19 +484,19 @@ class WelcomePage extends AbstractWelcomePage {
                         </div>
                     </IconContext.Provider>
                 )} */}
-                {/* {
+                    {/* {
                     this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' })
                 } */}
-            </div>
-            {/* <div className={`entry-section right-bg`}> */}
-            <div className={`entry-section ${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section' : 'right-bg'}`}>
-                {this.state.activeButton === 'join' ? (
-                    <div className={`${(switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section-container' : ''}`}>
-                        <div className="label-content">
-                            {'Meeting ID*'}
-                        </div>
-                        <div id='enter_room'>
-                            {/* <ToggleSwitch
+                </div>
+                {/* <div className={`entry-section right-bg`}> */}
+                <div className={`entry-section ${(activeButton == 'join' && switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section' : 'right-bg'}`}>
+                    {this.state.activeButton === 'join' ? (
+                        <div className={`${(activeButton == 'join' && switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'input-section-container' : ''}`}>
+                            <div className="label-content">
+                                {'Meeting ID*'}
+                            </div>
+                            <div id='enter_room'>
+                                {/* <ToggleSwitch
                         activeIndex={switchActiveIndex}
                         containerStyle={{ margin: '5px 0px 5px -7px' }}
                         items={toggleSwitchItems}
@@ -502,76 +504,78 @@ class WelcomePage extends AbstractWelcomePage {
                             this.setSwitchActiveIndex(index);
                         }} /> */}
 
-                            <div className='enter-room-input-container'>
-                                <form onSubmit={this._onFormSubmit}>
-                                    <input
-                                        autoFocus={true}
-                                        className='enter-room-input'
-                                        id='enter_room_field'
-                                        maxLength={switchActiveIndex ? '20' : '-1'}
-                                        onChange={this._onRoomNameChanged}
-                                        // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                        placeholder={switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
-                                            : t('welcomepage.placeholderEnterRoomName')} // this.state.roomPlaceholder
-                                        ref={this._setRoomInputRef}
-                                        title={t('welcomepage.roomNameAllowedChars')}
-                                        type='text' />
-                                </form>
-                            </div>
-                            <div
-                                className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
-                                onClick={this._onFormSubmit}>
-                                <div className='chat-piece' />
-                                {
-                                    t('welcomepage.go')
-                                }
-                                {
-                                    this.state.showGoLoader
-                                    && <div className='loader'>
-                                        <BiLoaderCircle size={30} />
-                                    </div>
-                                }
+                                <div className='enter-room-input-container'>
+                                    <form onSubmit={this._onFormSubmit}>
+                                        <input
+                                            autoFocus={true}
+                                            className='enter-room-input'
+                                            id='enter_room_field'
+                                            maxLength={switchActiveIndex ? '20' : '-1'}
+                                            onChange={this._onRoomNameChanged}
+                                            // pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+                                            placeholder={switchActiveIndex ? t('welcomepage.placeholderEnterRoomCode')
+                                                : t('welcomepage.placeholderEnterRoomName')} // this.state.roomPlaceholder
+                                            ref={this._setRoomInputRef}
+                                            title={t('welcomepage.roomNameAllowedChars')}
+                                            type='text' />
+                                    </form>
+                                </div>
+                                <div
+                                    className={`welcome-page-button go-button ${this.state.formDisabled ? 'disabled' : ''}`}
+                                    onClick={this._onFormSubmit}>
+                                    <div className='chat-piece' />
+                                    {
+                                        t('welcomepage.go')
+                                    }
+                                    {
+                                        this.state.showGoLoader
+                                        && <div className='loader'>
+                                            <BiLoaderCircle size={30} />
+                                        </div>
+                                    }
 
+                                </div>
                             </div>
+                            {
+                                switchActiveIndex === 1 && this._roomInputRef
+                                && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
+                            }
                         </div>
-                        {
-                            switchActiveIndex === 1 && this._roomInputRef
-                            && this._renderInsecureRoomNameWarning(this._roomInputRef.value)
-                        }
-                    </div>
-                ) : (
-                        <div className="button-wrapper">
-                            <ButtonWithIcon
-                                className="meet-now"
-                                labelText="MEET NOW"
-                                // backGroundColor={"#005C85"}
-                                onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
-                                source={'meet-now-group.svg'}
-                            />
-                            <div className="schedule--button">
+                    ) : (
+                            <div className="button-wrapper">
                                 <ButtonWithIcon
-                                    className="schedule-button"
-                                    labelText="SCHEDULE"
-                                    onButtonClick={() => { this.handleClickMeetNow('schedule') }}
-                                    // backGroundColor={"#FEA729"}
-                                    source={'schedule-image.svg'}
+                                    className="meet-now"
+                                    labelText="MEET NOW"
+                                    // backGroundColor={"#005C85"}
+                                    onButtonClick={() => { this.handleClickMeetNow('meetNow') }}
+                                    source={'meet-now-group.svg'}
                                 />
+                                <div className="schedule--button">
+                                    <ButtonWithIcon
+                                        className="schedule-button"
+                                        labelText="SCHEDULE"
+                                        onButtonClick={() => { this.handleClickMeetNow('schedule') }}
+                                        // backGroundColor={"#FEA729"}
+                                        source={'schedule-image.svg'}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )
-                }
-            </div>
-            <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : 'calender-wrapper'}`} >
+                        )
+                    }
+                </div>
+                <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : 'calender-wrapper'}`} >
+                    {
+                        !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
+                        // !_isUserSignedOut && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
+                    }
+                </div>
+                {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
                 {
-                    !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
-                    // !_isUserSignedOut && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
+                    (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
+                    ) : <></>
                 }
-            </div>
-            {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
-            {
-                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
-                ) : <></>
-            }
+            </>
+            )}
         </>);
     }
 
@@ -787,7 +791,13 @@ class WelcomePage extends AbstractWelcomePage {
                                             <div className='right-section'>
                                                 <HeaderSection>
                                                     {
-                                                        this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' })
+                                                        this.state.activeButton === 'join' ? t('welcomepage.enterJoinMeetingTitle', { defaultValue: 'Join' }) : ''
+                                                    }
+                                                    {
+                                                        this.state.activeButton === 'create' ? t('welcomepage.enterCreateMeetingTitle', { defaultValue: 'Create' }) : ''
+                                                    }
+                                                    {
+                                                        this.state.activeButton === 'connect' ? 'Connect Chat Call' : ''
                                                     }
                                                 </HeaderSection>
                                                 <div className='content-header'>
@@ -795,13 +805,13 @@ class WelcomePage extends AbstractWelcomePage {
                                                         this._renderContentHeaderSection()
                                                     }
                                                 </div>
-                                                <div className={`content-area ${(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : 'with-google-user'}`}>
+                                                <div className={`content-area ${(this.state.activeButton == 'join' && this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? 'not-google-user' : 'with-google-user'}`}>
                                                     <div className={`main-content`}>
                                                         {
                                                             this._renderMainContentSection()
                                                         }
                                                     </div>
-                                                    {(this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
+                                                    {(this.state.activeButton === 'join' && this.state.switchActiveIndex === 1 && (_isUserSignedOut || (!_isGoogleSigninUser))) ? (<></>) : (
                                                         <div className='right-content' >
                                                             <div className='calendar-placeholder' />
                                                         </div>

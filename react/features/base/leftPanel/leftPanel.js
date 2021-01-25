@@ -39,20 +39,20 @@ function LeftPanel(props) {
                 {/* <IconContext.Provider value={{
                     style: {
                         cursor: 'pointer',
-                        color: activeButton === 'contacts' ? 'white' : '#D1D1D1'
+                        color: activeButton === 'connect' ? 'white' : '#D1D1D1'
                     }
                 }}> */}
                     <div className="left-panel-options">
-                        <div className={`icon-wrapper disabled ${activeButton === 'contacts' ? 'selected' : ''}`}
+                        <div className={`icon-wrapper-image ${activeButton === 'connect' ? 'selected' : ''}`}
                             onClick={() => {
-                                // handleClickIcon('contacts')
+                                handleClickIcon('connect');
                             }}
                             style={{ textAlign: 'center' }}>
                             
                             <Icon src={IconCallConnect} />
 
                         </div>
-                        <div style={{ textAlign: 'center', marginTop: '10px', color: activeButton === 'contacts' ? '#00C062' : '#D1D1D1' }}>
+                        <div style={{ textAlign: 'center', marginTop: '10px', color: activeButton === 'connect' ? '#00C062' : '#D1D1D1' }}>
                             Connect
                         </div>
                     </div>

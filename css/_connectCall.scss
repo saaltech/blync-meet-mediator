@@ -1,0 +1,122 @@
+.connect-call-wrapper {
+    display: flex;
+    .listing-wrapper {
+        background: #FFFFFF;
+        width: 30%;
+        box-shadow: 0px 5px 5px #BEBEBE1D;
+        border: 1px solid #EDEDED;
+        border-radius: 12px;
+        height: 80vh;
+        .total-contacts {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+            background: #0A5694;
+            box-shadow: 0px 5px 5px #BEBEBE1D;
+            border: 1px solid #EDEDED;
+            font-size: 14px;
+            border-radius: 12px 12px 0px 0px;
+            color: #FFFFFF;
+        }
+        .search-container {
+            padding: 10px;
+            margin: 10px 5px;
+            background: #FFFFFF;
+            border: 1px solid #EDEDED;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            .enter-search{
+                border: 0;
+                margin-left: 5px;
+            }
+        }
+    }
+    .chat-wrapper {
+        background: #FFFFFF;
+        box-shadow: 0px 5px 5px #BEBEBE1D;
+        border: 1px solid #EDEDED;
+        border-radius: 12px;
+        width: 65%;
+        height: 80vh;
+        margin-left: 10px;
+        .chat-container {
+            margin: 0 auto;
+            width: 92%;
+            .header-contact {
+                margin-top: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #EDEDED;
+                display: flex;
+                position: relative;
+                align-items: center;
+                .call-icon {
+                    position: absolute;
+                    right: 5px;
+                }
+                .user-details-header {
+                    margin-left: 10px;
+                    .name-header {
+                        text-align: left;
+                        font-weight: 600;
+                        font-size: 14px;
+                        letter-spacing: 0px;
+                        color: #393939;
+                    }
+                    .status {
+                        text-align: left;
+                        font-size: 13px;
+                        letter-spacing: 0px;
+                        color: #393939;
+                        opacity: 0.5;
+                    }
+                }
+            }
+        }
+        .no-contact-selected {
+            height: 80vh;
+            display: flex;
+            color: #393939;
+            opacity: 0.5;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+        }
+    }
+    .listing-container {
+        display: flex;
+        flex-direction: column;
+        height: calc(80vh - 105px);
+        overflow-y: auto;
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #EDEDED;
+            cursor: pointer;
+            &.selected {
+                background-color: #EFFAFF;
+            }
+            .profile-image {
+                .avatarProfileImage {
+                    margin-right: 20px;
+                }
+            }
+            .user-details {
+                width: 100%;
+                .user-name {
+                    display: flex;
+                    justify-content: space-between;
+                    .name {
+                        text-align: left;
+                        font-weight: 600;
+                        font-size: 14px;
+                        letter-spacing: 0px;
+                        color: #393939;
+                    }
+                }
+            }
+        }
+    }
+}

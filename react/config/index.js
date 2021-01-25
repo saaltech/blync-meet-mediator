@@ -12,6 +12,8 @@ config.authenticatedIRP =
   process.env.REACT_APP_ENV === "prod" ? "/authenticate-irp" : "";
 config.conferenceManager =
   process.env.REACT_APP_ENV === "prod" ? "/blync-mgmt" : "";
+config.profileService =
+  process.env.REACT_APP_ENV === "prod" ? "/blync-profile-service" : "";
 
 // ==== blync-mgmt Endpoints ====
 //
@@ -26,3 +28,6 @@ config.authParticipantsEP = "/auth/api/v1/participants"
 config.signInEP = '/api/users/sign-in'
 config.socialSignInEP = '/api/users/social-sign-in'
 config.refreshToken = '/api/users/accesstoken/refresh'
+
+//Profile Service Endpoints
+config.getContacts = '/auth/api/v1/users';
