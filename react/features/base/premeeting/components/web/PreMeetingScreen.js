@@ -16,13 +16,15 @@ import {
     // setPrejoinVideoTrackMuted
 } from '../../../../prejoin/functions';
 import LeftPanel from '../../../leftPanel';
-import { redirectOnButtonChange } from '../../../../welcome/functions';
+import { redirectOnButtonChange, getPlatformToInstallDesktopApp } from '../../../../welcome/functions';
 
 import Loading from '../../../../always-on-top/Loading'
 import { goHome, setAppAuth } from '../../../../app-auth'
 import {
     setVideoMuted
 } from '../../../../base/media';
+
+import AppChoicePage from '../../../../welcome/components/AppChoicePage';
 
 type Props = {
 
@@ -80,11 +82,13 @@ class PreMeetingScreen extends PureComponent<Props> {
             actions: 'meetNow',
             isSignedOut: false,
             uuid: Math.random().toString(36).slice(2, 7),
-            permissionAsked: false
+            permissionAsked: false,
+            showAppChoice: true
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
         this.showTrackPreviews = this.showTrackPreviews.bind(this);
+        this.setShowAppChoice = this.setShowAppChoice.bind(this);
     }
 
     componentDidMount() {
@@ -170,6 +174,13 @@ class PreMeetingScreen extends PureComponent<Props> {
         })
     }
 
+    // Sets showAppChoice state that will used to determine whether we show the options page or not.
+    setShowAppChoice(value) {
+        this.setState({
+            showAppChoice: value
+        });
+    }
+
     render() {
         const { title, videoMuted, videoTrack, url, meetNowSelected, _isUserSignedOut } = this.props;
         const { meetNow, showTrackPreviews, navigatedFromHome, exiting,
@@ -189,89 +200,102 @@ class PreMeetingScreen extends PureComponent<Props> {
                 {
                     exiting && <Loading />
                 }
-                {!_isUserSignedOut ? (<LeftPanel
-                    activeButton={this.state.activeButton}
-                    showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
-                    isNotCreatePermission={!this._canCreateMeetings()}
-                    toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
-                    setActiveButton={this.handleRouteChange} />
-                ) : <></>
-                }
-                <div
-                    className='premeeting-screen'
-                    id='lobby-screen'>
-                    {/* <Background backgroundColor='black'/> */}
-
-                    <div style={{ height: '100%', width: '100%' }}>
-                        {/* {
-                        showTrackPreviews || meetNow ?
-                            <Preview
-                                videoMuted={videoMuted}
-                                videoTrack={videoTrack} >
-                                <div className='media-btn-container'>
-                                    <AudioSettingsButton visible={true} />
-                                    <VideoSettingsButton visible={true} />
-                                </div>
-                                {this.props.footer}
-                            </Preview>
-                            :
-                            <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
-
-                            </div>
-                    }
- */}
-
-                        <div className='content'>
-                            {
-                                navigatedFromHome &&
-                                <HostPrejoin
-                                    isMeetNow={this.setMeetNow}
-                                    onClickClose={() => {
-                                        this.setState({ exiting: true },
-                                            () => {
-                                                this.goToCreateHome()
-                                            })
-                                    }}
-                                    syncStoreFromParentWindowStore={() => {
-                                        this.syncStoreFromParentWindowStore()
-                                    }}
-                                    setIsVideoMuted={this.setIsVideoMuted}
-                                    //Show join now after page reload in case of `meet now` option
-                                    joinNow={meetNowSelected}
-                                    meetingId={urlToShow}
-                                    videoMuted={videoMuted}
-                                    videoTrack={videoTrack}
-                                    actions={this.state.actions}
-                                    previewFooter={this.props.footer}
-                                    showTrackPreviews={this.showTrackPreviews}
-                                />
-                            }
-                            {
-                                guestFlow &&
-                                <GuestPrejoin
-                                    setIsVideoMuted={this.setIsVideoMuted}
-                                    isSignedOut={this.state.isSignedOut}
-                                    joinMeeting={joinMeeting}
-                                    videoMuted={videoMuted}
-                                    videoTrack={videoTrack}
-                                    onClickClose={() => {
-                                        this.setState({ exiting: true },
-                                            () => {
-                                                goHome()
-                                            })
-                                    }}
-                                    syncStoreFromParentWindowStore={() => {
-                                        this.syncStoreFromParentWindowStore()
-                                    }}
-                                    previewFooter={this.props.footer}
-                                    meetingId={urlToShow}
-                                    showTrackPreviews={this.showTrackPreviews}
-                                    uuid={this.state.uuid}
-                                />
-                            }
-                        </div>
+                {
+                    getPlatformToInstallDesktopApp() && this.state.showAppChoice && urlToShow ?
+                    <div className='premeeting-screen'>
+                        <AppChoicePage 
+                            setShowAppChoice = { this.setShowAppChoice }
+                            meetingURL = { urlToShow }
+                        />
                     </div>
-                </div>
+                    :
+                    <>
+                        {!_isUserSignedOut ? (<LeftPanel
+                            activeButton={this.state.activeButton}
+                            showNoCreateMeetingPrivilegeTip={this.state.showNoCreateMeetingPrivilegeTip}
+                            isNotCreatePermission={!this._canCreateMeetings()}
+                            toolTipClose={() => { this.setState({ showNoCreateMeetingPrivilegeTip: false }) }}
+                            setActiveButton={this.handleRouteChange} />
+                        ) : <></>
+                        }
+                        <div
+                            className='premeeting-screen'
+                            id='lobby-screen'>
+                            {/* <Background backgroundColor='black'/> */}
+
+                            <div style={{ height: '100%', width: '100%' }}>
+                                {/* {
+                                showTrackPreviews || meetNow ?
+                                    <Preview
+                                        videoMuted={videoMuted}
+                                        videoTrack={videoTrack} >
+                                        <div className='media-btn-container'>
+                                            <AudioSettingsButton visible={true} />
+                                            <VideoSettingsButton visible={true} />
+                                        </div>
+                                        {this.props.footer}
+                                    </Preview>
+                                    :
+                                    <div className={`hostPrejoinOptionPage ${meetNow ? 'meetNow' : 'schedule'}`}>
+
+                                    </div>
+                            }
+        */}
+
+                                <div className='content'>
+                                    {
+                                        navigatedFromHome &&
+                                        <HostPrejoin
+                                            isMeetNow={this.setMeetNow}
+                                            onClickClose={() => {
+                                                this.setState({ exiting: true },
+                                                    () => {
+                                                        this.goToCreateHome()
+                                                    })
+                                            }}
+                                            syncStoreFromParentWindowStore={() => {
+                                                this.syncStoreFromParentWindowStore()
+                                            }}
+                                            setIsVideoMuted={this.setIsVideoMuted}
+                                            //Show join now after page reload in case of `meet now` option
+                                            joinNow={meetNowSelected}
+                                            meetingId={urlToShow}
+                                            videoMuted={videoMuted}
+                                            videoTrack={videoTrack}
+                                            actions={this.state.actions}
+                                            previewFooter={this.props.footer}
+                                            showTrackPreviews={this.showTrackPreviews}
+                                        />
+                                    }
+                                    {
+                                        guestFlow &&
+                                        <GuestPrejoin
+                                            setIsVideoMuted={this.setIsVideoMuted}
+                                            isSignedOut={this.state.isSignedOut}
+                                            joinMeeting={joinMeeting}
+                                            videoMuted={videoMuted}
+                                            videoTrack={videoTrack}
+                                            onClickClose={() => {
+                                                this.setState({ exiting: true },
+                                                    () => {
+                                                        goHome()
+                                                    })
+                                            }}
+                                            syncStoreFromParentWindowStore={() => {
+                                                this.syncStoreFromParentWindowStore()
+                                            }}
+                                            previewFooter={this.props.footer}
+                                            meetingId={urlToShow}
+                                            showTrackPreviews={this.showTrackPreviews}
+                                            uuid={this.state.uuid}
+                                        />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                }
+                
             </div>
         );
     }
