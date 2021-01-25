@@ -127,7 +127,8 @@ function ManageMeetings(props: Props) {
                                                         <div>
                                                             <ShareMeeting isShowLabel={false}
                                                                 meetingId={event.conferenceId}
-                                                                meetingUrl={`${window.location.origin}/${event.conferenceId}`}
+                                                                isFromManageMeeting={true}
+                                                                meetingUrl={`${window.location.origin}/${event.conferenceId}?join=true`}
                                                                 meetingName={event.conferenceName}
                                                                 meetingFrom={event.scheduledFrom}
                                                                 meetingTo={event.scheduledTo}
