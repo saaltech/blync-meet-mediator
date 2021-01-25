@@ -35,6 +35,7 @@ function ShareMeeting(props) {
         meetingName,
         meetingFrom,
         isFromConference,
+        isFromManageMeeting,
         meetingTo,
         meetingPassword } = props;
 
@@ -45,7 +46,7 @@ function ShareMeeting(props) {
     const invite = getInviteText({
         _conferenceName,
         _localParticipantName,
-        _inviteUrl,
+        _inviteUrl : isFromManageMeeting ? meetingUrl : _inviteUrl,
         _locationUrl,
         _dialIn: {},
         _liveStreamViewURL: null,
@@ -57,7 +58,6 @@ function ShareMeeting(props) {
         phoneNumber: null,
         t
     });
-
     return (
         <div className="shareMeetingWrapper" style={{ marginTop: !isShowLabel ? '10px' : '25px' }}>
             <div className={'shareMeeting'}>
