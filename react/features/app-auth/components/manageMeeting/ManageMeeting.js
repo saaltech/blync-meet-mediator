@@ -334,6 +334,8 @@ function ManageMeetings(props: Props) {
                             ))}
                 </div>
             }
+             <div className='coming-from-google-manage'>
+            </div>
         </div>
     );
 }
