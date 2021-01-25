@@ -60,7 +60,7 @@ function ConnectCall() {
     const setData = data => {
         if (data && data.length) {
             setContactsData(data);
-            console.log('set', [...data])
+            console.log('set', [...data], 'is');
             setTotalData(data);
         } else {
             setContactsData([]);
