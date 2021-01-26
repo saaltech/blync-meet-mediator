@@ -134,7 +134,7 @@ function MeetingInfo(props) {
                             style={!meetingName ? { color: '#969696' } : {}}>
                             {isBackPressed && !isFromConference ? 'Your meeting has been successfully updated' : ''}
                             {!isBackPressed && !isFromConference ? 'Your meeting has been successfully created' : ''}
-                            <div className="meeting-name-schedule">
+                            <div className="meeting-name-schedule" title={meetingName}>
                                 {meetingName}
                             </div>
                             <div className="meeting-id-schedule">
@@ -149,7 +149,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingFrom).locale('en').format('DD MMM YYYY, hh:mm A')
                                         }
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingTo).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingTo).locale('en').format('DD MMM YYYY, hh:mm A')
                                         }
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@ function MeetingInfo(props) {
                                     <div className="detail-heading">
                                         Password
                             </div>
-                                    <div className="detail-heading-value">
+                                    <div className="detail-heading-value password-value" title={meetingPassword}>
                                         {meetingPassword}
                                     </div>
                                 </div>
@@ -259,35 +259,28 @@ function MeetingInfo(props) {
                         <div className='you-are-host'> <span className="you-text">You</span> are the host of this meeting</div>
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: isPrivate ? '#00C062' : '#D1D1D1' } }}>
-
+                                <div className="password-image"> 
                                 {isPrivate ? <FaLock size={15} /> : <FaUnlock size={15} />}
+                                </div>
                             </IconContext.Provider>
-                            <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? `Password: ${meetingPassword}` : 'No Password'}</div>
+                            <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? <div className="password-title">{'Password: '}<div className="password-text" title={meetingPassword}>{meetingPassword}</div></div> : 'No Password'}</div>
                         </div>
                         )}
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: enableWaitingRoom ? '#00C062' : '#D1D1D1' } }}>
+                            <div className="password-image">
                                 {enableWaitingRoom ? <HiCheckCircle size={15} /> : <IoIosCloseCircle size={15} />}
+                            </div>
                             </IconContext.Provider>
                             <div className={`password-meeting ${!enableWaitingRoom ? 'fade-color' : ''}`}>Waiting Room</div>
                         </div>
                         )}
                     </div>)
             }
-            {/* {
-                (isPureJoinFlow || shareable) && meetingFrom &&
-                <div className={'date-info'}>
-                    {
-                        moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
-                    }
-                    {
-                        meetingTo && (
-                            ` - ${moment(meetingTo).isSame(meetingFrom, 'day') ?
-                                moment(meetingTo).locale('en').format('hh:mm a') :
-                                moment(meetingTo).locale('en').format('DD MMM, hh:mm a')}`)
-                    }
+             {!meetNow && !isPureJoinFlow && !shareable &&<div className='you-are-host-wrapper'>
+                        <div className='you-are-host'> <span className="you-text">You</span> are the host of this meeting</div>
                 </div>
-            } */}
+            }
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {
                     !meetNow && !isPureJoinFlow && !shareable

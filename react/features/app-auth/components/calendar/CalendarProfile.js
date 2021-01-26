@@ -145,7 +145,7 @@ function CalendarProfile(props: Props) {
                     onClick={() => APP.store.dispatch(refreshCalendar())} >
                     <HiOutlineRefresh />
                     <div className='last-synced'> {`Last synced: ${moment().locale('en')
-                        .format('DD MMM, hh:mm a')}`} </div>
+                        .format('DD MMM, hh:mm A')}`} </div>
                 </div>
             </div>
             <div
@@ -195,10 +195,10 @@ function CalendarProfile(props: Props) {
                                                 </IconContext.Provider>
                                                 <div>
                                                     {`${moment(event.startDate).locale('en')
-                                                        .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm a`)}
+                                                        .format(`${key === 'today' ? '' : 'DD MMM, '}hh:mm A`)}
                                                         ${event.endDate ? ` - ${moment(event.endDate).isSame(event.startDate, 'day') ?
-                                                            moment(event.endDate).locale('en').format('hh:mm a') :
-                                                            moment(event.endDate).locale('en').format('DD MMM, hh:mm a')}` : ''}`
+                                                            moment(event.endDate).locale('en').format('hh:mm A') :
+                                                            moment(event.endDate).locale('en').format('DD MMM, hh:mm A')}` : ''}`
                                                     }
                                                 </div>
 
