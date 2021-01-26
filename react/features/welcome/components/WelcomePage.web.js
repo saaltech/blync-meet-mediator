@@ -197,7 +197,7 @@ class WelcomePage extends AbstractWelcomePage {
             });
         }
 
-        if (activeButtonAction) {
+        if (activeButtonAction && (activeButtonAction == 'create' && this._canCreateMeetings())) {
             this.setState({ activeButton: activeButtonAction, showNoCreateMeetingPrivilegeTip: !this._canCreateMeetings() });
             this.setSwitchActiveIndex(activeButtonAction === 'create' ? 0 : 1);
         } else {
