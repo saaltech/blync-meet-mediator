@@ -11,7 +11,7 @@ type Props = {
 }
 
 function AppChoicePage(props: Props) {
-    const { setShowAppChoice, meetingURL } = props;
+    const { setShowAppChoice, meetingURL, machine } = props;
 
     const appLinks = {
         mac: "https://github.com/saaltech/blync-meet-electron/releases/latest/download/jifmeet.dmg",
@@ -38,7 +38,7 @@ function AppChoicePage(props: Props) {
                                  <ul>
                                      <li>
                                          <div>
-                                            <a href="https://github.com/saaltech/blync-meet-electron/releases/latest/download/jifmeet.dmg">
+                                            <a href={appLinks[machine]}>
                                                 Download app
                                             </a>
                                          </div>

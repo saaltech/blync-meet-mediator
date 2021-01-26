@@ -201,11 +201,15 @@ class PreMeetingScreen extends PureComponent<Props> {
                     exiting && <Loading />
                 }
                 {
-                    getPlatformToInstallDesktopApp() && this.state.showAppChoice && urlToShow ?
+                    getPlatformToInstallDesktopApp() && 
+                    this.state.showAppChoice && 
+                    urlToShow &&
+                    (!this.state.actions || this.state.actions != 'schedule') ?
                     <div className='premeeting-screen'>
                         <AppChoicePage 
                             setShowAppChoice = { this.setShowAppChoice }
                             meetingURL = { urlToShow }
+                            machine = { getPlatformToInstallDesktopApp() }
                         />
                     </div>
                     :
