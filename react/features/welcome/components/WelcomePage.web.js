@@ -19,6 +19,7 @@ import { translate } from '../../base/i18n';
 import { Icon, IconWarning, IconSadSmiley, IconArrowBack } from '../../base/icons';
 import LeftPanel from '../../base/leftPanel';
 import HeaderSection from '../../base/headerSection';
+import Loading from '../../always-on-top/Loading';
 
 import { connect } from '../../base/redux';
 
@@ -85,7 +86,8 @@ class WelcomePage extends AbstractWelcomePage {
             activeButton: 'join',
             showNoCreateMeetingPrivilegeTip: false,
             switchActiveIndex: this._canCreateMeetings() ? 0 : 1,
-            showGoLoader: false
+            showGoLoader: false,
+            exiting: false
         };
 
         /**
@@ -143,6 +145,7 @@ class WelcomePage extends AbstractWelcomePage {
         this._closeLogin = this._closeLogin.bind(this);
         this._onSocialLoginFailed = this._onSocialLoginFailed.bind(this);
         this._cleanupTooltip = this._cleanupTooltip.bind(this);
+        this.handleRouteChange = this.handleRouteChange.bind(this);
         this.links = window.interfaceConfig.MOBILE_APP_LINKS;
     }
 
@@ -440,7 +443,7 @@ class WelcomePage extends AbstractWelcomePage {
 
     handleClickMeetNow(action) {
         // super._onRoomChange('');
-        this.setState({ formDisabled: false }, () => { this.handleRedirection(action) })
+        this.setState({ formDisabled: false, exiting: true }, () => { this.handleRedirection(action) })
     }
 
     /**
@@ -576,7 +579,10 @@ class WelcomePage extends AbstractWelcomePage {
     }
 
     handleRouteChange(value) {
-        redirectOnButtonChange(value);
+        this.setState({ exiting: true },
+            () => {
+                redirectOnButtonChange(value);
+            })
     }
 
     /**
@@ -633,12 +639,15 @@ class WelcomePage extends AbstractWelcomePage {
      */
     render() {
         const { t, _isUserSignedOut, _isGoogleSigninUser } = this.props;
-        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '' } = this.state;
+        const { hideLogin, sessionExpiredQuery, loginErrorMsg = '', exiting } = this.state;
 
         const errorOnLoginPage = loginErrorMsg || (sessionExpiredQuery ? 'Session expired.' : '');
 
         return (
             <div>
+                {
+                    exiting && <Loading />
+                }
                 {
                     <div
                         className='welcome without-content'
