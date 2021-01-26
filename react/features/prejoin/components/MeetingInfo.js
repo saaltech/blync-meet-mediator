@@ -134,7 +134,7 @@ function MeetingInfo(props) {
                             style={!meetingName ? { color: '#969696' } : {}}>
                             {isBackPressed && !isFromConference ? 'Your meeting has been successfully updated' : ''}
                             {!isBackPressed && !isFromConference ? 'Your meeting has been successfully created' : ''}
-                            <div className="meeting-name-schedule">
+                            <div className="meeting-name-schedule" title={meetingName}>
                                 {meetingName}
                             </div>
                             <div className="meeting-id-schedule">
