@@ -112,7 +112,7 @@
         background: var(--unnamed-color-ffffff) 0% 0% no-repeat padding-box;
         background: #FFFFFF 0% 0% no-repeat padding-box;
         border: 1px solid #E7EFF4;
-        border-radius: 8px;
+        border-radius: $appBorderRadius;
         opacity: 1;
 
         position: relative;

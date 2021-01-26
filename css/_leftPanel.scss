@@ -52,7 +52,7 @@
     }
     .icon-wrapper-image {
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 7px;
         background-color: #E7EFF4;
         cursor: pointer;
         &:hover:not(.selected):not(.disabled){
@@ -78,7 +78,7 @@
     }
     .icon-wrapper {
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 7px;
         background-color: #E7EFF4;
         cursor: pointer;
         &:hover:not(.selected):not(.disabled){
