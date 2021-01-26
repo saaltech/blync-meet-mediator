@@ -4,18 +4,119 @@
     display: flex;
     flex-direction: column;
     font-family: $welcomePageFontFamily;
-    // justify-content: space-between;
     min-height: 100vh;
     height: 100%;
     position: relative;
     width: 100%;
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    &__btns {
+        display: flex;
+        margin: 20px 50px;
+        text-align: center;
+        border: 2px solid white;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px #0000001D;
+        padding: 10px 0px;
+        color: #393939;
+        cursor: pointer;
+
+        a {
+            text-decoration: none !important;
+            color: inherit;
+        }
+
+        &__title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        &__label {
+            text-align: left;
+        }
+
+        &__icon {
+            width: 35px;
+            height: 35px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            margin: auto 20px;
+        }
+
+        &__subTitle {
+            font-size: 14px;
+            padding-top: 5px;
+        }
+
+        &:hover {
+            color: #FFFFFF;
+        }
+    }
+
+    &__download {
+        border-color:#FFA400;
+        background-color: #FFF8EA;
+
+        &__icon {
+            background-image: url('../../images/download_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__download__icon {
+                background-image: url('../../images/download_app_choice_hover_2x.png');
+            }
+            background-color: #FFA400;
+        }
+    }
+
+    &__continue {
+        border-color:#00C062;
+        background-color: #F9FFF7;
+
+        &__icon {
+            background-image: url('../../images/continue_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__continue__icon {
+                background-image: url('../../images/continue_app_choice_hover_2x.png');
+            }
+            background-color: #06C35B;
+        }
+    }
+
+    &__openApp {
+        border-color:#055B96;
+        background-color: #055B96;
+        color: #FFFFFF;
+
+        &__icon {
+            background-image: url('../../images/openApp_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__openApp__icon {
+                background-image: url('../../images/openApp_app_choice_hover_2x.png');
+            }
+            background-color: #FFFFFF;
+            color: #393939;
+        }
+    }
+
+    .header_image {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
     .without-login-wrapper {
         width: 100%;
         height: 100%;
         overflow-y: auto;
         background: #F2F4FC;
-        // background-image: url('../../images/top-right-premeeting-image.png');
         background-size: 30%;
         background-repeat: no-repeat;
         background-position: top right;
@@ -76,10 +177,9 @@
                     background-color: white;
                     height: fit-content;
                     width: 50%;
-                    // height: 100%;
                     min-width: 700px;
                     max-width: 1005px;
-                    border-radius: 40px;
+                    border-radius: 12px;
                     overflow-y: auto;
                     box-shadow: 0px 5px 5px #00000029;
                     overflow-x: hidden;
@@ -88,15 +188,15 @@
                     .login-join-wrapper {
                         width: 70%;
                         margin: 0 auto;
-                        margin-bottom: 35px;
+                        margin-top: 30px;
+                        margin-bottom: 30px;
                         font-size: 1.3em;
                         position: relative;
                         .login-signin-wrapper {
                             margin: 0 auto;
                             text-align: center;
-                            margin-top: 35px;
                             margin-bottom: 25px;
-                            font-size: 30px;
+                            font-size: 28px;
                             color: #005694;
                         }
                     }

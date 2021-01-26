@@ -20,6 +20,10 @@ function AppChoicePage(props: Props) {
 
     const appProtocol = "jifmeet";
 
+    const replaceLocation = (href) => {
+        window.location.replace(href);
+    }
+
     return (
         <div className="appChoice">
             <div className="without-login-wrapper">
@@ -29,7 +33,13 @@ function AppChoicePage(props: Props) {
                     <div className="join-content-wrapper">
                         <div className="join-content-container">
                             <div className="login-join-wrapper">
-                                <div className="login-signin-wrapper">Options</div>
+                                <div className="appChoice__header">
+                                    <div className="header_image">
+                                        <img src='images/app_choice.svg' />
+                                    </div>
+                                    <div className="login-signin-wrapper">How would you like to continue?</div>
+                                </div>
+                                
 
                                  { /*<div
                                     className='close-icon'
@@ -37,25 +47,64 @@ function AppChoicePage(props: Props) {
                                  }
                                  <ul>
                                      <li>
-                                         <div>
-                                            <a href={appLinks[machine]}>
-                                                Download app
-                                            </a>
+                                         <div 
+                                            className="appChoice__btns appChoice__download"
+                                            onClick = {() => 
+                                                replaceLocation(appLinks[machine])
+                                            }
+                                        >
+                                            <div className="appChoice__btns__icon appChoice__download__icon">
+                                                
+                                            </div>
+                                            <div className="appChoice__btns__label">
+                                                <div className="appChoice__btns__title">
+                                                    Download app
+                                                </div>
+                                                <div className="appChoice__btns__subTitle">
+                                                    Use the desktop app for the best experience.
+                                                </div>
+                                            </div>
                                          </div>
                                         
                                      </li>
                                      <li>
-                                         <div onClick = {() => {
+                                         <div 
+                                            className="appChoice__btns appChoice__continue" 
+                                            onClick = {() => {
                                              setShowAppChoice(false);
-                                         }}>
-                                             Continue on the browser
+                                            }}
+                                        >
+                                            <div className="appChoice__btns__icon appChoice__continue__icon">
+                                                
+                                            </div>
+                                            <div className="appChoice__btns__label">
+                                                <div className="appChoice__btns__title">
+                                                    Continue on this browser
+                                                </div>
+                                                <div className="appChoice__btns__subTitle">
+                                                    No download or installation required.
+                                                </div>
+                                            </div>
                                          </div>
                                      </li>
                                      <li>
-                                         <div>
-                                             <a href={`${appProtocol}://${meetingURL}`}>
-                                                 Open the installed app
-                                             </a>
+                                         <div 
+                                            className="appChoice__btns appChoice__openApp"
+                                            onClick = {() => 
+                                                replaceLocation(`${appProtocol}://${meetingURL}`)
+                                            }
+                                        >
+                                            <div className="appChoice__btns__icon appChoice__openApp__icon">
+                                                
+                                            </div>
+                                            <div className="appChoice__btns__label">
+                                                <div className="appChoice__btns__title">
+                                                    Open your Jifmeet app
+                                                </div>
+                                                <div className="appChoice__btns__subTitle">
+                                                    Already have it? Go right to your meeting.
+                                                </div>
+                                            </div>
                                          </div>
                                      </li>
                                  </ul>
