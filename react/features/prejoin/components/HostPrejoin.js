@@ -249,7 +249,7 @@ function HostPrejoin(props) {
                     </IconContext.Provider> */}
                     <span className="clickable-content" onClick={props.onClickClose}>Create a meeting</span>
                     <span style={{ marginLeft: '10px', marginRight: '10px' }}>{'>'}</span>
-                    <span>Meet Now</span>
+                    <span>Meet now</span>
                     <div className='profileSection'>
                         <Profile
                             postLogout={goToHome}
