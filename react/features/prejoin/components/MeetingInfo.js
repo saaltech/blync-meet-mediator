@@ -149,7 +149,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingFrom).locale('en').format('DD MMM YYYY, hh:mm A')
                                         }
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingTo).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingTo).locale('en').format('DD MMM YYYY, hh:mm A')
                                         }
                                     </div>
                                 </div>
@@ -274,20 +274,6 @@ function MeetingInfo(props) {
                         )}
                     </div>)
             }
-            {/* {
-                (isPureJoinFlow || shareable) && meetingFrom &&
-                <div className={'date-info'}>
-                    {
-                        moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
-                    }
-                    {
-                        meetingTo && (
-                            ` - ${moment(meetingTo).isSame(meetingFrom, 'day') ?
-                                moment(meetingTo).locale('en').format('hh:mm a') :
-                                moment(meetingTo).locale('en').format('DD MMM, hh:mm a')}`)
-                    }
-                </div>
-            } */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {
                     !meetNow && !isPureJoinFlow && !shareable
