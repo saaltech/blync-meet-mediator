@@ -21,10 +21,16 @@
     }
     .detail-heading-value{
     margin-left: 10px;
-    flex: 0 0 160px;
+    flex: 0 0 195px;
     text-align: left;
     color: #0a5694;
     font-size: 16px;
+    &.password-value{
+        max-width: 195px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     }
 
     .divider {
@@ -79,9 +85,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         .meeting-name-schedule {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+                max-width: 300px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin: 0 auto;
                 font-size: 30px;
                 color: #005694;
         }
@@ -268,6 +276,17 @@
                 line-height: 1;
                 &.fade-color{
                     color: #D1D1D1;
+                }
+                .password-title {
+                    display: flex;
+                    align-items: center;
+                    .password-text {
+                        max-width: 50px;
+                        margin-left: 5px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
             }
 

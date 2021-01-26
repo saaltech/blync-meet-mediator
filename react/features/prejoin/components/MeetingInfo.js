@@ -149,7 +149,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingFrom).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingFrom).locale('en').format('DD MMM YYYY, hh:mm a')
                                         }
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ function MeetingInfo(props) {
                             </div>
                                     <div className="detail-heading-value">
                                         {
-                                            moment(meetingTo).locale('en').format('DD MMM, hh:mm a')
+                                            moment(meetingTo).locale('en').format('DD MMM YYYY, hh:mm a')
                                         }
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@ function MeetingInfo(props) {
                                     <div className="detail-heading">
                                         Password
                             </div>
-                                    <div className="detail-heading-value">
+                                    <div className="detail-heading-value password-value" title={meetingPassword}>
                                         {meetingPassword}
                                     </div>
                                 </div>
@@ -262,7 +262,7 @@ function MeetingInfo(props) {
 
                                 {isPrivate ? <FaLock size={15} /> : <FaUnlock size={15} />}
                             </IconContext.Provider>
-                            <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? `Password: ${meetingPassword}` : 'No Password'}</div>
+                            <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? <div className="password-title">{'Password: '}<div className="password-text" title={meetingPassword}>{meetingPassword}</div></div> : 'No Password'}</div>
                         </div>
                         )}
                         {meetNow && shareable && (<div className="password-wrapper">
@@ -288,6 +288,10 @@ function MeetingInfo(props) {
                     }
                 </div>
             } */}
+             {!meetNow && !isPureJoinFlow && !shareable &&<div className='you-are-host-wrapper'>
+                        <div className='you-are-host'> <span className="you-text">You</span> are the host of this meeting</div>
+                </div>
+            }
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 {
                     !meetNow && !isPureJoinFlow && !shareable
