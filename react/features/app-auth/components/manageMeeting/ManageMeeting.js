@@ -236,22 +236,22 @@ function ManageMeetings(props: Props) {
                                             </div>
                                             {event.scheduledFrom && event.scheduledTo ? (
                                                 <div className="meeting-calendar-date" title={`${
-                                                    moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm a')
+                                                    moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm A')
                                                     }${
                                                     event.scheduledTo && (
                                                         ` - ${moment(event.scheduledTo).isSame(event.scheduledFrom, 'day') ?
-                                                            moment(event.scheduledTo).locale('en').format('hh:mm a') :
-                                                            moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm a')}`)
+                                                            moment(event.scheduledTo).locale('en').format('hh:mm A') :
+                                                            moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm A')}`)
                                                     }`}>
                                                     {'From: '}
                                                     {
-                                                        moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm a')
+                                                        moment(event.scheduledFrom).locale('en').format('DD MMM, hh:mm A')
                                                     }
                                                     {
                                                         event.scheduledTo && (
                                                             ` - ${moment(event.scheduledTo).isSame(event.scheduledFrom, 'day') ?
-                                                                moment(event.scheduledTo).locale('en').format('hh:mm a') :
-                                                                moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm a')}`)
+                                                                moment(event.scheduledTo).locale('en').format('hh:mm A') :
+                                                                moment(event.scheduledTo).locale('en').format('DD MMM, hh:mm A')}`)
                                                     }
                                                 </div>
                                             ) : (<div className="meeting-calendar-date no-schedule">
