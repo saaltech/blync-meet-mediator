@@ -259,15 +259,18 @@ function MeetingInfo(props) {
                         <div className='you-are-host'> <span className="you-text">You</span> are the host of this meeting</div>
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: isPrivate ? '#00C062' : '#D1D1D1' } }}>
-
+                                <div className="password-image"> 
                                 {isPrivate ? <FaLock size={15} /> : <FaUnlock size={15} />}
+                                </div>
                             </IconContext.Provider>
                             <div className={`password-meeting ${!isPrivate ? 'fade-color' : ''}`}>{isPrivate ? <div className="password-title">{'Password: '}<div className="password-text" title={meetingPassword}>{meetingPassword}</div></div> : 'No Password'}</div>
                         </div>
                         )}
                         {meetNow && shareable && (<div className="password-wrapper">
                             <IconContext.Provider value={{ style: { color: enableWaitingRoom ? '#00C062' : '#D1D1D1' } }}>
+                            <div className="password-image">
                                 {enableWaitingRoom ? <HiCheckCircle size={15} /> : <IoIosCloseCircle size={15} />}
+                            </div>
                             </IconContext.Provider>
                             <div className={`password-meeting ${!enableWaitingRoom ? 'fade-color' : ''}`}>Waiting Room</div>
                         </div>

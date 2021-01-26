@@ -271,9 +271,12 @@
         .password-wrapper{
             display: flex;
             align-content: center;
+            .password-image {
+                margin-top: 2px;
+            }
             .password-meeting{
                 margin-left: 10px;
-                line-height: 1;
+                // line-height: 1.2;
                 &.fade-color{
                     color: #D1D1D1;
                 }
