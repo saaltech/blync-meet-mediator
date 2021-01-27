@@ -84,6 +84,7 @@ class PreMeetingScreen extends PureComponent<Props> {
         };
 
         this.setMeetNow = this.setMeetNow.bind(this);
+        this.handleRouteChange = this.handleRouteChange.bind(this);
         this.showTrackPreviews = this.showTrackPreviews.bind(this);
     }
 
@@ -112,7 +113,9 @@ class PreMeetingScreen extends PureComponent<Props> {
         }
     }
     handleRouteChange(value) {
-        redirectOnButtonChange(value);
+        this.setState({exiting: true} ,() => {
+            redirectOnButtonChange(value);
+        });
     }
 
     syncStoreFromParentWindowStore() {

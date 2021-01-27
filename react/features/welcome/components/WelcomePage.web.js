@@ -139,6 +139,7 @@ class WelcomePage extends AbstractWelcomePage {
         this._setAdditionalContentRef
             = this._setAdditionalContentRef.bind(this);
         this._setRoomInputRef = this._setRoomInputRef.bind(this);
+        this.setLoader = this.setLoader.bind(this);
         this._setAdditionalToolbarContentRef
             = this._setAdditionalToolbarContentRef.bind(this);
         this._onTabSelected = this._onTabSelected.bind(this);
@@ -446,6 +447,12 @@ class WelcomePage extends AbstractWelcomePage {
         this.setState({ formDisabled: false, exiting: true }, () => { this.handleRedirection(action) })
     }
 
+    setLoader() {
+        this.setState({
+            exiting: true
+        });
+    }
+
     /**
      */
     _renderMainContentSection() {
@@ -566,13 +573,13 @@ class WelcomePage extends AbstractWelcomePage {
             </div>
             <div className={`${(switchActiveIndex === 0 && _isUserSignedOut) ? 'contacts-placeholder' : 'calender-wrapper'}`} >
                 {
-                    !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
+                    !_isUserSignedOut && _isGoogleSigninUser && switchActiveIndex === 1 ? <CalendarProfile setLoader={this.setLoader}/> : <> </>
                     // !_isUserSignedOut && switchActiveIndex === 1 ? <CalendarProfile /> : <> </>
                 }
             </div>
             {/* <div className={`${(switchActiveIndex === 0) ? 'contacts-placeholder' : ''}`} > */}
             {
-                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings />
+                (switchActiveIndex === 0 && !_isUserSignedOut) ? (<ManageMeetings setLoader={this.setLoader}/>
                 ) : <></>
             }
         </>);

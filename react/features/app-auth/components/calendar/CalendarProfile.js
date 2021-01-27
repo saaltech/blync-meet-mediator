@@ -123,6 +123,7 @@ function CalendarProfile(props: Props) {
     };
 
     const _handleJoin = url => {
+        props.setLoader();
         let meetingId = url.match(/\d{2}-\d{13}-\d{3}/); // find meetingId
         if (meetingId && meetingId.length > 0) {
             const isElectron = navigator.userAgent.includes('Electron');

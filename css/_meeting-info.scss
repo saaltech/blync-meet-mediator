@@ -160,10 +160,10 @@
             position: absolute;
             z-index: 1;
             opacity: 0.95;
-            padding: 10px;
-            width: 125%;
-            border-radius: 20px;
-            left: -14.5%;
+            padding: 10px 0px;
+            width: 100%;
+            border-radius: $appBorderRadius;
+            // left: -14.5%;
             top: 35px;
                         // width: 200px;
             background: #FFFFFF;
@@ -245,7 +245,7 @@
                 position: absolute;
                 opacity: 1;
                 bottom: 100%;  /* At the top of the tooltip */
-                right: 26%;
+                right: 127px;
                 // box-shadow: 0px 0px 5px #00000029;
                 margin-left: -8px;
                 border-width: 8px;
