@@ -55,6 +55,77 @@
                     position: absolute;
                     right: 5px;
                 }
+                .profile-image-header {
+                    position: relative;
+                    .profile-image {
+                        cursor: pointer;
+                    }
+                    .profile-modal-container {
+                        &::after {
+                            content: " ";
+                            position: absolute;
+                            opacity: 1;
+                            bottom: 100%;  /* At the top of the tooltip */
+                            left: 42px;
+                            margin-left: -8px;
+                            border-width: 8px;
+                            border-style: solid;
+                            border-color: transparent transparent #fff transparent;
+                        }
+                        position: absolute;
+                        width: 220px;
+                        border-radius: $appBorderRadius;
+                        height: 200px;
+                        padding: 20px;
+                        top: 54px;
+                        left: -25px;
+                        background-color: #fff;
+                        // z-index: 1;
+                        box-shadow: 0px 5px 20px #00000034;
+                        border: 1px solid #EDEDED;
+                        .profile-modal-header {
+                            display: flex;
+                            justify-content: center;
+                            flex-direction: column;
+                            align-items: center;
+                            margin-top: 15px;
+                            .profile-modal-header-name{
+                                font-size: 14px;
+                                color: #393939;
+                                font-weight: 600;
+                                text-align: center;
+                                margin-top: 10px;
+                            }
+                            .profile-modal-last-seen{
+                                text-align: center;
+                                color: #999999;
+                                //margin-top: 10px;
+                                font-size: 12px;
+                            }
+                            .profile-modal-call-icon {
+                                margin-top: 10px;
+                                margin-bottom: 10px;
+                            }
+                            .profile-header-border-bottom {
+                                border-bottom: 1px solid #EDEDED;
+                                width:100%;
+                            }
+                            .profile-modal-details-section {
+                                display: flex;
+                                justify-content: space-between;
+                                width: 100%;
+                                align-items: center;
+                                margin-top: 10px;
+                                .profile-modal-details-title {
+                                    font-size: 14px;
+                                    font-weight: 700;
+                                    color: #393939;
+                                }
+                            }
+                        }
+        // opacity: 1;
+                    }
+                }
                 .user-details-header {
                     margin-left: 10px;
                     .name-header {

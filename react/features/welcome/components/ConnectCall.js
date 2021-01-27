@@ -7,6 +7,8 @@ import useRequest from '../../hooks/use-request';
 
 import { IconContext } from 'react-icons';
 import { BiSearch } from 'react-icons/bi';
+import { RiArrowDownSLine } from 'react-icons/ri';
+
 import { IoIosCall } from 'react-icons/io';
 
 // const items = [
@@ -55,6 +57,7 @@ function ConnectCall() {
 
     const [contactsData, setContactsData] = useState([]);
     const [selectedContact, setselectedContact] = useState(null);
+    const [isProfileDetail, setIsProfileDetail] = useState(false);
     const [searchData, setSearchData] = useState('');
     const [totalData, setTotalData] = useState([]);
     const setData = data => {
@@ -89,6 +92,10 @@ function ConnectCall() {
 
     function handleClickContact(value) {
         setselectedContact(value);
+    }
+
+    function handleClickProfileImage() {
+        setIsProfileDetail(!isProfileDetail);
     }
 
     function _handleKeyDown(e) {
@@ -161,11 +168,59 @@ function ConnectCall() {
                             </div>
                         </IconContext.Provider>
                         <div className="profile-image-header">
+                            <div className="profile-image" onClick={handleClickProfileImage}>
                             <Avatar
                                 className='avatarProfileHeaderImage'
                                 displayName={selectedContact.name}
                                 size={'40'}
                                 url={selectedContact.avatar} />
+                                </div>
+                            {isProfileDetail && <div className="profile-modal-container">
+                            <div className="profile-modal-header">
+                            <div>
+                            <Avatar
+                                // className=''
+                                displayName={selectedContact.name}
+                                size={'80'}
+                                url={selectedContact.avatar} />
+                                </div>
+                                <div className="profile-modal-header-name">
+                                {selectedContact.name}
+                            </div>
+                            <div className="profile-modal-last-seen">
+                                {`Last seen at ${moment(selectedContact.lastSeen).format('hh:mm')}`}
+                            </div>
+                            <div className="profile-modal-call-icon">
+                            <IconContext.Provider value={{
+                            style: {
+                                color: '#005C85'
+                            }
+                        }}>
+                            {/* <div className="call-icon"> */}
+                                <IoIosCall size={20} />
+                            {/* </div> */}
+                        </IconContext.Provider>
+                            </div>
+                            <div className="profile-header-border-bottom"></div>
+                            <div className="profile-modal-details-section">
+                                <div className="profile-modal-details-title">Details</div>
+                                <div>
+                                <IconContext.Provider value={{
+                            style: {
+                                color: '#005C85'
+                            }
+                        }}>
+                            {/* <div className="call-icon"> */}
+                                <RiArrowDownSLine size={20} />
+                            {/* </div> */}
+                        </IconContext.Provider>
+                                </div>
+
+                                
+                            </div>
+                            </div>
+                           
+                            </div>}
                         </div>
                         <div className="user-details-header">
                             <div className="name-header">
