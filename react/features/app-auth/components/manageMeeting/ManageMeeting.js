@@ -71,6 +71,7 @@ function ManageMeetings(props: Props) {
     };
 
     const handleClickStart = meetingId => {
+        props.setLoader();
         const isElectron = navigator.userAgent.includes('Electron');
         if(isElectron) {
             APP.API.notifyExplicitIframeReload({room: meetingId});

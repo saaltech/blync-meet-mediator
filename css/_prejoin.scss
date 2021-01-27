@@ -151,9 +151,10 @@
     z-index: 2;
     flex: 1;
     background-color: white;
-    height: fit-content;
+    // height: fit-content;
     width: 50%;
-    // height: 100%;
+    height: max-content;
+    min-height: 270px;
     min-width: 700px;
     max-width: 1005px;
     border-radius: $appBorderRadius;
