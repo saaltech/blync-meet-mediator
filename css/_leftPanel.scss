@@ -17,21 +17,23 @@
 }
     .active-cap {
         position: absolute;
-        left: 20px;
-        top: 60px;
+        left: -15px;
+    transform: rotate(270deg);
+    top: 20px;
         width: 0; 
     height: 0; 
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #fff;
     }
     .tooltip {
         position: absolute;
-    top: 65px;
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 200px;
+    left: 75px;
+    background-color:#fff;
+    padding: 15px;
+    width: 240px;
+    display: flex;
+    align-items: center;
     box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.1);
     .close-icon {
         width: 10px;
@@ -39,13 +41,18 @@
         top: 10px;
         right: 10px;
     }
+    &__icon {
+        padding: 5px 10px 5px 0;
+        border-right: 1px solid #ddd;
+    }
     .tooltip__message{
         color: black;
+        margin-left: 10px;
     }
     }
     .icon-wrapper-image {
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 7px;
         background-color: #E7EFF4;
         cursor: pointer;
         svg {
@@ -95,6 +102,30 @@
             pointer-events: none;
             svg path, svg {
                 fill: #D1D1D1;
+            }
+        }
+    }
+    .icon-wrapper {
+        padding: 10px;
+        border-radius: 7px;
+        background-color: #E7EFF4;
+        cursor: pointer;
+        &:hover:not(.selected):not(.disabled){
+            background-color: #005C85;
+            svg {
+                color: #e7eff4 !important;
+            }
+        }
+        &.selected{
+            background-color: #00C062 !important;
+        }
+        &.disabled{
+            background-color: #F6F6F6 !important;
+            pointer-events: none;
+            svg {
+                height: 30px;
+                width: 30px;
+                color: #D1D1D1;
             }
         }
     }

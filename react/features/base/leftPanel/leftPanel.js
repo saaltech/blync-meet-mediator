@@ -82,11 +82,12 @@ function LeftPanel(props) {
                     }
                 }}>
                     <div className="left-panel-options">
-                        {showNoCreateMeetingPrivilegeTip && (<><div className="active-cap"></div>
-                            <div className='tooltip show'>
+                        {showNoCreateMeetingPrivilegeTip && (<>
+                            <div className='tooltip'>
                                 <div
                                     className='close-icon'
                                     onClick={toolTipClose} />
+                                    <div className="active-cap"></div>
                                 <div className='tooltip__icon'> <Icon src={IconSadSmiley} /> </div>
                                 <div className='tooltip__message'>{props.t('welcomepage.noCreateMeetingRights')}</div>
                             </div>

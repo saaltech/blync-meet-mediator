@@ -122,6 +122,7 @@
             right: 20px;
             top: 10px;
             position: fixed;
+            cursor: pointer;
         }
         .hostPrejoin-container{
             display: flex;
@@ -155,7 +156,7 @@
     // height: 100%;
     min-width: 700px;
     max-width: 1005px;
-    border-radius: 40px;
+    border-radius: $appBorderRadius;
     overflow-y: auto;
     box-shadow: 0px 5px 5px #00000029;
     overflow-x: hidden;
@@ -170,7 +171,7 @@
         color: #FF0000;
         margin: 0px auto 30px;
         width: 80%;
-        margin-left: 80px;
+        // margin-left: 80px;
     }
 
     .invalid-container {
