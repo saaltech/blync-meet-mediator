@@ -10,6 +10,11 @@ import { getLocalVideoTrack } from '../../../tracks';
 export type Props = {
 
     /**
+     * Flag controlling whether the video should be flipped or not.
+     */
+    flipVideo: boolean,
+
+    /**
      * Flag signaling the visibility of camera preview.
      */
     videoMuted: boolean,
@@ -64,6 +69,7 @@ function Preview(props: Props) {
  */
 function _mapStateToProps(state, ownProps) {
     return {
+        flipVideo: state['features/base/settings'].localFlipX,
         videoMuted: ownProps.videoTrack ? ownProps.videoMuted : state['features/base/media'].video.muted,
         videoTrack: ownProps.videoTrack || (getLocalVideoTrack(state['features/base/tracks']) || {}).jitsiTrack
     };

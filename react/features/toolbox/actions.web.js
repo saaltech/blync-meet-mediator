@@ -9,7 +9,8 @@ import {
     SHOW_PARTICIPANTS_LIST,
     TOGGLE_PARTICIPANTS_LIST,
     SHOW_INVITE_PEOPLE,
-    TOGGLE_INVITE_PEOPLE
+    TOGGLE_INVITE_PEOPLE,
+    SET_OVERFLOW_DRAWER
 } from './actionTypes';
 import {
     clearToolboxTimeout,
@@ -211,5 +212,21 @@ export function showInvitePeople(show: boolean) {
 export function toggleInvitePeople() {
     return {
         type: TOGGLE_INVITE_PEOPLE
+    }
+}
+
+/**
+ * Signals a request to display overflow as drawer.
+ *
+ * @param {boolean} displayAsDrawer - True to display overflow as drawer, false to preserve original behaviour.
+ * @returns {{
+ *     type: SET_OVERFLOW_DRAWER,
+ *     displayAsDrawer: boolean
+ * }}
+ */
+export function setOverflowDrawer(displayAsDrawer: boolean) {
+    return {
+        type: SET_OVERFLOW_DRAWER,
+        displayAsDrawer
     };
 }

@@ -3,6 +3,7 @@
 import {
     ADD_MESSAGE,
     CLEAR_MESSAGES,
+    CLOSE_CHAT,
     SEND_MESSAGE,
     SET_PRIVATE_MESSAGE_RECIPIENT,
     MARK_AS_READ,
@@ -49,6 +50,19 @@ export function addMessage(messageDetails: Object) {
 export function clearMessages() {
     return {
         type: CLEAR_MESSAGES
+    };
+}
+
+/**
+ * Action to signal the closing of the chat dialog.
+ *
+ * @returns {{
+ *     type: CLOSE_CHAT
+ * }}
+ */
+export function closeChat() {
+    return {
+        type: CLOSE_CHAT
     };
 }
 

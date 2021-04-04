@@ -3,12 +3,19 @@
 import React, { Component } from 'react';
 
 import { connect } from '../../base/redux';
+import { setColorAlpha } from '../../base/util';
+// import { Subject } from '../../conference';
 import { fetchCustomBrandingData } from '../../dynamic-branding';
 import { Captions } from '../../subtitles/';
 
 declare var interfaceConfig: Object;
 
 type Props = {
+
+    /**
+     * The alpha(opacity) of the background
+     */
+    _backgroundAlpha: number,
 
     /**
      * The user selected background color.
@@ -67,6 +74,7 @@ class LargeVideo extends Component<Props> {
                 className = 'videocontainer'
                 id = 'largeVideoContainer'
                 style = { style }>
+                {/* <Subject /> */}
                 <div id = 'sharedVideo'>
                     <div id = 'sharedVideoIFrame' />
                 </div>
@@ -115,6 +123,12 @@ class LargeVideo extends Component<Props> {
 
         styles.backgroundColor = '#242424';
 
+        if (this.props._backgroundAlpha !== undefined) {
+            const alphaColor = setColorAlpha(styles.backgroundColor, this.props._backgroundAlpha);
+
+            styles.backgroundColor = alphaColor;
+        }
+
         if (_customBackgroundImageUrl) {
             styles.backgroundImage = `url(${_customBackgroundImageUrl})`;
             styles.backgroundSize = 'cover';
@@ -138,6 +152,7 @@ function _mapStateToProps(state) {
     const { isOpen: isChatOpen } = state['features/chat'];
 
     return {
+        _backgroundAlpha: state['features/base/config'].backgroundAlpha,
         _customBackgroundColor: backgroundColor,
         _customBackgroundImageUrl: backgroundImageUrl,
         _isChatOpen: isChatOpen,

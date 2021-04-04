@@ -4,7 +4,6 @@ import { ReducerRegistry } from '../base/redux';
 
 import {
     SET_FILMSTRIP_ENABLED,
-    SET_FILMSTRIP_HOVERED,
     SET_FILMSTRIP_VISIBLE,
     SET_HORIZONTAL_VIEW_DIMENSIONS,
     SET_TILE_VIEW_DIMENSIONS,

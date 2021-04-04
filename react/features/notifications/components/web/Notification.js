@@ -46,8 +46,6 @@ class Notification extends AbstractNotification<Props> {
         const {
             appearance,
             hideErrorSupportLink,
-            isDismissAllowed,
-            onDismissed,
             t,
             title,
             titleArguments,

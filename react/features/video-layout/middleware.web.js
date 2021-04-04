@@ -1,18 +1,16 @@
 // @flow
 
 import VideoLayout from '../../../modules/UI/videolayout/VideoLayout.js';
-import { CONFERENCE_JOINED, CONFERENCE_WILL_LEAVE } from '../base/conference';
+import { CONFERENCE_WILL_LEAVE } from '../base/conference';
+import { MEDIA_TYPE } from '../base/media';
 import {
-    DOMINANT_SPEAKER_CHANGED,
+    getLocalParticipant,
     PARTICIPANT_JOINED,
-    PARTICIPANT_LEFT,
-    PARTICIPANT_UPDATED,
-    PIN_PARTICIPANT,
-    getParticipantById
+    PARTICIPANT_UPDATED
 } from '../base/participants';
 import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actionTypes'
 import { MiddlewareRegistry } from '../base/redux';
-import { TRACK_ADDED, TRACK_REMOVED } from '../base/tracks';
+import { TRACK_ADDED, TRACK_REMOVED, TRACK_STOPPED } from '../base/tracks';
 import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED, setFilmStripCollapsed } from '../filmstrip';
 
 import { SET_TILE_VIEW } from './actionTypes';
@@ -56,8 +54,7 @@ MiddlewareRegistry.register(store => next => action => {
     case PARTICIPANT_JOINED:
         setTimeout(() => VideoLayout.onHostChange(), 2000);
         if (!action.participant.local) {
-            VideoLayout.addRemoteParticipantContainer(
-                getParticipantById(store.getState(), action.participant.id));
+            VideoLayout.updateVideoMutedForNoTracks(action.participant.id);
         }
 
         break;
@@ -88,21 +85,13 @@ MiddlewareRegistry.register(store => next => action => {
         break;
     }
 
-    case DOMINANT_SPEAKER_CHANGED:
-        VideoLayout.onDominantSpeakerChanged(action.participant.id);
-        break;
-
-    case PIN_PARTICIPANT:
-        VideoLayout.onPinChange(action.participant?.id);
-        break;
-
     case SET_FILMSTRIP_VISIBLE:
         VideoLayout.resizeVideoArea();
         break;
 
     case TRACK_ADDED:
-        if (!action.track.local) {
-            VideoLayout.onRemoteStreamAdded(action.track.jitsiTrack);
+        if (action.track.mediaType !== MEDIA_TYPE.AUDIO) {
+            VideoLayout._updateLargeVideoIfDisplayed(action.track.participantId, true);
         }
         break;
 
@@ -114,9 +103,18 @@ MiddlewareRegistry.register(store => next => action => {
         }
 
         break;
+
+    case TRACK_STOPPED: {
+        if (action.track.jitsiTrack.isLocal()) {
+            const participant = getLocalParticipant(store.getState);
+
+            VideoLayout._updateLargeVideoIfDisplayed(participant?.id);
+        }
+        break;
+    }
     case TRACK_REMOVED:
-        if (!action.track.local) {
-            VideoLayout.onRemoteStreamRemoved(action.track.jitsiTrack);
+        if (!action.track.local && action.track.mediaType !== MEDIA_TYPE.AUDIO) {
+            VideoLayout.updateVideoMutedForNoTracks(action.track.jitsiTrack.getParticipantId());
         }
 
         break;

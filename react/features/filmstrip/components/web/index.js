@@ -8,3 +8,4 @@ export { default as RaisedHandIndicator } from './RaisedHandIndicator';
 export { default as StatusIndicators } from './StatusIndicators';
 export { default as VideoMutedIndicator } from './VideoMutedIndicator';
 export { default as SpeakersList } from './SpeakersList';
+export { default as Thumbnail } from './Thumbnail';

@@ -1,5 +1,5 @@
 #sideToolbarContainer {
-    background-color: $newToolbarBackgroundColor;
+    background-color: $chatBackgroundColor;
     box-sizing: border-box;
     color: #393939;
     display: flex;
@@ -36,6 +36,13 @@
     text-align: left;
     width: $sidebarWidth;
     word-wrap: break-word;
+
+    display: flex;
+    flex-direction: column;
+
+    & > :first-child {
+        margin-top: auto;
+    }
 
     a {
         display: block;
@@ -147,20 +154,83 @@
         .jitsi-icon svg {
             fill: #414F50 !important;
         }
+    }
+}
 
-        &:hover {
-            color: rgba(255, 255, 255, 0.8);
+.chat-input-container {
+    padding: 0 16px 16px;
+
+    &.populated {
+        #chat-input {
+            .send-button {
+                background: #1B67EC;
+                cursor: pointer;
+
+                @media (hover: hover) and (pointer: fine) {
+                    &:hover {
+                        background: #3D82FB;
+                    }
+                }
+
+                &:active {
+                    background: #0852D4;
+                }
+
+                path {
+                    fill: #fff;
+                }
+            }
         }
     }
 }
 
 #chat-input {
-    border-top: 1px solid $chatInputSeparatorColor;
+    border: 1px solid $chatInputSeparatorColor;
     display: flex;
-    padding: 5px 10px;
+    padding: 4px;
+    border-radius: 3px;
+
+    &:focus-within {
+        border: 1px solid #619CF4;
+    }
 
     * {
         background-color: transparent;
+    }
+}
+
+.send-button-container {
+    display: flex;
+    align-items: center;
+}
+
+.send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 3px;
+
+    path {
+        fill: $chatInputSeparatorColor;
+    }
+}
+
+.smiley-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 3px;
+}
+
+#chat-input .smiley-button {
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #484A4F;
+        }
     }
 }
 
@@ -205,10 +275,55 @@
 #nickname {
     text-align: center;
     color: #9d9d9d;
-    font-size: 18px;
-    margin-top: 30px;
-    left: 5px;
-    right: 5px;
+    font-size: 16px;
+    margin: auto 0;
+    padding: 0 16px;
+
+    input {
+        height: 40px;
+    }
+
+    label {
+        line-height: 24px;
+    }
+
+    .enter-chat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 16px;
+        height: 40px;
+        background: #1B67EC;
+        border-radius: 3px;
+        color: #fff;
+        cursor: pointer;
+
+        &.disabled {
+            color: #757575;
+            background: #11336E;
+            pointer-events: none;
+        }
+    }
+}
+
+.mobile-browser {
+    #nickname {
+        input {
+            height: 48px;
+        }
+
+        .enter-chat {
+            height: 48px;
+        }
+    }
+
+    #usermsg {
+        font-size: 16px;
+    }
+
+    .chatmessage .usermessage {
+        font-size: 16px;
+    }
 }
 
 .sideToolbarContainer {
@@ -218,12 +333,16 @@
     }
 
     .display-name {
-        font-size: 13px;
-        font-weight: bold;
+        font-size: 12px;
+        font-weight: 600;
         margin-bottom: 5px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+    @media (max-width: 580px) {
+        display: none !important;
     }
 }
 
@@ -268,10 +387,14 @@
     }
 
     .messagecontent {
-        margin: 5px 10px;
+        margin: 8px;
         max-width: 100%;
         overflow: hidden;
     }
+}
+
+.timestamp {
+    color: #757575;
 }
 
 .smiley {

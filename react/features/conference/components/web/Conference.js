@@ -18,6 +18,7 @@ import {
     flushOutWaitingList,
     removeWaitingParticipants
 } from '../../../base/waiting-participants';
+import { setColorAlpha } from '../../../base/util';
 import { Chat } from '../../../chat';
 import { Filmstrip, SpeakersList } from '../../../filmstrip/components';
 import { setPage } from '../../../filmstrip/actions.web';
@@ -93,6 +94,11 @@ const LAYOUT_CLASSNAMES = {
 type Props = AbstractProps & {
 
     /**
+     * The alpha(opacity) of the background
+     */
+    _backgroundAlpha: number,
+
+    /**
      * Whether the local participant is recording the conference.
      */
     _iAmRecorder: boolean,
@@ -129,6 +135,7 @@ class Conference extends AbstractConference<Props, *> {
     _onShowToolbar: Function;
     _originalOnShowToolbar: Function;
     isLegalPage: boolean;
+    _setBackground: Function;
 
     /**
      * Initializes a new Conference instance.
@@ -159,6 +166,9 @@ class Conference extends AbstractConference<Props, *> {
 
             // Bind event handler so it is only bound once for every instance.
             this._onFullScreenChange = this._onFullScreenChange.bind(this);
+             // Bind event handler so it is only bound once for every instance.
+            this._onFullScreenChange = this._onFullScreenChange.bind(this);
+            this._setBackground = this._setBackground.bind(this);
         }
     }
 
@@ -317,7 +327,8 @@ class Conference extends AbstractConference<Props, *> {
             <div
                 className = { _layoutClassName }
                 id = 'videoconference_page'
-                onMouseMove = { this._onShowToolbar }>
+                onMouseMove = { this._onShowToolbar }
+                ref = { this._setBackground }>
 
                 {
                     _isModerator && _isWaitingEnabled
@@ -422,6 +433,35 @@ class Conference extends AbstractConference<Props, *> {
     }
 
     /**
+     * Sets custom background opacity based on config. It also applies the
+     * opacity on parent element, as the parent element is not accessible directly,
+     * only though it's child.
+     *
+     * @param {Object} element - The DOM element for which to apply opacity.
+     *
+     * @private
+     * @returns {void}
+     */
+    _setBackground(element) {
+        if (!element) {
+            return;
+        }
+
+        if (this.props._backgroundAlpha !== undefined) {
+            const elemColor = element.style.background;
+            const alphaElemColor = setColorAlpha(elemColor, this.props._backgroundAlpha);
+
+            element.style.background = alphaElemColor;
+            if (element.parentElement) {
+                const parentColor = element.parentElement.style.background;
+                const alphaParentColor = setColorAlpha(parentColor, this.props._backgroundAlpha);
+
+                element.parentElement.style.background = alphaParentColor;
+            }
+        }
+    }
+
+    /**
      * Updates the Redux state when full screen mode has been enabled or
      * disabled.
      *
@@ -494,6 +534,8 @@ function _mapStateToProps(state) {
             .filter(t => t.videoType === 'desktop' && t.participantId !== screenSharerId)
             .map(t => participants.find(p => p.id === t.participantId) || {}),
         _iAmRecorder: state['features/base/config'].iAmRecorder,
+        _backgroundAlpha: state['features/base/config'].backgroundAlpha,
+        _isLobbyScreenVisible: state['features/base/dialog']?.component === LobbyScreen,
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
         _roomName: getConferenceNameForTitle(state),
         _showPrejoin: isPrejoinPageVisible(state),

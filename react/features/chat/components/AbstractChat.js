@@ -13,6 +13,11 @@ import { getUnreadSinceLastRead } from '../functions';
 export type Props = {
 
     /**
+     * Whether the chat is opened in a modal or not (computed based on window width).
+     */
+    _isModal: boolean,
+
+    /**
      * True if the chat window should be rendered.
      */
     _isOpen: boolean,
@@ -157,6 +162,7 @@ export function _mapStateToProps(state: Object) {
     const _messagesSinceLastRead = getUnreadSinceLastRead(state);
 
     return {
+        _isModal: window.innerWidth <= SMALL_WIDTH_THRESHOLD,
         _isOpen: isOpen,
         _messages: messages,
         _participants: participants,

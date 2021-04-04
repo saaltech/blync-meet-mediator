@@ -1,12 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-import Emoji from 'react-emoji-render';
 import TextareaAutosize from 'react-textarea-autosize';
 import type { Dispatch } from 'redux';
 
+import { isMobileBrowser } from '../../../base/environment/utils';
 import { translate } from '../../../base/i18n';
-import { IconChatSend, Icon } from '../../../base/icons';
+import { IconChatSend, Icon, IconPlane, IconSmile } from '../../../base/icons';
 import { connect } from '../../../base/redux';
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
@@ -184,6 +184,7 @@ class ChatInput extends Component<Props, State> {
         this._onDetectSubmit = this._onDetectSubmit.bind(this);
         this._onMessageChange = this._onMessageChange.bind(this);
         this._onSmileySelect = this._onSmileySelect.bind(this);
+        this._onSubmitMessage = this._onSubmitMessage.bind(this);
         this._onToggleSmileysPanel = this._onToggleSmileysPanel.bind(this);
         this._setTextAreaRef = this._setTextAreaRef.bind(this);
     }
@@ -240,13 +241,21 @@ class ChatInput extends Component<Props, State> {
             ? 'show-smileys' : 'hide-smileys'} smileys-panel`;
 
         return (
-            <div id = 'chat-input' >
-                <div className = 'smiley-input'>
-                    <div id = 'smileysarea'>
-                        <div id = 'smileys'>
-                            <Emoji
-                                onClick = { this._onToggleSmileysPanel }
-                                text = ':)' />
+            <div className = { `chat-input-container${this.state.message.trim().length ? ' populated' : ''}` }>
+                <div id = 'chat-input' >
+                    <div className = 'smiley-input'>
+                        <div id = 'smileysarea'>
+                            <div id = 'smileys'>
+                                <div
+                                    className = 'smiley-button'
+                                    onClick = { this._onToggleSmileysPanel }>
+                                    <Icon src = { IconSmile } />
+                                </div>
+                            </div>
+                        </div>
+                        <div className = { smileysPanelClassName }>
+                            <SmileysPanel
+                                onSmileySelect = { this._onSmileySelect } />
                         </div>
                     </div>
                 </div>
@@ -291,6 +300,27 @@ class ChatInput extends Component<Props, State> {
         this._textArea && this._textArea.focus();
     }
 
+
+    _onSubmitMessage: () => void;
+
+    /**
+     * Submits the message to the chat window.
+     *
+     * @returns {void}
+     */
+    _onSubmitMessage() {
+        const trimmed = this.state.message.trim();
+
+        if (trimmed) {
+            this.props.onSend(trimmed);
+
+            this.setState({ message: '' });
+
+            // Keep the textarea in focus when sending messages via submit button.
+            this._focus();
+        }
+
+    }
     _onDetectSubmit: (Object) => void;
 
     /**
@@ -306,13 +336,7 @@ class ChatInput extends Component<Props, State> {
             && event.shiftKey === false) {
             event.preventDefault();
 
-            const trimmed = this.state.message.trim();
-
-            if (trimmed) {
-                this.props.onSend(trimmed);
-
-                this.setState({ message: '' });
-            }
+            this._onSubmitMessage();
         }
     }
 

@@ -15,9 +15,8 @@ import {
     IconYahoo,
     IconWhatsapp
 } from '../../../../base/icons';
-import { openURLInBrowser } from '../../../../base/util';
-
-import { copyText } from './utils';
+import { Tooltip } from '../../../../base/tooltip';
+import { copyText, openURLInBrowser } from '../../../../base/util';
 
 type Props = {
 

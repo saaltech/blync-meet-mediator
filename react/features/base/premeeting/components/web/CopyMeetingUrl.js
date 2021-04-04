@@ -160,12 +160,13 @@ class CopyMeetingUrl extends Component<Props, State> {
      * @private
      * @returns {void}
      */
-    _copyUrlAutomatically() {
-        navigator.clipboard.writeText(this.props.url)
-            .then(() => {
-                this._showLinkCopied();
-                window.setTimeout(this._hideLinkCopied, COPY_TIMEOUT);
-            });
+    async _copyUrlAutomatically() {
+        const isCopied = await copyText(this.props.url);
+
+        if (isCopied) {
+            this._showLinkCopied();
+            window.setTimeout(this._hideLinkCopied, COPY_TIMEOUT);
+        }
     }
 
     /**

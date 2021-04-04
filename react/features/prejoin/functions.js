@@ -130,7 +130,7 @@ export function getRawError(state: Object): string {
 }
 
 /**
- * Selector for getting the visiblity state for the 'JoinByPhoneDialog'.
+ * Selector for getting the visibility state for the 'JoinByPhoneDialog'.
  *
  * @param {Object} state - The state of the app.
  * @returns {boolean}
@@ -149,7 +149,8 @@ export function isJoinByPhoneDialogVisible(state: Object): boolean {
 export function isPrejoinPageEnabled(state: Object): boolean {
     return navigator.product !== 'ReactNative'
         && state['features/base/config'].prejoinPageEnabled
-        && !state['features/base/settings'].userSelectedSkipPrejoin;
+        && !state['features/base/settings'].userSelectedSkipPrejoin
+        && !(state['features/base/config'].enableForcedReload && state['features/prejoin'].skipPrejoinOnReload);
 }
 
 /**
@@ -176,8 +177,7 @@ export function getPageErrorMessageKey(state: Object): boolean {
     return state['features/prejoin']?.pageErrorMessageKey;
 }
 
-export function getQueryVariable(variable)
-{
+export function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i=0;i<vars.length;i++) {
@@ -194,4 +194,11 @@ export function getQueryVariable(variable)
         }
     }
     return(false);
+}
+
+export function shouldAutoKnock(state: Object): boolean {
+    const { iAmRecorder, iAmSipGateway } = state['features/base/config'];
+
+    return (isPrejoinPageEnabled(state) || (iAmRecorder && iAmSipGateway))
+        && !state['features/lobby'].knocking;
 }

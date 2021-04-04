@@ -5,10 +5,10 @@ import VideoLayout from '../../../modules/UI/videolayout/VideoLayout';
 import { getNearestReceiverVideoQualityLevel, setMaxReceiverVideoQuality } from '../base/conference';
 import { MiddlewareRegistry } from '../base/redux';
 import { CLIENT_RESIZED } from '../base/responsive-ui';
+import { SETTINGS_UPDATED } from '../base/settings';
 import {
     getCurrentLayout,
-    LAYOUTS,
-    shouldDisplayTileView
+    LAYOUTS
 } from '../video-layout';
 
 import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_PAGE } from './actionTypes';
@@ -68,7 +68,13 @@ MiddlewareRegistry.register(store => next => action => {
             // Once the thumbnails are reactified this should be moved there too.
             Filmstrip.resizeThumbnailsForHorizontalView(horizontalViewDimensions, true);
         }
-
+        break;
+    }
+    case SETTINGS_UPDATED: {
+        if (typeof action.settings?.localFlipX === 'boolean') {
+            // TODO: This needs to be removed once the large video is Reactified.
+            VideoLayout.onLocalFlipXChanged();
+        }
         break;
     }
     }

@@ -3,11 +3,15 @@
 import { jitsiLocalStorage } from '@jitsi/js-utils';
 import Logger from 'jitsi-meet-logger';
 
-import AuthHandler from './modules/UI/authentication/AuthHandler';
+import { redirectToTokenAuthService } from './modules/UI/authentication/AuthHandler';
+import { hideLoginDialog } from './react/features/authentication/actions.web';
+import { LoginDialog } from './react/features/authentication/components';
+import { isTokenAuthEnabled } from './react/features/authentication/functions';
 import {
     connectionEstablished,
     connectionFailed
 } from './react/features/base/connection/actions';
+import { openDialog } from './react/features/base/dialog/actions';
 import {
     isFatalJitsiConnectionError,
     JitsiConnectionErrors,
@@ -82,7 +86,7 @@ function checkForAttachParametersAndConnect(id, password, connection) {
  * @returns {Promise<JitsiConnection>} connection if
  * everything is ok, else error.
  */
-function connect(id, password, roomName) {
+export function connect(id, password, roomName) {
     const connectionConfig = Object.assign({}, config);
     const { issuer, jwt } = APP.store.getState()['features/base/jwt'];
 
@@ -223,5 +227,34 @@ export function openConnection({ id, password, retry, roomName }) {
         }
 
         throw err;
+    });
+}
+
+/**
+ * Show Authentication Dialog and try to connect with new credentials.
+ * If failed to connect because of PASSWORD_REQUIRED error
+ * then ask for password again.
+ * @param {string} [roomName] name of the conference room
+ *
+ * @returns {Promise<JitsiConnection>}
+ */
+function requestAuth(roomName) {
+    const config = APP.store.getState()['features/base/config'];
+
+    if (isTokenAuthEnabled(config)) {
+        // This Promise never resolves as user gets redirected to another URL
+        return new Promise(() => redirectToTokenAuthService(roomName));
+    }
+
+    return new Promise(resolve => {
+        const onSuccess = connection => {
+            APP.store.dispatch(hideLoginDialog());
+            resolve(connection);
+        };
+
+        APP.store.dispatch(
+            openDialog(LoginDialog, { onSuccess,
+                roomName })
+        );
     });
 }

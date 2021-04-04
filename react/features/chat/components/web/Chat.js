@@ -7,14 +7,16 @@ import { translate } from '../../../base/i18n';
 import { Icon, IconClose, IconArrowLeft } from '../../../base/icons';
 import { connect } from '../../../base/redux';
 import AbstractChat, {
-    _mapDispatchToProps,
     _mapStateToProps,
     type Props
 } from '../AbstractChat';
 
+import ChatDialog from './ChatDialog';
+import Header from './ChatDialogHeader';
 import ChatInput from './ChatInput';
 import ChatUsers from './ChatUsers';
 import DisplayNameForm from './DisplayNameForm';
+import KeyboardAvoider from './KeyboardAvoider';
 import MessageContainer from './MessageContainer';
 
 const SwitcherViews = {
@@ -71,8 +73,6 @@ class Chat extends AbstractChat<Props, State> {
 
         // Bind event handlers so they are only bound once for every instance.
         this._renderPanelContent = this._renderPanelContent.bind(this);
-
-        // Bind event handlers so they are only bound once for every instance.
         this._onChatInputResize = this._onChatInputResize.bind(this);
 
         this._onToggleChat = this._onToggleChat.bind(this);
@@ -406,6 +406,8 @@ class Chat extends AbstractChat<Props, State> {
             this._messageContainerRef.current.scrollToBottom(withAnimation);
         }
     }
+
+    _onSendMessage: (string) => void;
 }
 
-export default translate(connect(_mapStateToProps, _mapDispatchToProps)(Chat));
+export default translate(connect(_mapStateToProps)(Chat));
