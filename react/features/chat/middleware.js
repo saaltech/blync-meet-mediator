@@ -78,6 +78,7 @@ MiddlewareRegistry.register(store => next => action => {
     case CONFERENCE_JOINED:
         _addChatMsgListener(action.conference, store);
         break;
+
     case SEND_MESSAGE: {
         const state = store.getState();
         const { conference } = state['features/base/conference'];

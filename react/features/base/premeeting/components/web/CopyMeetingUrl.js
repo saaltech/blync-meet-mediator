@@ -2,11 +2,11 @@
 
 import React, { Component } from 'react';
 
+import CopyMeetingLinkSection
+    from '../../../../invite/components/add-people-dialog/web/CopyMeetingLinkSection';
 import { getCurrentConferenceUrl } from '../../../connection';
 import { translate } from '../../../i18n';
-import { Icon, IconCopy, IconCheck } from '../../../icons';
 import { connect } from '../../../redux';
-import { copyText, getDecodedURI } from '../../../util';
 
 type Props = {
 
@@ -27,20 +27,6 @@ type Props = {
     _enableAutomaticUrlCopy: boolean,
 };
 
-type State = {
-
-    /**
-     * If true it shows the 'copy link' message.
-     */
-    showCopyLink: boolean,
-
-    /**
-     * If true it shows the 'link copied' message.
-     */
-    showLinkCopied: boolean,
-};
-
-const COPY_TIMEOUT = 2000;
 
 /**
  * Component used to copy meeting url on prejoin page.

@@ -506,10 +506,10 @@
         z-index: 1;
 
         &--warning {
-            background: rgba(241, 173, 51, 0.7)
+            background: rgba(241, 173, 51, 1);
         }
         &--ok {
-            background: rgba(49, 183, 106, 0.7);
+            background: rgba(49, 183, 106, 1);
         }
     }
 
@@ -524,6 +524,8 @@
 
     &-error-desc {
         margin-right: 4px;
+        color: #fff;
+        font-weight: bold;
     }
 
     .settings-button-container {

@@ -2,7 +2,11 @@
 
 import React, { PureComponent } from 'react';
 
-import { AudioSettingsButton, VideoSettingsButton } from '../../../../toolbox/components';
+import { AudioSettingsButton, VideoSettingsButton } from '../../../../toolbox/components/web';
+import { VideoBackgroundButton } from '../../../../virtual-background';
+import { checkBlurSupport } from '../../../../virtual-background/functions';
+import { Avatar } from '../../../avatar';
+import { allowUrlSharing } from '../../functions';
 
 import CopyMeetingUrl from './CopyMeetingUrl';
 import Preview from './Preview';
@@ -53,7 +57,11 @@ type Props = {
 
     navigatedFromHome?: boolean,
 
-    meetNowSelected?: boolean
+    meetNowSelected?: boolean,
+    /**
+     * Array with the buttons which this Toolbox should display.
+     */
+    visibleButtons?: Array<string>
 }
 
 /**

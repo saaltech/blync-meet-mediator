@@ -437,7 +437,7 @@ const VideoLayout = {
         const participant = getParticipantById(state, id);
 
         if (participant?.isFakeParticipant) {
-            return SHARED_VIDEO_CONTAINER_TYPE;
+            return VIDEO_TYPE.CAMERA;
         }
 
         const videoTrack = getTrackByMediaTypeAndParticipant(state['features/base/tracks'], MEDIA_TYPE.VIDEO, id);

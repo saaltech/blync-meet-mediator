@@ -4,6 +4,7 @@ import InlineDialog from '@atlaskit/inline-dialog';
 import React, { Component } from 'react';
 
 import { getRoomName } from '../../base/conference';
+import { getToolbarButtons } from '../../base/config';
 import { translate } from '../../base/i18n';
 import { Icon, IconArrowDown, IconArrowUp, IconPhone, IconVolumeOff } from '../../base/icons';
 import { isVideoMutedByUser } from '../../base/media';
@@ -131,6 +132,11 @@ type Props = {
      * The JitsiLocalTrack to display.
      */
     videoTrack: ?Object,
+
+    /**
+     * Array with the buttons which this Toolbox should display.
+     */
+    visibleButtons: Array<string>
 };
 
 type State = {
@@ -192,6 +198,9 @@ class Prejoin extends Component<Props, State> {
         this._setRoomPassword = this._setRoomPassword.bind(this);
         this._setDetailsToStore = this._setDetailsToStore.bind(this);
 
+        this._onJoinConferenceWithoutAudioKeyPress = this._onJoinConferenceWithoutAudioKeyPress.bind(this);
+        this._showDialogKeyPress = this._showDialogKeyPress.bind(this);
+        this._onJoinKeyPress = this._onJoinKeyPress.bind(this);
     }
     _onJoinButtonClick: () => void;
 
@@ -212,6 +221,22 @@ class Prejoin extends Component<Props, State> {
 
         this.setState({ showError: false });
         this.props.joinConference();
+    }
+
+    _onJoinKeyPress: (Object) => void;
+
+    /**
+     * KeyPress handler for accessibility.
+     *
+     * @param {Object} e - The key event to handle.
+     *
+     * @returns {void}
+     */
+    _onJoinKeyPress(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            this._onJoinButtonClick();
+        }
     }
 
     _onToggleButtonClick: () => void;
@@ -376,6 +401,40 @@ class Prejoin extends Component<Props, State> {
         this._onDropdownClose();
     }
 
+    _showDialogKeyPress: (Object) => void;
+
+    /**
+     * KeyPress handler for accessibility.
+     *
+     * @param {Object} e - The key event to handle.
+     *
+     * @returns {void}
+     */
+    _showDialogKeyPress(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            this._showDialog();
+        }
+    }
+
+    _onJoinConferenceWithoutAudioKeyPress: (Object) => void;
+
+    /**
+     * KeyPress handler for accessibility.
+     *
+     * @param {Object} e - The key event to handle.
+     *
+     * @returns {void}
+     */
+    _onJoinConferenceWithoutAudioKeyPress(e) {
+        if (this.props.joinConferenceWithoutAudio
+            && (e.key === ' '
+                || e.key === 'Enter')) {
+            e.preventDefault();
+            this.props.joinConferenceWithoutAudio();
+        }
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -392,14 +451,14 @@ class Prejoin extends Component<Props, State> {
             showDialog,
             t,
             videoTrack,
-            pageErrorMessageKey
+            pageErrorMessageKey,
+            visibleButtons
         } = this.props;
 
-        // videoTrack && videoTrack._setMuted(true);
-
-        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onOptionsClick, _setName,
-            _showDialog, _setParticipantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
-        const { showJoinByPhoneButtons, navigatedFromHome } = this.state;
+        const { _closeDialog, _onCheckboxChange, _onDropdownClose, _onJoinButtonClick, _onJoinKeyPress, _showDialogKeyPress,
+            _onJoinConferenceWithoutAudioKeyPress, _onOptionsClick, _setName, _showDialog,
+            _setParticipantType, _setHostUsername, _setHostPassword, _setRoomPassword } = this;
+        const { showJoinByPhoneButtons, navigatedFromHome, showError } = this.state;
 
         return (
             <PreMeetingScreen
@@ -586,8 +645,10 @@ function mapStateToProps(state): Object {
         showDialog: isJoinByPhoneDialogVisible(state),
         hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
         showCameraPreview: !isVideoMutedByUser(state),
+        pageErrorMessageKey: getPageErrorMessageKey(state),
+        showConferenceInfo,
         videoTrack: getLocalJitsiVideoTrack(state),
-        pageErrorMessageKey: getPageErrorMessageKey(state)
+        visibleButtons: getToolbarButtons(state)
     };
 }
 

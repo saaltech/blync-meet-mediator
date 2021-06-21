@@ -91,6 +91,7 @@
 
         .video-quality-dialog-label-container.active {
             color: $videoQualityActive;
+            font-weight: bold;
 
             &::before {
                 background: $videoQualityActive;

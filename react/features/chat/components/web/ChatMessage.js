@@ -24,6 +24,7 @@ class ChatMessage extends AbstractChatMessage<Props> {
      * @returns {ReactElement}
      */
     render() {
+        const { message, t } = this.props;
         const processedMessage = [];
 
         // content is an array of text and emoji components
@@ -84,7 +85,9 @@ class ChatMessage extends AbstractChatMessage<Props> {
      */
     _renderDisplayName() {
         return (
-            <div className = 'display-name'>
+            <div
+                aria-hidden = { true }
+                className = 'display-name'>
                 { this.props.message.displayName }
             </div>
         );

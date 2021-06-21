@@ -53,7 +53,8 @@ type Props = {
     focused?: boolean,
 
     disablePaste?: boolean,
-    onKeyPress?: function
+    onKeyPress?: function,
+    autoComplete?: string
 };
 
 type State = {

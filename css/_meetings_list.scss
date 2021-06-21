@@ -131,7 +131,7 @@
         }
     }
 
-    .item:hover {
+    .item:hover, .item:focus, .item:focus-within {
         .delete-meeting {
             display: block;
         }

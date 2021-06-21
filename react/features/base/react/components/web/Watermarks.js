@@ -162,12 +162,16 @@ class Watermarks extends Component<Props, State> {
             _logoUrl,
             _showJitsiWatermark
         } = this.props;
+        const { t } = this.props;
         let reactElement = null;
 
         if (_showJitsiWatermark) {
             const style = {
                 backgroundImage: `url(${_logoUrl})`,
                 maxWidth: 180,
+                maxWidth: 140,
+                maxHeight: 70,
+                position: _logoLink ? 'static' : 'absolute'
             };
 
             reactElement = (<div

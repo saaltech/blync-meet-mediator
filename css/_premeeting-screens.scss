@@ -85,7 +85,7 @@
             cursor: pointer;
             color: #393939;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             font-size: 15px;
             font-weight: 300;
             justify-content: center;
@@ -122,6 +122,9 @@
                     margin-left: 10px;
                 }
             }
+            .copy-button{
+                width: 298px;
+             }
 
             &:hover {
                 align-self: stretch;

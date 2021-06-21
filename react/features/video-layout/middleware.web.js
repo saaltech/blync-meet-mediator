@@ -12,6 +12,7 @@ import {SCREEN_SHARE_PARTICIPANTS_UPDATED} from  './actionTypes'
 import { MiddlewareRegistry } from '../base/redux';
 import { TRACK_ADDED, TRACK_REMOVED, TRACK_STOPPED } from '../base/tracks';
 import { SET_FILMSTRIP_VISIBLE, SET_FILMSTRIP_COLLAPSED, setFilmStripCollapsed } from '../filmstrip';
+import { PARTICIPANTS_PANE_CLOSE, PARTICIPANTS_PANE_OPEN } from '../participants-pane/actionTypes.js';
 
 import { SET_TILE_VIEW } from './actionTypes';
 import './middleware.any';
@@ -85,6 +86,8 @@ MiddlewareRegistry.register(store => next => action => {
         break;
     }
 
+    case PARTICIPANTS_PANE_CLOSE:
+    case PARTICIPANTS_PANE_OPEN:
     case SET_FILMSTRIP_VISIBLE:
         VideoLayout.resizeVideoArea();
         break;

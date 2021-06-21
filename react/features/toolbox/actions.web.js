@@ -89,12 +89,15 @@ export function hideToolbox(force: boolean = false): Function {
 
         dispatch(clearToolboxTimeout());
 
+        const focusSelector = '.toolbox-content-items:focus-within,.filmstrip:focus-within,.remotevideomenu:hover';
+
         if (!force
                 && (hovered
                     || overflowMenuVisible
                     || state['features/invite'].calleeInfoVisible
                     || state['features/chat'].isOpen
                     || state['features/toolbox-more'].toastNotificationVisible
+                    || document.querySelector(focusSelector)
                 )) {
             dispatch(
                 setToolboxTimeout(

@@ -4,8 +4,8 @@ import React, { Component } from 'react';
 
 import { connect } from '../../base/redux';
 import { setColorAlpha } from '../../base/util';
-// import { Subject } from '../../conference';
 import { fetchCustomBrandingData } from '../../dynamic-branding';
+import { SharedVideo } from '../../shared-video/components/web';
 import { Captions } from '../../subtitles/';
 
 declare var interfaceConfig: Object;
@@ -67,7 +67,12 @@ class LargeVideo extends Component<Props> {
      * @returns {React$Element}
      */
     render() {
+        const {
+            _isChatOpen,
+            _noAutoPlayVideo
+        } = this.props;
         const style = this._getCustomSyles();
+        const className = `videocontainer${_isChatOpen ? ' shift-right' : ''}`;
 
         return (
             <div
@@ -78,6 +83,7 @@ class LargeVideo extends Component<Props> {
                 <div id = 'sharedVideo'>
                     <div id = 'sharedVideoIFrame' />
                 </div>
+                <SharedVideo />
                 <div id = 'etherpad' />
 
                 <div id = 'dominantSpeaker'>
@@ -97,9 +103,11 @@ class LargeVideo extends Component<Props> {
                       * another container for the background and the
                       * largeVideoWrapper in order to hide/show them.
                       */}
-                    <div id = 'largeVideoWrapper'>
+                    <div
+                        id = 'largeVideoWrapper'
+                        role = 'figure' >
                         <video
-                            autoPlay = { !this.props._noAutoPlayVideo }
+                            autoPlay = { !_noAutoPlayVideo }
                             id = 'largeVideo'
                             muted = { true }
                             playsInline = { true } /* for Safari on iOS to work */ />

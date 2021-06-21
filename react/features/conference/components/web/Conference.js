@@ -24,7 +24,6 @@ import { Filmstrip, SpeakersList } from '../../../filmstrip/components';
 import { setPage } from '../../../filmstrip/actions.web';
 import { CalleeInfoContainer } from '../../../invite';
 import { LargeVideo } from '../../../large-video';
-import { KnockingParticipantList } from '../../../lobby';
 import { NotificationsToasts, showNotification } from '../../../notifications-toasts';
 import { Prejoin, isPrejoinPageVisible, isInterimPrejoinPageVisible } from '../../../prejoin';
 import {
@@ -44,6 +43,10 @@ import { maybeShowSuboptimalExperienceNotification,
     getConferenceSocketBaseLink,
     getWaitingParticipantsSocketTopic,
     getAppSocketEndPoint } from '../../functions';
+import { KnockingParticipantList, LobbyScreen } from '../../../lobby';
+import { ParticipantsPane } from '../../../participants-pane/components';
+import { getParticipantsPaneOpen } from '../../../participants-pane/functions';
+import { Toolbox } from '../../../toolbox/components/web';
 import {
     AbstractConference,
     abstractMapStateToProps
@@ -52,6 +55,7 @@ import type { AbstractProps } from '../AbstractConference';
 
 import InviteParticipants from './InviteParticipants';
 import Labels from './Labels';
+import ConferenceInfo from './ConferenceInfo';
 import { default as Notice } from './Notice';
 import ParticipantsList from './ParticipantsList';
 import PrivacyPage from './privacy/privacy';
@@ -99,15 +103,25 @@ type Props = AbstractProps & {
     _backgroundAlpha: number,
 
     /**
-     * Whether the local participant is recording the conference.
+     * Returns true if the 'lobby screen' is visible.
      */
-    _iAmRecorder: boolean,
+    _isLobbyScreenVisible: boolean,
+
+    /**
+     * If participants pane is visible or not.
+     */
+    _isParticipantsPaneVisible: boolean,
 
     /**
      * The CSS class to apply to the root of {@link Conference} to modify the
      * application layout.
      */
     _layoutClassName: string,
+
+    /**
+     * The config specified interval for triggering mouseMoved iframe api events
+     */
+    _mouseMoveCallbackInterval: number,
 
     /**
      * Name for this conference room.
@@ -132,7 +146,11 @@ type Props = AbstractProps & {
  */
 class Conference extends AbstractConference<Props, *> {
     _onFullScreenChange: Function;
+    _onMouseEnter: Function;
+    _onMouseLeave: Function;
+    _onMouseMove: Function;
     _onShowToolbar: Function;
+    _originalOnMouseMove: Function;
     _originalOnShowToolbar: Function;
     isLegalPage: boolean;
     _setBackground: Function;
@@ -291,6 +309,8 @@ class Conference extends AbstractConference<Props, *> {
         } = interfaceConfig;
         const {
             _iAmRecorder,
+            _isLobbyScreenVisible,
+            _isParticipantsPaneVisible,
             _layoutClassName,
             _showPrejoin,
             _leavingMeeting,
@@ -402,9 +422,10 @@ class Conference extends AbstractConference<Props, *> {
                 <ToastNotificationSettings />
                 {_isModerator && <SpeakersList />}
 
-                { this.renderNotificationsContainer() }
+                    { _showPrejoin || _isLobbyScreenVisible || <Toolbox /> }
+                    <Chat />
 
-                <CalleeInfoContainer />
+                    { this.renderNotificationsContainer() }
 
                 {(_sharer || _iAmSharingScreen) && <div
                     className = 'conference__screen-shared'
@@ -473,6 +494,39 @@ class Conference extends AbstractConference<Props, *> {
     }
 
     /**
+     * Triggers iframe API mouseEnter event.
+     *
+     * @param {MouseEvent} event - The mouse event.
+     * @private
+     * @returns {void}
+     */
+    _onMouseEnter(event) {
+        APP.API.notifyMouseEnter(event);
+    }
+
+    /**
+     * Triggers iframe API mouseLeave event.
+     *
+     * @param {MouseEvent} event - The mouse event.
+     * @private
+     * @returns {void}
+     */
+    _onMouseLeave(event) {
+        APP.API.notifyMouseLeave(event);
+    }
+
+    /**
+     * Triggers iframe API mouseMove event.
+     *
+     * @param {MouseEvent} event - The mouse event.
+     * @private
+     * @returns {void}
+     */
+    _onMouseMove(event) {
+        APP.API.notifyMouseMove(event);
+    }
+
+    /**
      * Displays the toolbar.
      *
      * @private
@@ -536,7 +590,9 @@ function _mapStateToProps(state) {
         _iAmRecorder: state['features/base/config'].iAmRecorder,
         _backgroundAlpha: state['features/base/config'].backgroundAlpha,
         _isLobbyScreenVisible: state['features/base/dialog']?.component === LobbyScreen,
+        _isParticipantsPaneVisible: getParticipantsPaneOpen(state),
         _layoutClassName: LAYOUT_CLASSNAMES[getCurrentLayout(state)],
+        _mouseMoveCallbackInterval: mouseMoveCallbackInterval,
         _roomName: getConferenceNameForTitle(state),
         _showPrejoin: isPrejoinPageVisible(state),
         _interimPrejoin: isInterimPrejoinPageVisible(state),

@@ -16,7 +16,7 @@ import {
     IconWhatsapp
 } from '../../../../base/icons';
 import { Tooltip } from '../../../../base/tooltip';
-import { copyText, openURLInBrowser } from '../../../../base/util';
+import { copyText } from '../../../../base/util';
 
 type Props = {
 
@@ -73,8 +73,7 @@ function InviteByEmailSection({ isFromConference = false, isShowLabel = true, in
     /**
      * Opens an email provider containing the conference invite.
      *
-     * @param {string} url - The url to be opened.
-     * @returns {Function}
+     * @returns {void}
      */
     function _onSelectProvider(url) {
         return function () {
@@ -94,6 +93,20 @@ function InviteByEmailSection({ isFromConference = false, isShowLabel = true, in
     function onClickCopy() {
         copyText(inviteText);
     }
+    /**
+     * Toggles the email invite drawer.
+     *
+     * @param {Object} e - The key event to handle.
+     *
+     * @returns {void}
+     */
+    function _onToggleActiveStateKeyPress(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            setIsActive(!isActive);
+        }
+    }
+
     /**
      * Renders clickable elements that each open an email client
      * containing a conference invite.

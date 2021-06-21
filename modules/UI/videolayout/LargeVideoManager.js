@@ -19,6 +19,8 @@ import { CHAT_SIZE } from '../../../react/features/chat';
 import {
     updateKnownLargeVideoResolution
 } from '../../../react/features/large-video/actions';
+import { getParticipantsPaneOpen } from '../../../react/features/participants-pane/functions';
+import theme from '../../../react/features/participants-pane/theme.json';
 import { PresenceLabel } from '../../../react/features/presence-status';
 import { shouldDisplayTileView } from '../../../react/features/video-layout';
 /* eslint-enable no-unused-vars */

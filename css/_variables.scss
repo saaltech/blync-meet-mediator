@@ -38,6 +38,7 @@ $defaultSideBarFontColor: #44A5FF;
 $defaultSemiDarkColor: #ACACAC;
 $defaultDarkColor: #2b3d5c;
 $defaultWarningColor: rgb(215, 121, 118);
+$participantsPaneBgColor: #141414;
 $presence-available: rgb(110, 176, 5);
 $presence-away: rgb(250, 201, 20);
 $presence-busy: rgb(233, 0, 27);
@@ -129,7 +130,6 @@ $zindex2: 2;
 $zindex3: 3;
 $toolbarBackgroundZ: 4;
 $labelsZ: 5;
-$filmstripVideosZ: 6;
 $subtitlesZ: 7;
 $popoverZ: 8;
 $zindex10: 10;
@@ -144,6 +144,9 @@ $dropdownMaskZ: 900;
 $dropdownZ: 901;
 $centeredVideoLabelZ: 1010;
 $overlayZ: 1016;
+// Place filmstrip videos over toolbar in order
+// to make connection info visible.
+$filmstripVideosZ: $toolbarZ + 1;
 
 
 /**
