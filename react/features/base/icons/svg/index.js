@@ -152,3 +152,4 @@ export { default as IconWaiting } from './waiting.svg';
 export { default as IconSadSmiley } from './sad.svg';
 export { default as IconCopyDetail } from './copyDetail.svg';
 export { default as IconCallConnect } from './call-connect.svg';
+export { default as IconSip } from './sip.svg';

@@ -33,7 +33,8 @@ import {
     getLocalParticipant,
     getParticipants,
     participantUpdated,
-    PARTICIPANT_ROLE
+    PARTICIPANT_ROLE,
+    raiseHand
 } from '../../../base/participants';
 import { connect } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox/components';
@@ -556,17 +557,7 @@ class Toolbox extends Component<Props> {
         const { _localParticipantID, _raisedHand } = this.props;
         const newRaisedStatus = !_raisedHand;
 
-        this.props.dispatch(participantUpdated({
-            // XXX Only the local participant is allowed to update without
-            // stating the JitsiConference instance (i.e. participant property
-            // `conference` for a remote participant) because the local
-            // participant is uniquely identified by the very fact that there is
-            // only one local participant.
-
-            id: _localParticipantID,
-            local: true,
-            raisedHand: newRaisedStatus
-        }));
+        this.props.dispatch(raiseHand(newRaisedStatus));
 
         APP.API.notifyRaiseHandUpdated(_localParticipantID, newRaisedStatus);
     }
@@ -1397,6 +1388,7 @@ class Toolbox extends Component<Props> {
                     <ToolbarButton
                         accessibilityLabel = { t('toolbar.accessibilityLabel.participants') }
                         icon = { IconParticipants }
+                        key = 'participants'
                         onClick = { this._onToolbarToggleParticipantsPane }
                         toggled = { this.props._participantsPaneOpen }
                         tooltip = { t('toolbar.participants') } />)

@@ -6,6 +6,7 @@ import SockJsClient from 'react-stomp';
 
 import VideoLayout from '../../../../../modules/UI/videolayout/VideoLayout';
 import Loading from '../../../always-on-top/Loading';
+import AudioModerationNotifications from '../../../av-moderation/components/AudioModerationNotifications';
 import { getConferenceNameForTitle } from '../../../base/conference';
 import { connect, disconnect } from '../../../base/connection';
 import { translate } from '../../../base/i18n';

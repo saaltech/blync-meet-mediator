@@ -1,8 +1,10 @@
 .vertical-filmstrip .filmstrip {
     &.hide-videos {
-        .remote-videos-container {
-            opacity: 0;
-            pointer-events: none;
+        .remote-videos {
+            & > div {
+                opacity: 0;
+                pointer-events: none;
+            }
         }
     }
 
@@ -38,10 +40,6 @@
     transition: height .3s ease-in;
     right: 0;
     z-index: $filmstripVideosZ;
-
-    &.reduce-height {
-        height: calc(100% - #{$newToolbarSizeWithPadding});
-    }
 
     /**
      * Hide videos by making them slight to the right.
@@ -98,31 +96,8 @@
      * filmstrip from overlapping the left edge of the screen.
      */
     #filmstripLocalVideo,
-    #filmstripRemoteVideos {
+    .remote-videos {
         padding: 0;
-    }
-
-    #filmstripRemoteVideos {
-        @include minHWAutoFix();
-
-        display: flex;
-        flex: 1;
-        flex-direction: column-reverse;
-        height: auto;
-        overflow-x: hidden;
-        overflow-y: scroll;
-
-        #filmstripRemoteVideosContainer {
-            @include minHWAutoFix();
-            flex-direction: column-reverse;
-            overflow: visible;
-            width: calc(100% - 8px); // 8px for margin + border of the thumbnails
-
-            .videocontainer {
-                height: 0px;
-                width: 100%;
-            }
-        }
     }
 
     #remoteVideos {
@@ -132,18 +107,13 @@
         flex-grow: 1;
     }
 
-    .remote-videos-container {
-        display: flex;
-        transition: opacity 1s;
+    &.reduce-height {
+        height: calc(100% - calc(#{$newToolbarSizeWithPadding} + #{$scrollHeight}));
     }
 
-    .hide-scrollbar#filmstripRemoteVideos {
-        margin-right: 7px; // Scrollbar size
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-}
+    .remote-videos {
+        display: flex;
+        transition: height .3s ease-in;
 
 /**
  * Override other styles to support vertical filmstrip mode.
@@ -178,30 +148,9 @@
         #remoteVideos #filmstripRemoteVideos #filmstripRemoteVideosContainer {
             flex-direction: column;
         }
-    }
-}
 
-/**
- * FF does not include the scroll width when calculating the size of the content. That's why we need to include
- * ourselves the width of the scroll so that the remote videos are aligned with the local one.
- */
-@mixin filmstripSizeWithoutScroll {
-    .vertical-filmstrip {
-        #remoteVideos #filmstripRemoteVideos {
-            #filmstripRemoteVideosContainer {
-                width: calc(100% - 15px) // 8 px - margins + border of the thumbnails; 7px - for the scroll
-            }
+        &.is-not-overflowing > div {
+            bottom: 0px;
         }
     }
-}
-
-/** Firefox detection hack **/
-@-moz-document url-prefix() {
-    @include undoColumnReverseVideos();
-    @include filmstripSizeWithoutScroll();
-}
-
-/** Edge detection hack **/
-@supports (-ms-ime-align:auto) {
-    @include undoColumnReverseVideos();
 }

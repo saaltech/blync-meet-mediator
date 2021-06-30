@@ -12,7 +12,7 @@ import {
 } from '../video-layout';
 
 import { SET_HORIZONTAL_VIEW_DIMENSIONS, SET_TILE_VIEW_DIMENSIONS, SET_PAGE } from './actionTypes';
-import { setHorizontalViewDimensions, setTileViewDimensions } from './actions.web';
+import { setHorizontalViewDimensions, setTileViewDimensions, setVerticalViewDimensions } from './actions.web';
 
 import './subscriber.web';
 
@@ -39,7 +39,11 @@ MiddlewareRegistry.register(store => next => action => {
             break;
         }
         case LAYOUTS.HORIZONTAL_FILMSTRIP_VIEW:
-            store.dispatch(setHorizontalViewDimensions(state['features/base/responsive-ui'].clientHeight));
+            store.dispatch(setHorizontalViewDimensions());
+            break;
+
+        case LAYOUTS.VERTICAL_FILMSTRIP_VIEW:
+            store.dispatch(setVerticalViewDimensions());
             break;
         }
         break;

@@ -1,14 +1,15 @@
 /**
  * CSS styles that are specific to the filmstrip that shows the thumbnail tiles.
  */
-.tile-view {
+ .tile-view {
     /**
      * Add a border around the active speaker to make the thumbnail easier to
      * see.
      */
     .active-speaker {
-        border: 4px solid #00C062 !important;
-        box-shadow: 0px 0px 1px 1.5px black, 0px 0px 1.3px 4px $videoThumbnailSelected;
+        border: 4px solid #FFC646 !important;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px #ffc646;
     }
 
     #filmstripRemoteVideos {
@@ -16,8 +17,9 @@
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: calc(100% - 100px);
         width: 100%;
+        margin: 50px 0px;
     }
 
     .filmstrip__videos .videocontainer {
@@ -30,7 +32,8 @@
 
     .videocontainer {
         &.active-speaker {
-            border: 4px solid #00C062;
+            border: 4px solid #FFC646;
+            border-radius: 8px;
         }
     }
 
@@ -52,8 +55,25 @@
         position: absolute;
         top: 0;
         width: 100%;
-        z-index: $filmstripVideosZ;
+        // z-index: $filmstripVideosZ;
         flex-direction: column;
+        // animation: addwidth 0.5s;
+
+        // @keyframes addwidth {
+        //     0%   {width: calc(100% - 375px);}
+        //     100% {width: 100%}
+        // }
+        &.resized-filmstrip {
+            // width: calc(100% - 375px);
+            // animation: removewidth $optionsExpandAnimationTime;
+
+            @keyframes removewidth {
+                0%   {width: 100%;}
+                // 25%  {width: 100px;}
+                // 50% {width}
+                100% {width: calc(100% - 375px);}
+              }
+        }
     }
 
     .filmstrip .participants-count, .filmstrip .film-strip-header {
@@ -96,29 +116,20 @@
         box-sizing: border-box;
         display: flex;
         flex-wrap: wrap;
-        flex-shrink: 0;
         margin-top: auto;
         margin-bottom: auto;
         justify-content: center;
+        width: 95%;
 
         .videocontainer {
             border: 0;
             box-sizing: border-box;
             display: block;
-            margin: 2px;
+            margin: 5px;
         }
 
         video {
             object-fit: contain;
-        }
-
-        /**
-         * Max-width corresponding to the ASPECT_RATIO_BREAKPOINT from features/filmstrip/constants.
-         */
-        @media only screen and (max-width: 500px) {
-            video {
-                object-fit: cover;
-            }
         }
     }
 
@@ -129,23 +140,21 @@
     .has-overflow .videocontainer {
         align-self: baseline;
     }
-}
 
-.shift-right #filmstripRemoteVideosContainer {
     /**
-     * Max-width corresponding to the ASPECT_RATIO_BREAKPOINT from features/filmstrip/constants,
-     * from which we subtract the chat size.
+     * Firefox flex acts a little differently. To make sure the bottom row of
+     * thumbnails is not overlapped by the horizontal toolbar, margin is added
+     * to the local thumbnail to keep it from the bottom of the screen. It is
+     * assumed the local thumbnail will always be on the bottom row.
      */
-    @media only screen and (max-width: calc(500px + #{$sidebarWidth})) {
-        video {
-            object-fit: cover;
-        }
+    .has-overflow #localVideoContainer {
+        margin-bottom: 100px !important;
     }
 
     .conference__pagination {
         position: absolute;
         z-index: 99;
-        width: 100vw;
+        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;

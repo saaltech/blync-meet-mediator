@@ -41,6 +41,26 @@ type Props = {
     footer?: React$Node,
 
     /**
+     * The name of the participant.
+     */
+    name?: string,
+
+    /**
+     * Indicates whether the copy url button should be shown
+     */
+    showCopyUrlButton: boolean,
+
+    /**
+     * Indicates whether the avatar should be shown when video is off
+     */
+    showAvatar: boolean,
+
+    /**
+     * Indicates whether the label and copy url action should be shown
+     */
+    showConferenceInfo: boolean,
+
+    /**
      * Title of the screen.
      */
     title: string,
