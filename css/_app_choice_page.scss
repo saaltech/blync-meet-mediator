@@ -1,0 +1,224 @@
+.appChoice  {
+
+    background-color: $welcomePageBackgroundColor;
+    display: flex;
+    flex-direction: column;
+    font-family: $welcomePageFontFamily;
+    min-height: 100vh;
+    height: 100%;
+    position: relative;
+    width: 100%;
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    &__btns {
+        display: flex;
+        margin: 20px 50px;
+        text-align: center;
+        border: 2px solid white;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px #0000001D;
+        padding: 10px 0px;
+        color: #393939;
+        cursor: pointer;
+
+        a {
+            text-decoration: none !important;
+            color: inherit;
+        }
+
+        &__title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        &__label {
+            text-align: left;
+        }
+
+        &__icon {
+            width: 35px;
+            height: 35px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            margin: auto 20px;
+        }
+
+        &__subTitle {
+            font-size: 14px;
+            padding-top: 5px;
+        }
+
+        &:hover {
+            color: #FFFFFF;
+        }
+    }
+
+    &__download {
+        border-color:#FFA400;
+        background-color: #FFF8EA;
+
+        &__icon {
+            background-image: url('../../images/download_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__download__icon {
+                background-image: url('../../images/download_app_choice_hover_2x.png');
+            }
+            background-color: #FFA400;
+        }
+    }
+
+    &__continue {
+        border-color:#00C062;
+        background-color: #F9FFF7;
+
+        &__icon {
+            background-image: url('../../images/continue_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__continue__icon {
+                background-image: url('../../images/continue_app_choice_hover_2x.png');
+            }
+            background-color: #06C35B;
+        }
+    }
+
+    &__openApp {
+        border-color:#055B96;
+        background-color: #055B96;
+        color: #FFFFFF;
+
+        &__icon {
+            background-image: url('../../images/openApp_app_choice_2x.png');
+        }
+
+        &:hover {
+            .appChoice__openApp__icon {
+                background-image: url('../../images/openApp_app_choice_hover_2x.png');
+            }
+            background-color: #FFFFFF;
+            color: #393939;
+        }
+    }
+
+    .header_image {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .without-login-wrapper {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        background: #F2F4FC;
+        background-size: 30%;
+        background-repeat: no-repeat;
+        background-position: top right;
+        .jifmeet-logo {
+            width: 250px;
+            height: 100px;
+            margin: 20px auto;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('../../images/without-user-logo.png')
+        }
+        .image-content-wrapper {
+            display: flex;
+            height: calc(100% - 140px);
+            .footer-container {
+                text-align: center;
+                .footer-details {
+                    font-size: 14px;
+                    color: #393939;
+                    margin-top: 30px;
+                    margin-bottom: 20px;
+                    .jifmeet-text {
+                        font-weight: bold;
+                    }
+                    .click-here{
+                        color: #0A5694;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
+                }
+                .copy-rights-detail{
+                    margin-bottom: 30px;
+                }
+            }
+            .background-width-content {
+                flex: 1;
+            }
+            .no-user-left-background-image {
+                background-image: url('./../images/left-background-premeeting.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+                background-position: center 75%;
+            }
+            .no-user-right-background-image {
+                background-image: url('./../images/right-background-premeeting.png');
+                background-size: 100%;
+                background-repeat: no-repeat;
+                background-position: center 75%;
+            }
+            .join-content-wrapper{
+                .join-content-container{
+                    margin-bottom: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    z-index: 100;
+                    flex: 1;
+                    background-color: white;
+                    height: fit-content;
+                    width: 50%;
+                    min-width: 700px;
+                    max-width: 1005px;
+                    border-radius: 12px;
+                    overflow-y: auto;
+                    box-shadow: 0px 5px 5px #00000029;
+                    overflow-x: hidden;
+                    align-items: center;
+                    color: #393939;
+                    .login-join-wrapper {
+                        width: 70%;
+                        margin: 0 auto;
+                        margin-top: 30px;
+                        margin-bottom: 30px;
+                        font-size: 1.3em;
+                        position: relative;
+                        .login-signin-wrapper {
+                            margin: 0 auto;
+                            text-align: center;
+                            margin-bottom: 25px;
+                            font-size: 28px;
+                            color: #005694;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+@media only screen and (max-width: 1200px) {
+    .appChoice {
+        .without-login-wrapper{
+            .image-content-wrapper {
+                .no-user-left-background-image {
+                    background-image: none;
+                }
+                .no-user-right-background-image {
+                    background-image: none;
+                }
+            }
+
+        }
+        
+    }
+}

@@ -75,6 +75,23 @@ export function redirectOnButtonChange(buttonType) {
     }
 }
 
+export function getPlatformToInstallDesktopApp() {
+    const isElectron = navigator.userAgent.includes('Electron');
+    const platform = navigator.platform;
+    
+    if(!isElectron) {
+        if(platform.startsWith("Mac")) {
+            return "mac";
+        }
+        else if(platform.startsWith("Win")) {
+            return "win";
+        }
+    }
+
+    return null;
+
+}
+
 /**
  * Check if the meeting exists, given the meeting Id
  */
